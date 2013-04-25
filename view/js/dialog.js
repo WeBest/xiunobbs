@@ -282,7 +282,11 @@ if(!$.fn.dialog) {
 		};
 		
 		this.set_body = function(body) {
-			$('div.body', _div).html(body);
+			try {
+				$('div.body', _div).html(body);
+			} catch(e) {
+				alert('dialog.set_body() error: ' + e.message + "\nbody:" + body);
+			}
 		};
 		
 		// 设置 div 为顶层的 div
