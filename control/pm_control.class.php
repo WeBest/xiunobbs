@@ -30,9 +30,14 @@ class pm_control extends common_control {
 			exit;
 		}
 		
-		// 用户名被修改。
+		// 用户名被修改，需要重新登录。
 		if($user['username'] != $this->_user['username']) {
 			$this->user->set_login_cookie($user);
+		}
+		// 密码被修改，需要重新登录。
+		if($user['password'] != $this->_user['password']) {
+			misc::setcookie($this->conf['cookie_pre'].'auth', '', 0, $this->conf['cookie_path'], $this->conf['cookie_domain']);
+			$this->message('密码被修改，请重新登录。', 0);
 		}
 		
 		// 五分钟更新一次

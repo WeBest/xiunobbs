@@ -6,6 +6,7 @@ Disallow: /upload/
 Disallow: /admin/
 Disallow: /conf/
 Disallow: /install/
+Disallow: /control/
 Disallow: /model/
 Disallow: /plugin/
 Disallow: /view/
