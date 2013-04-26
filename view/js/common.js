@@ -4,7 +4,9 @@
 
 var is_ie = $.browser.msie;
 var is_ie6 = $.browser.msie && $.browser.version == '6.0';
-var is_w3c = window.getSelection; // 是否为标准浏览器
+var is_ie9 = $.browser.msie && $.browser.version == '9.0';
+var is_w3c = window.getSelection && !is_ie9; // 是否为标准浏览器
+
 /*
 window.onerror = function() {
 
