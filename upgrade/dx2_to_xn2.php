@@ -1129,7 +1129,7 @@ function upgrade_postpage() {
 	$tidkeys = $dx2->index_fetch_id('forum_thread', array('tid'), array('tid'=>array('>'=>$starttid)), array('tid'=>1), 0, $limit);
 	// 结束循环
 	if(empty($tidkeys)) {
-		message('升级 upgrade_postpage 完成，接下来升级 upgrade_postpid ...', '?step=upgrade_postpid&start=0');
+		message('升级 upgrade_postpage 完成，接下来升级 upgrade_forum2 ...', '?step=upgrade_forum2&start=0');
 	}
 	foreach($tidkeys as $key) {
 		list($table, $_, $tid) = explode('-', $key);
@@ -1230,8 +1230,9 @@ function upgrade_postpage() {
 
 /*
 	mysql_insert_id() 返回的为非最大值，这里需要修正。
+	不需要修正，最后由 dateline 排序
 */
-function upgrade_postpid() {
+/*function upgrade_postpid() {
 	global $start, $conf;
 	$dx2 = get_dx2();
 	$db = get_db();
@@ -1295,7 +1296,7 @@ function upgrade_postpid() {
 	} else {	
 		message('升级 thread 完成，接下来升级 upgrade_postpid...', '?step=upgrade_forum2&start=0', 5);
 	}
-}
+}*/
 
 // 第二次升级 forum
 function upgrade_forum2() {

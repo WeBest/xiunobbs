@@ -64,14 +64,12 @@ cp csft.conf /usr/local/coreseek/etc/
 cp sphinx.sh /etc/init.d/sphinx
 chmod a+x /etc/init.d/sphinx
 
+
 /usr/local/coreseek/bin/indexer -c /usr/local/coreseek/etc/csft.conf --all --rotate
 
-service sphinx start
 chkconfig sphinx --level 345 on
+service sphinx start
 
-cp jobs_sphinx_xiuno.sh /usr/local/sbin/
-cp jobs_sphinx_xiuno_delta.sh /usr/local/sbin/
-chmod a+x /usr/local/sbin/jobs_sphinx_xiuno.sh
-chmod a+x /usr/local/sbin/jobs_sphinx_xiuno_delta.sh
-crontab jobs.cron
+
+crontab ./jobs.cron
 

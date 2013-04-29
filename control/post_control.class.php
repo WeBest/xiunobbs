@@ -124,7 +124,8 @@ class post_control extends common_control {
 				// hook post_thread_create_after.php
 				
 				$this->thread_views->create(array('tid'=>$tid, 'views'=>0));
-				if(isset($this->conf['forumarr'][$fid])) {
+				// 如果没有设置权限才加入。
+				if(empty($this->conf['forumaccesson'][$fid])) {
 					$this->thread_new->create(array('fid'=>$fid, 'tid'=>$tid, 'dateline'=>$_SERVER['time'], 'lastpost'=>$_SERVER['time']));
 				}
 				
