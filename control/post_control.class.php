@@ -403,15 +403,17 @@ class post_control extends common_control {
 				
 				// 斑竹回复的话， 短消息通知楼主，有人回帖，每个主题前10名用户，引用回复也发送，高级别会员回复通知。
 				$tuser = $this->user->read($thread['uid']);
-				if($this->_user['uid'] != $thread['uid'] && $this->_user['groupid'] <= 5) {
-					$pmsubject = utf8::substr($thread['subject'], 0, 16);
-					$pmmessage = "【{$this->_user['username']}】回复了您的主题：<a href=\"?thread-index-fid-$fid-tid-$tid.htm\" target=\"_blank\">【{$pmsubject}】</a>。";
-					$this->pm->system_send($thread['uid'], $thread['username'], $pmmessage);
+				if($this->_user['groupid'] <= 5) {
+					if($this->_user['uid'] != $thread['uid']) {
+						$pmsubject = utf8::substr($thread['subject'], 0, 16);
+						$pmmessage = "【{$this->_user['username']}】回复了您的主题：<a href=\"?thread-index-fid-$fid-tid-$tid.htm\" target=\"_blank\">【{$pmsubject}】</a>。";
+						$this->pm->system_send($thread['uid'], $thread['username'], $pmmessage);
+					}
 					// 判断引用
 					if($quote && $quote['uid'] != $thread['uid']) {
 						$pmsubject = utf8::substr(htmlspecialchars(strip_tags($thread['subject'])), 0, 16);
 						$pmmessage = "【{$this->_user['username']}】引用了您的帖子：<a href=\"?thread-index-fid-$fid-tid-$tid-page-$page.htm\" target=\"_blank\">【{$pmsubject}】</a>。";
-						$this->pm->system_send($thread['uid'], $thread['username'], $pmmessage);
+						$this->pm->system_send($post['uid'], $post['username'], $pmmessage);
 					}
 				}
 				
