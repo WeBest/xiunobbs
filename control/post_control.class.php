@@ -288,6 +288,7 @@ class post_control extends common_control {
 			
 			// 引用某帖
 			$pid = intval(core::gpc('pid'));
+			$quote = $pid > 0 ? $this->post->read($fid, $pid) : array();
 			
 			$post = $error = array();
 			$subject = htmlspecialchars(core::gpc('subject', 'P')); // 废弃
@@ -296,7 +297,7 @@ class post_control extends common_control {
 			// 快速发帖。
 			if($quickpost) {
 				$message = misc::html_space($message);
-				$message = preg_replace('#(\w+://[^\s<]+)#', '<a href="\\1" target="_blank">\\1</a>', $message);
+				$message = preg_replace('#(\w+://[^\x7f-\xff\s<]+)#', '<a href="\\1" target="_blank">\\1</a>', $message);
 				$message = $this->post->html_safe($message);
 			} else {
 				$message = $this->post->html_safe($message);
@@ -406,6 +407,12 @@ class post_control extends common_control {
 					$pmsubject = utf8::substr($thread['subject'], 0, 16);
 					$pmmessage = "【{$this->_user['username']}】回复了您的主题：<a href=\"?thread-index-fid-$fid-tid-$tid.htm\" target=\"_blank\">【{$pmsubject}】</a>。";
 					$this->pm->system_send($thread['uid'], $thread['username'], $pmmessage);
+					// 判断引用
+					if($quote && $quote['uid'] != $thread['uid']) {
+						$pmsubject = utf8::substr(htmlspecialchars(strip_tags($thread['subject'])), 0, 16);
+						$pmmessage = "【{$this->_user['username']}】引用了您的帖子：<a href=\"?thread-index-fid-$fid-tid-$tid-page-$page.htm\" target=\"_blank\">【{$pmsubject}】</a>。";
+						$this->pm->system_send($thread['uid'], $thread['username'], $pmmessage);
+					}
 				}
 				
 				// hook post_post_succeed.php
