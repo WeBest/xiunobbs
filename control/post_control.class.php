@@ -64,9 +64,11 @@ class post_control extends common_control {
 		if(!$this->form_submit()) {
 			
 			$attachlist = $this->get_attachlist_by_tmp($uid);
-			$this->init_editor_attach($attachlist, '0');
+			$this->init_editor_attach($attachlist);
 		
+			$pid = 0;
 			$this->view->assign('fid', $fid);
+			$this->view->assign('pid', $pid);
 			
 			// 初始化 select 控件
 			$this->init_type_select($forum, $typeid1, $typeid2, $typeid3, $typeid4);
@@ -275,10 +277,11 @@ class post_control extends common_control {
 			
 			// 附件相关
 			$attachlist = $this->get_attachlist_by_tmp($uid);
-			$this->init_editor_attach($attachlist, '00');
+			$this->init_editor_attach($attachlist);
 			
 			$this->view->assign('fid', $fid);
 			$this->view->assign('tid', $tid);
+			$this->view->assign('pid', $pid);
 			$this->view->assign('thread', $thread);
 			$this->view->assign('message', $message);
 			$this->view->assign('forum', $forum);
@@ -410,8 +413,8 @@ class post_control extends common_control {
 						$this->pm->system_send($thread['uid'], $thread['username'], $pmmessage);
 					}
 					// 判断引用
-					if($quote && $quote['uid'] != $thread['uid']) {
-						$pmsubject = utf8::substr(htmlspecialchars(strip_tags($thread['subject'])), 0, 16);
+					if($quote && $quote['uid'] != $thread['uid'] && $quote['uid'] != $this->_user['uid']) {
+						$pmsubject = utf8::substr(htmlspecialchars(strip_tags($quote['message'])), 0, 16);
 						$pmmessage = "【{$this->_user['username']}】引用了您的帖子：<a href=\"?thread-index-fid-$fid-tid-$tid-page-$page.htm\" target=\"_blank\">【{$pmsubject}】</a>。";
 						$this->pm->system_send($post['uid'], $post['username'], $pmmessage);
 					}
@@ -474,7 +477,7 @@ class post_control extends common_control {
 			
 			// 附件相关
 			$attachlist = $this->attach->get_list_by_fid_pid($fid, $pid, 0);
-			$this->init_editor_attach($attachlist, $pid);
+			$this->init_editor_attach($attachlist);
 			
 			if($isfirst) {
 				$this->init_type_select($forum, $thread['typeid1'], $thread['typeid2'], $thread['typeid3'], $thread['typeid4']);
@@ -678,7 +681,7 @@ class post_control extends common_control {
 		return $attachlist;
 	}
 		
-	private function init_editor_attach($attachlist, $pid) {
+	private function init_editor_attach($attachlist) {
 		$attachnum = count($attachlist);
 		$this->view->assign('attachlist', $attachlist);
 		$this->view->assign('attachnum', $attachnum);
@@ -686,7 +689,6 @@ class post_control extends common_control {
 		$this->view->assign('upload_max_filesize', $upload_max_filesize);
 		$filetyps = core::json_encode($this->attach->filetypes);
 		$this->view->assign('filetyps', $filetyps);
-		$this->view->assign_value('pid', $pid);// 给编辑器附件列表使用
 	}
 
 	// copy from post_control.class.php
