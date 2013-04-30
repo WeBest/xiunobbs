@@ -214,11 +214,7 @@ class plugin_control extends admin_control {
 		
 		$install = $this->conf['plugin_path'].$dir.'/install.php';
 		if(is_file($install)) {
-			try {
-				include $install;
-			} catch(Exception $e) {
-				log::write("安装插件 $dir 可能发生错误:".$e->getMessage());
-			}
+			include $install;
 		}
 		
 		// 设置 installed 标记, 民间插件可能不包含 pluginid
@@ -332,11 +328,7 @@ class plugin_control extends admin_control {
 		// 开始寻找 install，这里非常的危险！需要过滤一下，只允许字母数字下划线的目录名
 		$unstall = $this->conf['plugin_path'].$dir.'/unstall.php';
 		if(is_file($unstall)) {
-			try {
-				include $unstall;
-			} catch(Exception $e) {
-				log::write("删除插件 $dir 可能发生错误:".$e->getMessage());
-			}
+			include $unstall;
 		}
 		
 		// 设置 installed 标记
@@ -466,12 +458,7 @@ class plugin_control extends admin_control {
 		// 开始寻找 install，这里非常的危险！需要过滤一下，只允许字母数字下划线的目录名
 		$setting = $this->conf['plugin_path'].$dir.'/setting.php';
 		if(is_file($setting)) {
-			try {
-				include $setting;
-			} catch(Exception $e) {
-				log::write("设置插件 $dir 可能发生错误:".$e->getMessage());
-				echo $e->getMessage();
-			}
+			include $setting;
 		} else {
 			echo " $setting 文件不存在。";
 		}

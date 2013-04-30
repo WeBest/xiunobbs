@@ -1,50 +1,101 @@
 <?php
 
 $error = $input = array();
-if(!$this->form_submit() && isset($_GET['count'])) {
+
+$start = intval(core::gpc('start'));
+
+if(!$this->form_submit() && empty($start)) {
 	$this->view->assign('dir', $dir);
-	$this->view->display('plugin_rebuild_count.htm');
+	$this->view->display('plugin_xn_recount.htm');
 } else {
 	
-	$user = core::gpc('user', 'R');
-	$forum = core::gpc('forum', 'R');
-	$threadtype = core::gpc('threadtype', 'R');
-	
-	// 锁住
-	$this->runtime->xset('site_runlevel', 4, 'runtime');
-	$this->kv->xset('site_runlevel', 4, 'conf');
-	
-	$start = core::start('start');
-	$conf = $this->conf;
+	$count_user = core::gpc('count_user', 'R');
+	$count_forum = core::gpc('count_forum', 'R');
+	$count_threadtype = core::gpc('count_threadtype', 'R');
 	
 	if(empty($start)) {
-		$this->mthread->index_create('index');
+		// 锁住
+		$this->runtime->xset('site_runlevel', 4, 'runtime');
+		$this->kv->xset('site_runlevel', 4, 'conf');
+		// 创建索引
+		try {$this->thread->index_create(array('tid'=>1)); } catch (Exception $e) {}
+		if($count_user) {
+			$this->user->index_update(array(), array('digests'=>0, 'threads'=>0));
+		}
+		if($count_forum) {
+			$this->forum->index_update(array(), array('digests'=>0, 'threads'=>0));
+		}
+		if($count_threadtype) {
+			$this->thread_type_count->truncate();
+			$this->thread_type_data->truncate();
+		}
+		$this->thread_digest->truncate();
 	}
-	// 建立索引
 	
-	$db = new db_mysql($conf['db']['mysql']);
-	$count = core::gpc('count');
-	if(empty($count)) {
-		$count = $db->index_count('thread');
-	}
-	$mthread = new thread($conf);
-	$mdigest = new thread_digest($conf);
-	if($start < $count) {
-		$limit = DEBUG ? 20 : 2000;
-		$arrlist = $mthread->index_fetch(array(), array(), $start, $limit);
+	$limit = DEBUG ? 20 : 200;
+	$arrlist = $this->thread->index_fetch(array('tid'=>array('>'=>$start)), array('tid'=>1), $start, $limit);
+	if(!empty($arrlist)) {
+		$user_digests = $user_threads = $forum_threads = $forum_digests = array();
 		foreach($arrlist as $arr) {
 			if(empty($arr['digest'])) continue;
-			$mdigest->create(array('fid'=>$arr['fid'], 'tid'=>$arr['tid'], 'digest'=>$arr['digest']));
+			$this->thread_digest->create(array('fid'=>$arr['fid'], 'tid'=>$arr['tid'], 'digest'=>$arr['digest']));
+			if($count_user) {
+				!isset($user_threads[$arr['uid']]) && $user_threads[$arr['uid']] = 0;
+				$user_threads[$arr['uid']]++;
+				if($arr['digest']) {
+					!isset($user_digests[$arr['uid']]) && $user_digests[$arr['uid']] = 0;
+					$user_digests[$arr['uid']]++;
+				}
+			}
+			if($count_forum) {
+				!isset($forum_threads[$arr['uid']]) && $forum_threads[$arr['uid']] = 0;
+				$forum_threads[$arr['uid']]++;
+				if($arr['digest']) {
+					!isset($forum_digests[$arr['uid']]) && $forum_digests[$arr['uid']] = 0;
+					$forum_digests[$arr['uid']]++;
+				}
+			}
+			if($arr['typeid1'] || $arr['typeid2'] || $arr['typeid3'] || $arr['typeid4']) {
+				$this->thread_type->xcreate($arr['fid'], $arr['tid'], $arr['typeid1'], $arr['typeid2'], $arr['typeid3'], $arr['typeid4']);
+			}
+		}
+		if($user_threads) {
+			foreach($user_threads as $_uid=>$_count) {
+				$user = $this->user->read($_uid);
+				$user['threads'] += $_count;
+				$this->user->update($user);
+			}
+		}
+		if($user_digests) {
+			foreach($user_digests as $_uid=>$_count) {
+				$user = $this->user->read($_uid);
+				$user['digests'] += $_count;
+				$this->user->update($user);
+			}
+		}
+		if($forum_threads) {
+			foreach($forum_threads as $_fid=>$_count) {
+				$forum = $this->forum->read($_fid);
+				$forum['threads'] += $_count;
+				$this->forum->update($forum);
+			}
+		}
+		if($forum_digests) {
+			foreach($forum_digests as $_fid=>$_count) {
+				$forum = $this->forum->read($_fid);
+				$forum['digests'] += $_count;
+				$this->forum->update($forum);
+			}
 		}
 		$start += $limit;
-		$this->message("正在升级 upgrade_digest, 一共: $count, 当前: $start...", "?plugin-setting-dir-$dir-user-$user-forum-$forum-threadtype-$threadtype-start-$start-count-$count.htm", 0);
+		$this->message("正在重建统计数, 当前: $start...", 0, "?plugin-setting-dir-$dir-count_user-$count_user-count_forum-$count_forum-count_threadtype-$count_threadtype-start-$start.htm");
 	} else {
-		$this->message('升级 upgrade_digest 完成', '?step=complete');
-	}	
-	
-	$this->message('恭喜，修改成功。', 1, "?plugin-setting-dir-$dir.htm");
+		// 锁住
+		$this->runtime->xset('site_runlevel', 0, 'runtime');
+		$this->kv->xset('site_runlevel', 0, 'conf');
+		try { $this->thread->index_drop(array('tid'=>1)); } catch (Exception $e) {}
+		$this->message('恭喜，修改成功。', 1, "?plugin-setting-dir-$dir.htm");
+	}
 }
-
-
 
 ?>
