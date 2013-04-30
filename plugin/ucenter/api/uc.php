@@ -19,6 +19,10 @@ define('API_RETURN_FORBIDDEN', '-2');
 include $conf['plugin_path'].'ucenter/ucenter_simple_client.php';
 $ucconf = include $conf['plugin_path'].'ucenter/conf.php';
 
+if(empty($ucconf['uc_appkey'])) {
+	exit('请配置 plugin/ucenter/conf.php 中的 uc_appkey');
+}
+
 $code = core::gpc('code');
 parse_str(uc_authcode($code, 'DECODE', $ucconf['uc_appkey']), $get);
 if(empty($get)) {

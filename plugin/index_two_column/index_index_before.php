@@ -61,6 +61,23 @@
 			$thread['subject_fmt'] = utf8::substr($thread['subject'], 0, 32);
 		}
 		
+		if($unset2 > 0) {
+			$digestlist = $this->thread_digest->get_newlist($start + $pagesize, $pagesize);
+			foreach($digestlist as $k=>&$thread) {
+				$this->thread->format($thread);
+				// 去掉没有权限访问的版块数据
+				$fid = $thread['fid'];
+				if(!isset($this->conf['forumarr'][$fid])) {
+					unset($digestlist[$k]);
+					$unset2++;
+					continue;
+				}
+				
+				$readtids .= ','.$thread['tid'];
+				$thread['subject_fmt'] = utf8::substr($thread['subject'], 0, 32);
+			}
+		}
+		
 		$readtids = substr($readtids, 1); 
 		$click_server = $this->conf['click_server']."?db=tid&r=$readtids";
 		

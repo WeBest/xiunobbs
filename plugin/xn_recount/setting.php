@@ -33,11 +33,10 @@ if(!$this->form_submit() && empty($start)) {
 	}
 	
 	$limit = DEBUG ? 20 : 200;
-	$arrlist = $this->thread->index_fetch(array('tid'=>array('>'=>$start)), array('tid'=>1), $start, $limit);
+	$arrlist = $this->thread->index_fetch(array('tid'=>array('>'=>$start)), array('tid'=>1), 0, $limit);
 	if(!empty($arrlist)) {
 		$user_digests = $user_threads = $forum_threads = $forum_digests = array();
 		foreach($arrlist as $arr) {
-			if(empty($arr['digest'])) continue;
 			$this->thread_digest->create(array('fid'=>$arr['fid'], 'tid'=>$arr['tid'], 'digest'=>$arr['digest']));
 			if($count_user) {
 				!isset($user_threads[$arr['uid']]) && $user_threads[$arr['uid']] = 0;
@@ -56,7 +55,7 @@ if(!$this->form_submit() && empty($start)) {
 				}
 			}
 			if($arr['typeid1'] || $arr['typeid2'] || $arr['typeid3'] || $arr['typeid4']) {
-				$this->thread_type->xcreate($arr['fid'], $arr['tid'], $arr['typeid1'], $arr['typeid2'], $arr['typeid3'], $arr['typeid4']);
+				$this->thread_type_data->xcreate($arr['fid'], $arr['tid'], $arr['typeid1'], $arr['typeid2'], $arr['typeid3'], $arr['typeid4']);
 			}
 		}
 		if($user_threads) {
@@ -87,14 +86,14 @@ if(!$this->form_submit() && empty($start)) {
 				$this->forum->update($forum);
 			}
 		}
-		$start += $limit;
-		$this->message("正在重建统计数, 当前: $start...", 0, "?plugin-setting-dir-$dir-count_user-$count_user-count_forum-$count_forum-count_threadtype-$count_threadtype-start-$start.htm");
+		$start = $arr['tid'];
+		$this->message("正在重建统计数, 当前: $start...", 1, "plugin-setting-dir-$dir-count_user-$count_user-count_forum-$count_forum-count_threadtype-$count_threadtype-start-$start.htm");
 	} else {
 		// 锁住
 		$this->runtime->xset('site_runlevel', 0, 'runtime');
 		$this->kv->xset('site_runlevel', 0, 'conf');
 		try { $this->thread->index_drop(array('tid'=>1)); } catch (Exception $e) {}
-		$this->message('恭喜，修改成功。', 1, "?plugin-setting-dir-$dir.htm");
+		$this->message('恭喜，修改成功。', 1, "plugin-setting-dir-$dir.htm");
 	}
 }
 
