@@ -7,7 +7,7 @@
 		
 		$threadlist = array();
 		if($page == 1) {
-			$threadlist = $this->runtime->get('threadlist');
+			$threadlist = $this->runtime->get('index_threadlist');
 		}
 		if(empty($threadlist) || $page != 1) {
 			
@@ -42,7 +42,7 @@
 				$threadlist = array_slice($threadlist, 0, $pagesize);
 			}
 			if($page == 1) {
-				$this->runtime->set('threadlist', $threadlist, 60);
+				$this->runtime->set('index_threadlist', $threadlist, 60);
 			}
 		}
 		
@@ -62,7 +62,7 @@
 		
 		$digestlist = array();
 		if($page == 1) {
-			$digestlist = $this->runtime->get('digestlist');
+			$digestlist = $this->runtime->get('index_digestlist');
 		}
 		if(empty($digestlist) || $page != 1) {
 			$unset2 = 0;
@@ -97,7 +97,7 @@
 				$digestlist = array_slice($digestlist, 0, $pagesize);
 			}
 			if($page == 1) {
-				$this->runtime->set('digestlist', $digestlist, 60);
+				$this->runtime->set('index_digestlist', $digestlist, 60);
 			}
 		}
 		
