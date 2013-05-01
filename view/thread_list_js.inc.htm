@@ -111,7 +111,7 @@ $('#mod_move').click(function() {
 $('#threadlist tr').bind('mouseover', function() {$(this).removeClass('bg1').addClass('bg2');});
 $('#threadlist tr').bind('mouseout', function() {$(this).removeClass('bg2').addClass('bg1');});
 
-// 最新贴，已读贴，比较最后阅读时间和帖子的最后回复时间
+// 最新帖，已读帖，比较最后阅读时间和帖子的最后回复时间
 $('#body table.thread').each(function() {
 	var tid = intval($(this).attr('tid'));
 	var lastpost = intval($(this).attr('lastpost'));
@@ -123,7 +123,7 @@ $('#body table.thread').each(function() {
 	}
 });
 
-// 点击服务器，火贴
+// 点击服务器，火帖
 $.getScript('$click_server&'+Math.random(), function() {
 	if(!xn_json) return;
 	var json = xn_json;

@@ -212,7 +212,7 @@ class post_control extends common_control {
 				// 更新 user
 				$this->user->update($user);
 				
-				// 更新 $forum 版块的总贴数
+				// 更新 $forum 版块的总帖数
 				$forum = $this->forum->read($fid);
 				$forum['threads']++;
 				$forum['posts']++;
@@ -387,7 +387,7 @@ class post_control extends common_control {
 				// 更新 $user 
 				$this->user->update($user);
 					
-				// 更新 $forum 版块的总贴数
+				// 更新 $forum 版块的总帖数
 				$forum = $this->forum->read($fid);
 				$forum['posts']++;
 				$forum['todayposts']++;
@@ -466,10 +466,10 @@ class post_control extends common_control {
 		$this->conf += $this->kv->xget('conf_ext');
 		if(!$ismod && $this->conf['post_update_expiry'] && $_SERVER['time'] - $post['dateline'] > $this->conf['post_update_expiry']) {
 			$time = ceil($this->conf['post_update_expiry'] / 60);
-			$this->message('您不能再继续修改该贴，已经超出了最大修改时间: (<b>'.$time.'分钟</b>)。', 0);
+			$this->message('您不能再继续修改该帖，已经超出了最大修改时间: (<b>'.$time.'分钟</b>)。', 0);
 		}
 		
-		// 是否为首贴
+		// 是否为首帖
 		$isfirst = $thread['firstpid'] == $pid;
 		
 		$input = $error = array();

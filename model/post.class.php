@@ -83,7 +83,7 @@ class post extends base_model {
 		// 删除 $post
 		$this->delete($fid, $pid);
 		
-		// 更新 $forum 版块的总贴数
+		// 更新 $forum 版块的总帖数
 		$rforum['posts']++;
 		$post['dateline'] > $_SERVER['time_today'] && $rforum['todayposts']++;
 		

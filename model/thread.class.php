@@ -61,7 +61,7 @@ class thread extends base_model {
 		if(empty($thread)) return;
 		$thread['subject_substr']  = utf8::substr($thread['subject'], 0, 50);
 		isset($thread['message']) && $thread['message']  = nl2br(htmlspecialchars($thread['message']));
-		$thread['isnew'] = ($this->conf['site_pv'] <= 1000000 ? $_SERVER['time'] - 86400 * 7 : $_SERVER['time_today']) < max($thread['dateline'], $thread['lastpost']);	// 最新贴定义：如果是 pv > 100w 的站点，为今日，否则为7天内的，否则先的太“冷清”了。
+		$thread['isnew'] = ($this->conf['site_pv'] <= 1000000 ? $_SERVER['time'] - 86400 * 7 : $_SERVER['time_today']) < max($thread['dateline'], $thread['lastpost']);	// 最新帖定义：如果是 pv > 100w 的站点，为今日，否则为7天内的，否则先的太“冷清”了。
 		$thread['dateline_fmt'] = misc::humandate($thread['dateline']);
 		$thread['posts_fmt'] = max(0, $thread['posts'] - 1);	// 用来前端显示
 		$thread['lastpost_fmt'] = misc::humandate($thread['lastpost']);
@@ -76,7 +76,7 @@ class thread extends base_model {
 		}
 		$thread['forumname'] = isset($this->conf['forumarr'][$thread['fid']]) ? $this->conf['forumarr'][$thread['fid']] : '';
 		
-		// 精华 火贴 新帖 老帖
+		// 精华 火帖 新帖 老帖
 		if($thread['digest'] > 0) {
 			$thread['color'] = "thread-digest-$thread[digest]";
 		} elseif($thread['posts'] > $this->conf['threadlist_hotviews']) {

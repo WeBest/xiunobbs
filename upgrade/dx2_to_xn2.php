@@ -876,7 +876,7 @@ function upgrade_post() {
 						}
 					}
 				}
-				// 如果没有 aid 不在 message 中，则直接粘贴到内容末尾
+				// 如果没有 aid 不在 message 中，则直接粘帖到内容末尾
 			}
 			$old['message'] = bbcode2html($old['message']);
 			

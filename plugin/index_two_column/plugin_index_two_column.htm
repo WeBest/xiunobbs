@@ -12,7 +12,7 @@
 			<td class="center">
 				<a class="icon icon-home" href="./"></a>
 				<span class="sep"></span>
-				<span>最新贴</span>
+				<span>最新帖</span>
 				<!--{hook index_index_nav_center_after.htm}-->
 			</td>
 			<td width="80">
@@ -156,7 +156,7 @@ $('table.forum').bind('mouseout', function() {$('td:gt(0)', this).removeClass('b
 $('#threadlist tr').bind('mouseover', function() {$(this).removeClass('bg1').addClass('bg2');});
 $('#threadlist tr').bind('mouseout', function() {$(this).removeClass('bg2').addClass('bg1');});
 
-// 最新贴，已读贴，比较最后阅读时间和帖子的最后回复时间
+// 最新帖，已读帖，比较最后阅读时间和帖子的最后回复时间
 $('#body table.thread').each(function() {
 	var tid = intval($(this).attr('tid'));
 	var lastpost = intval($(this).attr('lastpost'));
