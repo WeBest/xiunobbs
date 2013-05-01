@@ -2,7 +2,6 @@
 		
 		$pagesize = 50;
 		$toplist = array(); // only top 3
-		$readtids = '';
 		$page = misc::page();
 		$page2 = misc::page('page2');
 		$start = ($page - 1) * $pagesize;
@@ -18,17 +17,32 @@
 				$unset1++;
 				continue;
 			}
-			
-			$readtids .= ','.$thread['tid'];
 			$thread['subject_fmt'] = utf8::substr($thread['subject'], 0, 32);
 		}
 		
+		if($unset1 > 0) {
+			$threadlist += (array)$this->thread->get_newlist($start + $pagesize, $pagesize * 4);
+			foreach($threadlist as $k=>&$thread) {
+				$this->thread->format($thread);
+				// 去掉没有权限访问的版块数据
+				$fid = $thread['fid'];
+				if(!isset($this->conf['forumarr'][$fid])) {
+					unset($threadlist[$k]);
+					$unset1++;
+					continue;
+				}
+				$thread['subject_fmt'] = utf8::substr($thread['subject'], 0, 32);
+			}
+			$threadlist = array_slice($threadlist, 0, $pagesize);
+		}
+		
+		/*
 		$toplist = $page == 1 ? $this->get_toplist() : array();
 		$toplist = array_filter($toplist);
 		foreach($toplist as $k=>&$thread) {
 			$this->thread->format($thread);
-                        $readtids .= ','.$thread['tid'];
                 }
+                */
                 
 		$pages = misc::simple_pages("?index-index-page2-$page2.htm", count($threadlist) + $unset1, $page, $pagesize, 'page');
 
@@ -56,8 +70,6 @@
 				$unset2++;
 				continue;
 			}
-			
-			$readtids .= ','.$thread['tid'];
 			$thread['subject_fmt'] = utf8::substr($thread['subject'], 0, 32);
 		}
 		
@@ -72,15 +84,22 @@
 					$unset2++;
 					continue;
 				}
-				
-				$readtids .= ','.$thread['tid'];
 				$thread['subject_fmt'] = utf8::substr($thread['subject'], 0, 32);
 			}
 			$digestlist = array_slice($digestlist, 0, $pagesize);
 		}
 		
+		/*
+		$readtids = '';
+		foreach($threadlist as $thread) {
+			$readtids .= ','.$thread['tid'];
+		}
+		foreach($digestlist as $thread) {
+			$readtids .= ','.$thread['tid'];
+		}
 		$readtids = substr($readtids, 1); 
 		$click_server = $this->conf['click_server']."?db=tid&r=$readtids";
+		*/
 		
 		$pages2 = misc::simple_pages("?index-index-page-$page.htm", count($digestlist) + $unset2, $page2, $pagesize, 'page2');
 		$this->view->assign('digestlist', $digestlist);
