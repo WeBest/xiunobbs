@@ -209,6 +209,10 @@ class mod_control extends common_control {
 				} elseif($rank == 0 && $thread['digest'] > 0) {
 					$digestarr[$thread['uid']]--;
 					$this->thread_digest->delete($tid);
+				} elseif($rank > 0 && $thread['digest'] > 0 && $rank != $thread['digest']) {
+					$thread_digest = $this->thread_digest->read($tid);
+					$thread_digest['digest'] = $rank;
+					$this->thread_digest->update($thread_digest);
 				}
 				
 				// 记录到版主操作日志
