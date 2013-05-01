@@ -47,15 +47,17 @@ if(!$this->form_submit() && empty($start)) {
 				}
 			}
 			if($count_forum) {
-				!isset($forum_threads[$arr['uid']]) && $forum_threads[$arr['uid']] = 0;
-				$forum_threads[$arr['uid']]++;
+				!isset($forum_threads[$arr['fid']]) && $forum_threads[$arr['fid']] = 0;
+				$forum_threads[$arr['fid']]++;
 				if($arr['digest']) {
-					!isset($forum_digests[$arr['uid']]) && $forum_digests[$arr['uid']] = 0;
-					$forum_digests[$arr['uid']]++;
+					!isset($forum_digests[$arr['fid']]) && $forum_digests[$arr['fid']] = 0;
+					$forum_digests[$arr['fid']]++;
 				}
 			}
-			if($arr['typeid1'] || $arr['typeid2'] || $arr['typeid3'] || $arr['typeid4']) {
-				$this->thread_type_data->xcreate($arr['fid'], $arr['tid'], $arr['typeid1'], $arr['typeid2'], $arr['typeid3'], $arr['typeid4']);
+			if($count_threadtype) {
+				if($arr['typeid1'] || $arr['typeid2'] || $arr['typeid3'] || $arr['typeid4']) {
+					$this->thread_type_data->xcreate($arr['fid'], $arr['tid'], $arr['typeid1'], $arr['typeid2'], $arr['typeid3'], $arr['typeid4']);
+				}
 			}
 		}
 		if($user_threads) {

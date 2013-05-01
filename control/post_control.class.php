@@ -300,7 +300,8 @@ class post_control extends common_control {
 			// 快速发帖。
 			if($quickpost) {
 				$message = misc::html_space($message);
-				$message = preg_replace('#(\w+://[^\x7f-\xff\s<]+)#', '<a href="\\1" target="_blank">\\1</a>', $message);
+				$message = preg_replace('#^(https?://)?([\w%\-\.]+?/)*[\w%\-\.]\??[^\s<\x7f-\xff]*$#is', $message);
+				$message = preg_replace('#^ed2k://[^\s\'\"\\\\<>]+?$#is', '<a href="\\1" target="_blank">\\1</a>', $message);
 				$message = $this->post->html_safe($message);
 			} else {
 				$message = $this->post->html_safe($message);
