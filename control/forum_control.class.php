@@ -49,6 +49,7 @@ class forum_control extends common_control {
 		
 		$this->_title[] = $forum['seo_title'] ? $forum['seo_title'] : $forum['name'];
 		$this->_seo_keywords = $forum['seo_keywords'] ?  $forum['seo_keywords'] : $forum['name'];
+		$this->_seo_description = $forum['brief'];
 		
 		// hook forum_index_page_before.php
 		
