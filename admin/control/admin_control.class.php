@@ -48,9 +48,9 @@ class admin_control extends common_control {
 						2. IP发生变化，退出登录
 						3. 更换浏览器，退出登录（浏览器同样可以被xss获取，此项废除）
 					*/
-					if($_SERVER['time'] - $time > 1800 && $_SERVER['time'] - $time < 3600) {
+					if($_SERVER['time'] - $time > 1800) {
 						$s = encrypt("$_SERVER[time]\t$_SERVER[ip]", $this->conf['auth_key']);
-						misc::setcookie('admin_auth', $s, $time + 3600, $this->conf['cookie_path'], $this->conf['cookie_domain']);
+						misc::setcookie($this->conf['cookie_pre'].'admin_auth', $s, $_SERVER['time'] + 3600, $this->conf['cookie_path'], $this->conf['cookie_domain']);
 						$time = $_SERVER['time'];
 					}
 					/*
@@ -58,7 +58,7 @@ class admin_control extends common_control {
 						$login = 0;
 					}
 					*/
-					if($_SERVER['time'] - $time > 1800 || $ip != $_SERVER['ip']) {
+					if($ip != $_SERVER['ip']) {
 						$login = 1;
 					}
 				}

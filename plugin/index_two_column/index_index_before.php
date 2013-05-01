@@ -62,7 +62,7 @@
 		}
 		
 		if($unset2 > 0) {
-			$digestlist = $this->thread_digest->get_newlist($start + $pagesize, $pagesize);
+			$digestlist += (array)$this->thread_digest->get_newlist($start + $pagesize, $pagesize * 4);
 			foreach($digestlist as $k=>&$thread) {
 				$this->thread->format($thread);
 				// 去掉没有权限访问的版块数据
@@ -76,6 +76,7 @@
 				$readtids .= ','.$thread['tid'];
 				$thread['subject_fmt'] = utf8::substr($thread['subject'], 0, 32);
 			}
+			$digestlist = array_slice($digestlist, 0, $pagesize);
 		}
 		
 		$readtids = substr($readtids, 1); 
