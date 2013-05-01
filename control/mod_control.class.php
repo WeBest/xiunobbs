@@ -209,6 +209,7 @@ class mod_control extends common_control {
 				} elseif($rank == 0 && $thread['digest'] > 0) {
 					$digestarr[$thread['uid']]--;
 					$this->thread_digest->delete($tid);
+				// 更新精华
 				} elseif($rank > 0 && $thread['digest'] > 0 && $rank != $thread['digest']) {
 					$thread_digest = $this->thread_digest->read($tid);
 					$thread_digest['digest'] = $rank;
