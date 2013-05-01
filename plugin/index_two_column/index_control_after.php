@@ -1,6 +1,9 @@
 
 	// 最新
 	public function on_new() {
+	
+		$this->_checked['index'] = ' class="checked"';
+		
 		$pagesize = $this->conf['forum_index_pagesize'];
 		$page = misc::page();
 		$start = ($page - 1) * $pagesize;
@@ -36,6 +39,9 @@
 	
 	// 精华
 	public function on_digest() {
+	
+		$this->_checked['index'] = ' class="checked"';
+		
 		$pagesize = $this->conf['forum_index_pagesize'];
 		$page = misc::page();
 		$start = ($page - 1) * $pagesize;

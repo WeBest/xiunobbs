@@ -1,4 +1,6 @@
-		
+
+		$this->_checked['index'] = ' class="checked"';
+				
 		$pagesize = 50;
 		$start = 0;
 		
