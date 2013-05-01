@@ -14,7 +14,7 @@ class mod_control extends common_control {
 		parent::__construct($conf);
 		$this->check_login();
 		if($this->_user['groupid'] > 5) {
-			$this->message('对不起，您没有权限访问此板块。');
+			$this->message('对不起，您没有权限访问此版块。');
 		}
 		
 		// 加载精华积分策略
@@ -310,7 +310,7 @@ class mod_control extends common_control {
 				$fid = intval($fid);
 				$tid = intval($tid);
 				
-				// 过滤非本板块的主题分类
+				// 过滤非本版块的主题分类
 				if($fid != intval(core::gpc('fid'))) continue;
 				
 				$thread = $this->thread->read($fid, $tid);
@@ -353,7 +353,7 @@ class mod_control extends common_control {
 		}
 	}
 	
-	// 所有 fid 相关表都需要更新，板块的统计数也需要更新。
+	// 所有 fid 相关表都需要更新，版块的统计数也需要更新。
 	public function on_move() {
 		$this->_title[] = '移动主题';
 		$this->_nav[] = '移动主题';
@@ -403,7 +403,7 @@ class mod_control extends common_control {
 			$this->check_forum_exists($forum2);
 			$this->check_access($forum2, 'post');
 			if($fid == $fid2) {
-				$this->message('请选择其他板块。', 0);
+				$this->message('请选择其他版块。', 0);
 			}
 			
 			$typeidsum = $typeid1 + $typeid2 + $typeid3 + $typeid4;	// 检查合法范围
@@ -485,7 +485,7 @@ class mod_control extends common_control {
 				// hook mod_move_loop_after.php
 			}
 			
-			// 更新板块主题数，回复数
+			// 更新版块主题数，回复数
 			$forum['threads'] -= $tidnum;
 			$forum2['threads'] += $tidnum;
 			$forum['posts'] -= $pidnum;
@@ -512,7 +512,7 @@ class mod_control extends common_control {
 		// 权限检测
 		$forum = $this->forum->read($fid);
 		if(!$this->is_mod($forum, $this->_user)) {
-			$this->message('您没有权限管理该板块！');
+			$this->message('您没有权限管理该版块！');
 		}
 		
 		$post = $this->post->read($fid, $pid);

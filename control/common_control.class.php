@@ -445,7 +445,7 @@ class common_control extends base_control {
 			return TRUE;
 		} else {
 			$loginadd = empty($this->_user['uid']) ? ' <a href="?user-login-ajax-1.htm" class="ajaxdialog" onclick="return false" rel="nofollow">点击登录</a>' : '';
-			$message =  '您没有对该板块的(<b>'.$actiontext[$action].'</b>)权限！'.$loginadd;
+			$message =  '您没有对该版块的(<b>'.$actiontext[$action].'</b>)权限！'.$loginadd;
 			return FALSE;
 		}
 	}
@@ -501,7 +501,7 @@ class common_control extends base_control {
 	
 	protected function check_forum_exists($forum) {
 		if(empty($forum)) {
-			$this->message('板块不存在！可能被设置了隐藏。', 0);
+			$this->message('版块不存在！可能被设置了隐藏。', 0);
 		}
 	}
 	

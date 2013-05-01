@@ -28,7 +28,7 @@ class thread_control extends common_control {
 		$this->check_thread_exists($thread);
 		$fpage = intval(core::gpc($this->conf['cookie_pre'].'page', 'C'));
 		
-		// 板块权限检查
+		// 版块权限检查
 		$forum = $this->mcache->read('forum', $fid);
 		$this->check_forum_exists($forum);
 		$this->check_access($forum, 'read');

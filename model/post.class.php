@@ -83,7 +83,7 @@ class post extends base_model {
 		// 删除 $post
 		$this->delete($fid, $pid);
 		
-		// 更新 $forum 板块的总贴数
+		// 更新 $forum 版块的总贴数
 		$rforum['posts']++;
 		$post['dateline'] > $_SERVER['time_today'] && $rforum['todayposts']++;
 		
@@ -107,7 +107,7 @@ class post extends base_model {
 		return $return;
 	}
 	
-	// 合并返回值，用户删除板块时候，合并主题。
+	// 合并返回值，用户删除版块时候，合并主题。
 	public function xdelete_merge_return(&$return, &$return2) {
 		foreach($return2['user'] as $uid=>$arr) {
 			if(!$uid) continue;

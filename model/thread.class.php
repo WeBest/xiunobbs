@@ -211,7 +211,7 @@ class thread extends base_model {
 		return $return;
 	}
 	
-	// 合并返回值，用户删除板块时候，合并主题。
+	// 合并返回值，用户删除版块时候，合并主题。
 	public function xdelete_merge_return(&$return, &$return2) {
 		foreach($return2['user'] as $uid=>$arr) {
 			if(!$uid) continue;

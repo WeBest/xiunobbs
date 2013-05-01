@@ -71,7 +71,7 @@ class attach_control extends common_control {
 			if($forum['accesson']) {
 				$access = $this->forum_access->read($forum['fid'], $this->_user['groupid']);
 				if(!$access['allowdown']) {
-					$this->message('您所在的用户组不允许在本板块('.$forum['name'].')下载附件。');
+					$this->message('您所在的用户组不允许在本版块('.$forum['name'].')下载附件。');
 				}
 			}
 			
@@ -345,7 +345,7 @@ class attach_control extends common_control {
 		$aid = intval(core::gpc('aid'));
 		$uid = $this->_user['uid'];
 		
-		// 板块权限检查
+		// 版块权限检查
 		$forum = $this->mcache->read('forum', $fid);
 		$this->check_forum_exists($forum);
 		$this->check_access($forum, 'attach');
@@ -382,7 +382,7 @@ class attach_control extends common_control {
 		$fid = intval(core::gpc('fid'));
 		$aid = intval(core::gpc('aid'));
 		
-		// 板块权限检查
+		// 版块权限检查
 		$forum = $this->mcache->read('forum', $fid);
 		$this->check_forum_exists($forum);
 		$this->check_access($forum, 'attach');

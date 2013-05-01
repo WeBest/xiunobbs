@@ -212,7 +212,7 @@ class post_control extends common_control {
 				// 更新 user
 				$this->user->update($user);
 				
-				// 更新 $forum 板块的总贴数
+				// 更新 $forum 版块的总贴数
 				$forum = $this->forum->read($fid);
 				$forum['threads']++;
 				$forum['posts']++;
@@ -257,7 +257,7 @@ class post_control extends common_control {
 			$this->message('该帖子回复数已经达到10000，不能再回复了，再起话题吧！');
 		}
 		
-		// 板块权限检查
+		// 版块权限检查
 		$forum = $this->mcache->read('forum', $fid);
 		$this->check_forum_exists($forum);
 		$this->check_access($forum, 'post');
@@ -387,7 +387,7 @@ class post_control extends common_control {
 				// 更新 $user 
 				$this->user->update($user);
 					
-				// 更新 $forum 板块的总贴数
+				// 更新 $forum 版块的总贴数
 				$forum = $this->forum->read($fid);
 				$forum['posts']++;
 				$forum['todayposts']++;
@@ -443,7 +443,7 @@ class post_control extends common_control {
 		$user = $this->user->read($uid);
 		$this->check_user_delete($user);
 		
-		// 板块权限检查
+		// 版块权限检查
 		$forum = $this->mcache->read('forum', $fid);
 		$this->check_forum_exists($forum);
 		$this->check_access($forum, 'post');
@@ -610,7 +610,7 @@ class post_control extends common_control {
 		$user = $this->user->read($uid);
 		$this->check_user_delete($user);
 		
-		// 板块权限检查
+		// 版块权限检查
 		$forum = $this->mcache->read('forum', $fid);
 		$this->check_forum_exists($forum);
 		$this->check_access($forum, 'thread');

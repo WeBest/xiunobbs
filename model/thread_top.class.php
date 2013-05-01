@@ -80,7 +80,7 @@ class thread_top extends base_model {
 		return $tidkeys;
 	}
 	
-	// 删除板块的时候，清理2级，3级的置顶帖子
+	// 删除版块的时候，清理2级，3级的置顶帖子
 	public function clear_top_by_fid($fid) {
 	
 	}

@@ -26,7 +26,7 @@ class forum extends base_model {
 		$this->update($forum);
 	}
 	
-	// 取板块列表，二级
+	// 取版块列表，二级
 	public function get_list() {
 		$forumlist = $this->index_fetch(array(), array('rank'=>1), 0, 1000);
 		misc::arrlist_change_key($forumlist, 'fid');
@@ -35,7 +35,7 @@ class forum extends base_model {
 	
 	public function check_name(&$name) {
 		if(empty($name)) {
-			return '板块名称不能为空。';
+			return '版块名称不能为空。';
 		}
 		return '';
 	}

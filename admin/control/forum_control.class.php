@@ -25,8 +25,8 @@ class forum_control extends admin_control {
 	}	
 	
 	public function on_list() {
-		$this->_title[] = '板块列表';
-		$this->_nav[] = '<a href="./">板块列表</a>';
+		$this->_title[] = '版块列表';
+		$this->_nav[] = '<a href="./">版块列表</a>';
 		
 		$error = array();
 		if($this->form_submit()) {
@@ -99,10 +99,10 @@ class forum_control extends admin_control {
 		$this->view->display('forum_list.htm');
 	}
 
-	// 合并板块，保留fid1， 删除fid2，
+	// 合并版块，保留fid1， 删除fid2，
 	public function on_merge() {
-		$this->_title[] = '合并板块';
-		$this->_nav[] = '合并板块';
+		$this->_title[] = '合并版块';
+		$this->_nav[] = '合并版块';
 		
 		$fid1 = intval(core::gpc('fid1', 'R')); // 保留
 		$fid2 = intval(core::gpc('fid2', 'R')); // 删除
@@ -126,7 +126,7 @@ class forum_control extends admin_control {
 			$this->thread_digest->index_update(array('fid'=>$fid2), array('fid'=>$fid1), TRUE);
 			$this->thread_new->index_update(array('fid'=>$fid2), array('fid'=>$fid1), TRUE);
 			
-			// 删除原来板块的数据
+			// 删除原来版块的数据
 			$this->forum_access->delete_by_fid($fid2);
 			$this->thread_type->delete_by_fid($fid2);
 			$this->thread_type_cate->delete_by_fid($fid2);
@@ -161,8 +161,8 @@ class forum_control extends admin_control {
 	
 	// 修改
 	public function on_update() {
-		$this->_title[] = '修改板块';
-		$this->_nav[] = '修改板块';
+		$this->_title[] = '修改版块';
+		$this->_nav[] = '修改版块';
 		
 		$fid = intval(core::gpc('fid'));
 
@@ -331,8 +331,8 @@ class forum_control extends admin_control {
 	}
 	
 	public function on_delete() {
-		$this->_title[] = '删除板块';
-		$this->_nav[] = '删除板块';
+		$this->_title[] = '删除版块';
+		$this->_nav[] = '删除版块';
 		
 		$fid = intval(core::gpc('fid'));
 		$starttid = intval(core::gpc('starttid'));//tid
@@ -342,7 +342,7 @@ class forum_control extends admin_control {
 
 		$forum = $this->forum->read($fid);
 		if(empty($forum)) {
-			$this->message('板块已经被删除。', 1, '?forum-list.htm');
+			$this->message('版块已经被删除。', 1, '?forum-list.htm');
 		}
 		
 		if(empty($threads)) {
