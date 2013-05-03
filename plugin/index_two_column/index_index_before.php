@@ -6,10 +6,8 @@
 		
 		$threadlist = array();
 		$groupid = $this->_user['groupid'];
-		if($groupid == 0) {
-			$threadlist = $this->runtime->get('index_threadlist');
-		}
-		if(empty($threadlist) || $groupid == 0) {
+		$threadlist = $this->runtime->get('index_threadlist');
+		if(empty($threadlist)) {
 			$threadlist = $this->thread->get_newlist($start, $pagesize);
 			$unset1 = 0;
 			foreach($threadlist as $k=>&$thread) {
@@ -40,9 +38,7 @@
 				}
 				$threadlist = array_slice($threadlist, 0, $pagesize);
 			}
-			if($groupid == 0) {
-				$this->runtime->set('index_threadlist', $threadlist, 60);
-			}
+			$this->runtime->set('index_threadlist', $threadlist, 60);
 		}
 		
 		// 在线会员
@@ -56,10 +52,8 @@
 		// hook index_bbs_after.php
 		
 		$digestlist = array();
-		if($groupid == 0) {
-			$digestlist = $this->runtime->get('index_digestlist');
-		}
-		if(empty($digestlist) || $groupid == 0) {
+		$digestlist = $this->runtime->get('index_digestlist');
+		if(empty($digestlist)) {
 			$unset2 = 0;
 			$digestlist = $this->thread_digest->get_newlist($start, $pagesize);
 			foreach($digestlist as $k=>&$thread) {
@@ -90,9 +84,7 @@
 				}
 				$digestlist = array_slice($digestlist, 0, $pagesize);
 			}
-			if($groupid == 0) {
-				$this->runtime->set('index_digestlist', $digestlist, 60);
-			}
+			$this->runtime->set('index_digestlist', $digestlist, 60);
 		}
 		
 		$this->view->assign('digestlist', $digestlist);
