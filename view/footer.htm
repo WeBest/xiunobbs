@@ -33,6 +33,16 @@
 
 <script type="text/javascript">
 
+$('#search input').focus(function() {$('#search').addClass('hover');});
+$('#search input').blur(function() {$('#search').removeClass('hover');});
+$('#search input').keyup(function(e) {
+	if(e.which == 13 || e.which == 10) {
+		var val = encodeURIComponent($(this).val());
+		$('#search_form').attr('action', '?search-index-keyword-'+val+'.htm');
+		$('#search_form').submit();
+	}
+});
+
 // 登陆后才能发帖
 $('#create_thread').click(function() {
 	if(g_uid == 0) {

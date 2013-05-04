@@ -37,42 +37,22 @@
 					<!--{/loop}-->
 					<!--{hook header_menu_end.htm}-->
 				</td>
-				<!--{if $_user['groupid'] == 0}-->
-				<td class="right" valign="top" width="90">
-				<!--{else}-->
-				<td class="right" valign="top" width="160">
-				<!--{/if}-->
-					<span id="user">
-					<!--{hook header_user_start.htm}-->
-					<!--{if $_user['groupid'] == 0}-->
-						<a href="?user-login-ajax-1.htm" class="ajaxdialog" onclick="return false" rel="nofollow">登录</a>
-						<a href="?user-create-ajax-1.htm" class="ajaxdialog" onclick="return false" rel="nofollow">注册</a>
-					<!--{else}-->
-						<a href="?my-profile.htm" title="$_user[groupname]">$_user[username]</a>
-						
-						<!--{if $_user['groupid'] == 6}-->
-						<a href="?user-reactive.htm">邮箱激活</a>
-						<!--{/if}-->
-						
-						<span id="pm">
-							<a href="?my-pm.htm" class="icon icon-pm"></a><a href="?my-pm.htm" class="icon icon-newpm" style="display: none;" aria-label="短消息"></a>
-						</span>
-
-						<!--{if $_user['groupid'] > 0 && $_user['groupid'] < 6}-->
-						<a href="admin/" target="_blank">管理</a>
-						<!--{/if}-->
-			
-						<a href="?user-logout.htm" class="ajaxdialog" onclick="return false">退出</a>
+				<td class="right" valign="top" width="118">
+					
+					<!--{hook header_menu_search_before.htm}-->
+					<!--{if $conf[search_type]}-->
+					<form action="?search-index.htm" target="_blank" id="search_form" method="post">
+						<div id="search"><input type="text" id="search_keyword" name="keyword" /></div>
+					</form>
 					<!--{/if}-->
-						<a href="?search-index.htm" rel="nofollow">搜索</a>
-						<!--{hook header_user_end.htm}-->
-					</span>
+					<!--{hook header_menu_search_after.htm}-->
 				</td>
 			</tr>
 		</table>
 	</div>
 </div>
 
+					
 <!--{hook header_menu_after.htm}-->
 
 <div id="body" role="main">

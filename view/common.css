@@ -105,13 +105,13 @@ a.icon:hover {background-image: url(image/icon-hover.gif)}
 .icon-digest-3 {background-position: -80px -16px;}
 
 /* 第三行 */
-/*
 .icon-user-guest { background-position: -0px -32px; }
 .icon-user-user { background-position: -16px -32px; }
 .icon-user-mod { background-position: -32px -32px; }
 .icon-user-admin { background-position: -48px -32px; }
+.icon-user-logout { background-position: -80px -32px; }
+.icon-user-create { background-position: -96px -32px; }
 .icon-user-group { background-position: -112px -32px; }
-*/
 
 /* 第四行 */
 .icon-orderby-0 { background-position: -32px -48px; }
@@ -142,9 +142,13 @@ a.icon:hover {background-image: url(image/icon-hover.gif)}
 .icon-stat {background-position: -96px -96px;}
 .icon-lastpage {background-position: -112px -96px;}
 
+/* 第八行 */
+.icon-qq {background-position: -0px -112px;}
+.icon-setting {background-position: -16px -112px;}
+
 /* 其他动画图标 */
-a.icon-pm, a.icon-pm:hover{width: 13px; height: 9px; background-image: url(image/icon-pm.gif); _vertical-align: bottom;}
-a.icon-newpm, a.icon-newpm:hover {width: 13px; height: 9px; background-image: url(image/icon-newpm.gif); _vertical-align: bottom;}
+span.icon-pm, span.icon-pm:hover{background-image: url(image/icon-pm.gif); _vertical-align: bottom;}
+span.icon-newpm, span.icon-newpm:hover {background-image: url(image/icon-newpm.gif); _vertical-align: bottom;}
 
 /* 翻页 */
 .page {padding-bottom: 8px; overflow: visible; clear: both;}
@@ -175,15 +179,15 @@ a.button.biggrey:hover span{background-position: 0 -200px; }
 a.button.biggrey:active {background-position: 100% -250px; text-decoration: none;}
 a.button.biggrey:active span{background-position: 0 -250px;}
 
-a.button.smallblue {background-position: 100% -300px;  height: 28px;}
-a.button.smallblue span {background-position: 0px -300px; padding: 5px 10px 8px 20px;color: #FFFFFF; font-size: 12px; text-shadow: 0 -1px #007132;}
+a.button.smallblue {background-position: 100% -300px;  height: 27px;}
+a.button.smallblue span {background-position: 0px -300px; padding: 4px 10px 7px 20px;color: #FFFFFF; font-size: 12px; text-shadow: 0 -1px #007132;}
 a.button.smallblue:hover {background-position: 100% -350px; text-decoration: none;}
 a.button.smallblue:hover span{background-position: 0 -350px; }
 a.button.smallblue:active {background-position: 100% -400px; text-decoration: none;}
 a.button.smallblue:active span{background-position: 0 -400px;}
 
-a.button.smallgrey {background-position: 100% -450px; height: 28px;}
-a.button.smallgrey span {background-position: 0px -450px; padding: 6px 10px 7px 20px; color: #888888; font-size: 12px; text-shadow: 0 1px #FFFFFF;}
+a.button.smallgrey {background-position: 100% -450px; height: 27px;}
+a.button.smallgrey span {background-position: 0px -450px; padding: 4px 10px 7px 20px; color: #888888; font-size: 12px; text-shadow: 0 1px #FFFFFF;}
 a.button.smallgrey:hover {background-position: 100% -500px; text-decoration: none;}
 a.button.smallgrey:hover span{background-position: 0 -500px; }
 a.button.smallgrey:active {background-position: 100% -550px; text-decoration: none;}
@@ -256,15 +260,21 @@ span.nopic {width: 54px; height: 54px; background: url(image/nopic.gif) no-repea
 	#menu td.center a{height: 35px; line-height: 35px; padding-left: 12px; padding-right: 12px; overflow: hidden; background: url(image/menu_bg.gif) repeat-x; float: left;  font-size: 12px; font-weight: 800; color: #AEB2BE; text-shadow: 1px 1px 0 #000000; }
 	#menu td.center a:hover{background-position: 0px -50px; text-decoration: none;}
 	#menu td.center a.checked{background-position: 0px -100px; cursor: default; color: #FFFFFF}
-	#menu td.center span.sep {height: 35px; float: left; width: 2px; background: url(image/menu_bg.gif) 0px -150px;}
+	#menu span.sep {height: 35px; float: left; width: 2px; background: url(image/menu_bg.gif) 0px -150px;}
 	#menu td.right {text-align: right; line-height: 35px; white-space:nowrap;}
 	#user {color: #AEB2BE; font-size: 12px; *margin-top: 8px;}
-	#user a {color: #AAAAAA;}
+	#user a {color: #AAAAAA; margin-right: 24px;}
+	#user span.sep {margin-right: 24px;}
 	#pm {}
 	#pm_userlist {text-align: left;}
 	#pm_userlist a {color: #454545; display: block; float: left; width: 100%; padding: 4px 0px; text-indent: 4px; text-decoration: none;}
 	#pm_userlist a:hover {background: #BB0000; color: #FFFFFF;}
 	#pm_userlist a:hover b{background: #BB0000; color: #FFFFFF;}
+	
+	#search {width: 118px; height: 23px; line-height: 23px; overflow: hidden; margin-top: 6px; padding:0px; background: url(image/nav_search.gif) no-repeat; text-decoration: none; cursor: default;}
+	#search.hover{background-position: 0px -23px; cursor: default;}
+	#search input{width: 118px; height: 23px; border: 0px; background: transparent; padding: 0px 0px 0px 24px; outline:none}
+	
 #body {width: 100%; margin: auto; background: #EFEFEF; overflow: hidden; padding-top: 8px; padding-bottom: 8px;}
 	#nav {width: 100%; margin: auto; height: 18px; text-shadow: 1px 1px 0 #FFFFFF; }
 	#nav td{}

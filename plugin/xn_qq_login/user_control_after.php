@@ -1,4 +1,3 @@
-<?
 public function on_qqlogin() {
 	$qqlogin = $this->kv->get('qqlogin');
 	$appid = $qqlogin['appid'];
@@ -73,7 +72,7 @@ public function on_qqtoken() {
 	*/
 	
 	// 查询数据表，
-	$this->user_qqlogin = core::model($this->conf, 'user_qqlogin', 'uid', 'uid');
+	/*$this->user_qqlogin = core::model($this->conf, 'user_qqlogin', 'uid', 'uid');
 	$arrlist = $this->user_qqlogin->index_fetch(array('openid'=>$openid), array(), 0, 1);
 	$arr = array_pop($arrlist);
 	if(empty($arr)) {
@@ -83,7 +82,7 @@ public function on_qqtoken() {
 		// 登陆成功
 		$user = $this->user->read($arr['uid']);
 		
-	}
+	}*/
 	
 	// 判断是否已经注册
 	print_r($qquser);
