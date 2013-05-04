@@ -38,7 +38,7 @@
 		parse_str($s, $params);
 		
 		if(empty($params["access_token"])) {
-			throw new Exception('access_token 解码出错。');
+			throw new Exception('access_token 解码出错。'.$s);
 		}
 	
 		// token 有效期三个月
