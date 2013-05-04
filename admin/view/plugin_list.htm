@@ -55,7 +55,7 @@
 						<!--{else}-->
 						<input type="button" class="button smallblue" onclick="window.location='?plugin-enable-dir-$dir.htm'" value="启用" />
 						<!--{/if}-->
-						<input type="button" class="button smallgrey" onclick="window.location='?plugin-unstall-dir-$dir.htm'" value="删除" />
+						<input type="button" class="button smallgrey" onclick="if(window.confirm('删除操作不可逆！您确定删除该插件吗？'))window.location='?plugin-unstall-dir-$dir.htm'" value="删除" />
 					<!--{/if}-->
 						
 						<!--{if $pconf[have_setting]}-->
