@@ -86,18 +86,13 @@ class user extends base_model{
 
 	// 结果为唯一
 	public function get_user_by_email($email) {
-		$user = $this->index_fetch(array('email'=>$email), array(), 0, 1);
-		if(!empty($user)) {
-			list($k, $v) = each($user);
-			return $v;
-		} else {
-			return array();
-		}
+		$userlist = $this->index_fetch(array('email'=>$email), array(), 0, 1);
+		return $userlist ? array_pop($userlist) : array();
 	}
 	
 	public function get_user_by_username($username) {
 		// 根据非主键取数据
-		$userlist = $this->index_fetch($cond = array('username'=>$username), $orderby = array(), $start = 0, $limit = 1);
+		$userlist = $this->index_fetch( array('username'=>$username), array(), 0, 1);
 		return $userlist ? array_pop($userlist) : array();
 	}
 	

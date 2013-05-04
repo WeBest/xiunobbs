@@ -10,9 +10,9 @@ if(!$this->form_submit()) {
 	!isset($qqlogin['appid']) && $qqlogin['appid'] = '';
 	!isset($qqlogin['appkey']) && $qqlogin['appkey'] = '';
 	$input['enable'] = form::get_radio_yes_no('enable', $qqlogin['enable']);
-	$input['meta'] = form::get_text('meta', htmlspecialchars($qqlogin['meta']));
-	$input['appid'] = form::get_text('appid', $qqlogin['appid']);
-	$input['appkey'] = form::get_text('appkey', $qqlogin['appkey']);
+	$input['meta'] = form::get_text('meta', htmlspecialchars($qqlogin['meta']), 300);
+	$input['appid'] = form::get_text('appid', $qqlogin['appid'], 300);
+	$input['appkey'] = form::get_text('appkey', $qqlogin['appkey'], 300);
 	$this->view->assign('dir', $dir);
 	$this->view->assign('input', $input);
 	$this->view->display('plugin_xn_qq_login.htm');
