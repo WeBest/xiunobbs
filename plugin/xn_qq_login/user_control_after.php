@@ -86,12 +86,17 @@
 			$user = $this->user->read($arr['uid']);
 			$this->check_user_exists($user);
 			$this->user->set_login_cookie($user);
-			
+			$url = "./";
+			header("Location:$url");
 		}
 		
 	}
 	
 	public function on_qqreg() {
+		$qqlogin = $this->kv->get('qqlogin');
+		$appid = $qqlogin['appid'];
+		$appkey = $qqlogin['appkey'];
+		
 		$args = core::gpc('args');
 		$s = decrypt($args, $this->conf['auth_key']);
 		$arr = explode("\t", $s);
@@ -230,6 +235,10 @@
 	}
 	
 	public function on_qqbind() {
+		$qqlogin = $this->kv->get('qqlogin');
+		$appid = $qqlogin['appid'];
+		$appkey = $qqlogin['appkey'];
+		
 		$args = core::gpc('args');
 		$s = decrypt($args, $this->conf['auth_key']);
 		$arr = explode("\t", $s);

@@ -32,7 +32,7 @@ if(!$this->form_submit()) {
 			$this->message('写入文件 plugin/xn_qq_login/header_css_before.htm 失败，请检查文件是否可写<br />或者手工编辑此文件内容为：'.htmlspecialchars($meta));
 		}
 		// 删除 tmp 下的缓存文件
-		misc::rmdir($this->conf['tmp_path']);
+		misc::rmdir($this->conf['tmp_path'], 1);
 	}
 	
 	$this->kv->set('qqlogin', array('enable'=>$enable, 'meta'=>$meta, 'appid'=>$appid, 'appkey'=>$appkey));
