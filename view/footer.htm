@@ -105,9 +105,9 @@ function newpm() {
 					var userlist = json.message;
 					g_newpm_userlist = userlist;
 					var s = userlist_to_html(userlist);
-					$('#pm a.icon-pm').hide();
-					$('#pm a.icon-newpm').show().unbind('mouseover').mouseover(function() {
-						$('#pm a.icon-newpm').alert(s, {"width": 150, "pos": 7, "delay": 1000, "alerticon": 0});
+					$('#pm a.pm').hide();
+					$('#pm a.newpm').show().unbind('mouseover').mouseover(function() {
+						$('#pm a.newpm').alert(s, {"width": 150, "pos": 7, "delay": 1000, "alerticon": 0});
 					});
 					_this.delay = g_newpm_delay;
 					_this.run();

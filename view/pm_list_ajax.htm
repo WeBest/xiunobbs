@@ -76,8 +76,8 @@ function delay_execute(dialog, recall) {
 				g_newpm_userlist = null;
 			}
 			if(!g_newpm_userlist) {
-				$('#pm a.icon-pm').show();
-				$('#pm a.icon-newpm').hide()
+				$('#pm a.pm').show();
+				$('#pm a.newpm').hide()
 			}		
 			// copy end
 		});
@@ -192,8 +192,8 @@ function delay_execute(dialog, recall) {
 								g_newpm_userlist = null;
 							}
 							if(!g_newpm_userlist) {
-								$('#pm a.icon-pm').show();
-								$('#pm a.icon-newpm').hide()
+								$('#pm a.pm').show();
+								$('#pm a.newpm').hide()
 							}
 							// copy end.
 						});
@@ -211,8 +211,8 @@ function delay_execute(dialog, recall) {
 	$('#pm_userlist a[uid={$touser[uid]}]').remove();
 	if($('#pm_userlist a').length == 0) {
 		$('#pm_userlist').closest('div.alert').remove();
-		$('#pm a.icon-pm').show();
-		$('#pm a.icon-newpm').hide();
+		$('#pm a.pm').show();
+		$('#pm a.newpm').hide();
 	}
 	
 }
