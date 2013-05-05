@@ -354,7 +354,7 @@ class common_control extends base_control {
 	
 	// relocation
 	public function url($url) {
-		return $this->conf['app_url'].($this->conf['urlrewrite'] ? '?' : '').$url;
+		return $this->conf['app_url'].($this->conf['urlrewrite'] ? '' : '?').$url;
 	}
 	
 	// relocation
