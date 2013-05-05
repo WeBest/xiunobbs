@@ -57,6 +57,9 @@ function attach_file_type(type) {
 }
 
 function delay_execute(dialog, recall) {
+	
+	// hook post_thread_delay_execute_start.htm
+	
 	var attachnum = $attachnum;
 	var pid = $pid;
 	$('#post_thread_form_$pid').submit(function() {return false;});
@@ -323,6 +326,9 @@ function delay_execute(dialog, recall) {
 			},
 			baseurl: 'view/js/editor/'
 		});
+		
+		// hook post_thread_ajax_editor_end.htm
+		
 		$('#subject_$pid').focus().keydown(function(e) {
 			// TAB 切换键到 message
 			var keycode = e.keyCode ? e.keyCode : e.which;
@@ -397,6 +403,8 @@ function delay_execute(dialog, recall) {
 		// hook post_thread_js_end.htm
 		
 	}); // end xload()
+	
+	// hook post_thread_delay_execute_end.htm
 	
 	// hook common_form_hash_after_js.htm
 }
