@@ -1,0 +1,22 @@
+<div class="div">
+	<div class="header">友情链接</div>
+	<div class="body grey">
+		<!--{if $friendlinklist[1]}-->
+		<div id="friendlink_img">
+			<!--{loop $friendlinklist[1] $friendlink}-->
+			<a href="$friendlink[url]" target="_blank" title="$friendlink[sitename]"><img src="$friendlink[logourl]" width="88" height="31" class="xgrey" /></a>
+			<!--{/loop}-->
+		</div>
+		<!--{/if}-->
+		
+		<!--{if $friendlinklist[0]}-->
+		<div id="friendlink_text">
+			<!--{loop $friendlinklist[0] $friendlink}-->
+			<a href="$friendlink[url]" target="_blank" class="grey2">$friendlink[sitename]</a>
+			<!--{/loop}-->
+		</div>
+		<!--{/if}-->
+		&nbsp;
+	</div>
+	<div class="footer"></div>
+</div>
