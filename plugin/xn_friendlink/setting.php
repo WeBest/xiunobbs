@@ -1,5 +1,5 @@
 <?php
 
-header("Location:?friendlink-list.htm");
+$this->location($this->url("friendlink-list.htm"));
 
 ?>

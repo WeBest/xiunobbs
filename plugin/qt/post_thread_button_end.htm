@@ -1,0 +1,72 @@
+		</dd>
+		
+	</dl>
+</form>
+
+<script type="text/javascript">
+function delay_execute(dialog, recall) {
+	$('#post_thread_form').submit(function() {return false;});
+		$('#post_thread_submit').click(function() {
+			$('div.alert').remove();
+			$('#post_thread_submit').disable();
+			var postdata = $("#post_thread_form").serialize();
+			$.post($('#post_thread_form').attr('action'), postdata,  function(s){
+				$('#post_thread_submit').enable();
+				var json = json_decode(s);
+				if(error = json_error(json)) {alert(error); return false;}
+				if(json.status <=0) {
+					alert(json.message);
+					return false;
+				}
+				
+				json = json.message;
+				if(json.subject) {
+					$('#subject').alert(json.subject, {width: 250, delay: 3000}).focus();
+					return false;
+				}
+				if(json.message) {
+					$('#thread_message').parent().alert(json.message, {width: 250, delay: 3000}).focus();
+					return false;
+				}
+				var thread = json.thread;
+		 		
+
+
+
+
+		 		
+		 		dialog.set_body('<div class="ok">发表成功，页面将自动跳转到列表页！</div>');
+		 		setTimeout(function() {
+		 			if(thread.typeid1 || thread.typeid2 || thread.typeid3 || thread.typeid4) {
+		 				var typeidurl = '-typeid1-'+thread.typeid1+'-typeid2-'+thread.typeid2+'-typeid3-'+thread.typeid3+'-typeid4-'+thread.typeid4; 
+		 			} else {
+		 				var typeidurl = '';
+		 			}
+		 			window.location= '?forum-index-fid-'+thread.fid+'-tid-'+thread.tid+typeidurl+'.htm';
+		 			dialog.close();
+		 		}, 500);
+			  });
+			  return false;
+		});
+		$('#post_thread_cancel').click(function() {
+			dialog.close();
+		});
+		
+		
+		// 选择版块，AJAX 加载主题分类
+		$('#fid').change(function() {
+			var fid = this.value;
+			$.get('?post-typeselect-fid-'+fid+'-ajax-1.htm', function(s) {
+				var json = json_decode(s);
+				if(error = json_error(json)) {alert(error); return false;}
+				if(json.status <=0) {
+					alert(json.message);
+					return false;
+				}
+				
+				json = json.message;
+				var typeslects = json.typeselect1 + json.typeselect2 + json.typeselect3 + json.typeselect4;
+				$('#typeselect').html(typeslects);
+			});
+	 	});
+<!--{if 0}-->
