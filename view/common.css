@@ -59,9 +59,9 @@ p {margin-top: 4px;}
 .submit {margin-top: 4px;}
 .checked {font-weight: 800;}
 
-.thread-new, .thread-new:hover{color: #333333}
+.thread-new, .thread-new:hover{color: #111111}
 .thread-new.read, .thread-new.read:hover {color: #888888}
-.thread-old, .thread-old:hover {color: #333333}
+.thread-old, .thread-old:hover {color: #111111}
 .thread-old.read, .thread-old.read:hover {color: #888888}
 .thread-hot, .thread-hot:hover {color: #EF4E1D;}
 .thread-hot.read, .thread-hot.read:hover {color: #F8AF99}
