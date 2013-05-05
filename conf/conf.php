@@ -108,17 +108,15 @@ return array(
 	'plugin_path' => BBS_PATH.'plugin/',
 	
 	// 插件目录对应的URL
-	'plugin_url' => 'http://x.net/plugin/',
+	'plugin_url' => 'http://xiuno.net/plugin/',
 	
-	// 是否开启插件功能，为了安全，请在插件安装完毕以后置为 0。
-	'plugin_on' => 1,
+	'plugin_disable'=>0,			// 禁止掉所有插件
 	
-	// 服务器所在的时区
-	'timeoffset' => '+8',
-	
-	'disable_plugin'=>0,			// 禁止掉所有插件
+	'plugin_on' => 1,			// 是否开启后台插件安装
 	
 	'urlrewrite' => 0,			// 手工开启 URL-Rewrite 后，需要清空下 tmp 目录！
+	
+	'timeoffset' => '+8',			// 服务器所在的时区
 	
 	// ------------------> 以下为 BBS 相关:
 	

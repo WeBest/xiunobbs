@@ -567,7 +567,7 @@ class plugin_control extends admin_control {
 		}
 		
 		// 获取插件目录
-		$pluginpaths = $conf['disable_plugin'] ? array() : core::get_paths($conf['plugin_path'], TRUE);
+		$pluginpaths = $conf['plugin_disable'] ? array() : core::get_paths($conf['plugin_path'], TRUE);
 		
 		// 遍历 control
 		foreach(($conf['control_path'] + $pluginpaths) as $path) {
