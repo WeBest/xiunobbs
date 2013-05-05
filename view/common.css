@@ -258,13 +258,13 @@ span.nopic {width: 54px; height: 54px; background: url(image/nopic.gif) no-repea
 #menu {width: 100%; height: 35px; background: url(image/menu_bg.gif); overflow: hidden;}
 	#logo {display: block; width: 88px; height: 35px; background: url(image/logo.gif) no-repeat; margin-right: 8px;}
 	#menu td.left {width: 0px;}
-	#menu td.logo {width: 88px;}
+	#menu td.logo {width: 88px; vertical-align: top;}
 	#menu td.center {}
 	#menu td.center a{height: 35px; line-height: 35px; padding-left: 12px; padding-right: 12px; overflow: hidden; background: url(image/menu_bg.gif) repeat-x; float: left;  font-size: 12px; font-weight: 800; color: #AEB2BE; text-shadow: 1px 1px 0 #000000; }
 	#menu td.center a:hover{background-position: 0px -50px; text-decoration: none;}
 	#menu td.center a.checked{background-position: 0px -100px; cursor: default; color: #FFFFFF}
 	#menu td.center span.sep {height: 35px; float: left; width: 2px; background: url(image/menu_bg.gif) 0px -150px;}
-	#menu td.center2 {width: 118px; text-align: right; line-height: 35px; white-space:nowrap;}
+	#menu td.center2 {width: 118px; text-align: right; line-height: 35px; white-space:nowrap;  vertical-align: top;}
 		#search {width: 118px; height: 23px; line-height: 23px; overflow: hidden; *margin-top: 6px; padding:0px; background: url(image/nav_search.gif) no-repeat; text-decoration: none; cursor: default;}
 		#search.hover{background-position: 0px -23px; cursor: default;}
 		#search input{width: 118px; height: 23px; border: 0px; background: transparent; padding: 0px 0px 0px 24px; outline:none}
