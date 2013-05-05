@@ -17,6 +17,9 @@ class plugin_control extends admin_control {
 	function __construct(&$conf) {
 		parent::__construct($conf);
 		$this->check_admin_group();
+		if(empty($this->conf['plugin_on'])) {
+			$this->message('插件功能没有开启，请检查 conf/conf.php 中 plugin_on 的值。');
+		}
 	}
 	
 	// 本地插件列表，如果有pluginid, 则从官方获取更新

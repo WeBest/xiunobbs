@@ -26,7 +26,8 @@
 	<div class="width">
 		<table cellpadding="0" cellspacing="0" width="100%" style="table-layout: fixed;">
 			<tr>
-				<td class="left" valign="top"><a href="./" title="点击进入首页"><span id="logo"></span></a></td>
+				<td class="left"></td>
+				<td class="logo"><a href="./" title="点击进入首页"><span id="logo"></span></a></td>
 				<td class="center">
 					<!--{hook header_menu_start.htm}-->
 					<span class="sep"></span>
@@ -37,8 +38,7 @@
 					<!--{/loop}-->
 					<!--{hook header_menu_end.htm}-->
 				</td>
-				<td class="right" valign="top" width="118">
-					
+				<td class="center2">
 					<!--{hook header_menu_search_before.htm}-->
 					<!--{if $conf[search_type]}-->
 					<form action="?search-index.htm" target="_blank" id="search_form" method="post">
@@ -47,6 +47,7 @@
 					<!--{/if}-->
 					<!--{hook header_menu_search_after.htm}-->
 				</td>
+				<td class="right"></td>
 			</tr>
 		</table>
 	</div>

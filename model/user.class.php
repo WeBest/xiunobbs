@@ -193,8 +193,8 @@ class user extends base_model{
 			core::htmlspecialchars($homepage);
 			if(utf8::strlen($homepage) > 40) {
 				return '网址不能超过 40 个字符';
-			} elseif(substr($homepage, 0, 7) != 'http://') {
-				return '网址必须以 http:// 开头';
+			} elseif(!check::is_url($homepage)) {
+				return '网址格式不正确！';
 			}
 		}
 		return '';

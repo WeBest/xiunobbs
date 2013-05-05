@@ -110,6 +110,9 @@ return array(
 	// 插件目录对应的URL
 	'plugin_url' => 'http://x.net/plugin/',
 	
+	// 是否开启插件功能，为了安全，请在插件安装完毕以后置为 0。
+	'plugin_on' => 1,
+	
 	// 服务器所在的时区
 	'timeoffset' => '+8',
 	
