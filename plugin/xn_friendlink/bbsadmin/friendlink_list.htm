@@ -27,7 +27,7 @@
 					<tr>
 						<td align="center"><input type="checkbox" name="linkids[]" value="{$friendlink[linkid]}" /></td>
 						<td><input type="text" size="4" name="ranks[{$friendlink[linkid]}]" value="$friendlink[rank]" /></td>
-						<td>$friendlink[typeword] $friendlink[type]</td>
+						<td>$friendlink[typeword]</td>
 						<td>$friendlink[sitename]</td>
 						<td><a href="$friendlink[url]" target="_blank">$friendlink[url]</a></td>
 					<!--{if $type == 1}-->
@@ -76,7 +76,7 @@
 			</div>
 			<div style="text-align: center; margin-top: 4px;">
 				<input type="submit" class="button bigblue" id="friendlink_create_submit" value="添加" />
-				<input type="button" class="button biggrey" value="取消" onclick="history.back()" />
+				<input type="button" class="button biggrey" value="返回插件列表" onclick="window.location='?plugin-list.htm'" />
 				<div class="notice" id="addnotice" style="display: none;"></div>
 			</div>
 		</div>
@@ -117,11 +117,6 @@ $('#addlink').click(function() {
 
 $('#friendlink_create_submit').click(function() {
 	$('#friendlink_create_form').submit();
-});
-
-
-$('#friendlink_setting_submit').click(function() {
-	$('#friendlink_setting_form').submit();
 });
 
 

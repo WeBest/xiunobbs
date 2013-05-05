@@ -97,6 +97,7 @@ class friendlink_control extends admin_control {
 					'logo'=>'',
 				);
 				$linkid = $this->friendlink->create($arr);
+				$arr['linkid'] = $linkid;
 				if(!$linkid) continue;
 				
 				$tmpfile = empty($_FILES['logos']['tmp_name'][$k]) ? '' : $_FILES['logos']['tmp_name'][$k];
@@ -155,13 +156,12 @@ class friendlink_control extends admin_control {
 				}
 			}
 			
-			if(misc::values_empty($error)) {
+			if(!array_filter($error)) {
 				$error = array();
 				$friendlink = array_merge($friendlink, $post);
 				$this->friendlink->update($friendlink);
 			}
 		}
-		
 		
 		$typearr = $this->friendlink->typearr;
 		$typeoptions = form::get_options($typearr, $friendlink['type']);
