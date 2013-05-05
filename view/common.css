@@ -60,9 +60,9 @@ p {margin-top: 4px;}
 .checked {font-weight: 800;}
 
 .thread-new, .thread-new:hover{color: #333333}
-.thread-new.read, .thread-new.read:hover {color: #AAAAAA}
+.thread-new.read, .thread-new.read:hover {color: #888888}
 .thread-old, .thread-old:hover {color: #333333}
-.thread-old.read, .thread-old.read:hover {color: #AAAAAA}
+.thread-old.read, .thread-old.read:hover {color: #888888}
 .thread-hot, .thread-hot:hover {color: #EF4E1D;}
 .thread-hot.read, .thread-hot.read:hover {color: #F8AF99}
 .thread-digest-1, .thread-digest-1:hover {color: #17AC56; font-weight: 800;}
@@ -71,7 +71,7 @@ p {margin-top: 4px;}
 .thread-digest-2.read, .thread-digest-2.read:hover {color: #9BBDE7; font-weight: 800;}
 .thread-digest-3, .thread-digest-3:hover {color: #E03D7E; font-weight: 800;}
 .thread-digest-3.read, .thread-digest-3.read:hover {color: #F6AFCB; font-weight: 800;}
-.subject_type.read {color: #AAAAAA}
+.subject_type.read {color: #888888}
 
 /* 表单结果提示，醒目，比较大 <div class="error"> */
 div.error {margin-top: 4px; padding: 4px; line-height: 32px; text-indent: 40px; word-break: break-all; border: 1px solid #8A0000; background: #FFF4D2 url(image/error.gif) no-repeat 4px 4px; font-size: 16px; color: #8A0000; font-weight: 800; -moz-border-radius: 4px; -khtml-border-radius: 4px; -webkit-border-radius: 4px; border-radius: 4px; }
