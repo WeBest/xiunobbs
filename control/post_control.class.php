@@ -405,20 +405,17 @@ class post_control extends common_control {
 				$thread['lastusername'] = $username;
 				$this->thread->update($thread);
 				
-				// 斑竹回复的话， 短消息通知楼主，有人回帖，每个主题前10名用户，引用回复也发送，高级别会员回复通知。
-				$tuser = $this->user->read($thread['uid']);
-				if($this->_user['groupid'] <= 5) {
-					if($this->_user['uid'] != $thread['uid']) {
-						$pmsubject = utf8::substr($thread['subject'], 0, 16);
-						$pmmessage = "【{$this->_user['username']}】回复了您的主题：<a href=\"?thread-index-fid-$fid-tid-$tid.htm\" target=\"_blank\">【{$pmsubject}】</a>。";
-						$this->pm->system_send($thread['uid'], $thread['username'], $pmmessage);
-					}
-					// 判断引用
-					if($quote && $quote['uid'] != $thread['uid'] && $quote['uid'] != $this->_user['uid']) {
-						$pmsubject = utf8::substr(htmlspecialchars(strip_tags($quote['message'])), 0, 16);
-						$pmmessage = "【{$this->_user['username']}】引用了您的帖子：<a href=\"?thread-index-fid-$fid-tid-$tid-page-$page.htm\" target=\"_blank\">【{$pmsubject}】</a>。";
-						$this->pm->system_send($post['uid'], $post['username'], $pmmessage);
-					}
+				// hook post_post_send_msg_before.php
+				
+				// 引用或者斑竹回复，短信通知楼主
+				if($quote && $quote['uid'] != $this->_user['uid']) {
+					$pmsubject = utf8::substr(htmlspecialchars(strip_tags($quote['message'])), 0, 16);
+					$pmmessage = "【{$this->_user['username']}】引用了您的帖子：<a href=\"?thread-index-fid-$fid-tid-$tid-page-$page.htm\" target=\"_blank\">【{$pmsubject}】</a>。";
+					$this->pm->system_send($quote['uid'], $quote['username'], $pmmessage);
+				} elseif($this->_user['groupid'] <= 5 && $this->_user['uid'] != $thread['uid']) {
+					$pmsubject = utf8::substr($thread['subject'], 0, 16);
+					$pmmessage = "【{$this->_user['username']}】回复了您的主题：<a href=\"?thread-index-fid-$fid-tid-$tid.htm\" target=\"_blank\">【{$pmsubject}】</a>。";
+					$this->pm->system_send($thread['uid'], $thread['username'], $pmmessage);
 				}
 				
 				// hook post_post_succeed.php
