@@ -14,11 +14,10 @@ class attach extends base_model {
 		'mp3' => array('mp3','mp4'),
 		'binary' => array('dat', 'bin'),
 		'flash' => array('swf', 'fla', 'as'),
-		'html' => array('html', 'htm'),
 		'image' => array('gif', 'jpg', 'jpeg', 'png', 'bmp'),
 		'office' => array('doc', 'xls', 'ppt'),
 		'pdf' => array('pdf'),
-		'text' => array('txt', 'c', 'cpp', 'cc'),
+		'text' => array('c', 'cpp', 'cc'),
 		'zip' => array('tar', 'zip', 'gz', 'tar.gz', 'rar', '7z', 'bz'),
 		'book' => array('chm'),
 		'torrent' => array('bt', 'torrent')
