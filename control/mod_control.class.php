@@ -214,6 +214,8 @@ class mod_control extends common_control {
 					$thread_digest = $this->thread_digest->read($tid);
 					$thread_digest['digest'] = $rank;
 					$this->thread_digest->update($thread_digest);
+				} else {
+					continue;
 				}
 				
 				// 记录到版主操作日志
