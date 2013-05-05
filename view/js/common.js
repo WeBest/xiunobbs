@@ -227,7 +227,7 @@ $.alert = function(s, type, recall) {
 	s += '<div style="margin-top: 4px; text-align: center;"><a id="alertclose" href="javascript:void(0)"><span>关闭</span></a></div>';
 	jdialog = $('<div class="dialog bg2 border shadow" title="对话框标题" id="alertdialog" style="display: none;">'+ s +'</div>').appendTo('body');
 	jdialog.dialog({open: true, width: jdialog.width()});
-	$('#alertclose').unbind('click').click(function() {alert(123);$('#alertdialog').dialog('close')});
+	$('#alertclose').unbind('click').click(function() {$('#alertdialog').dialog('close')});
 	if(typeof recall == 'number') {
 		setTimeout(function() {$('#alertdialog').remove();}, recall);
 	} else if(recall) {
