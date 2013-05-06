@@ -178,8 +178,21 @@ class plugin_control extends admin_control {
 		$dir = trim(core::gpc('dir'));
 		!preg_match('#^\w+$#', $dir) && $this->message('dir 不合法。');
 
+		$official = $this->get_official_by_dir($dir);
+		// 检查版本
+		if(version_compare($this->conf['version'], $official['bbs_version']) == -1) {
+			$this->message("此插件依赖的 Xiuno BBS 最低版本为 $local[bbs_version] ，您当前的版本：".$this->conf['version']);
+		}
+		
 		// 如果本地目录不存在，则下载。
 		if(!is_dir($this->conf['plugin_path'].$dir)) {
+			
+			// 检查版本
+			$official = $this->get_official_by_dir($dir);
+			if(version_compare($this->conf['version'], $official['bbs_version']) == -1) {
+				$this->message("此插件依赖的 Xiuno BBS 最低版本为 $official[bbs_version] ，您当前的版本：".$this->conf['version']);
+			}
+			
 			$siteid =  md5($this->conf['app_url'].$this->conf['auth_key']);
 			$app_url = core::urlencode($this->conf['app_url']);
 			$url = $this->official_plugin_site."plugin-down-dir-$dir-siteid-$siteid-ajax-1.htm?app_url=$app_url";
@@ -201,18 +214,26 @@ class plugin_control extends admin_control {
 				xn_zip::unzip($zipfile, $destpath);
 				unlink($zipfile);
 			}
-		}
+			
+			if(!is_dir($this->conf['plugin_path'].$dir)) {
+				$this->message('插件可能安装失败，目录不存在:'.$this->conf['plugin_path'].$dir, 0);
+			}
+			
+			$local = $this->get_local_plugin($dir);
+			empty($local) && $this->message('插件不存在。', 0);
+		} else {
 		
-		if(!is_dir($this->conf['plugin_path'].$dir)) {
-			$this->message('插件可能安装失败，目录不存在:'.$this->conf['plugin_path'].$dir, 0);
-		}
-		
-		$local = $this->get_local_plugin($dir);
-		empty($local) && $this->message('插件不存在。', 0);
-		
-		// 检查版本
-		if(version_compare($this->conf['version'], $local['bbs_version']) == -1) {
-			$this->message("此插件依赖的 Xiuno BBS 最低版本为 $local[bbs_version] ，您当前的版本：".$this->conf['version']);
+			if(!is_dir($this->conf['plugin_path'].$dir)) {
+				$this->message('插件可能安装失败，目录不存在:'.$this->conf['plugin_path'].$dir, 0);
+			}
+			
+			$local = $this->get_local_plugin($dir);
+			empty($local) && $this->message('插件不存在。', 0);
+			
+			// 检查版本
+			if(version_compare($this->conf['version'], $local['bbs_version']) == -1) {
+				$this->message("此插件依赖的 Xiuno BBS 最低版本为 $local[bbs_version] ，您当前的版本：".$this->conf['version']);
+			}
 		}
 		
 		$install = $this->conf['plugin_path'].$dir.'/install.php';
@@ -279,7 +300,14 @@ class plugin_control extends admin_control {
 				<li>解压 tmp.zip 得到 tmp 目录，FTP 上传到线上 tmp/ 目录下</li>
 				</ul>', 1, $referer);
 		} else {
-			// 下载最新版本
+			
+			// 检查版本
+			$official = $this->get_official_by_dir($dir);
+			if(version_compare($this->conf['version'], $official['bbs_version']) == -1) {
+				$this->message("此插件依赖的 Xiuno BBS 最低版本为 $official[bbs_version] ，您当前的版本：".$this->conf['version']);
+			}
+			
+			// 下载最新版本，判断版本号是否匹配
 			$s = misc::fetch_url($url, 20);
 			empty($s) && $this->message('获取失败', 0);
 			substr($s, 0, 2) != 'PK' && $this->message('获取插件包失败，提示信息：'.$s, 0);
@@ -523,6 +551,11 @@ class plugin_control extends admin_control {
 			throw new Exception("从官方获取插件信息失败: $pluginlist[servererror] , URL: $url 。");
 		}
 		return $pluginlist;
+	}
+	
+	private function get_official_by_dir($dir) {
+		$pluginlist = $this->get_official_by_dirs(array($dir));
+		return empty($pluginlist[$dir]) ? array() : $pluginlist[$dir];
 	}
 	
 	private function get_official_plugin($pluginid) {

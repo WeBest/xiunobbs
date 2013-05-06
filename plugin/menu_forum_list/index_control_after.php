@@ -24,5 +24,5 @@
 		}
 		$this->view->assign('forumarr', $forumarr);
 		$this->view->assign('threadlists', $threadlists);
-		$this->view->display('index_list.htm');
+		$this->view->display('plugin_menu_forum_list.htm');
 	}
