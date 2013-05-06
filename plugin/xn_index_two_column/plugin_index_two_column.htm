@@ -107,6 +107,7 @@
 		<div class="header"><span class="icon icon-stat"></span> 站点统计</div>
 		<div class="body">
 			<div style="margin-top: 8px; line-height: 12px; margin-bottom: 4px;">
+				<!--{hook index_index_stat_start.htm}-->
 				<span class="grey">帖子：</span><span>$conf[posts]</span> <span class="small grey2">|</span>
 				<span class="grey">会员：</span><span>$conf[users]</span>
 				<!--{if $conf[todayusers]}-->
@@ -123,13 +124,13 @@
 				<!--{/if}-->
 				<span class="small grey2">|</span>
 				<span class="grey">在线：</span><span class="new bold">$conf[onlines]</span>
-				<!--{hook index_index_stat_after.htm}-->
+				<!--{hook index_index_stat_end.htm}-->
 			</div>
 		</div>
 		<div class="footer"></div>
 	</div>
 	
-	<!--{hook index_index_online_before.htm}-->
+	<!--{hook index_index_stat_after.htm}-->
 	
 </div>
 
