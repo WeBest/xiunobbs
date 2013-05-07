@@ -63,11 +63,22 @@ function complete() {
 	$mconf->set('plugin_disable', 0);
 	$mconf->save();
 	
-	misc::rmdir($this->conf['plugin_path'].'defend_flooding_posts');
-	misc::rmdir($this->conf['plugin_path'].'syntaxlighter');
-	misc::rmdir($this->conf['plugin_path'].'menu_forum_list');
-	misc::rmdir($this->conf['plugin_path'].'index_two_column');
-	misc::rmdir($this->conf['plugin_path'].'rename_username');
+	// 清除老插件
+	misc::rmdir($conf['plugin_path'].'defend_flooding_posts');
+	misc::rmdir($conf['plugin_path'].'syntaxlighter');
+	misc::rmdir($conf['plugin_path'].'menu_forum_list');
+	misc::rmdir($conf['plugin_path'].'index_two_column');
+	misc::rmdir($conf['plugin_path'].'rename_username');
+	
+	$settingfile = $conf['upload_path'].'plugin.json';
+	!is_file($settingfile) && file_put_contents($settingfile, '');
+	$arr = core::json_decode(file_get_contents($settingfile));
+	if(isset($arr['defend_flooding_posts'])) unset($arr['defend_flooding_posts']);
+	if(isset($arr['syntaxlighter'])) unset($arr['syntaxlighter']);
+	if(isset($arr['menu_forum_list'])) unset($arr['menu_forum_list']);
+	if(isset($arr['index_two_column'])) unset($arr['index_two_column']);
+	if(isset($arr['rename_username'])) unset($arr['rename_username']);
+	file_put_contents($settingfile, core::json_encode($arr));
 	
 	message('升级完毕。', './');
 }

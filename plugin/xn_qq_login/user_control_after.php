@@ -99,6 +99,91 @@
 		
 	}
 	
+	public function on_qqreg() {
+		$qqlogin = $this->kv->get('qqlogin');
+		$appid = $qqlogin['appid'];
+		$appkey = $qqlogin['appkey'];
+		
+		$args = core::gpc('args');
+		$s = decrypt($args, $this->conf['auth_key']);
+		$arr = explode("\t", $s);
+		if(DEBUG) {
+			$openid = $token = '';
+		} else {
+			if(count($arr) < 2) {
+				$this->message('参数错误', 0);
+			}
+			list($openid, $token) = $arr;
+		}
+		
+		$input = $error = array();
+		if(!$this->form_submit()) {
+			if(DEBUG) {
+				$qquser = array('nickname'=>'张三', 'figureurl_1'=>'http://www.baidu.com/img/baidu_jgylogo3.gif', 'figureurl_2'=>'http://www.baidu.com/img/baidu_jgylogo3.gif');
+			} else {
+				$qquser = $this->qqlogin_get_user_by_openid($openid, $token, $appid);
+			}
+			$username = $qquser['nickname'];
+			$avatar_url_1 = $qquser['figureurl_1'];
+			$avatar_url_2 = $qquser['figureurl_2'];
+		// 头像
+		} else {
+			$username = core::gpc('username', 'P');
+			$avatar_url_1 = core::gpc('avatar_url_1', 'P');
+			$avatar_url_2 = core::gpc('avatar_url_2', 'P');
+			
+			$conf = $this->conf;
+			
+			if($avatar_url_2 && !check::is_url($avatar_url_2)) {
+				$this->message('avatar_url_2 格式有误');
+			}
+			
+			$error['username'] = $this->user->check_username($username) OR $error['username'] = $this->user->check_username_exists($username);
+			if(!array_filter($error)) {
+				$this->qq_create_user($username, $avatar_url_2);
+			}
+		}
+		
+		// 筛选用户名, 用户名，提示是否被注册
+		
+		$this->view->assign('username', $username);
+		$this->view->assign('password', $password);
+		$this->view->assign('password2', $password2);
+		$this->view->assign('email', $email);
+		$this->view->assign('avatar_url_1', $avatar_url_1);
+		$this->view->assign('avatar_url_2', $avatar_url_2);
+		$this->view->assign('args', $args);
+		$this->view->assign('input', $input);
+		$this->view->assign('error', $error);
+		$this->view->display('xn_qq_login_reg.htm');
+	}
+	
+	private function qqlogin_get_openid_by_token($token) {
+		$url = "https://graph.qq.com/oauth2.0/me?access_token=$token";
+		$s  = misc::https_fetch_url($url);
+		if(strpos($s, "callback") !== false) {
+			$lpos = strpos($s, "(");
+			$rpos = strrpos($s, ")");
+			$s  = substr($s, $lpos + 1, $rpos - $lpos -1);
+		}
+		
+		$arr = core::json_decode($s);
+		if (isset($arr['error'])) {
+			$error = $arr['error'].'<br />'.$arr['error_description'];
+			throw new Exception($error);
+		}
+		
+		return $arr['openid'];
+	}
+	
+	private function qqlogin_get_user_by_openid($openid, $token, $appid) {
+		$get_user_info = "https://graph.qq.com/user/get_user_info?access_token=$token&oauth_consumer_key=$appid&openid=$openid&format=json";
+		$s = misc::https_fetch_url($get_user_info);
+		$arr = json_decode($s, true);
+		return $arr;
+	}
+	
+	
 	private function qq_create_user($username, $avatar_url_2) {
 		$groupid = 11;
 		$salt = rand(100000, 999999);
@@ -149,197 +234,5 @@
 			$this->user->update($userdb);
 		}
 		
-	}
-	
-	public function on_qqreg() {
-		$qqlogin = $this->kv->get('qqlogin');
-		$appid = $qqlogin['appid'];
-		$appkey = $qqlogin['appkey'];
-		
-		$args = core::gpc('args');
-		$s = decrypt($args, $this->conf['auth_key']);
-		$arr = explode("\t", $s);
-		if(DEBUG) {
-			$openid = $token = '';
-		} else {
-			if(count($arr) < 2) {
-				$this->message('参数错误', 0);
-			}
-			list($openid, $token) = $arr;
-		}
-		
-		$input = $error = array();
-		if(!$this->form_submit()) {
-			if(DEBUG) {
-				$qquser = array('nickname'=>'张三', 'figureurl_1'=>'http://www.baidu.com/img/baidu_jgylogo3.gif', 'figureurl_2'=>'http://www.baidu.com/img/baidu_jgylogo3.gif');
-			} else {
-				$qquser = $this->qqlogin_get_user_by_openid($openid, $token, $appid);
-			}
-			$username = $qquser['nickname'];
-			$avatar_url_1 = $qquser['figureurl_1'];
-			$avatar_url_2 = $qquser['figureurl_2'];
-			$email = '';
-			$password = '';
-			$password2 = '';
-			// 头像
-		} else {
-			$username = core::gpc('username', 'P');
-			$avatar_url_1 = core::gpc('avatar_url_1', 'P');
-			$avatar_url_2 = core::gpc('avatar_url_2', 'P');
-			
-			$conf = $this->conf;
-			
-			if($avatar_url_2 && !check::is_url($avatar_url_2)) {
-				$this->message('avatar_url_2 格式有误');
-			}
-			
-			$error['username'] = $this->user->check_username($username);
-			empty($error['username']) && $error['username'] = $this->user->check_username_exists($username);
-			
-			$this->qq_create_user($username, $avatar_url_2);
-		}
-		
-		// 筛选用户名, 用户名，提示是否被注册
-		
-		$this->view->assign('username', $username);
-		$this->view->assign('password', $password);
-		$this->view->assign('password2', $password2);
-		$this->view->assign('email', $email);
-		$this->view->assign('avatar_url_1', $avatar_url_1);
-		$this->view->assign('avatar_url_2', $avatar_url_2);
-		$this->view->assign('args', $args);
-		$this->view->assign('input', $input);
-		$this->view->assign('error', $error);
-		$this->view->display('xn_qq_login_reg.htm');
-	}
-	
-	public function on_qqbind() {
-		$qqlogin = $this->kv->get('qqlogin');
-		$appid = $qqlogin['appid'];
-		$appkey = $qqlogin['appkey'];
-		
-		$args = core::gpc('args');
-		$s = decrypt($args, $this->conf['auth_key']);
-		$arr = explode("\t", $s);
-		if(DEBUG) {
-			$openid = $token = '';
-		} else {
-			if(count($arr) < 2) {
-				$this->message('参数错误', 0);
-			}
-			list($openid, $token) = $arr;
-		}
-		
-		$input = $error = array();
-		if(!$this->form_submit()) {
-			if(DEBUG) {
-				$qquser = array('nickname'=>'张三', 'figureurl_1'=>'http://www.baidu.com/img/baidu_jgylogo3.gif', 'figureurl_2'=>'http://www.baidu.com/img/baidu_jgylogo3.gif');
-			} else {
-				$qquser = $this->qqlogin_get_user_by_openid($openid, $token, $appid);
-			}
-			$username = $qquser['nickname'];
-			$avatar_url_1 = $qquser['figureurl_1'];
-			$avatar_url_2 = $qquser['figureurl_2'];
-			$email = '';
-			$password = '';
-			$password2 = '';
-			// 头像
-		} else {
-			$username = core::gpc('username', 'P');
-			$password = core::gpc('password', 'P');
-			$password2 = core::gpc('password2', 'P');
-			$avatar_url_1 = core::gpc('avatar_url_1', 'P');
-			$avatar_url_2 = core::gpc('avatar_url_2', 'P');
-			
-			$conf = $this->conf;
-			
-			$user = array();
-			if(strpos($username, '@') === FALSE) {
-				$error['username'] = $this->user->check_username($username);
-				empty($error['username']) && $user = $this->user->get_user_by_username($username);
-			} else {
-				$error['username'] = $this->user->check_email($email);
-				empty($error['username']) && $user = $this->user->get_user_by_email($username);
-			}
-			empty($user) && $error['username'] = '该用户名不存在。';
-			
-			// 检查密码
-			if(empty($error)) {
-				if(!$this->user->verify_password($password, $user['password'], $user['salt'])) {
-					$error['password'] = '密码错误';
-				}
-			}
-			
-			// 判断结果
-			if(!array_filter($error)) {
-				$error = array();
-				$uid = $user['uid'];
-				$userdb = $this->user->read($uid);
-				$this->user->set_login_cookie($userdb);
-				
-				// 更新头像
-				if($avatar_url_2) {
-					$dir = image::get_dir($uid);
-					$smallfile = $conf['upload_path']."avatar/$dir/{$uid}_small.gif";
-					$middlefile = $conf['upload_path']."avatar/$dir/{$uid}_middle.gif";
-					$bigfile = $conf['upload_path']."avatar/$dir/{$uid}_big.gif";
-					
-					try {
-						$s = misc::fetch_url($avatar_url_2, 5);
-						file_put_contents($bigfile, $s);
-						image::thumb($bigfile, $smallfile, $conf['avatar_width_small'], $conf['avatar_width_small']);
-						image::thumb($bigfile, $middlefile, $conf['avatar_width_middle'], $conf['avatar_width_middle']);
-						image::thumb($bigfile, $bigfile, $conf['avatar_width_big'], $conf['avatar_width_big']);
-						$user['avatar'] = $_SERVER['time'];
-					} catch (Exception $e) {
-						$userdb['avatar'] = 0;
-					}
-					
-					$this->user->update($userdb);
-				}
-				
-				// 绑定
-				$this->user_qqlogin = core::model($this->conf, 'user_qqlogin', 'uid', 'uid');
-				$this->user_qqlogin->create(array('uid'=>$uid, 'openid'=>$openid));
-					
-			}
-		}
-		
-		// 筛选用户名, 用户名，提示是否被注册
-		
-		$this->view->assign('username', $username);
-		$this->view->assign('password', $password);
-		$this->view->assign('password2', $password2);
-		$this->view->assign('avatar_url_1', $avatar_url_1);
-		$this->view->assign('avatar_url_2', $avatar_url_2);
-		$this->view->assign('args', $args);
-		$this->view->assign('input', $input);
-		$this->view->assign('error', $error);
-		$this->view->display('xn_qq_login_bind.htm');
-	}
-	
-	public function qqlogin_get_openid_by_token($token) {
-		$url = "https://graph.qq.com/oauth2.0/me?access_token=$token";
-		$s  = misc::https_fetch_url($url);
-		if(strpos($s, "callback") !== false) {
-			$lpos = strpos($s, "(");
-			$rpos = strrpos($s, ")");
-			$s  = substr($s, $lpos + 1, $rpos - $lpos -1);
-		}
-		
-		$arr = core::json_decode($s);
-		if (isset($arr['error'])) {
-			$error = $arr['error'].'<br />'.$arr['error_description'];
-			throw new Exception($error);
-		}
-		
-		return $arr['openid'];
-	}
-	
-	public function qqlogin_get_user_by_openid($openid, $token, $appid) {
-		$get_user_info = "https://graph.qq.com/user/get_user_info?access_token=$token&oauth_consumer_key=$appid&openid=$openid&format=json";
-		$s = misc::https_fetch_url($get_user_info);
-		$arr = json_decode($s, true);
-		return $arr;
 	}
 ?>
