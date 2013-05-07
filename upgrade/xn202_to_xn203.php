@@ -63,6 +63,12 @@ function complete() {
 	$mconf->set('plugin_disable', 0);
 	$mconf->save();
 	
+	misc::rmdir($this->conf['plugin_path'].'defend_flooding_posts');
+	misc::rmdir($this->conf['plugin_path'].'syntaxlighter');
+	misc::rmdir($this->conf['plugin_path'].'menu_forum_list');
+	misc::rmdir($this->conf['plugin_path'].'index_two_column');
+	misc::rmdir($this->conf['plugin_path'].'rename_username');
+	
 	message('升级完毕。', './');
 }
 
