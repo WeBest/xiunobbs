@@ -77,10 +77,17 @@
 		$arrlist = $this->user_qqlogin->index_fetch(array('openid'=>$openid), array(), 0, 1);
 		$arr = array_pop($arrlist);
 		if(empty($arr)) {
-			// 注册或者绑定账号
-			$args = encrypt("$openid\t$token", $this->conf['auth_key']);
-			$url = "?user-qqreg-args-$args.htm";
-			header("Location:$url");
+			// 自动注册账户，如果用户名没被注册，则直接生成用户名，完成登录
+			if(!$this->user->check_username_exists($username)) {
+				$this->qq_create_user($username, $figureurl_qq_2);
+				$url = core::gpc('HTTP_REFERER', 'S') ? core::gpc('HTTP_REFERER', 'S') : './';
+				header("Location:$url");
+			} else {
+				// 注册或者绑定账号
+				$args = encrypt("$openid\t$token", $this->conf['auth_key']);
+				$url = "?user-qqreg-args-$args.htm";
+				header("Location:$url");
+			}
 		} else {
 			// 登陆成功，设置 cookie
 			$user = $this->user->read($arr['uid']);
@@ -88,6 +95,58 @@
 			$this->user->set_login_cookie($user);
 			$url = "./";
 			header("Location:$url");
+		}
+		
+	}
+	
+	private function qq_create_user($username, $avatar_url_2) {
+		$groupid = 11;
+		$salt = rand(100000, 999999);
+		$password = rand(10000000, 99999999);
+		$email = 'qq_'.rand(10000000, 99999999).'@qq.com';
+		$user = array(
+			'username'=>$username,
+			'email'=>$email,
+			'password'=>$this->user->md5_md5($password, $salt),
+			'groupid'=>$groupid,
+			'salt'=>$salt,
+		);
+		
+		$uid = $this->user->xcreate($user);
+		
+		// hook user_create_after.php
+		
+		$userdb = $this->user->read($uid);
+		$this->user->set_login_cookie($userdb);
+		
+		$this->runtime->xset('users', '+1');
+		$this->runtime->xset('todayusers', '+1');
+		$this->runtime->xset('newuid', $uid);
+		$this->runtime->xset('newusername', $userdb['username']);
+		
+		// hook user_create_succeed.php
+		
+		// 更新头像
+		if($avatar_url_2) {
+			$dir = image::get_dir($uid);
+			$smallfile = $conf['upload_path']."avatar/$dir/{$uid}_small.gif";
+			$middlefile = $conf['upload_path']."avatar/$dir/{$uid}_middle.gif";
+			$bigfile = $conf['upload_path']."avatar/$dir/{$uid}_big.gif";
+			$hugefile = $conf['upload_path']."avatar/$dir/{$uid}_huge.gif";
+			
+			try {
+				$s = misc::fetch_url($avatar_url_2, 5);
+				file_put_contents($bigfile, $s);
+				image::thumb($bigfile, $smallfile, $conf['avatar_width_small'], $conf['avatar_width_small']);
+				image::thumb($bigfile, $middlefile, $conf['avatar_width_middle'], $conf['avatar_width_middle']);
+				image::thumb($bigfile, $bigfile, $conf['avatar_width_big'], $conf['avatar_width_big']);
+				image::thumb($bigfile, $hugefile, $conf['avatar_width_huge'], $conf['avatar_width_huge']);
+				$user['avatar'] = $_SERVER['time'];
+			} catch (Exception $e) {
+				$userdb['avatar'] = 0;
+			}
+			
+			$this->user->update($userdb);
 		}
 		
 	}
@@ -127,99 +186,17 @@
 			$username = core::gpc('username', 'P');
 			$avatar_url_1 = core::gpc('avatar_url_1', 'P');
 			$avatar_url_2 = core::gpc('avatar_url_2', 'P');
-			$email = core::gpc('email', 'P');
-			$password = core::gpc('password', 'P');
-			$password2 = core::gpc('password2', 'P');
 			
 			$conf = $this->conf;
-			
-			// 检查参数
-			if($avatar_url_1 && !check::is_url($avatar_url_1)) {
-				$this->message('avatar_url_1 格式有误');
-			}
 			
 			if($avatar_url_2 && !check::is_url($avatar_url_2)) {
 				$this->message('avatar_url_2 格式有误');
 			}
 			
-			$error['email'] = $this->user->check_email($email);
-			$error['email_exists'] = $this->user->check_email_exists($email);
-			
-			// 如果email存在
-			if($error['email_exists']) {
-				// 如果该Email一天内没激活，则删除掉，防止被坏蛋“占坑”。
-				$uid = $this->user->get_uid_by_email($email);
-				$_user = $this->user->read($uid);
-				if($_user['groupid'] == 6 && $_SERVER['time'] - $_user['regdate'] > 86400) {
-					$this->user->xdelete($uid);
-					$error['email_exists'] = '';
-				}
-				$error['email'] = $error['email_exists'];
-				unset($error['email_exists']);
-			}
-			
 			$error['username'] = $this->user->check_username($username);
 			empty($error['username']) && $error['username'] = $this->user->check_username_exists($username);
-			$error['password'] = $this->user->check_password($password);
-			$error['password2'] = $this->user->check_password2($password, $password2);
 			
-			$groupid = $this->conf['reg_email_on'] ? 6 : 11;
-			$salt = rand(100000, 999999);
-			$user = array(
-				'username'=>$username,
-				'email'=>$email,
-				'password'=>$this->user->md5_md5($password, $salt),
-				'groupid'=>$groupid,
-				'salt'=>$salt,
-			);
-			
-			// hook user_create_after.php
-			
-			// 判断结果
-			if(!array_filter($error)) {
-				$error = array();
-				$uid = $this->user->xcreate($user);
-				if(empty($uid)) {
-					throw new Exception('创建用户失败。');
-				}
-				$userdb = $this->user->read($uid);
-				$this->user->set_login_cookie($userdb);
-				
-				$this->runtime->xset('users', '+1');
-				$this->runtime->xset('todayusers', '+1');
-				$this->runtime->xset('newuid', $uid);
-				$this->runtime->xset('newusername', $userdb['username']);
-				
-				// hook user_create_succeed.php
-				
-				// 更新头像
-				if($avatar_url_2) {
-					$dir = image::get_dir($uid);
-					$smallfile = $conf['upload_path']."avatar/$dir/{$uid}_small.gif";
-					$middlefile = $conf['upload_path']."avatar/$dir/{$uid}_middle.gif";
-					$bigfile = $conf['upload_path']."avatar/$dir/{$uid}_big.gif";
-					$hugefile = $conf['upload_path']."avatar/$dir/{$uid}_huge.gif";
-					
-					try {
-						$s = misc::fetch_url($avatar_url_2, 5);
-						file_put_contents($bigfile, $s);
-						image::thumb($bigfile, $smallfile, $conf['avatar_width_small'], $conf['avatar_width_small']);
-						image::thumb($bigfile, $middlefile, $conf['avatar_width_middle'], $conf['avatar_width_middle']);
-						image::thumb($bigfile, $bigfile, $conf['avatar_width_big'], $conf['avatar_width_big']);
-						image::thumb($bigfile, $hugefile, $conf['avatar_width_huge'], $conf['avatar_width_huge']);
-						$user['avatar'] = $_SERVER['time'];
-					} catch (Exception $e) {
-						$userdb['avatar'] = 0;
-					}
-					
-					$this->user->update($userdb);
-				}
-				
-				$this->user_qqlogin = core::model($this->conf, 'user_qqlogin', 'uid', 'uid');
-				$this->user_qqlogin->create(array('uid'=>$uid, 'openid'=>$openid));
-					
-				// hook user_create_succeed.php
-			}
+			$this->qq_create_user($username, $avatar_url_2);
 		}
 		
 		// 筛选用户名, 用户名，提示是否被注册
