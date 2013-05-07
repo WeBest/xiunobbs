@@ -7,16 +7,17 @@
 			<form action="?user-qqreg-args-$args.htm" method="post" id="form">
 				<input type="hidden" name="FORM_HASH" value="{FORM_HASH}" />
 				<dl>
-					<dt></dt><dd>$username，很抱歉，您的用户名被占用，请更换一个独一无二的用户名。</dd>
-					
 					<dt></dt>
-					<dd><img src="$avatar_url_1" width="50" height="50" /><input type="hidden" name="avatar_url_1" value="$avatar_url_1" /><input type="hidden" name="avatar_url_2" value="$avatar_url_2" /></dd>
+					<dd><img src="$avatar_url_1" width="50" height="50" /><input type="hidden" name="avatar_url_1" value="$avatar_url_1" /><input type="hidden" name="avatar_url_2" value="$avatar_url_2" />
+						<p>$username，很抱歉，您的用户名被占用，请更换一个独一无二的用户名。</p><br />
+					</dd>
 					
 					<dt><label for="username">用户名：</label></dt>
 					<dd><input type="text" name="username" id="username" size="24" value="$username" title="请输入独一无二的用户名" tabindex="1" style="width: 250px;" />
 						<span id="check_username"></span>
 					</dd>
 					
+					<dt></dt>
 					<dd>
 						<input type="submit" class="button bigblue" id="submit" value="确定" tabindex="5" />
 						<div class="notice" id="notice" style="display: none;"></div>
@@ -32,6 +33,7 @@
 
 <script type="text/javascript">
 $('#submit').click(function() {
+	$('#submit').disable();
 	$('#form').submit();
 	return false;
 });
@@ -64,14 +66,8 @@ $('#username').blur(function() {
 	check_username($('#username').val());
 });
 
-<!--{loop $error $k $v}-->
-<!--{if $v}-->
-$('#$k').alert('$v');
-<!--{/if}-->
-<!--{/loop}-->
-
 <!--{if !empty($_POST)}-->
-<!--{if empty($error)}-->
+<!--{if !array_filter($error)}-->
 	$('#notice').html('更新用户名成功！').show();
 	setTimeout(function() {window.location='./';}, 1000);
 <!--{else}-->

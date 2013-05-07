@@ -3,7 +3,7 @@
 		$qqlogin = $this->kv->get('qqlogin');
 		$appid = $qqlogin['appid'];
 		$appkey = $qqlogin['appkey'];
-		$callback = urlencode('?user-qqtoken.htm');
+		$callback = DEBUG ? urlencode('http://www.xiuno.com/user-qqtoken.htm') : urlencode('?user-qqtoken.htm');
 		
 		$scope = "get_user_info,add_share,list_album,add_album,upload_pic,add_topic,add_one_blog,add_weibo";
 		$state = md5(uniqid(rand(), TRUE)); //CSRF protection
@@ -16,7 +16,7 @@
 		$qqlogin = $this->kv->get('qqlogin');
 		$appid = $qqlogin['appid'];
 		$appkey = $qqlogin['appkey'];
-		$callback = urlencode('?user-qqtoken.htm');
+		$callback = DEBUG ? urlencode('http://www.xiuno.com/user-qqtoken.htm') : urlencode('?user-qqtoken.htm');
 		
 		$state = core::gpc('state', 'R');
 		$code = core::gpc('code', 'R');
@@ -78,12 +78,19 @@
 		$arr = array_pop($arrlist);
 		if(empty($arr)) {
 			// 自动注册账户，如果用户名没被注册，则直接生成用户名，完成登录
+			if(DEBUG) {
+				$qquser = array('nickname'=>'张三', 'figureurl_1'=>'http://www.baidu.com/img/baidu_jgylogo3.gif', 'figureurl_2'=>'http://www.baidu.com/img/baidu_jgylogo3.gif');
+			} else {
+				$qquser = $this->qqlogin_get_user_by_openid($openid, $token, $appid);
+			}
+			$username = $qquser['nickname'];
+			$figureurl_qq_2 = $qquser['figureurl_qq_2'];
 			if(!$this->user->check_username_exists($username)) {
-				$this->qq_create_user($username, $figureurl_qq_2);
+				$this->qq_create_user($username, $figureurl_qq_2, $openid);
 				$url = core::gpc('HTTP_REFERER', 'S') ? core::gpc('HTTP_REFERER', 'S') : './';
 				header("Location:$url");
 			} else {
-				// 注册或者绑定账号
+				// 新用户名
 				$args = encrypt("$openid\t$token", $this->conf['auth_key']);
 				$url = "?user-qqreg-args-$args.htm";
 				header("Location:$url");
@@ -140,16 +147,13 @@
 			
 			$error['username'] = $this->user->check_username($username) OR $error['username'] = $this->user->check_username_exists($username);
 			if(!array_filter($error)) {
-				$this->qq_create_user($username, $avatar_url_2);
+				$this->qq_create_user($username, $avatar_url_2, $openid);
 			}
 		}
 		
 		// 筛选用户名, 用户名，提示是否被注册
 		
 		$this->view->assign('username', $username);
-		$this->view->assign('password', $password);
-		$this->view->assign('password2', $password2);
-		$this->view->assign('email', $email);
 		$this->view->assign('avatar_url_1', $avatar_url_1);
 		$this->view->assign('avatar_url_2', $avatar_url_2);
 		$this->view->assign('args', $args);
@@ -184,7 +188,8 @@
 	}
 	
 	
-	private function qq_create_user($username, $avatar_url_2) {
+	private function qq_create_user($username, $avatar_url_2, $openid) {
+		$conf = $this->conf;
 		$groupid = 11;
 		$salt = rand(100000, 999999);
 		$password = rand(10000000, 99999999);
@@ -198,6 +203,9 @@
 		);
 		
 		$uid = $this->user->xcreate($user);
+		
+		$this->user_qqlogin = core::model($this->conf, 'user_qqlogin', 'uid', 'uid');
+		$this->user_qqlogin->create(array('uid'=>$uid, 'openid'=>$openid));
 		
 		// hook user_create_after.php
 		
