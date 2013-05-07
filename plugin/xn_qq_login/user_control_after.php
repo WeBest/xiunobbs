@@ -198,6 +198,7 @@
 					$smallfile = $conf['upload_path']."avatar/$dir/{$uid}_small.gif";
 					$middlefile = $conf['upload_path']."avatar/$dir/{$uid}_middle.gif";
 					$bigfile = $conf['upload_path']."avatar/$dir/{$uid}_big.gif";
+					$hugefile = $conf['upload_path']."avatar/$dir/{$uid}_huge.gif";
 					
 					try {
 						$s = misc::fetch_url($avatar_url_2, 5);
@@ -205,6 +206,7 @@
 						image::thumb($bigfile, $smallfile, $conf['avatar_width_small'], $conf['avatar_width_small']);
 						image::thumb($bigfile, $middlefile, $conf['avatar_width_middle'], $conf['avatar_width_middle']);
 						image::thumb($bigfile, $bigfile, $conf['avatar_width_big'], $conf['avatar_width_big']);
+						image::thumb($bigfile, $hugefile, $conf['avatar_width_huge'], $conf['avatar_width_huge']);
 						$user['avatar'] = $_SERVER['time'];
 					} catch (Exception $e) {
 						$userdb['avatar'] = 0;
