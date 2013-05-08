@@ -281,18 +281,18 @@ create table bbs_thread_views (
 	PRIMARY KEY (tid) 
 )Engine=MyISAM;
 
-alter table bbs_user 
-	change myposts myposts mediumint(8) unsigned NOT NULL  DEFAULT '0' after posts, 
-	change avatar avatar int(11) unsigned NOT NULL  DEFAULT '0' after myposts, 
-	change digests digests int(11) unsigned NOT NULL  DEFAULT '0' after golds, 
-	change follows follows smallint(3) unsigned NOT NULL  DEFAULT '0' after digests, 
-	change accesson accesson tinyint(1) NOT NULL  DEFAULT '0' after homepage, 
-	add column onlinetime int(1) NOT NULL  DEFAULT '0' after accesson, 
-	change lastactive lastactive int(1) NOT NULL  DEFAULT '0' after onlinetime, 
-	drop column replies, 
-	drop column money, 
-	drop column signature, 
-	drop key email, add KEY email (email), COMMENT='';
+alter table bbs_user change myposts myposts mediumint(8) unsigned NOT NULL  DEFAULT '0' after posts;
+alter table bbs_user change avatar avatar int(11) unsigned NOT NULL  DEFAULT '0' after myposts;
+alter table bbs_user change digests digests int(11) unsigned NOT NULL  DEFAULT '0' after golds;
+alter table bbs_user change follows follows smallint(3) unsigned NOT NULL  DEFAULT '0' after digests;
+alter table bbs_user change accesson accesson tinyint(1) NOT NULL  DEFAULT '0' after homepage;
+alter table bbs_user add column onlinetime int(1) NOT NULL  DEFAULT '0' after accesson;
+alter table bbs_user change lastactive lastactive int(1) NOT NULL  DEFAULT '0' after onlinetime;
+alter table bbs_user drop column replies;
+alter table bbs_user drop column money;
+alter table bbs_user drop column signature;
+alter table bbs_user drop key email, add KEY email (email), COMMENT='';
+
 ";
 	
 	$db = new db_mysql($conf['db']['mysql']);
