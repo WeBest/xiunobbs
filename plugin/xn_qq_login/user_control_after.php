@@ -1,4 +1,3 @@
-<?php
 	public function on_qqlogin() {
 		$qqlogin = $this->kv->get('qqlogin');
 		$appid = $qqlogin['appid'];
@@ -243,4 +242,3 @@
 		}
 		
 	}
-?>
