@@ -14,6 +14,7 @@ if($this->conf['db']['type'] != 'mongodb') {
 	);");
 	
 	// 检测 email 是否为唯一主键，如果是则DROP掉，重建。
+	
 }
 
 ?>
