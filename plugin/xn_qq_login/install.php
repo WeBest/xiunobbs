@@ -12,6 +12,8 @@ if($this->conf['db']['type'] != 'mongodb') {
 		  PRIMARY KEY(uid),
 		  UNIQUE KEY(openid)
 	);");
+	
+	// 检测 email 是否为唯一主键，如果是则DROP掉，重建。
 }
 
 ?>
