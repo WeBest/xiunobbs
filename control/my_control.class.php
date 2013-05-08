@@ -101,7 +101,7 @@ class my_control extends common_control {
 			$newpassword2 = core::gpc('newpassword2', 'P');
 			
 			// 检查原密码是否正确
-			$error['password'] = $this->user->verify_password($password, $_user['password'], $_user['salt']) ? '' : '旧密码错误';
+			$_user['password'] && $error['password'] = $this->user->verify_password($password, $_user['password'], $_user['salt']) ? '' : '旧密码错误';
 			$error['newpassword'] = $this->user->check_password($newpassword);
 			$error['newpassword2'] = $this->user->check_password2($newpassword, $newpassword2);
 			// hook my_password_before.php

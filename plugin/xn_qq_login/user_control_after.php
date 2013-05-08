@@ -192,12 +192,12 @@
 		$conf = $this->conf;
 		$groupid = 11;
 		$salt = rand(100000, 999999);
-		$password = rand(10000000, 99999999);
+		$password = ''; // 密码为空，第一次修改，不需要输入密码。
 		$email = 'qq_'.rand(10000000, 99999999).'@qq.com';
 		$user = array(
 			'username'=>$username,
 			'email'=>$email,
-			'password'=>$this->user->md5_md5($password, $salt),
+			'password'=>$password,
 			'groupid'=>$groupid,
 			'salt'=>$salt,
 		);
