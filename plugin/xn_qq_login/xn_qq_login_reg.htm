@@ -71,7 +71,7 @@ $('#username').blur(function() {
 	$('#notice').html('更新用户名成功！').show();
 	setTimeout(function() {window.location='./';}, 1000);
 <!--{else}-->
-	$('#notice').html('更新用户名失败，请重新填写一个用户名！').show();
+	$('#notice').html('更新用户名失败，原因：$error[username]').show();
 <!--{/if}-->
 <!--{/if}-->
 

@@ -84,7 +84,7 @@
 			}
 			$username = $qquser['nickname'];
 			$figureurl_qq_2 = $qquser['figureurl_qq_2'];
-			if(!$this->user->check_username_exists($username)) {
+			if(!$this->user->check_username_exists($username) && !$this->user->check_username($username)) {
 				$this->qq_create_user($username, $figureurl_qq_2, $openid);
 				$url = core::gpc('HTTP_REFERER', 'S') ? core::gpc('HTTP_REFERER', 'S') : './';
 				header("Location:$url");
@@ -132,6 +132,7 @@
 			$username = $qquser['nickname'];
 			$avatar_url_1 = $qquser['figureurl_1'];
 			$avatar_url_2 = $qquser['figureurl_2'];
+			$error['username'] = $this->user->check_username($username);
 		// 头像
 		} else {
 			$username = core::gpc('username', 'P');
