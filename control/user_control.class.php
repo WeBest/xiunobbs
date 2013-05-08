@@ -20,7 +20,6 @@ class user_control extends common_control {
 	
 	// ajax 登录
 	public function on_login() {
-		$a += $b;
 		// hook user_login_start.php
 		if(!$this->form_submit()) {
 			
