@@ -42,12 +42,23 @@ $mthread_views = core::model($conf, 'thread_views');
 // read
 $r = isset($_GET['r']) ? $_GET['r'] : '';
 $r && $tids = explode(',', $r);
+
+// 过滤
+foreach($tids as &$_tid) {
+	$_tid = intval($_tid);
+}
+$tids = array_filter($tids);
+if(count($tids) > 100) {
+	$tids = array_slice($tids, 0, 100);
+}
+
 if(!empty($tids)) {
 	$arr = $mthread_views->mget($tids);
 	$s = '';
 	foreach($arr as $k=>$v) {
 		if(empty($v)) {
 			list($_, $_, $tid) = explode('-', $k);
+			$tid = intval($tid);
 			$s .= ',"'.$tid.'":'.'"0"';
 		} else {
 			$s .= ',"'.$v['tid'].'":'.'"'.$v['views'].'"';
