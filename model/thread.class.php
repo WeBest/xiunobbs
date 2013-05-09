@@ -248,6 +248,7 @@ class thread extends base_model {
 			foreach($return['user'] as $uid=>$arr) {
 				if(!$uid) continue;
 				$user = $this->user->read($uid);
+				if(empty($user)) continue;
 				$user['threads'] -= $arr['threads'];
 				$user['posts'] -= $arr['posts'];
 				$user['myposts'] -= $arr['myposts'];
@@ -262,6 +263,7 @@ class thread extends base_model {
 			foreach($return['forum'] as $fid=>$arr) {
 				if(!$fid) continue;
 				$forum = $this->forum->read($fid);
+				if(empty($forum)) continue;
 				$forum['threads'] -= $arr['threads'];
 				$forum['posts'] -= $arr['posts'];
 				$forum['todayposts'] -= $arr['todayposts'];
