@@ -250,7 +250,7 @@ class plugin_control extends admin_control {
 		
 		// 如果为风格插件，则需要设置 view_path
 		if(substr($dir, 0, 4) == 'view') {
-			$viewpath = array($this->conf['plugin_path'].$dir);
+			$viewpath = array($this->conf['plugin_path'].$dir.'/');
 			$this->kv->xset('view_path', $viewpath);
 			$this->runtime->xset('view_path', $viewpath);
 			
@@ -422,7 +422,7 @@ class plugin_control extends admin_control {
 		
 		// 如果为风格插件，则需要设置 view_path
 		if(substr($dir, 0, 4) == 'view') {
-			$viewpath = array($this->conf['plugin_path'].$dir);
+			$viewpath = array($this->conf['plugin_path'].$dir.'/');
 			$this->kv->xset('view_path', $viewpath);
 			$this->runtime->xset('view_path', $viewpath);
 			
