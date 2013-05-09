@@ -31,10 +31,9 @@ core::init();
 
 IN_SAE && $conf['upload_path'] = 'saestor://upload/';
 
-if(!DEBUG && is_file($conf['upload_path'].'install.lock')) {
+if(file_exists($conf['upload_path'].'install.lock')) {
 	message('已经安装过，如果需要重新安装，请删除 upload/install.lock 文件。');
 }
-
 
 include BBS_PATH.'model/user.class.php';
 include BBS_PATH.'model/forum.class.php';
@@ -405,9 +404,9 @@ if(empty($step) || $step == 'checklicense') {
 				'credits_policy_digest_1' => 10,		
 				'credits_policy_digest_2' => 20,		
 				'credits_policy_digest_3' => 30,		
-				'golds_policy_digest_1' => 1,		
-				'golds_policy_digest_2' => 2,		
-				'golds_policy_digest_3' => 3,		
+				'golds_policy_digest_1' => 10,		
+				'golds_policy_digest_2' => 20,		
+				'golds_policy_digest_3' => 30,		
 			);
 			$kv->set('conf_ext', $kvconf);
 			
@@ -463,6 +462,9 @@ if(empty($step) || $step == 'checklicense') {
 		message('SAE 环境安装，此步需要手工安装，点击<a href="'.$conf['upload_url'].'tmp.zip'.'" target="_blank"><b>【下载压缩包:tmp.zip】</b></a>，解压后，将文件上传到 tmp 目录，完成点击<a href="?step=complete"><b>【下一步】</b></a>。');
 	}
 } elseif($step == 'complete') {
+	
+	file_put_contents($conf['upload_path'].'install.lock', '');
+	
 	if(IN_SAE && !is_file($conf['tmp_path'].'_runtime.php')) {
 		message('SAE 环境下需要手工上传 tmp 文件夹，请返回上一步，下载 tmp.zip ，解压后上传到服务器。', 'javascript:history:back();');
 	}
@@ -472,7 +474,6 @@ if(empty($step) || $step == 'checklicense') {
 	echo '<h1>安装完成，点击<a href="../">【跳转到首页】</a>！</h1>';
 	echo '<h3>安装完成，为了安全请删除 install 目录</h3><script>setTimeout(function() {window.location="../";}, 3000);</script>';
 	include './footer.inc.php';
-	file_put_contents($conf['upload_path'].'install.lock', '');
 	exit;
 }
 

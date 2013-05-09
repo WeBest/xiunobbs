@@ -610,6 +610,15 @@ $.editor = function(textarea, settings) {
 	this.exec_cmd = function(cmd, arg) {
 		if(!arg) arg = null;
 		//_this._focus();
+		/*
+		try {_doc.execCommand("styleWithCSS", 0, false);
+		} catch (e) {
+			try {_doc.execCommand("useCSS", 0, true);
+			} catch (e) {
+				try {_doc.execCommand('styleWithCSS', false, false);
+				} catch (e) {}
+			}
+		}*/
 		_doc.execCommand(cmd, false, arg);
 		_this.save();
 		_this.check_toolbar();

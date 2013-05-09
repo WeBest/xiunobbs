@@ -108,7 +108,7 @@ return array(
 	'plugin_path' => BBS_PATH.'plugin/',
 	
 	// 插件目录对应的URL
-	'plugin_url' => 'http://xiuno.net/plugin/',
+	'plugin_url' => 'http://x.net/plugin/',
 	
 	'plugin_disable'=>0,			// 禁止掉所有插件
 	
@@ -124,10 +124,10 @@ return array(
 	'click_server' => 'http://x.net/service/clickd/',	// 记录主题点击数，论坛点击数
 	
 	// 加密KEY，
-	'auth_key' => 'd22fb3e56c7befd3b30bd7ecfeb7a339',
+	'auth_key' => 'b185fb10b2c9efd0a1bd09d9b92a9b06',
 	
 	// 站点的ID，用来和官方通信，下载，安装插件。
-	'siteid' => 'dd8eaf9ca3736b8f096a9d370b0d5edb',
+	'siteid' => '62112974a75ad1ab79dfa87745f37631',
 	
 	'cookie_pre' => 'bbs_',
 	'cookie_domain' => '',

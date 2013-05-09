@@ -179,8 +179,9 @@ class plugin_control extends admin_control {
 		!preg_match('#^\w+$#', $dir) && $this->message('dir 不合法。');
 
 		$official = $this->get_official_by_dir($dir);
+		
 		// 检查版本
-		if(version_compare($this->conf['version'], $official['bbs_version']) == -1) {
+		if($official && version_compare($this->conf['version'], $official['bbs_version']) == -1) {
 			$this->message("此插件依赖的 Xiuno BBS 最低版本为 $local[bbs_version] ，您当前的版本：".$this->conf['version']);
 		}
 		
@@ -188,7 +189,9 @@ class plugin_control extends admin_control {
 		if(!is_dir($this->conf['plugin_path'].$dir)) {
 			
 			// 检查版本
-			$official = $this->get_official_by_dir($dir);
+			if(empty($official)) {
+				$this->message("该插件不存在: $dir");
+			}
 			if(version_compare($this->conf['version'], $official['bbs_version']) == -1) {
 				$this->message("此插件依赖的 Xiuno BBS 最低版本为 $official[bbs_version] ，您当前的版本：".$this->conf['version']);
 			}
@@ -247,7 +250,7 @@ class plugin_control extends admin_control {
 		
 		// 如果为风格插件，则需要设置 view_path
 		if(substr($dir, 0, 4) == 'view') {
-			$viewpath = array($this->conf['plugin_path'].$dir);
+			$viewpath = array($this->conf['plugin_path'].$dir.'/');
 			$this->kv->xset('view_path', $viewpath);
 			$this->runtime->xset('view_path', $viewpath);
 			
@@ -303,7 +306,10 @@ class plugin_control extends admin_control {
 			
 			// 检查版本
 			$official = $this->get_official_by_dir($dir);
-			if(version_compare($this->conf['version'], $official['bbs_version']) == -1) {
+			if(empty($official)) {
+				$this->message("该插件不存在: $dir");
+			}
+			if($official && version_compare($this->conf['version'], $official['bbs_version']) == -1) {
 				$this->message("此插件依赖的 Xiuno BBS 最低版本为 $official[bbs_version] ，您当前的版本：".$this->conf['version']);
 			}
 			
@@ -416,7 +422,7 @@ class plugin_control extends admin_control {
 		
 		// 如果为风格插件，则需要设置 view_path
 		if(substr($dir, 0, 4) == 'view') {
-			$viewpath = array($this->conf['plugin_path'].$dir);
+			$viewpath = array($this->conf['plugin_path'].$dir.'/');
 			$this->kv->xset('view_path', $viewpath);
 			$this->runtime->xset('view_path', $viewpath);
 			
