@@ -129,6 +129,8 @@ class attach_control extends common_control {
 			// 默认开启压缩加快下载速度！
 			//$_SERVER['ob_no_gzip'] = 1;
 			
+			// hook attach_download_gold_after.php
+			
 			// 头部
 			if(stripos($_SERVER["HTTP_USER_AGENT"], 'MSIE') !== FALSE) {
 				$attach['orgfilename'] = urlencode($attach['orgfilename']);
@@ -146,7 +148,7 @@ class attach_control extends common_control {
 			header('Content-Type: application/octet-stream');
 			//header("Content-Type: application/force-download");	// 后面的会覆盖前面
 			
-			// hook attach_download_gold_after.php
+			
 			readfile($this->conf['upload_path'].'attach/'.$attach['filename']);
 			
 			/*if($attach['filetype'] == 'image') {
