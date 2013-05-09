@@ -42,6 +42,12 @@ class mod_control extends common_control {
 
 		$this->check_access($forum, 'top');
 		
+		// 去除非本版块的置顶主题
+		foreach($tidarr as $k=>$v) {
+			$thread = $this->thread->read($fid, $v);
+			if(empty($thread)) unset($tidarr[$k]);
+		}
+		
 		if(!$this->form_submit()) {
 			
 			// 初始化控件状态
@@ -56,7 +62,7 @@ class mod_control extends common_control {
 			$comment = core::gpc('comment', 'P');
 			$this->check_comment($comment);
 			
-			if(($this->_user['groupid'] == 4 || $this->_user['groupid'] == 5) && $rank != 1 && $rank != 0) {
+			if(($this->_user['groupid'] == 4 || $this->_user['groupid'] == 5) && $rank > 1) {
 				$this->message('您只有本版块置顶权限！', 0);
 			}
 			
