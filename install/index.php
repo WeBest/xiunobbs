@@ -405,9 +405,9 @@ if(empty($step) || $step == 'checklicense') {
 				'credits_policy_digest_1' => 10,		
 				'credits_policy_digest_2' => 20,		
 				'credits_policy_digest_3' => 30,		
-				'golds_policy_digest_1' => 1,		
-				'golds_policy_digest_2' => 2,		
-				'golds_policy_digest_3' => 3,		
+				'golds_policy_digest_1' => 10,		
+				'golds_policy_digest_2' => 20,		
+				'golds_policy_digest_3' => 30,		
 			);
 			$kv->set('conf_ext', $kvconf);
 			

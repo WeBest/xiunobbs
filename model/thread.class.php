@@ -157,9 +157,13 @@ class thread extends base_model {
 		}
 		
 		// 发表主题的积分策略不同于回帖的策略。
-		$ruser[$uid]['credits'] = $ruser[$uid]['credits'] - $this->conf['credits_policy_post'] +  - $this->conf['credits_policy_thread'];
-		$ruser[$uid]['golds'] = $ruser[$uid]['golds'] - $this->conf['golds_policy_post'] +  - $this->conf['golds_policy_thread'];
-		$thread['digest'] > 0 && $ruser[$uid]['digests']++;
+		$ruser[$uid]['credits'] += $this->conf['credits_policy_thread'];
+		$ruser[$uid]['golds'] += $this->conf['golds_policy_thread'];
+		if($thread['digest'] > 0) {
+			$ruser[$uid]['digests']++;
+			$ruser[$uid]['credits'] += $this->conf['credits_policy_digest_'.$thread['digest']];
+			$ruser[$uid]['golds'] += $this->conf['golds_policy_digest_'.$thread['digest']];
+		}
 		$ruser[$uid]['threads']++;
 		
 		$rforum['threads']++;
@@ -183,6 +187,8 @@ class thread extends base_model {
 		
 		// modlog
 		$this->modlog->delete_by_fid_tid($fid, $tid);
+		
+		// 评分不删除
 		
 		// 更新 runtime
 		$this->runtime->xset('threads', '-1');
