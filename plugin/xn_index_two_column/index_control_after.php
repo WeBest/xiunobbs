@@ -9,6 +9,7 @@
 		$start = ($page - 1) * $pagesize;
 		
 		$threadlist = array();
+		$readtids = '';
 			
 		$threadlist = $this->thread->get_newlist($start, $pagesize);
 		$n = count($threadlist);
@@ -23,7 +24,11 @@
 				continue;
 			}
 			$thread['subject_fmt'] = utf8::substr($thread['subject'], 0, 32);
+			$readtids .= ','.$thread['tid'];
 		}
+		
+		$readtids = substr($readtids, 1); 
+		$click_server = $this->conf['click_server']."?db=tid&r=$readtids";
 		
 		$pages = misc::simple_pages("?index-new.htm", $n, $page, $pagesize);
 
@@ -34,6 +39,7 @@
 		$this->view->assign('fid', $fid);
 		$this->view->assign('threadlist', $threadlist);
 		$this->view->assign('pages', $pages);
+		$this->view->assign('click_server', $click_server);
 		$this->view->display('plugin_index_new.htm');
 	}
 	
@@ -46,8 +52,11 @@
 		$page = misc::page();
 		$start = ($page - 1) * $pagesize;
 		
+		$readtids = '';
+		
 		$digestlist = $this->thread_digest->get_newlist($start, $pagesize);
 		$n = count($digestlist);
+		
 		foreach($digestlist as $k=>&$thread) {
 			$this->thread->format($thread);
 			
@@ -59,7 +68,11 @@
 				continue;
 			}
 			$thread['subject_fmt'] = utf8::substr($thread['subject'], 0, 32);
+			$readtids .= ','.$thread['tid'];
 		}
+		
+		$readtids = substr($readtids, 1); 
+		$click_server = $this->conf['click_server']."?db=tid&r=$readtids";
 		
 		$pages = misc::simple_pages("?index-digest.htm", $n, $page, $pagesize);
 
@@ -70,6 +83,7 @@
 		$this->view->assign('fid', $fid);
 		$this->view->assign('threadlist', $digestlist);
 		$this->view->assign('pages', $pages);
+		$this->view->assign('click_server', $click_server);
 		$this->view->display('plugin_index_digest.htm');
 	}
 	
