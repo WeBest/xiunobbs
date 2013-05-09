@@ -31,16 +31,8 @@ core::init();
 
 IN_SAE && $conf['upload_path'] = 'saestor://upload/';
 
-
-if(!IN_SAE) {
-	if(!DEBUG && is_file($conf['upload_path'].'install.lock')) {
-		message('已经安装过，如果需要重新安装，请删除 upload/install.lock 文件。');
-	}
-} else {
-	$s = new SaeStorage();
-	if($s->fileExists ('upload', 'install.lock')) {
-		message('已经安装过，如果需要重新安装，请删除 upload/install.lock 文件。');
-	}
+if(file_exists($conf['upload_path'].'install.lock')) {
+	message('已经安装过，如果需要重新安装，请删除 upload/install.lock 文件。');
 }
 
 include BBS_PATH.'model/user.class.php';
