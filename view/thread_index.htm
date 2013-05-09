@@ -459,16 +459,12 @@ $('#quick_message').focus();
 
 // 记录当前页码
 var fid_page = $.parseJSON($.pdata(cookie_pre + 'fid_page'));
-var page = fid_page ? fid_page[''+$fid] : '';
-if(page && page > 1) {
-	var href = $('#forum_link').attr('href').replace(/page-1/ig, "page-"+page);
-	$('#forum_link').attr('href', href);
-	$('#return_back').click(function() {
-		window.location = href;
-	});
-
-	$('#forum_link').attr('href', href);
-}
+var page = fid_page ? fid_page[''+$fid] : 1;
+var href = $('#forum_link').attr('href').replace(/page-1/ig, "page-"+page);
+$('#forum_link').attr('href', href);
+$('#return_back').click(function() {
+	window.location = href;
+});
 
 // 鼠标放在头像上弹出用户信息 ajaxdialog_hover
 var jajaxdialoglinks = $('a.ajaxdialog_hover');
