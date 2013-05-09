@@ -258,7 +258,7 @@
 			<!--{hook thread_index_mod_end.htm}-->
 		</div>
 		<!--{/if}-->
-		<p style="text-align: center; padding: 8px;"><input type="button" value=" 返回【$forum[name]】" class="button bigblue" onclick="window.location='?forum-index-fid-$fid-page-1.htm'" /></p>
+		<p style="text-align: center; padding: 8px;"><input type="button" value=" 返回【$forum[name]】" class="button bigblue" id="return_back" /></p>
 	</div>
 	
 	<!--{hook thread_index_mod_after.htm}-->
@@ -462,6 +462,11 @@ var fid_page = $.parseJSON($.pdata(cookie_pre + 'fid_page'));
 var page = fid_page ? fid_page[''+$fid] : '';
 if(page && page > 1) {
 	var href = $('#forum_link').attr('href').replace(/page-1/ig, "page-"+page);
+	$('#forum_link').attr('href', href);
+	$('#return_back').click(function() {
+		window.location = href;
+	});
+
 	$('#forum_link').attr('href', href);
 }
 
