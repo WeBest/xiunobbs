@@ -108,7 +108,7 @@ function message($s, $url = '', $timeout = 2) {
 	<body>
 	<div id="header" style="overflow: hidden;">
 		<h3 style="color: #FFFFFF;line-height: 26px;margin-left: 16px;">Xiuno BBS 2.0.2 - Xiuno BBS 2.0.3  升级程序</h3>
-		<p style="color: #BBBBBB;margin-left: 16px;">本程序用来升级Xiuno BBS 2.0.1。</p>
+		<p style="color: #BBBBBB;margin-left: 16px;">本程序用来升级Xiuno BBS 2.0.2。</p>
 	</div>
 	<div id="body" style="padding: 16px;">
 		'.$s.'
