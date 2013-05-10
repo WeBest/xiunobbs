@@ -59,7 +59,7 @@ function complete() {
 	$s = str_replace("'version' => '2.0.2'", "'version' => '2.0.3'", $s);
 	file_put_contents($conffile, $s);
 	
-	$mconf = new xn_conf($configfile);
+	$mconf = new xn_conf($conffile);
 	$mconf->set('plugin_on', 1);
 	$mconf->set('plugin_disable', 0);
 	$mconf->save();
@@ -81,7 +81,7 @@ function complete() {
 	if(isset($arr['rename_username'])) unset($arr['rename_username']);
 	file_put_contents($settingfile, core::json_encode($arr));
 	
-	message('老插件已经清除，请通过后台在线插件安装新插件，升级完毕。', './');
+	message('老插件已经清除，请通过后台在线插件安装新插件，升级完毕！ 请删除 xn202_to_xn203.php 文件。', './');
 }
 
 function message($s, $url = '', $timeout = 2) {
