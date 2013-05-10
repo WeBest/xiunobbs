@@ -106,12 +106,8 @@ return array(
 	
 	// 插件目录
 	'plugin_path' => BBS_PATH.'plugin/',
-	
-	// 插件目录对应的URL
 	'plugin_url' => 'http://x.net/plugin/',
-	
-	'plugin_disable'=>0,			// 禁止掉所有插件
-	
+	'plugin_disable' => 0,			// 禁止掉所有插件
 	'plugin_on' => 1,			// 是否开启后台插件安装
 	
 	'urlrewrite' => 0,			// 手工开启 URL-Rewrite 后，需要清空下 tmp 目录！
