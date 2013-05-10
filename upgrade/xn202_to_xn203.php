@@ -70,6 +70,7 @@ function complete() {
 	misc::rmdir($conf['plugin_path'].'menu_forum_list');
 	misc::rmdir($conf['plugin_path'].'index_two_column');
 	misc::rmdir($conf['plugin_path'].'rename_username');
+	misc::rmdir($conf['plugin_path'].'view_btbbt');
 	
 	$settingfile = $conf['upload_path'].'plugin.json';
 	!is_file($settingfile) && file_put_contents($settingfile, '');
