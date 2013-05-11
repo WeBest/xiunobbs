@@ -41,7 +41,7 @@ if(!$this->form_submit()) {
 	
 	// 如果是 mysql 新建表
 	
-	$this->message('设置成功！', 1, '?plugin-setting-dir-xn_qq_login.htm');
+	$this->message('设置成功！', 1, $this->url('?plugin-setting-dir-xn_qq_login.htm'));
 	
 }
 

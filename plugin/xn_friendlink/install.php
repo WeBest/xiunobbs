@@ -7,7 +7,7 @@ if($this->conf['db']['type'] != 'mongodb') {
 	$db = $this->user->db;	// 与 user model 同一台 db
 	$tablepre = $db->tablepre;
 	try {
-	$db->query("CREATE TABLE bbs_friendlink(
+	$db->query("CREATE TABLE {$tablepre}friendlink(
   linkid int(10) unsigned NOT NULL auto_increment ,
   type tinyint(1) NOT NULL default '0',	
   rank tinyint(1) unsigned NOT NULL default '0',

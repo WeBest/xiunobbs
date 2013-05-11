@@ -91,13 +91,13 @@ if(!$this->form_submit() && empty($start)) {
 			}
 		}
 		$start = $arr['tid'];
-		$this->message("正在重建统计数, 当前: $start...", 1, "plugin-setting-dir-$dir-count_user-$count_user-count_forum-$count_forum-count_threadtype-$count_threadtype-start-$start.htm");
+		$this->message("正在重建统计数, 当前: $start...", 1, $this->url("plugin-setting-dir-$dir-count_user-$count_user-count_forum-$count_forum-count_threadtype-$count_threadtype-start-$start.htm"));
 	} else {
 		// 锁住
 		$this->runtime->xset('site_runlevel', 0, 'runtime');
 		$this->kv->xset('site_runlevel', 0, 'conf');
 		try { $this->thread->index_drop(array('tid'=>1)); } catch (Exception $e) {}
-		$this->message('恭喜，修改成功。', 1, "plugin-setting-dir-$dir.htm");
+		$this->message('恭喜，修改成功。', 1, $this->url("plugin-setting-dir-$dir.htm"));
 	}
 }
 
