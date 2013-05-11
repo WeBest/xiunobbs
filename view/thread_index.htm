@@ -257,7 +257,12 @@
 			<!--{hook thread_index_mod_end.htm}-->
 		</div>
 		<!--{/if}-->
-		<p style="text-align: center; padding: 8px;"><input type="button" value=" 返回【$forum[name]】" class="button bigblue" id="return_back" /></p>
+		<p style="text-align: center; padding: 8px;">
+			<!--{if !empty($referer_other)}-->
+			<input type="button" value=" 返回上一页" class="button bigblue" onclick="window.location='$referer_other'" />
+			<!--{/if}-->
+			<input type="button" value=" 返回【$forum[name]】" class="button bigblue" id="return_back" />
+		</p>
 	</div>
 	
 	<!--{hook thread_index_mod_after.htm}-->

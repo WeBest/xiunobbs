@@ -112,6 +112,12 @@ class thread_control extends common_control {
 		$ismod = $this->is_mod($forum, $this->_user);
 		
 		// userlist
+		$referer = core::gpc('HTTP_REFERER', 'S');
+		$referer_other = '';
+		if(strpos($referer, 'forum-index') === FALSE) {
+			$referer_other = check::is_url($referer) ? $referer : ''; // 自己玩自己？
+		}
+		$this->view->assign('referer_other', $referer_other);
 		
 		$this->view->assign('click_server', $click_server);
 		$this->view->assign('scrollbottom', $scrollbottom);
