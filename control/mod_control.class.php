@@ -44,7 +44,8 @@ class mod_control extends common_control {
 		
 		// 去除非本版块的置顶主题
 		foreach($tidarr as $k=>$v) {
-			$thread = $this->thread->read($fid, $v);
+			list($_fid, $_tid) = explode('-', $v);
+			$thread = $this->thread->read($_fid, $_tid);
 			if(empty($thread)) unset($tidarr[$k]);
 		}
 		
@@ -88,14 +89,14 @@ class mod_control extends common_control {
 			
 			// 先去除已有，然后加入
 			$this->thread_top->delete_top_1($forum, $tidarr);
-			$this->thread_top->delete_top_3($forum, $tidarr);
+			$this->thread_top->delete_top_3($tidarr);
 			
 			if($rank == 0) {
 				
 			} elseif($rank == 1) {
 				$this->thread_top->add_top_1($forum, $tidarr);
 			} elseif($rank == 3) {
-				$this->thread_top->add_top_3($forum, $tidarr);
+				$this->thread_top->add_top_3($tidarr);
 			}
 			
 			// 记录到版主操作日志

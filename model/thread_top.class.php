@@ -17,7 +17,7 @@ class thread_top extends base_model {
 		$this->forum->xupdate($forum);
 		
 		// 更新到 $thread
-		$this->update_thread_top($forum, $fidtidarr, 1);
+		$this->update_thread_top($fidtidarr, 1);
 	}
 	
 	/*
@@ -29,28 +29,28 @@ class thread_top extends base_model {
 		$this->forum->xupdate($forum);
 		
 		// 更新到 $thread
-		$this->update_thread_top($forum, $fidtidarr, 0);
+		$this->update_thread_top($fidtidarr, 0);
 	}
 
 	// $tidkeys 
-	public function add_top_3($forum, $fidtidarr) {
+	public function add_top_3($fidtidarr) {
 		$tidkeys = $this->tidarr_to_fidtid($fidtidarr);
 		$toptids = misc::key_str_merge($this->conf['toptids'], $tidkeys);
 		$this->kv->set('toptids', $toptids);
 		$this->runtime->xset('toptids', $toptids);
 		
 		// 更新到 $thread
-		$this->update_thread_top($forum, $fidtidarr, 3);
+		$this->update_thread_top($fidtidarr, 3);
 	}
 	
-	public function delete_top_3($forum, $fidtidarr) {
+	public function delete_top_3($fidtidarr) {
 		$tidkeys = $this->tidarr_to_fidtid($fidtidarr);
 		$toptids = misc::key_str_strip($this->conf['toptids'], $tidkeys);
 		$this->kv->set('toptids', $toptids);
 		$this->runtime->xset('toptids', $toptids);
 		
 		// 更新到 $thread
-		$this->update_thread_top($forum, $fidtidarr, 0);
+		$this->update_thread_top($fidtidarr, 0);
 	}
 	
 	// 删除某个版块下的所有三级置顶数据
@@ -85,7 +85,7 @@ class thread_top extends base_model {
 	
 	}
 	
-	private function update_thread_top($forum, $fidtidarr, $top) {
+	private function update_thread_top($fidtidarr, $top) {
 		// 更新到 $thread
 		foreach($fidtidarr as $fid_tid) {
 			list($fid, $tid) = explode('-', $fid_tid);

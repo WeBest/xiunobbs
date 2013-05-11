@@ -59,7 +59,7 @@ class thread extends base_model {
 	// 用来显示给用户
 	public function format(&$thread, $forum = array()) {
 		if(empty($thread)) return;
-		$thread['subject_substr']  = utf8::substr($thread['subject'], 0, 50);
+		$thread['subject_substr']  = utf8::substr($thread['subject'], 0, 40);
 		isset($thread['message']) && $thread['message']  = nl2br(htmlspecialchars($thread['message']));
 		$thread['isnew'] = ($this->conf['site_pv'] <= 1000000 ? $_SERVER['time'] - 86400 * 7 : $_SERVER['time_today']) < max($thread['dateline'], $thread['lastpost']);	// 最新帖定义：如果是 pv > 100w 的站点，为今日，否则为7天内的，否则先的太“冷清”了。
 		$thread['dateline_fmt'] = misc::humandate($thread['dateline']);
@@ -174,7 +174,7 @@ class thread extends base_model {
 		// 删除置顶
 		if($thread['top']) {
 			$thread['top'] == 1 && $this->thread_top->delete_top_1($forum, array("$fid-$tid"));
-			$thread['top'] == 3 && $this->thread_top->delete_top_3($forum, array("$fid-$tid"));
+			$thread['top'] == 3 && $this->thread_top->delete_top_3(array("$fid-$tid"));
 		}
 		
 		// 删除主题
