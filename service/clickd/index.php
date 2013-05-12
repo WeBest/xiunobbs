@@ -40,6 +40,7 @@ if(misc::is_robot()) {
 $mthread_views = core::model($conf, 'thread_views');
 
 // read
+$tids = array();
 $r = isset($_GET['r']) ? $_GET['r'] : '';
 $r && $tids = explode(',', $r);
 
