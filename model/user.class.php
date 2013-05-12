@@ -362,6 +362,7 @@ class user extends base_model{
 				$this->update($user);
 			} else {
 				$this->delete($uid);
+				$this->runtime->xset('users', '-1');
 			}
 				
 			// 删除其主题
