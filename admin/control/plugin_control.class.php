@@ -202,7 +202,10 @@ class plugin_control extends admin_control {
 			if(IN_SAE) {
 				// 提示下载
 				$next = "?plugin-install-dir-$dir.htm";
-				$this->message("SAE 环境安装，需要手工<a href=\"$url\" target=\"_blank\"><b>【下载压缩包】</b></a>，然后解压后，上传到 <b>plugin/$dir</b> 目录，再进行<a href=\"$next\"><b>【下一步】</b></a>安装。");
+				$this->message("SAE 环境安装，需要<br />
+					1. 手工<a href=\"$url\" target=\"_blank\"><b>【下载压缩包】</b></a><br />
+					2. 然后解压后，上传到 <b>plugin/$dir</b> 目录
+					3. 点击<a href=\"$next\"><b>【下一步】</b></a>安装。");
 			} else {
 				// 服务端开始下载
 				$s = misc::fetch_url($url, 20);
@@ -439,7 +442,7 @@ class plugin_control extends admin_control {
 		if(IN_SAE) {
 			$this->make_tmp($this->conf);
 			$url = "?plugin-saetmp.htm";
-			$this->message("请<a href=\"$url\" target=\"\"><b>下载压缩包</b></a>，解压后，将文件上传到 tmp 目录，完成启用。", 1, $referer);
+			$this->message("请<a href=\"$url\" target=\"\"><b>【下载压缩包】</b></a>，解压后，将文件上传到 tmp 目录，完成启用，<a href=\"$referer\">下一步</a>，。");
 		} else {
 			$this->clear_tmp();
 			$this->message('启用成功。', 1, $referer);
@@ -471,7 +474,7 @@ class plugin_control extends admin_control {
 		if(IN_SAE) {
 			$this->make_tmp($this->conf);
 			$url = "?plugin-saetmp.htm";
-			$this->message("请<a href=\"$url\" target=\"\"><b>下载压缩包</b></a>，解压后，将文件上传到 tmp 目录，完成禁用。", 1, $referer);
+			$this->message("请<a href=\"$url\" target=\"\"><b>【下载压缩包】</b></a>，解压后，将文件上传到 tmp 目录，完成禁用，<a href=\"$referer\">下一步</a>。");
 		} else {
 			$this->clear_tmp();
 			if($isview) {
