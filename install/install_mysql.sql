@@ -260,7 +260,7 @@ CREATE TABLE bbs_attach (
   tid int(11) NOT NULL default '0',			# 主题id
   pid int(11) NOT NULL default '0',			# 帖子id
   uid int(10) NOT NULL default '0',			# 用户id
-  filesize mediumint(8) unsigned NOT NULL default '0',	# 文件尺寸，单位字节
+  filesize int(8) unsigned NOT NULL default '0',	# 文件尺寸，单位字节
   width mediumint(8) unsigned NOT NULL default '0',	# width
   height mediumint(8) unsigned NOT NULL default '0',	# height
   filename char(120) NOT NULL default '',		# 文件名称，会过滤，并且截断，保存后的文件名，不包含URL前缀 upload_url
