@@ -14,7 +14,7 @@
 
 @set_time_limit(0);
 
-define('DEBUG', 2);
+define('DEBUG', 0);
 
 define('BBS_PATH', str_replace('\\', '/', dirname(__FILE__)).'/');
 
