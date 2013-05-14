@@ -30,12 +30,20 @@ class thread extends base_model {
 	}
 	
 	// 按照 tid 倒序，获取最新的列表
-	public function get_newlist($start = 0, $pagesize = 30) {
-		$newlist = $threadlist = array();
-		$newlist = $this->thread_new->index_fetch(array(), array('tid'=>-1), $start, $pagesize);
+	public function get_newlist($start = 0, $limit = 30, $threadlist = array()) {
+		// 递归深度不能超过4次
+		static $deep = 1;
+		if($deep++ > 4) return $threadlist;
+		
+		$newlist = array();
+		$newlist = $this->thread_new->index_fetch(array(), array('tid'=>-1), $start, $limit);
 		foreach($newlist as $new) {
 			$thread = $this->read($new['fid'], $new['tid']);
 			$threadlist[] = $thread;
+		}
+		if(count($newlist) == $limit && count($threadlist) < $limit) {
+			$threadlist += $this->get_newlist($start + $limit, $limit, $threadlist);
+			$threadlist = array_slice($threadlist, 0, $limit);
 		}
 		return $threadlist;
 	}

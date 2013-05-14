@@ -127,7 +127,7 @@ class post_control extends common_control {
 				
 				$this->thread_views->create(array('tid'=>$tid, 'views'=>0));
 				// 如果没有设置权限才加入。
-				if(empty($this->conf['forumaccesson'][$fid])) {
+				if(empty($this->conf['forumaccesson'][$fid]) || $this->conf['search_type'] == 'sphinx') {
 					$this->thread_new->create(array('fid'=>$fid, 'tid'=>$tid, 'dateline'=>$_SERVER['time'], 'lastpost'=>$_SERVER['time']));
 				}
 				

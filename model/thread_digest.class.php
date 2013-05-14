@@ -23,12 +23,19 @@ class thread_digest extends base_model {
 	}
 	
 	// 按照 tid 倒序，获取最新的列表
-	public function get_newlist($start = 0, $limit = 30) {
-		$threadlist = array();
+	public function get_newlist($start = 0, $limit = 30, $threadlist = array()) {
+		// 递归深度不能超过4次
+		static $deep = 1;
+		if($deep++ > 4) return $threadlist;
+		
 		$arrlist = $this->index_fetch(array(), array('tid'=>-1), $start, $limit);
 		foreach($arrlist as $arr) {
 			$thread = $this->thread->read($arr['fid'], $arr['tid']);
 			$threadlist[] = $thread;
+		}
+		if(count($arrlist) == $limit && count($threadlist) < $limit) {
+			$threadlist += $this->get_newlist($start + $limit, $limit, $threadlist);
+			$threadlist = array_slice($threadlist, 0, $limit);
 		}
 		return $threadlist;
 	}
