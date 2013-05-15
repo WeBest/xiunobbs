@@ -599,6 +599,9 @@ $.editor = function(textarea, settings) {
 			s = '<div></div>';
 		}
 		
+		// strip script
+		s = s.replace(/<script[^>]*>.*?<\/script>/ig, '');
+		
 		if(_issource) {
 			$(_doc.body).html(s);
 		} else {

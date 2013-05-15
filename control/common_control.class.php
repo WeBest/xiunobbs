@@ -203,12 +203,12 @@ class common_control extends base_control {
 	// 检查域名，如果不在安装域名下，跳转到安装域名。
 	private function check_domain() {
 		$appurl = $this->conf['app_url'];
-		preg_match('#^http://([^/]+)/#', $appurl, $m);
+		preg_match('#^https?://([^/]+)/#', $appurl, $m);
 		$installhost = $m[1];
 		$host = core::gpc('HTTP_HOST', 'S');
 		if($host != $m[1]) {
 			$currurl = misc::get_script_uri();
-			$newurl = preg_replace('#^http://([^/]+)/#', "http://$installhost/", $currurl);
+			$newurl = preg_replace('#^https?://([^/]+)/#', "http://$installhost/", $currurl);
 			header("Location: $newurl");
 			exit;
 		}

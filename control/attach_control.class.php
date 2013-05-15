@@ -148,7 +148,6 @@ class attach_control extends common_control {
 			header('Content-Type: application/octet-stream');
 			//header("Content-Type: application/force-download");	// 后面的会覆盖前面
 			
-			
 			readfile($this->conf['upload_path'].'attach/'.$attach['filename']);
 			
 			/*if($attach['filetype'] == 'image') {
