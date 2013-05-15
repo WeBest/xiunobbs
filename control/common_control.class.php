@@ -542,7 +542,8 @@ class common_control extends base_control {
 		while(($file = readdir($dh)) !== FALSE ) {
 			if($file != "." && $file != ".." && $file[0] != '.') {
 				if(empty($pre) || substr($file, 0, $len) == $pre) {
-					unlink($this->conf['tmp_path']."$file");
+					$filename = $this->conf['tmp_path']."$file";
+					is_file($filename) && unlink($filename);
 				}
 			}
 		}

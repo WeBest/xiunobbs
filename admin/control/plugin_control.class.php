@@ -237,7 +237,7 @@ class plugin_control extends admin_control {
 			empty($local) && $this->message('插件不存在。', 0);
 			
 			// 检查版本
-			if(version_compare($this->conf['version'], $local['bbs_version']) == -1) {
+			if(!empty($local['bbs_version']) && version_compare($this->conf['version'], $local['bbs_version']) == -1) {
 				$this->message("此插件依赖的 Xiuno BBS 最低版本为 $local[bbs_version] ，您当前的版本：".$this->conf['version']);
 			}
 		}
