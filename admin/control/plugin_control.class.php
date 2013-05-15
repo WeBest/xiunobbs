@@ -585,7 +585,8 @@ class plugin_control extends admin_control {
 	
 	// 生成 tmp 缓存，仅仅在SAE下需要。
 	private function make_tmp($conf) {
-		
+		global $bbsconf;
+		$conf = $bbsconf;
 		//$tmppath = IN_SAE ? FRAMEWORK_TMP_TMP_PATH.'tmp/' : FRAMEWORK_TMP_PATH;	// 这样比较保险，但是目前看来没有必要。
 		$tmppath = FRAMEWORK_TMP_TMP_PATH;
 		
