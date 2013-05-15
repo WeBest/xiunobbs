@@ -25,6 +25,9 @@ class admin_control extends common_control {
 		// 检查IP 屏蔽
 		$this->check_ip();
 		
+		// 检查来路是否合法
+		$this->check_xss();
+		
 		// 这里可能会有跨站脚本导致的提交，可以触发安全警报。管理员应该定期查看后台日志。
 		$this->check_mod_group();
 		$admin_auth = core::gpc($this->conf['cookie_pre'].'admin_auth', 'R');
@@ -76,6 +79,23 @@ class admin_control extends common_control {
 		}
 		
 		// hook admin_control_check_after.php
+	}
+	
+	// 检查 xss
+	protected function check_xss() {
+		global $bbsconf;
+		$referer = core::gpc('HTTP_REFERER', 'S');
+		// 如果来自前台，则停顿一下！点击后继续访问
+		$len = strlen($bbsconf['app_url']);
+		$len2 = strlen($this->conf['app_url']);
+		$url = misc::get_script_uri();
+		if(substr($referer, 0, $len2) == substr($this->conf['app_url'], 0, $len2)) {
+			// 合法
+		} elseif(empty($referer) || substr($referer, 0, $len) == substr($bbsconf['app_url'], 0, $len)) {
+			$this->message("<a href=\"$url\">通过了来路检查, 点击【继续访问管理后台】</a>");
+		} else {
+			$this->message("此来路可能存在安全问题：<br />$referer, <br /><br /><a href=\"$url\">点击【继续访问管理后台】</a>");
+		}
 	}
 	
 	// 是否为最高级别的管理员
