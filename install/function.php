@@ -24,7 +24,7 @@ function clear_tmp($pre = '', $tmppath = '') {
 	while(($file = readdir($dh)) !== false ) {
 		if($file != "." && $file != ".." && $file != ".svn") {
 			if(empty($pre) || substr($file, 0, strlen($pre)) == $pre) {
-				unlink($tmppath."$file");
+				is_file($tmppath."$file") && unlink($tmppath."$file");
 			}
 		}
 	}
