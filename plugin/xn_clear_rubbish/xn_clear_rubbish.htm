@@ -1,0 +1,52 @@
+<!--{include header.htm}-->
+
+<div class="width">
+	<form action="?plugin-setting-dir-$dir.htm" method="post" id="conf_form">
+		<input type="hidden" name="FORM_HASH" value="{FORM_HASH}" />
+		<div class="div" style="width: 700px;">
+			<div class="header">清理垃圾</div>
+			<div class="body">
+				<dl>
+					<dt><label for="fids">选择版块：</label></dt>
+					<dd>
+						<!--{loop $forumlist $forum}-->
+						<div><input type="checkbox" name="fid[]" value="$forum[fid]" /> $forum[name]</div>
+						<!--{/loop}-->
+					</dd>
+				
+					<dt><label for="startdate">日期范围：</label></dt>
+					<dd><input type="text" value="" name="startdate" id="startdate" size="16" /> - <input type="text" value="" name="enddate" id="enddate" size="16" /></dd>
+					
+					<dt><label for="keyword">标题含有关键词：</label></dt>
+					<dd><input type="text" value="" name="keyword" id="keyword" size="16" /></dd>
+					
+					<dt></dt>
+					<dd>
+						<input type="submit" class="button bigblue" id="conf_submit" value="开始清理" />
+						<input type="button" class="button biggrey" value="返回" onclick="window.location='?plugin-list.htm'" />
+						<div id="notice" class="notice" style="display: none;"></div>
+					</dd>
+					
+					<dt></dt>
+					<dd>
+						<p>清理操作会耗费大量资源，请在系统负载比较低的时刻进行。</p>
+					</dd>
+				</dl>
+			</div>
+		</div>
+	</form>
+</div>
+
+<!--{include footer.htm}-->
+
+<script type="text/javascript">
+$('#conf_submit').click(function() {
+	if(window.confirm('清理操作期间，站点会自动切换到只读状态，您确定继续吗？')) {
+		$('#conf_form').submit();
+	}
+	return false;
+});
+
+</script>
+</body>
+</html>
