@@ -99,7 +99,7 @@ class attach extends base_model {
 		$attachlist = $this->index_fetch(array('fid'=>$fid, 'pid'=>$pid), array(), 0, 10000);
 		foreach($attachlist as $attach) {
 			$this->unlink($attach);
-			$this->delete($attach['fid'], $attach['aid']);
+			$this->delete($fid, $attach['aid']);
 		}
 		$n = count($attachlist);
 		// hook attach_model_xeelete_end.php
