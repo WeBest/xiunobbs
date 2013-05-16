@@ -88,6 +88,7 @@
 <script type="text/javascript">
 
 function delay_execute(dialog, recall) {
+	$('#rate_credits_$pid').focus();
 	$('#mod_rate_submit_$pid').click(function() {
 		$('#mod_rate_submit_$pid').disable();
 		var postdata = $("#mod_rate_form_$pid").serialize();

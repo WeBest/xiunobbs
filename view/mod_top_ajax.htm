@@ -34,6 +34,7 @@ function delay_execute(dialog, recall) {
 	var tidsurl = '$tidsurl';
 	// 延迟执行的脚本，约定名字为：delay_execute()
 
+	$('#mod_top_submit').focus();
 	$('#mod_top_submit').click(function() {
 		$('#mod_top_submit').disable();
 		var postdata = $("#mod_top_form").serialize();

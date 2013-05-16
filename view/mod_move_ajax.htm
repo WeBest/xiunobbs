@@ -44,6 +44,7 @@ var sep = $conf[urlrewrite] ? '?' : '&';
 var tidsurl = '$tidsurl';
 // 延迟执行的脚本，约定名字为：delay_execute()
 function delay_execute(dialog, recall) {
+	$('#typeselect').focus();
 	$('#mod_move_submit').click(function() {
 		$('#mod_move_submit').disable();
 		var postdata = $("#mod_move_form").serialize();
