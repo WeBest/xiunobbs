@@ -644,8 +644,6 @@ class post_control extends common_control {
 			$this->post->xdelete($fid, $pid, TRUE);
 			// hook post_delete_thread_after.php
 			
-			// 删除附件
-			
 			$forum['posts']--;
 			$this->forum->xupdate($forum);
 			
