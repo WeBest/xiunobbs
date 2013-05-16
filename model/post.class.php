@@ -74,7 +74,7 @@ class post extends base_model {
 		$rthread = &$return['thread']["$fid-$tid"];
 		
 		// 删除 $attach
-		$post['attachnum'] && $this->attach->xdelete($fid, $pid);
+		($post['attachnum'] || $post['imagenum']) && $this->attach->xdelete($fid, $pid);
 		
 		// 删除 mypost，有可能空删，因为记录的时候根据 tid 去重了
 		$r = $this->mypost->delete($post['uid'], $post['fid'], $post['pid']);
