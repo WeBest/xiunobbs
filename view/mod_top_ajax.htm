@@ -5,16 +5,16 @@
 		<dt><label>主题：</label></dt>
 		<dd>$threads (篇)</dd>
 		
-		<dt><label for="top">置顶范围：</label></dt>
+		<dt><label>置顶范围：</label></dt>
 		<dd>
 			<input type="radio" name="rank" id="top_0" value="0" checked="checked" /><label for="top_0">取消置顶</label>
 			<input type="radio" name="rank" id="top_1" value="1" /><span class="icon icon-top-1"></span><label for="top_1">版块置顶</label>
 			<input type="radio" name="rank" id="top_3" value="3" /><span class="icon icon-top-3"></span><label for="top_3">全站置顶</label>
 		</dd>
 		
-		<dt><label for="rate_comment">版主备注：</label></dt>
+		<dt><label for="top_comment">版主备注：</label></dt>
 		<dd>
-			<textarea name="comment" style="width: 350px; height: 40px;" onkeyup="if(this.value.length > 64) {alert('最多只能输入64个字符。'); return false;}">$modlog[comment]</textarea>
+			<textarea name="comment" id="top_comment" style="width: 350px; height: 40px;" onkeyup="if(this.value.length > 64) {alert('最多只能输入64个字符。'); return false;}">$modlog[comment]</textarea>
 		</dd>
 		
 		<dt><label>通知作者：</label></dt>

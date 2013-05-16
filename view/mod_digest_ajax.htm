@@ -18,9 +18,9 @@
 			<input type="radio" name="rank" id="digest_3" value="3" /><span class="icon icon-digest-3"></span><label for="digest_3">三级精华</label>
 		</dd>
 		
-		<dt><label for="rate_comment">版主备注：</label></dt>
+		<dt><label for="digest_comment">版主备注：</label></dt>
 		<dd>
-			<textarea name="comment" style="width: 400px; height: 40px;" onkeyup="if(this.value.length > 64) {alert('最多只能输入64个字符。'); return false;}">$modlog[comment]</textarea>
+			<textarea name="comment" id="digest_comment" style="width: 400px; height: 40px;" onkeyup="if(this.value.length > 64) {alert('最多只能输入64个字符。'); return false;}">$modlog[comment]</textarea>
 		</dd>
 		
 		<dt><label>通知作者：</label></dt>
