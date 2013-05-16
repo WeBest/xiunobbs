@@ -6,7 +6,7 @@
 
 class friendlink extends base_model {
 	
-	public $typearr = array(0=>'文字连接', 1=>'图片链接');
+	public $typearr = array(0=>'文字链接', 1=>'图片链接');
 	
 	function __construct(&$conf) {
 		parent::__construct($conf);
