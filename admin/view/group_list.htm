@@ -138,7 +138,7 @@ $('#addusergroup').click(function() {
 	var jclone = jlasttr.clone();
 	$('td:eq(6)', jclone).html('');
 	
-	var groupid = to_int(jlasttr.attr('groupid')) + 1;
+	var groupid = intval(jlasttr.attr('groupid')) + 1;
 	jlasttr.attr('groupid', groupid);
 	$('td:eq(0) input', jlasttr).val(groupid);
 	$('td:eq(1) input', jlasttr).val('').attr('name', 'newname['+groupid+']');
@@ -152,7 +152,7 @@ $('#addusergroup').click(function() {
 $('#addspecialgroup').click(function() {
 	// 克隆倒数第二行
 	var jlasttr = $(this).closest('tr');
-	var groupid = to_int($('td:eq(0) input', jlasttr).val()) + 1;
+	var groupid = intval($('td:eq(0) input', jlasttr).val()) + 1;
 	if(groupid >= 11) {
 		alert('最多只能有3个特殊用户组。');
 		return false;

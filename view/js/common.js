@@ -876,7 +876,7 @@ function bind_document_keyup_page() {
 			}
 			
 			if(keycode == 33 || keycode == 37) {
-				if(page > 1) window.location = url.replace(/page-(\d+)/i, "page-"+(to_int(page)-1));
+				if(page > 1) window.location = url.replace(/page-(\d+)/i, "page-"+(intval(page)-1));
 			} else if(keycode == 34 || keycode == 39) {
 				window.location = url.replace(/page-(\d+)/i, "page-"+(intval(page)+1));
 			}
