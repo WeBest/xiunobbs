@@ -97,8 +97,8 @@ class conf_control extends admin_control {
 		// 用 $post 覆盖 $kvconf
 		$kvconf = array_merge($kvconf, $post);
 		
-		$input['app_name'] = form::get_text('app_name', $kvconf['app_name'], 300);
-		$input['app_copyright'] = form::get_text('app_copyright', $kvconf['app_copyright'], 300);
+		$input['app_name'] = form::get_text('app_name', htmlspecialchars($kvconf['app_name']), 300);
+		$input['app_copyright'] = form::get_text('app_copyright', htmlspecialchars($kvconf['app_copyright']), 300);
 		$input['credits_policy_post'] = form::get_text('credits_policy_post', $kvconf['credits_policy_post'], 50);
 		$input['credits_policy_thread'] = form::get_text('credits_policy_thread', $kvconf['credits_policy_thread'], 50);
 		$input['credits_policy_digest_1'] = form::get_text('credits_policy_digest_1', $kvconf['credits_policy_digest_1'], 50);
@@ -113,9 +113,9 @@ class conf_control extends admin_control {
 		$input['reg_email_on'] = form::get_radio_yes_no('reg_email_on', $kvconf['reg_email_on']);
 		$input['reg_init_golds'] = form::get_text('reg_init_golds', $kvconf['reg_init_golds'], 50);
 		$input['resetpw_on'] = form::get_radio_yes_no('resetpw_on', $kvconf['resetpw_on']);
-		$input['seo_title'] = form::get_text('seo_title', $kvconf['seo_title'], 300);
-		$input['seo_keywords'] = form::get_text('seo_keywords', $kvconf['seo_keywords'], 300);
-		$input['seo_description'] = form::get_text('seo_description', $kvconf['seo_description'], 300);
+		$input['seo_title'] = form::get_text('seo_title', htmlspecialchars($kvconf['seo_title']), 300);
+		$input['seo_keywords'] = form::get_text('seo_keywords', htmlspecialchars($kvconf['seo_keywords']), 300);
+		$input['seo_description'] = form::get_text('seo_description', htmlspecialchars($kvconf['seo_description']), 300);
 		$input['threadlist_hotviews'] = form::get_text('threadlist_hotviews', $kvconf['threadlist_hotviews'], 50);
 		$input['post_update_expiry'] = form::get_text('post_update_expiry', $kvconf['post_update_expiry'], 50);
 		$input['search_type'] = form::get_radio('search_type', array(''=>'无', 'title'=>'标题', 'baidu'=>'百度', 'google'=>'谷歌', 'bing'=>'Bing', 'sphinx'=>'Sphinx'), $kvconf['search_type']);
@@ -123,7 +123,7 @@ class conf_control extends admin_control {
 		$input['sphinx_port'] = form::get_text('sphinx_port', $kvconf['sphinx_port'], 100);
 		$input['sphinx_datasrc'] = form::get_text('sphinx_datasrc', $kvconf['sphinx_datasrc'], 100);
 		$input['sphinx_deltasrc'] = form::get_text('sphinx_deltasrc', $kvconf['sphinx_deltasrc'], 100);
-		$input['china_icp'] = form::get_text('china_icp', $kvconf['china_icp'], 150);
+		$input['china_icp'] = form::get_text('china_icp', htmlspecialchars($kvconf['china_icp']), 150);
 		$input['footer_js'] = form::get_text('footer_js', htmlspecialchars($kvconf['footer_js']), 300);
 		$input['site_pv'] = form::get_text('site_pv', $kvconf['site_pv'], 70);
 		$input['site_runlevel'] = form::get_radio('site_runlevel', array(0=>'所有人可访问', 1=>'会员可访问', 2=>'版主可访问', 3=>'管理员可访问', 4=>'全站只读'), $kvconf['site_runlevel']);
