@@ -189,7 +189,8 @@ class conf_control extends admin_control {
 	
 	// 关键词过滤
 	public function on_badword() {
-		$badword = (array)$this->kv->get('badword');
+		$badword = $this->kv->get('badword');
+		$badword === FALSE && $badword = array();
 		$badword_on = $this->conf['badword_on'];
 		$error = $input = array();
 		if($this->form_submit()) {
