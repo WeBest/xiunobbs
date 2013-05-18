@@ -80,6 +80,9 @@ return array(
 	// 模板使用的目录，按照顺序搜索，这样可以支持风格切换,结果缓存在 tmp/bbs_xxx.htm.php
 	'view_path' => array(BBS_PATH.'view/'), 
 	
+	// 转换 button 为 a + span
+	'view_convert_button' => 1,
+	
 	// 数据模块的路径，按照数组顺序搜索目录
 	'model_path' => array(BBS_PATH.'model/'),
 	

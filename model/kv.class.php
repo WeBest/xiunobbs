@@ -56,6 +56,14 @@ class kv extends base_model {
 		$this->changed[$key] = 1;
 	}
 	
+	// 删除某个
+	public function xunset($k, $key = 'conf') {
+		if(!isset($this->data[$key])) {
+			unset($this->data[$key]);
+		}
+		$this->changed[$key] = 1;
+	}
+	
 	// 显示的保存
 	public function xsave($key = 'conf') {
 		$this->set($key, $this->data[$key]);

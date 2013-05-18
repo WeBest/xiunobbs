@@ -86,6 +86,14 @@ class runtime extends base_model {
 		$this->changed[$key] = 1;
 	}
 	
+	// 删除某个
+	public function xunset($k, $key = 'runtime') {
+		if(!isset($this->data[$key])) {
+			unset($this->data[$key]);
+		}
+		$this->changed[$key] = 1;
+	}
+	
 	// 更新
 	public function xupdate($k) {
 		if($k == 'forumarr') {

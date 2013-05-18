@@ -5,5 +5,6 @@ return 	array (
 	'brief' => '宽屏风格+头部搜索+广告位+LOGO， LOGO 修改地址：plugin/view_btbbt/logo.gif',
 	'version' => '1.0.0',		// 插件版本
 	'bbs_version' => '2.0.3',		// 插件支持的 Xiuno BBS 版本
+	'disable_convert_button' => 1,		// 禁止编译 button 为 a + span	
 );
 ?>

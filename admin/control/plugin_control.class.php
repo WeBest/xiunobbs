@@ -257,6 +257,14 @@ class plugin_control extends admin_control {
 			$this->kv->xset('view_path', $viewpath);
 			$this->runtime->xset('view_path', $viewpath);
 			
+			if(isset($local['view_convert_button'])) {
+				$this->kv->xset('view_convert_button', $local['view_convert_button']);
+				$this->runtime->xset('view_convert_button', $local['view_convert_button']);
+			} else {
+				$this->kv->xunset('view_convert_button');
+				$this->runtime->xunset('view_convert_button');
+			}
+			
 			// 卸载其他 view，只允许一个风格插件启用。
 			$locallist = core::get_plugins($this->conf);
 			foreach($locallist as $_dir=>$plugin) {
@@ -379,6 +387,9 @@ class plugin_control extends admin_control {
 		if($isview) {
 			$this->kv->xset('view_path', array());
 			$this->runtime->xset('view_path', array());
+		
+			$this->kv->xunset('view_convert_button');
+			$this->runtime->xunset('view_convert_button');
 		}
 		
 		// 清空 tmp 目录下的 bbs_* bbsadmin_*
@@ -429,6 +440,14 @@ class plugin_control extends admin_control {
 			$this->kv->xset('view_path', $viewpath);
 			$this->runtime->xset('view_path', $viewpath);
 			
+			if(isset($local['view_convert_button'])) {
+				$this->kv->xset('view_convert_button', $local['view_convert_button']);
+				$this->runtime->xset('view_convert_button', $local['view_convert_button']);
+			} else {
+				$this->kv->xunset('view_convert_button');
+				$this->runtime->xunset('view_convert_button');
+			}
+			
 			// 卸载其他 view，只允许一个风格插件启用。
 			$locallist = core::get_plugins($this->conf);
 			foreach($locallist as $_dir=>$plugin) {
@@ -467,6 +486,9 @@ class plugin_control extends admin_control {
 			$viewpath = array(BBS_PATH.'view/');
 			$this->kv->xset('view_path', array());
 			$this->runtime->xset('view_path', array());
+			
+			$this->kv->xunset('view_convert_button');
+			$this->runtime->xunset('view_convert_button');
 		}
 		
 		// 清空 tmp 目录下的 bbs_* bbsadmin_*

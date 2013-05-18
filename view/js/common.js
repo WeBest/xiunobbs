@@ -236,16 +236,31 @@ $.alert = function(s, type, recall) {
 }
 
 $.fn.disable = function(s) {
-	var jspan = $('span', this);
-	jspan.attr('oldhtml', jspan.html());
-	jspan.html(s ? s : '正在提交...');
-	return this;
+	var tag = $(this).get(0);
+	var tagname = tag.tagName.toLowerCase();
+	if(tagname == 'input') {
+		$(tag).attr('oldval', $(tag).val());
+		$(tag).val(s ? s : '正在提交...');
+		return this;
+	} else {
+		var jspan = $('span', this);
+		jspan.attr('oldhtml', jspan.html());
+		jspan.html(s ? s : '正在提交...');
+		return this;
+	}
 }
 
 $.fn.enable = function() {
-	var jspan = $('span', this);
-	jspan.html(jspan.attr('oldhtml'));
-	return this;
+	var tag = $(this).get(0);
+	var tagname = tag.tagName.toLowerCase();
+	if(tagname == 'input') {
+		$(tag).val($(tag).attr('oldval'));
+		return this;
+	} else {
+		var jspan = $('span', this);
+		jspan.html(jspan.attr('oldhtml'));
+		return this;
+	}
 }
 
 
