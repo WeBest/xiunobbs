@@ -378,7 +378,7 @@ if(empty($step) || $step == 'checklicense') {
 				'seo_description' => 'Xiuno BBS',	// 论坛首页的 description
 				'search_type' => 'title',		// title|baidu|google|bing|sphinx
 				'china_icp' => '',			// icp 备案号，也只有在这神奇的国度有吧。
-				'app_copyright' => '© 2008-201 科技有限公司',
+				'app_copyright' => '© 2008-2010 科技有限公司',
 				'footer_js' => '',			// 页脚额外的代码，放用于统计JS之类代码。
 				'iptable_on' => 0,			// IP 规则，白名单，黑名单
 				'badword_on' => 0,			// 关键词过滤
