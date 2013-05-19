@@ -93,7 +93,7 @@ CREATE TABLE bbs_user_access (				# 字段中文名			# 控件属性					# 字�
 DROP TABLE IF EXISTS bbs_forum;
 CREATE TABLE bbs_forum (				# 字段中文名			# 控件属性					# 字段描述
   fid int(11) unsigned NOT NULL auto_increment,		# fid				#						#
-  name char(16) NOT NULL default '',			# 用户名				# type="text"					#
+  name char(16) NOT NULL default '',			# 版块名称			# type="text"					#
   rank tinyint(3) unsigned NOT NULL default '0',	# 显示，倒序			# type="text"
   threads mediumint(8) unsigned NOT NULL default '0',	# 主题数	
   posts int(11) unsigned NOT NULL default '0',		# 回帖数				
