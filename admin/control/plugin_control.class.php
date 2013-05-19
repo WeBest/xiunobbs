@@ -34,7 +34,11 @@ class plugin_control extends admin_control {
 			$plugin['pluginid'] && $dirs[] = $dir;
 		}
 		// 如果全部为第三方插件，这里则不会请求服务器
-		$officiallist = $dirs ? $this->get_official_by_dirs($dirs) : array();
+		try {
+			$officiallist = $dirs ? $this->get_official_by_dirs($dirs) : array();
+		} catch (Exception $e) {
+			$officiallist = array();
+		}
 		foreach($pluginlist as $dir=>&$pconf) {
 			// 用官方数据覆盖当前插件数据
 			if(!empty($officiallist[$dir])) {
