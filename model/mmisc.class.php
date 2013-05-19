@@ -16,6 +16,8 @@ class mmisc extends base_model {
 		
 		if($mailconf['sendtype'] == 0) {
 			
+			$subject = iconv('UTF-8', 'GBK', $subject);
+			$message = iconv('UTF-8', 'GBK', $message);
 			mail($email, $subject, $message, NULL, NULL);
 			
 		} elseif($mailconf['sendtype'] == 1) {
@@ -24,7 +26,10 @@ class mmisc extends base_model {
 			
 			$smtp = $mailconf['smtplist'][$key];
 			
-			return xn_mail::send($smtp, $username, $email, $subject, $message);
+			$subject = iconv('UTF-8', 'GBK', $subject);
+			$message = iconv('UTF-8', 'GBK', $message);
+			$username = iconv('UTF-8', 'GBK', $username);
+			return xn_mail::send($smtp, $username, $email, $subject, $message, 'UTF-8');
 			
 		}
 	}
