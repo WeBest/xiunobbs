@@ -29,7 +29,7 @@ class mmisc extends base_model {
 			$subject = iconv('UTF-8', 'GBK', $subject);
 			$message = iconv('UTF-8', 'GBK', $message);
 			$username = iconv('UTF-8', 'GBK', $username);
-			return xn_mail::send($smtp, $username, $email, $subject, $message, 'UTF-8');
+			return xn_mail::send($smtp, $username, $email, $subject, $message);
 			
 		}
 	}
