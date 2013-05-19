@@ -208,7 +208,7 @@ class my_control extends common_control {
 		$page = misc::page();
 		$pagesize = 64;
 		$followedlist = $this->follow->get_followedlist_by_uid($uid, $page, $pagesize);
-		$pages = misc::simple_pages("?my-follow.htm", count($followedlist), $page, $pagesize);
+		$pages = misc::simple_pages("?my-followed.htm", count($followedlist), $page, $pagesize);
 		$this->view->assign('pages', $pages);
 		$this->view->assign('userlist', $followedlist);
 		
