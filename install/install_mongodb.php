@@ -32,9 +32,7 @@ $db_data = array(
 			
 	),
 	'forum'=> array(
-		array('fid'=>1, 'name'=>'默认分类一', 'rank'=>0, 'threads'=>0, 'posts'=>0, 'digests'=>0, 'todayposts'=>0, 'lasttid'=>0, 'brief'=>'默认大区介绍', 'icon'=>'', 'accesson'=>0, 'modids'=>'', 'modnames'=>'', 'toptids'=>'', 'lastcachetime'=>0, 'status'=>1, 'orderby'=>0, 'seo_title'=>'', 'seo_keywords'=>''),
-		array('fid'=>2, 'name'=>'默认版块二', 'rank'=>0, 'threads'=>0, 'posts'=>0, 'digests'=>0, 'todayposts'=>0, 'tops'=>0, 'lasttid'=>0, 'brief'=>'默认版块介绍', 'icon'=>'', 'accesson'=>0, 'modids'=>'', 'modnames'=>'', 'toptids'=>'', 'lastcachetime'=>0, 'status'=>1, 'orderby'=>0, 'seo_title'=>'', 'seo_keywords'=>''),
-		array('fid'=>3, 'name'=>'默认版块三', 'rank'=>0, 'threads'=>0, 'posts'=>0, 'digests'=>0, 'todayposts'=>0, 'tops'=>0, 'lasttid'=>0, 'brief'=>'默认版块介绍', 'icon'=>'', 'accesson'=>0, 'modids'=>'', 'modnames'=>'', 'toptids'=>'', 'lastcachetime'=>0, 'status'=>1, 'orderby'=>0, 'seo_title'=>'', 'seo_keywords'=>''),
+		array('fid'=>1, 'name'=>'默认版块', 'rank'=>0, 'threads'=>0, 'posts'=>0, 'digests'=>0, 'todayposts'=>0, 'lasttid'=>0, 'brief'=>'默认版块介绍', 'icon'=>'', 'accesson'=>0, 'modids'=>'', 'modnames'=>'', 'toptids'=>'', 'lastcachetime'=>0, 'status'=>1, 'orderby'=>0, 'seo_title'=>'', 'seo_keywords'=>''),
 	)
 );
 

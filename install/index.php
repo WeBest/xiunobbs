@@ -282,8 +282,8 @@ if(empty($step) || $step == 'checklicense') {
 			$db->maxid('group-groupid', 15);
 			$db->count('user', 2);
 			$db->maxid('user-uid', 10);	// 内置10个账户，方便扩展
-			$db->count('forum', 3);
-			$db->maxid('forum-fid', 3);
+			$db->count('forum', 1);
+			$db->maxid('forum-fid', 1);
 			$db->truncate('kv');
 			$db->truncate('runtime');
 			
