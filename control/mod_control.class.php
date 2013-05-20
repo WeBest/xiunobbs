@@ -45,6 +45,8 @@ class mod_control extends common_control {
 		// 去除非本版块的置顶主题
 		foreach($tidarr as $k=>$v) {
 			list($_fid, $_tid) = explode('-', $v);
+			$_fid = intval($_fid);
+			$_tid = intval($_tid);
 			$thread = $this->thread->read($_fid, $_tid);
 			if(empty($thread)) unset($tidarr[$k]);
 		}
@@ -103,7 +105,7 @@ class mod_control extends common_control {
 			foreach($tidarr as &$v) {			// 此处也得用 &
 				// 初始化数据
 				list($fid, $tid) = explode('-', $v);
-				//$fid = intval($fid);
+				$fid = intval($fid);
 				$tid = intval($tid);
 				
 				$thread = $this->thread->read($fid, $tid);
@@ -182,7 +184,7 @@ class mod_control extends common_control {
 			foreach($tidarr as &$v) {			// 此处也得用 &
 				// 初始化数据
 				list($fid, $tid) = explode('-', $v);
-				//$fid = intval($fid);
+				$fid = intval($fid);
 				$tid = intval($tid);
 				$thread = $this->thread->read($fid, $tid);
 				if(empty($thread)) continue;
@@ -426,6 +428,7 @@ class mod_control extends common_control {
 			
 			foreach($tidarr as $v) {
 				list($fid, $tid) = explode('-', $v);
+				$fid = intval($fid);
 				$tid = intval($tid);
 				$thread = $this->thread->read($fid, $tid);
 				if(empty($thread)) continue;
@@ -438,6 +441,7 @@ class mod_control extends common_control {
 			$tidnum = $pidnum = $digestnum = 0;
 			foreach($tidarr as $v) {
 				list($fid, $tid) = explode('-', $v);
+				$fid = intval($fid);
 				$tid = intval($tid);
 				$thread = $this->thread->read($fid, $tid);
 				if(empty($thread)) continue;
@@ -687,7 +691,7 @@ class mod_control extends common_control {
 			// hook mod_delete_after.php
 			foreach($tidarr as $v) {
 				list($fid, $tid) = explode('-', $v);
-				//$fid = intval($fid);
+				$fid = intval($fid);
 				$tid = intval($tid);
 				
 				// 记录到版主操作日志
@@ -764,6 +768,7 @@ class mod_control extends common_control {
 		$thread = $modlog = array();
 		foreach($tidarr as &$v) {
 			list($fid, $tid) = explode('-', $v);
+			$fid = intval($fid);
 			$tid = intval($tid);
 			$thread = $this->thread->read($fid, $tid);
 			break;
