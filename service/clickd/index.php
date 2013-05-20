@@ -75,6 +75,9 @@ if(!empty($tids)) {
 $tids = array();
 $w = isset($_GET['w']) ? $_GET['w'] : '';
 $w && $tids = explode(',', $w);
+foreach($tids as &$_tid) {
+	$_tid = intval($_tid);
+}
 if(!empty($tids)) {
 	$arr = $mthread_views->mget($tids);
 	foreach($arr as $k=>$v) {

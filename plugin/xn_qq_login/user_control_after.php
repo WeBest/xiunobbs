@@ -220,12 +220,14 @@
 		// hook user_create_succeed.php
 		
 		// 更新头像
+		/*
 		if($avatar_url_2) {
 			$dir = image::get_dir($uid);
 			$smallfile = $conf['upload_path']."avatar/$dir/{$uid}_small.gif";
 			$middlefile = $conf['upload_path']."avatar/$dir/{$uid}_middle.gif";
 			$bigfile = $conf['upload_path']."avatar/$dir/{$uid}_big.gif";
 			$hugefile = $conf['upload_path']."avatar/$dir/{$uid}_huge.gif";
+			
 			
 			try {
 				$s = misc::fetch_url($avatar_url_2, 5);
@@ -241,5 +243,6 @@
 			
 			$this->user->update($userdb);
 		}
+		*/
 		
 	}
