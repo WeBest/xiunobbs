@@ -1,3 +1,4 @@
+
 <?php
 
 /*
@@ -565,6 +566,10 @@ class plugin_control extends admin_control {
 	
 	// 从官方获取最新的 plugin
 	private function get_official_list($cateid, $styleid, $orderby, $page = 1, $pagesize = 20) {
+		// 本地模式
+		if($this->conf['plugin_on'] == 2) {
+			return array();
+		}
 		$pluginlist = array();
 		$url = $this->official_plugin_site."plugin-list-cateid-$cateid-styleid-$styleid-orderby-$orderby-page-$page-pagesize-$pagesize-ajax-1.htm";
 		$s = misc::fetch_url($url, 5);
@@ -577,6 +582,10 @@ class plugin_control extends admin_control {
 	}
 	
 	private function get_official_by_dirs($dirs) {
+		// 本地模式
+		if($this->conf['plugin_on'] == 2) {
+			return array();
+		}
 		$dirsurl = implode(',', (array)$dirs);
 		$url = $this->official_plugin_site."plugin-dirs-dirs-$dirsurl-ajax-1.htm";
 		$s = misc::fetch_url($url, 5);
@@ -589,6 +598,10 @@ class plugin_control extends admin_control {
 	}
 	
 	private function get_official_by_dir($dir) {
+		// 本地模式
+		if($this->conf['plugin_on'] == 2) {
+			return array();
+		}
 		$pluginlist = $this->get_official_by_dirs(array($dir));
 		return empty($pluginlist[$dir]) ? array() : $pluginlist[$dir];
 	}

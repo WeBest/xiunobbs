@@ -111,7 +111,7 @@ return array(
 	'plugin_path' => BBS_PATH.'plugin/',
 	'plugin_url' => 'http://x.net/plugin/',
 	'plugin_disable' => 0,			// 禁止掉所有插件
-	'plugin_on' => 1,			// 是否开启后台插件安装
+	'plugin_on' => 1,			// 是否开启后台插件安装，1:为开启，2:为本地模式
 	
 	'urlrewrite' => 0,			// 手工开启 URL-Rewrite 后，需要清空下 tmp 目录！
 	
