@@ -25,7 +25,7 @@
 
 @set_time_limit(0);
 
-define('DEBUG', 2);
+define('DEBUG', 0);
 
 define('BBS_PATH', './');
 
@@ -57,7 +57,6 @@ $start = isset($_GET['start']) ? intval($_GET['start']) : $start;
 $start2 = isset($_GET['start2']) ? intval($_GET['start2']) : $start2;
 
 // 输入 dx2 路径！ 检查 xn2 安装。取得 max uid
-
 
 // 升级配置文件
 if(empty($step)) {
@@ -612,7 +611,6 @@ function upgrade_thread() {
 		$thread_type_data->truncate();
 		$thread_type_count->truncate();
 	}
-	
 	if($start < $maxtid) {
 		$limit = DEBUG ? 10 : 1000;	// 每次升级 100
 		$arrlist = $dx2->index_fetch_id('forum_thread', 'tid', array('tid'=>array('>'=>$start)), array('tid'=>1), 0, $limit);
@@ -1690,7 +1688,11 @@ function dx2_unserialize($s, $dbcharset) {
 	if(strtolower($dbcharset) == 'gbk') {
 		$s = iconv('UTF-8', 'GBK', $s);
 	}
-	$arr = unserialize($s);
+	try {
+		$arr = unserialize($s);
+	} catch (Exception $e) {
+		echo $s;exit;
+	}
 	if(strtolower($dbcharset) == 'gbk') {
 		foreach($arr as &$v) {
 			if(is_string($v)) $v = iconv('GBK', 'UTF-8', $v);
