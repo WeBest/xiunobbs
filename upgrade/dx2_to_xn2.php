@@ -1437,7 +1437,7 @@ function get_db() {
 // 获取升级的进度，保存 step 和 start 到 tmp
 function loading_upgrade_process(&$step, &$start, &$start2) {
 	$conf = include BBS_PATH.'conf/conf.php';
-	$file = $conf['tmp_path'].'upgrade_process.txt';
+	$file = $conf['upload_path'].'upgrade_process.txt';
 	if(is_file($file)) {
 		$s = file_get_contents($file);
 		if($s) {
@@ -1457,7 +1457,7 @@ function loading_upgrade_process(&$step, &$start, &$start2) {
 function save_upgrade_process() {
 	global $start, $start2, $step;
 	$conf = include BBS_PATH.'conf/conf.php';
-	$file = $conf['tmp_path'].'upgrade_process.txt';
+	$file = $conf['upload_path'].'upgrade_process.txt';
 	file_put_contents($file, "$step $start $start2");
 }
 
