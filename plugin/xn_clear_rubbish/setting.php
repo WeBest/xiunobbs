@@ -2,9 +2,20 @@
 
 $error = $input = array();
 
-$start = intval(core::gpc('start'));
-$fid = intval(core::gpc('fid'));
-$keepcredits = intval(core::gpc('keepcredits'));
+$start = intval(core::gpc('start', 'R'));
+$fid = intval(core::gpc('fid', 'R'));
+$keepcredits = intval(core::gpc('keepcredits', 'R'));
+$startdate = core::gpc('startdate', 'R');
+$enddate = core::gpc('enddate', 'R');
+$keyword = core::gpc('keyword', 'R');
+$username = core::gpc('username', 'R');
+
+$startdate_url = core::urlencode($startdate);
+$enddate_url = core::urlencode($enddate);
+$startdate = strtotime($startdate);
+$enddate = strtotime($enddate);
+$keyword_url = core::urlencode($keyword);
+$username_url = core::urlencode($username);
 
 if(!$this->form_submit() && empty($start)) {
 	
@@ -13,6 +24,10 @@ if(!$this->form_submit() && empty($start)) {
 	$this->view->assign('forumoptions', $forumoptions);
 	$input['keepcredits'] = form::get_radio_yes_no('keepcredits', $keepcredits);
 	
+	$this->view->assign('startdate_url', $startdate_url);
+	$this->view->assign('enddate_url', $enddate_url);
+	$this->view->assign('keyword_url', $keyword_url);
+	$this->view->assign('username_url', $username_url);
 	$this->view->assign('dir', $dir);
 	$this->view->assign('input', $input);
 	$this->view->display('xn_clear_rubbish.htm');
@@ -31,6 +46,10 @@ if(!$this->form_submit() && empty($start)) {
 		foreach($arrlist as $arr) {
 			$fid = $arr['fid'];
 			$tid = $arr['tid'];
+			if($starttime && $arr['dateline'] <= $starttime) continue;
+			if($endtime && $arr['dateline'] >= $endtime) continue;
+			if($keyword && stripos($arr['subject'], $keyword) !== FALSE) continue;
+			
 			$return = $this->thread->xdelete($fid, $tid, FALSE);
 			$this->thread->xdelete_merge_return($thread_return, $return);
 		}
@@ -38,7 +57,7 @@ if(!$this->form_submit() && empty($start)) {
 		$this->thread->xdelete_update($thread_return, $keepcredits);
 		
 		$start = $arr['tid'];
-		$this->message("正在清理, 当前: $start...", 1, $this->url("plugin-setting-dir-$dir-keepcredits-$keepcredits-start-$start.htm"));
+		$this->message("正在清理, 当前: $start...", 1, $this->url("plugin-setting-dir-$dir-fid-$fid-start-$start-keepcredits-$keepcredits-startdate-$startdate_url-enddate-$enddate_url-keyword-$keyword_url-username-$username_url.htm"));
 	} else {
 		// 锁住
 		$this->runtime->xset('site_runlevel', 0, 'runtime');

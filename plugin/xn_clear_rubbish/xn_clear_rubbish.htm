@@ -11,13 +11,16 @@
 					<dd><select id="fid">$forumoptions</select></dd>
 					
 					<dt><label for="keepcredits">保留用户积分：</label></dt>
-					<dd><select id="keepcredits">$input[keepcredits]</select></dd>
+					<dd>$input[keepcredits]</dd>
 				
 					<dt><label for="startdate">日期范围：</label></dt>
-					<dd><input type="text" value="" name="startdate" id="startdate" size="16" /> - <input type="text" value="" name="enddate" id="enddate" size="16" /></dd>
+					<dd><input type="text" value="$startdate_url" name="startdate" id="startdate" size="16" /> - <input type="text" value="$enddate_url" name="enddate" id="enddate" size="16" /> <span class="grey">格式为 2013-5-1，留空表示不限制</span></dd>
 					
 					<dt><label for="keyword">标题含有关键词：</label></dt>
-					<dd><input type="text" value="" name="keyword" id="keyword" size="16" /></dd>
+					<dd><input type="text" value="$keyword_url" name="keyword" id="keyword" size="16" /></dd>
+					
+					<dt><label for="username">用户名：</label></dt>
+					<dd><input type="text" value="$username_url" name="username" id="username" size="16" /></dd>
 					
 					<dt></dt>
 					<dd>
@@ -40,6 +43,11 @@
 
 <script type="text/javascript">
 $('#conf_submit').click(function() {
+	if(!$('#fid').val()) {
+		alert('请选择版块！');
+		$('#fid').focus();
+		return false;
+	}
 	if(window.confirm('清理操作期间，站点会自动切换到只读状态，您确定继续吗？')) {
 		$('#conf_form').submit();
 	}
