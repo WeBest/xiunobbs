@@ -214,11 +214,10 @@ function upgrade_forum_policy() {
 		</ul>';
 	
 	$catelist = $dx2->index_fetch('forum_forum', 'fid', array('fup'=>0), array(), 0, 1000);
-	
 	echo '<form action="'.$_SERVER['PHP_SELF'].'?step=upgrade_forum_policy" method="post">';
 	foreach($catelist as $cate) {
 		$fup = $cate['fid'];
-		if($cate['status'] == 3) continue;
+		//if($cate['status'] == 3) continue; // 可能为群组
 		if($cate['name'] == '') continue;
 		
 		$cate['name'] = strip_tags($cate['name']); 
@@ -245,7 +244,7 @@ function upgrade_forum_policy() {
 			</p>";
 	
 		foreach($forumlist as $forum) {
-			if($cate['status'] == 3) continue;
+			//if($cate['status'] == 3) continue; // 可能为群组
 			if($cate['name'] == '') continue;
 		
 			$fid = $forum['fid'];
