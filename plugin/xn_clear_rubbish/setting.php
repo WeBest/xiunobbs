@@ -27,12 +27,15 @@ if(!$this->form_submit() && empty($start)) {
 	$limit = DEBUG ? 20 : 200;
 	$arrlist = $this->thread->index_fetch(array('fid'=>$fid, 'tid'=>array('>'=>$start)), array('tid'=>1), 0, $limit);
 	if(!empty($arrlist)) {
-		$user_digests = $user_threads = $forum_threads = $forum_digests = array();
+		$thread_return = array();
 		foreach($arrlist as $arr) {
 			$fid = $arr['fid'];
 			$tid = $arr['tid'];
-			$this->thread->xdelete($fid, $tid);
+			$return = $this->thread->xdelete($fid, $tid, FALSE);
+			$this->thread->xdelete_merge_return($thread_return, $return);
 		}
+		
+		$this->thread->xdelete_update($thread_return, $keepcredits);
 		
 		$start = $arr['tid'];
 		$this->message("正在清理, 当前: $start...", 1, $this->url("plugin-setting-dir-$dir-keepcredits-$keepcredits-start-$start.htm"));

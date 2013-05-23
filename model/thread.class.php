@@ -250,7 +250,7 @@ class thread extends base_model {
 	}
 	
 	// 关联删除后的更新
-	public function xdelete_update($return) {
+	public function xdelete_update($return, $keep_user_credits = 0) {
 		// 更新回复用户的积分
 		if(isset($return['user'])) {
 			foreach($return['user'] as $uid=>$arr) {
@@ -260,8 +260,8 @@ class thread extends base_model {
 				$user['threads'] -= $arr['threads'];
 				$user['posts'] -= $arr['posts'];
 				$user['myposts'] -= $arr['myposts'];
-				$user['credits'] -= $arr['credits'];
-				$user['golds'] -= $arr['golds'];
+				empty($keep_user_credits) && $user['credits'] -= $arr['credits'];
+				empty($keep_user_credits) && $user['golds'] -= $arr['golds'];
 				$user['digests'] -= $arr['digests'];
 				$this->user->update($user);
 			}

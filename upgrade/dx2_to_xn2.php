@@ -25,7 +25,7 @@
 
 @set_time_limit(0);
 
-define('DEBUG', 0);
+define('DEBUG', 2);
 
 define('BBS_PATH', './');
 
@@ -271,7 +271,7 @@ function upgrade_forum_policy() {
 	echo "</form>";
 	
 	echo '
-		<script src="../view/js/jquery-1.4.min.js" ></script>
+		<script src="view/js/jquery-1.4.min.js" ></script>
 		<script type="text/javascript">
 			$("div.catediv").each(function() {
 				var _div = this;
