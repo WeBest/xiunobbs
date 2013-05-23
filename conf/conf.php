@@ -23,7 +23,7 @@ return array(
 				'host' => 'localhost',								
 				'user' => 'root',				
 				'password' => 'root',				
-				'name' => 'test',				
+				'name' => 'xn',				
 				'charset' => 'utf8',				
 				'tablepre' => 'bbs_',								
 				'engine'=>'MyISAM',
@@ -123,10 +123,10 @@ return array(
 	'click_server' => 'http://x.net/service/clickd/',	// 记录主题点击数，论坛点击数
 	
 	// 加密KEY，
-	'auth_key' => 'c31ff66d32b442362778bdd27c26a369',
+	'auth_key' => 'c861a6fe88bd4734f1e178eaa600edeb',
 	
 	// 站点的ID，用来和官方通信，下载，安装插件。
-	'siteid' => 'beed27caeb4f0847018c602ad3f7d2fe',
+	'siteid' => '916ca7d62206af0bb9d42a0ea1480d36',
 	
 	'cookie_pre' => 'bbs_',
 	'cookie_domain' => '',

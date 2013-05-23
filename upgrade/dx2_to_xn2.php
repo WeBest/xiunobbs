@@ -1472,7 +1472,7 @@ function show_header() {
 	<head>
 		<title>Discuz!X 2.0 转 Xiuno BBS 2.0.0 Release 程序 </title>
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-		<link rel="stylesheet" type="text/css" href="../view/common.css" />
+		<link rel="stylesheet" type="text/css" href="view/common.css" />
 	</head>
 	<body>
 	<div id="header" style="overflow: hidden;">
