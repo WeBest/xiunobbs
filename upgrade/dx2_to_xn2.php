@@ -1367,7 +1367,7 @@ function laststep() {
 	//$db->query("ALTER TABLE {$db->tablepre}thread_type DROP COLUMN oldtypeid;");
 	
 	// 修改管理员用户组
-	message('升级完毕，请<b>删除 upgrade 目录</b>，防止重复升级！！！<a href="../">【进入论坛】</a>');
+	message('升级完毕，请<b>删除 dx2_to_xn2.php </b>，防止重复升级！！！<a href="../">【进入论坛】</a>');
 }
 
 function int_to_string($arr) {
