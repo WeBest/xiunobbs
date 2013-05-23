@@ -64,7 +64,10 @@ class admin_control extends common_control {
 						$login = 0;
 					}
 					*/
-					if($ip != $_SERVER['ip']) {
+					
+					// 仅比较IP段！放宽一点。
+					$pos = strrpos($ip, '.');
+					if(substr($ip, 0, $pos) != substr($_SERVER['ip'], 0, $pos)) {
 						$login = 1;
 					}
 				}
