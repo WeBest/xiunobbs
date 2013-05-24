@@ -40,6 +40,7 @@ $('#search input').keyup(function(e) {
 		var val = encodeURIComponent($(this).val());
 		$('#search_form').attr('action', '?search-index-keyword-'+val+'.htm');
 		$('#search_form').submit();
+		return false;
 	}
 });
 

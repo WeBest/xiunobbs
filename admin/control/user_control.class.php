@@ -115,7 +115,7 @@ class user_control extends admin_control {
 		if($this->form_submit()) {
 			$post = array('uid'=>$uid);
 			
-			$post['email'] = core::gpc('email', 'P');
+			$post['email'] = htmlspecialchars(core::gpc('email', 'P'));
 			$post['groupid'] = intval(core::gpc('groupid', 'P'));
 			$post['threads'] = intval(core::gpc('threads', 'P'));
 			$post['posts'] = intval(core::gpc('posts', 'P'));
@@ -124,7 +124,7 @@ class user_control extends admin_control {
 			$post['password'] = core::gpc('password', 'P');
 			
 			// check 数据格式
-			$error['email'] = $this->user->check_email($post['email']);
+			//$error['email'] = $this->user->check_email($post['email']);
 			if(!empty($post['password'])) {
 				$error['password'] = $this->user->check_password($post['password']);
 				$post['password'] = $this->user->md5_md5($post['password'], $user['salt']);
