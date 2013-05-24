@@ -243,6 +243,7 @@ class common_control extends base_control {
 			}
 		} else {
 			// 垃圾的 iis 某些情况下, 居然在请求 / 时候，REQUEST_URI 为 /Index.php，第一个字母还大写！iis, go to hell!
+			/*
 			if($pos + 1 != strlen($_SERVER['REQUEST_URI']) && substr($_SERVER['REQUEST_URI'], $pos + 1, 1) != '?' && strtolower(substr($_SERVER['REQUEST_URI'], -10)) != '/index.php') {
 				// 加上 ?
 				$_SERVER['REQUEST_URI'] = substr($_SERVER['REQUEST_URI'], 0, $pos + 1).'?'.substr($_SERVER['REQUEST_URI'], $pos + 1);
@@ -250,6 +251,7 @@ class common_control extends base_control {
 				header("Location: $newurl");
 				exit;
 			}
+			*/
 		}
 	}
 	
