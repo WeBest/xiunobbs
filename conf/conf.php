@@ -23,7 +23,7 @@ return array(
 				'host' => 'localhost',								
 				'user' => 'root',				
 				'password' => 'root',				
-				'name' => 'xn',				
+				'name' => 'test',				
 				'charset' => 'utf8',				
 				'tablepre' => 'bbs_',								
 				'engine'=>'MyISAM',

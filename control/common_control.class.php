@@ -271,6 +271,7 @@ class common_control extends base_control {
 			if($_SERVER['time'] > $cron_2_next_time) {
 				$this->_cron_2_run = TRUE;
 			}
+			$this->update_online(); // fix: onlines = 0
 			$this->cron->run();
 		}
 		
