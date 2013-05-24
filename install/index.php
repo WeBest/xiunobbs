@@ -54,12 +54,13 @@ if(empty($step) || $step == 'checklicense') {
 	get_env($env, $write);
 	if(IN_SAE) {
 		$saestorage = new SaeStorage();
-		$saestorage->getDomainCapacity('upload');
-		$saewrite['upload_path'] = $saestorage->errno() != 7;
+		$n = $saestorage->getDomainCapacity('upload');
+		$saewrite['upload_path'] = $n !== NULL && $saestorage->errno() != -7;
 		
 		$kv = new SaeKV();
 		$saewrite['tmp_path'] = 1;
 	}
+
 	include './header.inc.php';	
 	include './check_env.inc.php';	
 	include './footer.inc.php';
@@ -419,6 +420,7 @@ if(empty($step) || $step == 'checklicense') {
 					echo '<h3>SAE 环境下安装需要手工编辑 conf/conf.php，复制以下代码，粘帖到 conf/conf.php：</h3>';
 					echo '<div><textarea style="width: 700px; height: 400px">'.$s.'</textarea></div>';
 					echo '<div>【注意】 需要使用UTF-8编辑器，请不要使用WINDOWS 记事本！</div>';
+					
 					echo '<div><input type="submit" value=" 下一步" name="formsubmit" onclick="window.location=\'index.php?step=saedown\'" /></div>';
 					include './footer.inc.php';
 					exit;
