@@ -205,7 +205,8 @@ $.editor = function(textarea, settings) {
 					<div class="video" style="display: none">\
 						<table width="540"><tr><td width="60">视频网址：</td><td width="450"><input type="text" size="64" value="http://" class="url" /></td></tr>\
 						<tr><td align="right">宽度：</td><td><input type="text" size="4" class="w" value="876" />高度：<input type="text" size="4" class="h" value="454" /></td></tr>\
-						<tr><td></td><td><input type="button" value="插入" class="insert" style="margin-top: 8px; margin-left: 2px;" /><input type="button" value="关闭" class="close" style="margin-top: 8px; margin-left: 2px;" /><span class="grey">【提示】：请粘贴以 .swf 结尾的网址。</span></td></tr></table>\
+						<tr><td align="right">标签：</td><td><input type="radio" name="playertag" value="embed" checked="checked" />&lt;EMBED&gt; <input type="radio" name="playertag" value="iframe" />&lt;IFRAME&gt; </td></tr>\
+						<tr><td></td><td><input type="button" value="插入" class="insert" style="margin-top: 8px; margin-left: 2px;" /><input type="button" value="关闭" class="close" style="margin-top: 8px; margin-left: 2px;" /></td></tr></table>\
 					</div>\
 					<div class="face" style="display: none">\
 					</div>\
@@ -370,7 +371,8 @@ $.editor = function(textarea, settings) {
 			var url = $('.video input.url', menu).val();
 			var width = $('.video input.w', menu).val();
 			var height = $('.video input.h', menu).val();
-			_this.add_video(url, width, height);
+			var playertag = $('.video input[name=playertag]:checked').val();
+			_this.add_video(url, width, height, playertag);
 			return true;
 		});
 		$('.video input.close', menu).click(function() {
@@ -557,11 +559,14 @@ $.editor = function(textarea, settings) {
 		$('.link', _this.menu).hide();
 	}
 	
-	this.add_video = function(url, width, height) {
+	this.add_video = function(url, width, height, playertag) {
 		width = intval(width);
 		height = intval(height);
-		var s = "<embed wmode=\"transparent\" src=\""+url+"\" style=\"z-index:0;\" width=\""+width+"\" height=\""+height+"\" type=\"application/x-shockwave-flash\" allowFullscreen=\"true\" class=\"border\" />";
-		
+		if(playertag == 'embed') {
+			var s = "<embed wmode=\"transparent\" src=\""+url+"\" style=\"z-index:0;\" width=\""+width+"\" height=\""+height+"\" type=\"application/x-shockwave-flash\" allowFullscreen=\"true\" class=\"border\" />";
+		} else {
+			var s = '<iframe frameborder="0" src="'+url+'" width="'+width+'" height="'+height+'" allowFullscreen></iframe>';
+		}
 		_this.paste(s);
 		
 		$('div.video', _this.menu).hide();
