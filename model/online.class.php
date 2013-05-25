@@ -33,14 +33,15 @@ class online extends base_model {
 		// 默认 15 分钟算离线
 		$expiry = $_SERVER['time'] - $this->conf['online_hold_time'];
 		
-		// 采用暴力的 index_delete() 节省代码。
+		// 采用暴力的 index_delete() 节省代码，有可能删除自己！
 		$n = $this->index_delete(array('lastvisit'=>array('<'=>$expiry)));
-		$this->conf['onlines'] -= $n;
+		if($n <= 0) return;
 		
+		$this->conf['onlines'] -= $n;
+		//log::trace("n: $n, onlines: ".$this->conf['onlines']);
 		// 修正非法数据：意外
 		if($this->conf['onlines'] < 1) {
 			$n = $this->index_count();
-			$this->count($n);
 			$this->runtime->xset('onlines', $n);
 		} else {
 			$this->runtime->xset('onlines', $this->conf['onlines']);
