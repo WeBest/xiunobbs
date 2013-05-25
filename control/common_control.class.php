@@ -285,14 +285,17 @@ class common_control extends base_control {
 		// 每隔 5 分钟插入一次！ cookie 控制时间
 		
 		$lastonlineupdate = core::gpc($this->conf['cookie_pre'].'lastonlineupdate', 'C');// cookie 中存放的为北京时间
-		if(empty($lastonlineupdate) || $lastonlineupdate < $_SERVER['time'] - 300) {
-			// 屏蔽蜘蛛
-			if(core::gpc($this->conf['cookie_pre'].'lastonlineupdate', 'C')) {
-				$this->update_online();
-			}
-			
+		
+		// 蜘蛛或者为第一次访问
+		if(empty($lastonlineupdate)) {
+			// 迫使下次更新
+			misc::setcookie($this->conf['cookie_pre'].'lastonlineupdate', $_SERVER['time'] - 86400, $_SERVER['time'] + 86400, $this->conf['cookie_path'], $this->conf['cookie_domain']);
+		}
+		if($lastonlineupdate && $lastonlineupdate < $_SERVER['time'] - 300) {
+			$this->update_online();
 			misc::setcookie($this->conf['cookie_pre'].'lastonlineupdate', $_SERVER['time'], $_SERVER['time'] + 86400, $this->conf['cookie_path'], $this->conf['cookie_domain']);
 		}
+		
 		// 每天更新一次用户组，发帖，回帖也会更新。
 		$lastday = core::gpc($this->conf['cookie_pre'].'lastday', 'C');
 		if(empty($lastday) || $lastday < $_SERVER['time'] - 86400) {
