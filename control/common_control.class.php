@@ -328,7 +328,7 @@ class common_control extends base_control {
 			);
 			$this->online->create($online);
 			$this->runtime->xset('onlines', '+1');
-			$this->conf['onlines']++;
+			$this->conf['onlines']++; // 这里必须+1，否则触发 online->gc()，那里会在此基础上减，造成差一
 			//$this->runtime->xsave();// debug
 		} else {
 			$online['lastvisit'] = $_SERVER['time'];

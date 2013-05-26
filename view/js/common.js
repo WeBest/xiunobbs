@@ -560,6 +560,7 @@ function ajaxdialog_request(url, recall, options) {
 		var json = jdialog.data(url);
 		var dialogdiv = json.dialogdiv;
 		jdialog[0].dialog.open();
+		//jdialog[0].dialog.set_position(options.position);
 		//jdialog.dialog('open');
 		//jdialog.dialog(options);
 	// 没有 cache, ajax 请求 url
@@ -592,13 +593,11 @@ function ajaxdialog_request(url, recall, options) {
 			
 			// 弹出层
 			options = $.extend({open: true, width: json.width, title: json.title, body: json.body }, options);
-			
 			jdialog.dialog(options);
 			
 			// 如果在不同的域，firefox 下需要 settimeout，同域则不需要。
 			// 可能含有脚本，晚执行，约定函数名字为 delay_execute()
 			// 兼容IE6： typeof delay_execute != 'undefined'
-			
 			if(typeof delay_execute != 'undefined') delay_execute(jdialog[0].dialog, recall);
 			
 		});
@@ -611,7 +610,7 @@ function ajaxdialog_click(e) {
 	var url = $(this).attr('href');
 	var options = $(this).attr('ajaxdialog');//获取并判断外部设置参数并转换为对象
 	if(options != null && options.length > 0) {
-		eval("options = " + options);//alert(typeof(options));
+		eval("var options = " + options);//alert(typeof(options));
 		options.xcaller = this;
 	}
 	
