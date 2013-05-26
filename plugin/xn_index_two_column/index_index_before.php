@@ -20,7 +20,7 @@
 					$unset1++;
 					continue;
 				}
-				$thread['subject_fmt'] = utf8::substr($thread['subject'], 0, 32);
+				$thread['subject_fmt'] = $this->cutstr_cn($thread['subject'], 32);
 			}
 			
 			if($unset1 > 0) {
@@ -34,7 +34,7 @@
 						$unset1++;
 						continue;
 					}
-					$thread['subject_fmt'] = utf8::substr($thread['subject'], 0, 32);
+					$thread['subject_fmt'] = $this->cutstr_cn($thread['subject'], 32);
 				}
 				$threadlist = array_slice($threadlist, 0, $pagesize);
 			}
@@ -66,7 +66,7 @@
 					$unset2++;
 					continue;
 				}
-				$thread['subject_fmt'] = utf8::substr($thread['subject'], 0, 32);
+				$thread['subject_fmt'] = $this->cutstr_cn($thread['subject'], 32);
 			}
 			
 			if($unset2 > 0) {
@@ -80,7 +80,7 @@
 						$unset2++;
 						continue;
 					}
-					$thread['subject_fmt'] = utf8::substr($thread['subject'], 0, 32);
+					$thread['subject_fmt'] = $this->cutstr_cn($thread['subject'], 32);
 				}
 				$digestlist = array_slice($digestlist, 0, $pagesize);
 			}

@@ -67,7 +67,7 @@
 				$unset1++;
 				continue;
 			}
-			$thread['subject_fmt'] = utf8::substr($thread['subject'], 0, 32);
+			$thread['subject_fmt'] = utf8::substr($thread['subject'], 0, 18);
 			$readtids .= ','.$thread['tid'];
 		}
 		
@@ -85,5 +85,39 @@
 		$this->view->assign('pages', $pages);
 		$this->view->assign('click_server', $click_server);
 		$this->view->display('plugin_index_digest.htm');
+	}
+	
+	private function cutstr_cn($s, $len) {
+		$n = strlen($s);
+		$r = '';
+		$rlen = 0;
+		
+		// 32, 64
+		$UTF8_1 = 0x80;
+		$UTF8_2 = 0x40;
+		$UTF8_3 = 0x20;
+		
+		for($i=0; $i<$n; $i++) {
+			$c = '';
+			$ord = ord($s[$i]);
+			if($ord < 127) {
+				$rlen++;
+				$r .= $s[$i];
+			} elseif(($ord & $UTF8_1)  && ($ord & $UTF8_2) && ($ord & $UTF8_3)) {
+				// 期望后面的字符满足条件,否则抛弃	  && ord($s[$i+1]) & $UTF8_2
+				if($i+1 < $n && (ord($s[$i+1]) & $UTF8_1)) {
+					if($i+2 < $n && (ord($s[$i+2]) & $UTF8_1)) {
+						$rlen += 2;
+						$r .= $s[$i].$s[$i+1].$s[$i+2];
+					} else {
+						$i += 2;
+					}
+				} else {
+					$i++;
+				}
+			}
+			if($rlen >= $len) break;
+		}
+		return $r;
 	}
 	
