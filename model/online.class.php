@@ -46,6 +46,8 @@ class online extends base_model {
 		} else {
 			$this->runtime->xset('onlines', $this->conf['onlines']);
 		}
+		
+		$this->runtime->xsave();
 	}
 }
 ?>

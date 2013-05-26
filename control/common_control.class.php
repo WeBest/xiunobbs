@@ -290,8 +290,7 @@ class common_control extends base_control {
 		if(empty($lastonlineupdate)) {
 			// 迫使下次更新
 			misc::setcookie($this->conf['cookie_pre'].'lastonlineupdate', $_SERVER['time'] - 86400, $_SERVER['time'] + 86400, $this->conf['cookie_path'], $this->conf['cookie_domain']);
-		}
-		if($lastonlineupdate && $lastonlineupdate < $_SERVER['time'] - 300) {
+		} elseif($lastonlineupdate < $_SERVER['time'] - 300) {
 			$this->update_online();
 			misc::setcookie($this->conf['cookie_pre'].'lastonlineupdate', $_SERVER['time'], $_SERVER['time'] + 86400, $this->conf['cookie_path'], $this->conf['cookie_domain']);
 		}
@@ -329,6 +328,8 @@ class common_control extends base_control {
 			);
 			$this->online->create($online);
 			$this->runtime->xset('onlines', '+1');
+			$this->conf['onlines']++;
+			//$this->runtime->xsave();// debug
 		} else {
 			$online['lastvisit'] = $_SERVER['time'];
 			$this->online->update($online);
