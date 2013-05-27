@@ -299,6 +299,7 @@ class post_control extends common_control {
 			
 			// 快速发帖。
 			if($quickpost) {
+				$message = htmlspecialchars($message);
 				$message = misc::html_space($message);
 				$message = preg_replace('#(https?://[^\'"\\\\<>:\s]+(:\d+)?)([^\'"\\\\<>:\s]+?)#is', '<a href="\\0" target="_blank">\\0</a>', $message);
 				$message = preg_replace('#(ed2k://[^\s\'\"\\\\<>]+)#is', '<a href="\\1" target="_blank">\\1</a>', $message);
