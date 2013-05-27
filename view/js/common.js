@@ -224,7 +224,7 @@ $.alert = function(s, type, recall) {
 	
 	if(!type) type = 'ok';  // ok|error|notice
 	s = '<div class="'+type+'">'+s+'</div>';
-	s += '<div style="margin-top: 4px; text-align: center;"><a id="alertclose" href="javascript:void(0)"><span>关闭</span></a></div>';
+	s += '<div style="margin-top: 4px; text-align: center;"><a id="alertclose" href="javascript:return false;" class="button bigblue"><span>关闭</span></a></div>';
 	jdialog = $('<div class="dialog bg2 border shadow" title="对话框标题" id="alertdialog" style="display: none;">'+ s +'</div>').appendTo('body');
 	jdialog.dialog({open: true, width: jdialog.width()});
 	$('#alertclose').unbind('click').click(function() {$('#alertdialog').dialog('close')});
@@ -357,6 +357,30 @@ $.fn.alert = function(s, setting) {
 	
 	$('a.icon-close', alertdiv).click(function() {alertdiv.hide(); alertarrow.hide();});
 	return this;
+}
+
+// 创建一个层，点击确定后，POST 该 URL。
+$.confirm = function(url, s, type, recall) {
+	// 避免重复创建
+	$('#confirmdialog').remove();
+	
+	s = '<div class="'+type+'">'+s+'</div>';
+	s += '<div style="margin-top: 4px; text-align: center;"><form action="'+url+'" method="post" id="confirmform"><input type="hidden" name="formhash" value="js" /><a id="confirmsubmit" href="javascript:return false;" class="button bigblue"><span>确定</span></a> <a id="confirmclose" href="javascript:return false" class="button biggrey"><span>关闭</span></a></form></div>';
+	jdialog = $('<div class="dialog bg2 border shadow" title="提示信息" id="confirmdialog" style="display: none;">'+ s +'</div>').appendTo('body');
+	jdialog.dialog({open: true, width: jdialog.width()});
+	$('#confirmsubmit').unbind('click').click(function() {
+		if(!recall) {
+			$('#confirmform').submit();
+			$('#confirmdialog').dialog('close');
+		} else {
+			recall();
+		}
+		return false;
+	});
+	$('#confirmclose').unbind('click').click(function() {
+		$('#confirmdialog').dialog('close');
+		return false;
+	});
 }
 
 // 将菜单浮动于 this 对象的周围, pos 默认为 8
@@ -607,6 +631,22 @@ function ajaxdialog_request(url, recall, options) {
 			
 		});
 	}
+}
+
+function ajaxdialog_confirm(e) {
+	var e = e ? e : window.event;// 兼容 event
+	var url = $(this).attr('href');
+	var options = $(this).attr('ajaxconfirm');//获取并判断外部设置参数并转换为对象
+	if(options != null && options.length > 0) {
+		eval("var options = " + options);//alert(typeof(options));
+		options.xcaller = this;
+	}
+	
+	var message = options.message ? options.message : '';
+	var type = options.type ? options.type : 'ok';
+	var url = $(this).attr('href');
+	$.confirm(url, message, type);
+	return false;
 }
 
 // 参考文档：http://jqueryui.com/demos/dialog/#option-width
@@ -932,7 +972,6 @@ function set_client_zone() {
 }
 
 set_client_zone();
-
 
 
 // fix chrome bug

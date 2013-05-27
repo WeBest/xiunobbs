@@ -596,6 +596,11 @@ class post_control extends common_control {
 		$this->_title[] = '删除帖子';
 		$this->_nav[] = '删除帖子';
 		
+		// 检查是否为 post 提交
+		if(!core::gpc('formhash', 'P')) {
+			$this->message('非法请求！');
+		}
+		
 		$this->check_login();
 		$this->check_forbidden_group();
 		

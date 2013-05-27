@@ -180,7 +180,7 @@
 						
 						<!--{if $ismod || $_user[uid] == $post[uid]}-->	
 						<a href="?post-update-fid-$thread[fid]-pid-$post[pid]-ajax-1.htm" class="ajaxdialog" ajaxdialog="{fullicon: true, modal: false, cache: false}" onclick="return false;">编辑</a>
-						<a href="?post-delete-fid-$fid-pid-$post[pid].htm" onclick="return window.confirm('您确定删除吗？');">删除</a>
+						<a href="?post-delete-fid-$fid-pid-$post[pid].htm" class="ajaxconfirm" ajaxconfirm="{message: '确定删除吗？'}" onclick="return false;">删除</a>
 						<!--{/if}-->
 						
 						#$post[floor]楼
@@ -475,6 +475,7 @@ var jajaxdialoglinks = $('a.ajaxdialog_hover');
 jajaxdialoglinks.die('click').live('click', function() {window.open($(this).attr('href_real'))});
 jajaxdialoglinks.die('mouseover').live('mouseover', ajaxdialog_mouseover);
 jajaxdialoglinks.die('mouseout').live('mouseout', ajaxdialog_mouseout);
+$('a.ajaxconfirm').die('click').live('click', ajaxdialog_confirm);
 
 // post_td 下的图片调整大小
 $(function() {
