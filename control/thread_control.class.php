@@ -79,15 +79,16 @@ class thread_control extends common_control {
 		$uids = array_unique($uids);
 		$userlist = $this->user->mget($uids);
 		foreach($userlist as &$user) {
+			if(empty($user)) continue;
 			$this->user->format($user);
 			$userlist[$user['uid']] = $user;
 		}
-		$uid && $this->_user = $userlist[$uid];
+		$uid && !empty($userlist[$uid]) && $this->_user = $userlist[$uid];
 		$this->view->assign('userlist', $userlist);
 		
 		// 判断权限
 		foreach($postlist as &$post) {
-			if($userlist[$post['uid']]['groupid'] == 7) $post['message'] = '<span class="grey">用户被禁言，帖子被屏蔽。</span>';
+			if(isset($userlist[$post['uid']]) && $userlist[$post['uid']]['groupid'] == 7) $post['message'] = '<span class="grey">用户被禁言，帖子被屏蔽。</span>';
 		}
 		
 		// 版主管理日志，包含评分列表

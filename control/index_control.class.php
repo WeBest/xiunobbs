@@ -20,6 +20,7 @@ class index_control extends common_control {
 	
 	// 给插件预留个位置
 	public function on_index() {
+		
 		/*$expiry = 10;
 		$n = $this->online->index_delete(array('lastvisit'=>array('<'=>$expiry)));
 		$this->conf['onlines'] -= $n;

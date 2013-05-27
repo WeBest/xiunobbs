@@ -15,7 +15,7 @@ class attach_control extends common_control {
 		$this->_checked['bbs'] = ' class="checked"';
 		
 		// 加载积分策略
-		$this->conf += $this->kv->xget('conf_ext');
+		// $this->conf += $this->kv->xget('conf_ext');
 		
 		// 检查IP 屏蔽
 		$this->check_ip();

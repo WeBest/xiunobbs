@@ -461,7 +461,6 @@ class post_control extends common_control {
 		
 		// 过期不能编辑
 		// post_update_expiry
-		$this->conf += $this->kv->xget('conf_ext');
 		if(!$ismod && $this->conf['post_update_expiry'] && $_SERVER['time'] - $post['dateline'] > $this->conf['post_update_expiry']) {
 			$time = ceil($this->conf['post_update_expiry'] / 60);
 			$this->message('您不能再继续修改该帖，已经超出了最大修改时间: (<b>'.$time.'分钟</b>)。', 0);

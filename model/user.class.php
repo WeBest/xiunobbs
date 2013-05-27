@@ -15,6 +15,11 @@ class user extends base_model{
 	
 	// 关联创建用户
 	public function xcreate($arr) {
+		
+		if(!isset($this->conf['reg_init_golds'])) {
+			$this->conf += $this->kv->xget('conf_ext');
+		}
+		
 		empty($arr['uid']) && $arr['uid'] = $this->maxid('+1');
 		$arr['regdate'] = $_SERVER['time'];
 		$arr['regip'] = ip2long($_SERVER['REMOTE_ADDR']);

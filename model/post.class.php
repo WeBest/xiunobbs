@@ -11,7 +11,6 @@ class post extends base_model {
 		$this->table = 'post';
 		$this->primarykey = array('fid', 'pid');
 		$this->maxcol = 'pid';
-		
 	}
 	
 	// 附件数计数
@@ -58,6 +57,10 @@ class post extends base_model {
 
 	// 删除回帖，非主题帖。相对比较简单，是相对！万恶的删除和缓存啊！不过现在终于可以把它封起来了，稳定了。
 	public function xdelete($fid, $pid, $updatestat = TRUE) {
+		if(!isset($this->conf['credits_policy_post'])) {
+			$this->conf += $this->kv->xget('conf_ext');
+		}
+		
 		$post = $this->read($fid, $pid);
 		$tid = $post['tid'];
 		$uid = $post['uid'];

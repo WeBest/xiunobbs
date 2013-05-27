@@ -14,7 +14,9 @@ class user_control extends common_control {
 		parent::__construct($conf);
 		
 		// resetpw_on, reg_email_on, resetpw_on, reg_email_on
-		$this->conf += $this->kv->xget('conf_ext');
+		if(!isset($this->conf['reg_on'])) {
+			$this->conf += $this->kv->xget('conf_ext');
+		}
 		
 	}
 	
