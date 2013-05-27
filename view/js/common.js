@@ -559,10 +559,15 @@ function ajaxdialog_request(url, recall, options) {
 	if(jdialog.data(url) && (options == undefined || options.cache == undefined || options && options.cache)) {
 		var json = jdialog.data(url);
 		var dialogdiv = json.dialogdiv;
-		jdialog[0].dialog.open();
-		//jdialog[0].dialog.set_position(options.position);
-		//jdialog.dialog('open');
+		
+		// 会初始化两次，导致关闭按钮第二次点击会出问题
 		//jdialog.dialog(options);
+		
+		// 修正第二次定位不准
+		jdialog[0].dialog.open();
+		jdialog[0].dialog.settings.xcaller = options.xcaller;
+		jdialog[0].dialog.set_position(options.position);
+		
 	// 没有 cache, ajax 请求 url
 	} else {
 		// 弹出对话框
@@ -613,6 +618,8 @@ function ajaxdialog_click(e) {
 		eval("var options = " + options);//alert(typeof(options));
 		options.xcaller = this;
 	}
+//	var offset = $(this).offset();
+//	alert(offset.top);	
 	
 	//if(options == undefined || options.cache == undefined) options.cache = true;	// 默认开启 cache
 	
