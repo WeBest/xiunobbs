@@ -870,7 +870,14 @@ function humansize(num) {
 function bind_document_keyup_page() {
 	//var arr = xn_parse_url(href);
 	//var currpage = arr['page'];
+	
 	$(document).keyup(function(e) {
+		if(document.activeElement && document.activeElement.tagName){
+			var tagname = document.activeElement.tagName.toUpperCase();
+			if(tagname == 'INPUT' || tagname == 'TEXTAREA' || tagname == 'IFRAME') {
+				return true;
+			}
+		}
 		var url = window.location.toString();
 		var r = url.match(/page-(\d+)/i);
 		var e = e || event,      
