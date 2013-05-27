@@ -45,7 +45,7 @@ class plugin_control extends admin_control {
 			if(!empty($officiallist[$dir])) {
 				$oconf = $officiallist[$dir];
 				$pconf['official_version'] = $oconf['version'];
-				$pconf['have_new_version'] = version_compare($oconf['version'], $pconf['version']);	// 如果有新版本，提示下载，更新
+				$pconf['have_new_version'] = version_compare($oconf['version'], $pconf['version']) > 0;	// 如果有新版本，提示下载，更新
 				$pconf['stars'] = intval($oconf['stars']);
 				$pconf['name'] = $oconf['name'];
 				$pconf['brief'] = $oconf['brief'];
@@ -96,7 +96,7 @@ class plugin_control extends admin_control {
 				empty($lconf['version']) && $lconf['version'] = 0;
 				$pconf['have_setting'] = is_file($this->conf['plugin_path'].$dir.'/setting.php');
 				$pconf['local_version'] = $lconf['version'];
-				$pconf['have_new_version'] = version_compare($lconf['version'], $pconf['version']);	// 如果有新版本，提示下载，更新
+				$pconf['have_new_version'] = version_compare($lconf['version'], $pconf['version']) > 0;	// 如果有新版本，提示下载，更新
 				$pconf += $lconf; // 追加, installed, enable
 			} else {
 				$pconf['have_setting'] = 0;
@@ -165,7 +165,7 @@ class plugin_control extends admin_control {
 			$plugin['email'] = $official['email'];
 			
 			$plugin['md5_ok'] = $this->dir_md5($this->conf['plugin_path'].$dir.'/') == $official['file_md5'];
-			$plugin['have_new_version'] = version_compare($official['version'], $local['version']);	// 如果有新版本，提示下载，更新
+			$plugin['have_new_version'] = version_compare($official['version'], $local['version']) > 0;	// 如果有新版本，提示下载，更新
 		}
 		
 		$this->view->assign('dir', $dir);
