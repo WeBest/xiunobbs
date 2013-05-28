@@ -11,6 +11,8 @@ class forum extends base_model {
 		$this->table = 'forum';
 		$this->primarykey = array('fid');
 		$this->maxcol = 'fid';
+		
+		// hook forum_construct_end.php
 	}
 	
 	// 更新版块的最后发帖

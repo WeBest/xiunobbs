@@ -11,6 +11,7 @@ class stat extends base_model {
 		$this->table = 'stat';
 		$this->primarykey = array('year', 'month', 'day');
 		
+		// hook stat_construct_end.php
 	}
 
 	// 取时间段

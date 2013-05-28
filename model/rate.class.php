@@ -11,6 +11,8 @@ class rate extends base_model {
 		$this->table = 'rate';
 		$this->primarykey = array('rateid');
 		$this->maxcol = 'rateid';
+		
+		// hook rate_construct_end.php
 	}
 	
 	// 删除评价

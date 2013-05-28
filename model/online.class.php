@@ -10,6 +10,8 @@ class online extends base_model {
 		parent::__construct($conf);
 		$this->table = 'online';
 		$this->primarykey = array('sid');
+		
+		// hook online_construct_end.php
 	}
 	
 	// 重载, 因为 online 表为 Memory 类型，重启后消失，count 不准确。

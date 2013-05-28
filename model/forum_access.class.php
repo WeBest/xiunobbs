@@ -11,6 +11,8 @@ class forum_access extends base_model {
 		$this->table = 'forum_access';
 		$this->primarykey = array('fid', 'groupid');
 		$this->maxcol = 'fid';
+		
+		// hook forum_access_construct_end.php
 	}
 	
 	public function delete_by_fid($fid) {

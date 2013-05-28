@@ -48,6 +48,8 @@ class attach extends base_model {
 		$this->table = 'attach';
 		$this->primarykey = array('fid', 'aid');
 		$this->maxcol = 'aid';
+		
+		// hook attach_construct_end.php
 	}
 	
 	public function get_allow_filetypes() {

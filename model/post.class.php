@@ -11,6 +11,8 @@ class post extends base_model {
 		$this->table = 'post';
 		$this->primarykey = array('fid', 'pid');
 		$this->maxcol = 'pid';
+		
+		// hook post_construct_end.php
 	}
 	
 	// 附件数计数

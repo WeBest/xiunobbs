@@ -10,6 +10,8 @@ class cron extends base_model {
 		parent::__construct($conf);
 		//set_time_limit(600);
 		//ignore_user_abort(true);
+		
+		// hook cron_construct_end.php
 	}
 	
 	public function run() {

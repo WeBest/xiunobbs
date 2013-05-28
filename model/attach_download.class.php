@@ -10,6 +10,8 @@ class attach_download extends base_model {
 		parent::__construct($conf);
 		$this->table = 'attach_download';
 		$this->primarykey = array('uid', 'fid', 'aid');
+		
+		// hook attach_download_construct_end.php
 	}
 
 	public function get_list_by_fid_aid($fid, $aid, $page = 1, $pagesize = 20) {

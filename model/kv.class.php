@@ -19,6 +19,8 @@ class kv extends base_model {
 		// $this->conf['cache']['enable'] = 1;
 		
 		//IN_SAE && $this->conf['db']['type'] = 'saekv';
+		
+		// hook kv_construct_end.php
 	}
 
 	/*function __destruct() {

@@ -13,6 +13,8 @@ class pmnew extends base_model{
 		$this->table = 'pmnew';
 		$this->primarykey = array('recvuid', 'senduid');
 		$this->conf['cache']['enable'] = FALSE;	// 关闭 Memcached，短消息直接走MYSQL
+		
+		// hook pmnew_construct_end.php
 	}
 
 	// 获取最新的短消息

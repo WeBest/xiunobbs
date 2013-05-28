@@ -18,6 +18,8 @@ class mcache extends base_model {
 	
 	function __construct(&$conf) {
 		parent::__construct($conf);
+		
+		// hook mcache_construct_end.php
 	}
 
 	/*

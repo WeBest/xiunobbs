@@ -18,6 +18,8 @@ class thread_top extends base_model {
 		
 		// 更新到 $thread
 		$this->update_thread_top($fidtidarr, 1);
+		
+		// hook thread_top_construct_end.php
 	}
 	
 	/*

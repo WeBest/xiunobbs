@@ -10,6 +10,8 @@ class thread_digest extends base_model {
 		parent::__construct($conf);
 		$this->table = 'thread_digest';
 		$this->primarykey = array('tid');
+		
+		// hook thread_digest_construct_end.php
 	}
 	
 	public function get_list_by_fid($fid, $start, $limit) {

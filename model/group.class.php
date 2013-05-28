@@ -11,6 +11,8 @@ class group extends base_model {
 		$this->table = 'group';
 		$this->primarykey = array('groupid');
 		$this->maxcol = 'groupid';
+		
+		// hook group_construct_end.php
 	}
 	
 	// 取得注册用户的 groupid, 和0

@@ -11,6 +11,8 @@ class modlog extends base_model {
 		$this->table = 'modlog';
 		$this->primarykey = array('logid');
 		$this->maxcol = 'logid';
+		
+		// hook modlog_construct_end.php
 	}
 	
 	public function delete_by_fid($fid) {

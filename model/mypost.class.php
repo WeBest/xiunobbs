@@ -11,6 +11,8 @@ class mypost extends base_model {
 		$this->table = 'mypost';
 		$this->primarykey = array('uid', 'fid', 'pid');
 		
+		// hook mypost_construct_end.php
+		
 	}
 
 	public function read_by_tid($uid, $fid, $tid) {

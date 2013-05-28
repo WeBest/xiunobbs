@@ -12,6 +12,8 @@ class pm extends base_model {
 		$this->primarykey = array('pmid');
 		$this->maxcol = 'pmid';
 		$this->conf['cache']['enable'] = FALSE;	// 关闭 Memcached，短消息直接走MYSQL
+		
+		// hook pm_construct_end.php
 	}
 
 	public function system_send($touid, $tousername, $message) {

@@ -31,6 +31,8 @@ class thread_type extends base_model {
 		parent::__construct($conf);
 		$this->table = 'thread_type';
 		$this->primarykey = array('fid', 'typeid');
+		
+		// hook thread_type_construct_end.php
 	}
 	
 	private function find_empty_typeid($fid, $cateid) {

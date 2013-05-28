@@ -11,6 +11,8 @@ class follow extends base_model{
 		$this->table = 'follow';
 		$this->primarykey = array('uid', 'fuid');
 		$this->conf['cache']['enable'] = FALSE;	// 关闭 Memcached，短消息直接走db or service
+		
+		// hook follow_construct_end.php
 	}
 	
 	// xcrate(), 处理关联关系。判断双向

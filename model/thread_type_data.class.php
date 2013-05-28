@@ -15,6 +15,7 @@ class thread_type_data extends base_model {
 		$this->table = 'thread_type_data';
 		$this->primarykey = array('fid', 'tid', 'typeidsum');
 		
+		// hook thread_type_data_construct_end.php
 	}
 	
 	// 一个主题属于多个 typeid

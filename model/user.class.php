@@ -11,6 +11,8 @@ class user extends base_model{
 		$this->table = 'user';
 		$this->primarykey = array('uid');
 		$this->maxcol = 'uid';
+		
+		// hook user_construct_end.php
 	}
 	
 	// 关联创建用户

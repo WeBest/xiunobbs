@@ -18,6 +18,8 @@ class thread_type_cate extends base_model {
 		parent::__construct($conf);
 		$this->table = 'thread_type_cate';
 		$this->primarykey = array('fid', 'cateid');
+		
+		// hook thread_type_cate_construct_end.php
 	}
 	
 	public function xread($fid, $cateid, $fillblank = FALSE) {

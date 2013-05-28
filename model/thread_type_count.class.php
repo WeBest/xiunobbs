@@ -15,6 +15,7 @@ class thread_type_count extends base_model {
 		$this->table = 'thread_type_count';
 		$this->primarykey = array('fid', 'typeidsum');
 		
+		// hook thread_type_count_construct_end.php
 	}
 	
 	public function xcreate($fid, $typeidsum) {

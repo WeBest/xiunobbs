@@ -12,6 +12,8 @@ class user_access extends base_model{
 		$this->primarykey = array('uid');
 		$this->maxcol = 'uid';
 		$this->conf['cache']['enable'] = FALSE;
+		
+		// hook user_access_construct_end.php
 	}
 	
 	// 初始化权限

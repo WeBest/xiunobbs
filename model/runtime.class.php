@@ -18,6 +18,8 @@ class runtime extends base_model {
 		$this->primarykey = array('k');
 		
 		//IN_SAE && $this->conf['db']['type'] = 'saekv';
+		
+		// hook runtime_construct_end.php
 	}
 	
 	// 带有过期时间的 get

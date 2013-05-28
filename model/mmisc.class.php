@@ -8,6 +8,8 @@ class mmisc extends base_model {
 
 	function __construct(&$conf) {
 		parent::__construct($conf);
+		
+		// hook mmisc_construct_end.php
 	}
 		
 	public function sendmail($username, $email, $subject, $message) {

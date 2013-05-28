@@ -11,6 +11,8 @@ class thread extends base_model {
 		$this->table = 'thread';
 		$this->primarykey = array('fid', 'tid');
 		$this->maxcol = 'tid';
+		
+		// hook thread_construct_end.php
 	}
 	
 	public function get_threadlist_by_fid($fid, $orderby, $start, $limit, $total = 0) {

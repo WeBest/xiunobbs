@@ -11,6 +11,8 @@ class banip extends base_model {
 		$this->table = 'banip';
 		$this->primarykey = array('banid');
 		$this->maxcol = 'banid';
+		
+		// hook banip_construct_end.php
 	}
 	
 	public function is_banip($ip) {
