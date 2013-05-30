@@ -366,6 +366,7 @@ class common_control extends base_control {
 	
 	// relocation
 	public function url($url) {
+		$url[0] == '?' && $url = substr($url, 1);
 		return $this->conf['app_url'].($this->conf['urlrewrite'] ? '' : '?').$url;
 	}
 	
