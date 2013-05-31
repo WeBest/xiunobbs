@@ -5,15 +5,15 @@ $error = $input = array();
 $start = intval(core::gpc('start', 'R'));
 $fid = intval(core::gpc('fid', 'R'));
 $keepcredits = intval(core::gpc('keepcredits', 'R'));
-$startdate = core::gpc('startdate', 'R');
-$enddate = core::gpc('enddate', 'R');
+$startdate_html = core::gpc('startdate', 'R');
+$enddate_html = core::gpc('enddate', 'R');
 $keyword = core::gpc('keyword', 'R');
 $username = core::gpc('username', 'R');
 
-$startdate_url = core::urlencode($startdate);
-$enddate_url = core::urlencode($enddate);
-$startdate = strtotime($startdate);
-$enddate = strtotime($enddate);
+$startdate_url = core::urlencode($startdate_html);
+$enddate_url = core::urlencode($enddate_html);
+$startdate = strtotime($startdate_html);
+$enddate = strtotime($enddate_html);
 $keyword_url = core::urlencode($keyword);
 $username_url = core::urlencode($username);
 
@@ -24,8 +24,10 @@ if(!$this->form_submit() && empty($start)) {
 	$this->view->assign('forumoptions', $forumoptions);
 	$input['keepcredits'] = form::get_radio_yes_no('keepcredits', $keepcredits);
 	
-	$this->view->assign('startdate_url', $startdate_url);
-	$this->view->assign('enddate_url', $enddate_url);
+	empty($startdate_html) && $startdate_html = date('Y-n-j', $_SERVER['time']);
+	empty($enddate_html) && $enddate_html = date('Y-n-j', $_SERVER['time']);
+	$this->view->assign('startdate_html', $startdate_html);
+	$this->view->assign('enddate_html', $enddate_html);
 	$this->view->assign('keyword_url', $keyword_url);
 	$this->view->assign('username_url', $username_url);
 	$this->view->assign('dir', $dir);
