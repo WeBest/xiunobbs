@@ -72,6 +72,18 @@ class thread_type extends base_model {
 		return $typelist;
 	}
 	
+	// 获取所有的 thread_type
+	public function get_list_from_cache() {
+		
+		// 主题分类数据
+		$threadtypelist = $this->runtime->get('threadtypelist');
+		if(empty($threadtypelist)) {
+			$threadtypelist = $this->get_list();
+			$this->runtime->set('threadtypelist', $threadtypelist, 60); // todo:一分钟的缓存时间！这里可以根据负载进行调节。
+		}
+		return $threadtypelist;
+	}
+	
 	// 返回非空的主题分类, cateid = 1, 2, 3，排序？
 	/*
 		返回格式，按照 rank 正序，typeid 为 key：
