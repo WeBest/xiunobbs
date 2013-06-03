@@ -144,11 +144,11 @@ class forum_control extends admin_control {
 			// 更新缓存
 			$this->mcache->clear('forum', $fid1);
 			$this->mcache->clear('forum', $fid2);
-			$this->runtime->xupdate('forumarr');
 			
 			$this->forum->delete($fid2);
 			
 			$this->runtime->xupdate('forumarr');
+			$this->runtime->delete('typearr');
 			
 			// hook admin_forum_merge_succeed.php
 				
@@ -280,6 +280,7 @@ class forum_control extends admin_control {
 			// 清除缓存
 			$this->mcache->clear('forum', $fid);
 			$this->runtime->xupdate('forumarr');
+			$this->runtime->delete('typearr');
 		}
 		
 		// 版块权限
@@ -363,6 +364,7 @@ class forum_control extends admin_control {
 			$this->forum->delete($fid);
 			
 			$this->runtime->xupdate('forumarr');
+			$this->runtime->delete('typearr');
 			$this->message("删除 fid: $fid 完毕 ...", 1, "?forum-delete-fid-$fid.htm");
 		} else {
 			// 分批删除主题。

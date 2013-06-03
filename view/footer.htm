@@ -56,6 +56,7 @@ $('#create_thread').click(function() {
 		}, {fullicon: 1});
 		return false;
 	} else {
+		ajaxdialog_request($('#create_thread').attr('href'), null, {fullicon: 1});
 		return true;
 	}
 });

@@ -73,15 +73,18 @@ class thread_type extends base_model {
 	}
 	
 	// 获取所有的 thread_type
-	public function get_list_from_cache() {
-		
+	public function get_typearr_from_cache() {
 		// 主题分类数据
-		$threadtypelist = $this->runtime->get('threadtypelist');
-		if(empty($threadtypelist)) {
+		$typearr = $this->runtime->get('typearr');
+		if($typearr === FALSE) {
 			$threadtypelist = $this->get_list();
-			$this->runtime->set('threadtypelist', $threadtypelist, 60); // todo:一分钟的缓存时间！这里可以根据负载进行调节。
+			$typearr = array();
+			foreach($threadtypelist as $threadtype) {
+				$typearr[$threadtype['fid']][$threadtype['typeid']] = $threadtype['typename'];
+			}
+			$this->runtime->set('typearr', $typearr, 600000); // todo:一分钟的缓存时间！这里可以根据负载进行调节。
 		}
-		return $threadtypelist;
+		return $typearr;
 	}
 	
 	// 返回非空的主题分类, cateid = 1, 2, 3，排序？

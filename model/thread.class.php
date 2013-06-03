@@ -82,7 +82,12 @@ class thread extends base_model {
 			$thread['typename3'] = $thread['typeid3'] && isset($forum['types'][3][$thread['typeid3']]) ? $forum['types'][3][$thread['typeid3']] : '';
 			$thread['typename4'] = $thread['typeid4'] && isset($forum['types'][4][$thread['typeid4']]) ? $forum['types'][4][$thread['typeid4']] : '';
 		} else {
-			$thread['typename1'] = $thread['typename2'] = $thread['typename3'] = $thread['typename4'] = '';
+			static $typearr = FALSE;
+			$typearr === FALSE && $typearr = $this->thread_type->get_typearr_from_cache();
+			$thread['typename1'] = $thread['typeid1'] && !empty($typearr[$thread['fid']][$thread['typeid1']]) ? $typearr[$thread['fid']][$thread['typeid1']] : '';
+			$thread['typename2'] = $thread['typeid2'] && !empty($typearr[$thread['fid']][$thread['typeid2']]) ? $typearr[$thread['fid']][$thread['typeid2']] : '';
+			$thread['typename3'] = $thread['typeid3'] && !empty($typearr[$thread['fid']][$thread['typeid3']]) ? $typearr[$thread['fid']][$thread['typeid3']] : '';
+			$thread['typename4'] = $thread['typeid4'] && !empty($typearr[$thread['fid']][$thread['typeid4']]) ? $typearr[$thread['fid']][$thread['typeid3']] : '';
 		}
 		$thread['forumname'] = isset($this->conf['forumarr'][$thread['fid']]) ? $this->conf['forumarr'][$thread['fid']] : '';
 		
