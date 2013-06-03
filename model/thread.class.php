@@ -31,14 +31,14 @@ class thread extends base_model {
 		}
 	}
 	
-	// 按照 tid 倒序，获取最新的列表
+	// 按照 lastpost 倒序，获取最新的列表
 	public function get_newlist($start = 0, $limit = 30, $threadlist = array()) {
 		// 递归深度不能超过4次
 		static $deep = 1;
 		if($deep++ > 4) return $threadlist;
 		
 		$newlist = array();
-		$newlist = $this->thread_new->index_fetch(array(), array('tid'=>-1), $start, $limit);
+		$newlist = $this->thread_new->index_fetch(array(), array('lastpost'=>-1), $start, $limit);
 		foreach($newlist as $new) {
 			$thread = $this->read($new['fid'], $new['tid']);
 			$threadlist[] = $thread;
