@@ -585,7 +585,7 @@ function upgrade_forum() {
 	} else {
 		
 		// fid, typeid -> newfid, typeid1, typeid2
-		message('升级 forum 完成，接下来升级 thread ...', '?step=upgrade_thread');
+		message('升级 forum 完成，接下来升级 thread ...', '?step=upgrade_thread&start=0');
 	}
 }
 
