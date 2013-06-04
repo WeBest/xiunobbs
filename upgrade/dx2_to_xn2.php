@@ -63,7 +63,7 @@ if(empty($step)) {
 	
 	// 如果没有升级进度，则清空
 	$db = get_db();
-	$file = $conf['tmp_path'].'upgrade_process.txt';
+	$file = $conf['upload_path'].'upgrade_process.txt';
 	if(!is_file($file)) {
 		$db = get_db();
 		$db->truncate('forum');
