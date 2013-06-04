@@ -227,7 +227,8 @@ class attach_control extends common_control {
 			// 如果为 GIF, 直接 copy
 			// 判断文件类型，如果为图片文件，缩略，否则直接保存。
 			if($imginfo[2] == 1) {
-				$fileurl = image::set_dir($aid, $uploadpath).'/'.$aid.'.gif';
+				$md5name = md5(rand(0, 1000000000).$_SERVER['time'].$_SERVER['ip']);
+				$fileurl = image::set_dir($aid, $uploadpath).'/'.$md5name.'.gif';
 				$thumbfile = $uploadpath.$fileurl;
 				copy($file['tmp_name'], $thumbfile);
 				$r['filesize'] = filesize($file['tmp_name']);
@@ -235,9 +236,9 @@ class attach_control extends common_control {
 				$r['height'] = $imginfo[1];
 				$r['fileurl'] = $fileurl;
 			} else {
-				$r = image::safe_thumb($file['tmp_name'], $aid, '.jpg', $uploadpath, $this->conf['upload_image_max_width'], 240000);	// 1210 800
-				$thumb = image::safe_thumb($file['tmp_name'], $aid, '_thumb.jpg', $uploadpath, $this->conf['thread_icon_middle'], 2256);
-				$thumbfile = $uploadpath.$thumb['fileurl'];
+				$r = image::safe_thumb($file['tmp_name'], $aid, '.jpg', $uploadpath, $this->conf['upload_image_max_width'], 240000, 1);	// 1210 800
+				$thumbfile = $uploadpath.image::thumb_name($r['fileurl']);
+				image::thumb($file['tmp_name'], $thumbfile, $this->conf['thread_icon_middle'], 2256);
 				image::clip($thumbfile, $thumbfile, 0, 0, $this->conf['thread_icon_middle'], $this->conf['thread_icon_middle']);	// 对付金箍棒图片
 			}
 			
