@@ -60,7 +60,7 @@ $start2 = isset($_GET['start2']) ? intval($_GET['start2']) : $start2;
 
 // 升级配置文件
 if(empty($step)) {
-	/*
+	
 	// 如果没有升级进度，则清空
 	$db = get_db();
 	$file = $conf['tmp_path'].'upgrade_process.txt';
@@ -74,7 +74,8 @@ if(empty($step)) {
 		$db->truncate('thread_type');
 		$db->truncate('friendlink');
 		$db->truncate('runtime');
-	*/
+	}
+	
 	upgrade_conf();
 } elseif($step == 'upgrade_prepare') {
 	upgrade_prepare();
