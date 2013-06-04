@@ -669,12 +669,14 @@ function upgrade_thread() {
 				if($old['displayorder'] == 3) {
 					$toptids = $mkv->get('toptids');
 					if(substr_count($toptids, ' ', 0) < 10) {
+						$toptids = str_replace(" $newfid-$tid ", " ", $toptids.' ');
 						$toptids .= trim($toptids)." $newfid-$tid";
 						$mkv->set('toptids', $toptids);
 					}
 				} elseif($old['displayorder'] == 2 || $old['displayorder'] == 1) {
 					$forum = $mforum->read($newfid);
 					if(substr_count($forum['toptids'], ' ', 0) < 8) {
+						$forum['toptids'] = str_replace(" $newfid-$tid ", " ", $forum['toptids'].' ');
 						$forum['toptids'] = trim($forum['toptids'])." $newfid-$tid";
 						$mforum->update($forum);
 					} else {

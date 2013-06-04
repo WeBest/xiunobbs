@@ -1,4 +1,3 @@
-	<?php class a{
 	public function on_weibologin() {
 		$weibologin = $this->kv->get('weibologin');
 		$appsecret = $weibologin['appsecret'];
