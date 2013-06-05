@@ -185,8 +185,17 @@ class attach_control extends common_control {
 		
 		// hook attach_uploadimage_before.php
 
-		if(isset($_FILES['Filedata']['tmp_name']) && is_file($_FILES['Filedata']['tmp_name'])) {
+		//  && is_file($_FILES['Filedata']['tmp_name'])
+		if(!empty($_FILES['Filedata']['tmp_name'])) {
+			
+			// 对付一些变态的 iis 环境， is_file() 无法检测无权限的目录。
+			$tmpfile = $this->conf['tmp_path'].md5(rand(0, 1000000000).$_SERVER['time'].$_SERVER['ip']);
+			if(!@move_uploaded_file($_FILES['Filedata']['tmp_name'], $tmpfile)) {
+				$this->message('移动临时文件错误，请检查临时目录的可写权限。', 0);
+			}
+			
 			$file = $_FILES['Filedata'];
+			$file['tmp_name'] = $tmpfile;
 			core::htmlspecialchars($file['name']);
 			$filetype = $this->attach->get_filetype($file['name']);
 			if($filetype != 'image') {
@@ -250,6 +259,8 @@ class attach_control extends common_control {
 			$arr['filename'] = $r['fileurl'];
 			$this->attach->update($arr);
 			
+			is_file($file['tmp_name']) && unlink($file['tmp_name']);
+			
 			// hook attach_uploadimage_after.php
 			$this->message('<img src="'.$uploadurl.$r['fileurl'].'" width="'.$arr['width'].'" height="'.$arr['height'].'"/>');
 			
@@ -257,7 +268,7 @@ class attach_control extends common_control {
 			if($_FILES['Filedata']['error'] == 1) {
 				$this->message('上传文件( '.htmlspecialchars($_FILES['Filedata']['name']).' )太大，超出了 php.ini 的设置：'.ini_get('upload_max_filesize'), 0);
 			} else {
-				$this->message('上传文件失败，错误编码：'.$_FILES['Filedata']['error'], 0); // .print_r($_FILES, 1)
+				$this->message('上传文件失败，错误编码：'.$_FILES['Filedata']['error'].', FILES: '.print_r($_FILES, 1).', is_file: '.is_file($_FILES['Filedata']['tmp_name']).', file_exists: '.file_exists($_FILES['Filedata']['tmp_name']), 0); // .print_r($_FILES, 1)
 			}
 		}
 	}
@@ -277,8 +288,15 @@ class attach_control extends common_control {
 
 		// hook attach_uploadfile_before.php
 		
-		if(isset($_FILES['Filedata']['tmp_name']) && is_file($_FILES['Filedata']['tmp_name'])) {
+		if(!empty($_FILES['Filedata']['tmp_name'])) {
+			// 对付一些变态的 iis 环境， is_file() 无法检测无权限的目录。
+			$tmpfile = $this->conf['tmp_path'].md5(rand(0, 1000000000).$_SERVER['time'].$_SERVER['ip']);
+			if(!@move_uploaded_file($_FILES['Filedata']['tmp_name'], $tmpfile)) {
+				$this->message('移动临时文件错误，请检查临时目录的可写权限。', 0);
+			}
+			
 			$file = $_FILES['Filedata'];
+			$file['tmp_name'] = $tmpfile;
 			$file['name'] = htmlspecialchars($file['name']);
 			$filetype = $this->attach->get_filetype($file['name']);
 			// 多后缀名以最后一个 . 为准。文件名舍弃，避免非法文件名。
@@ -325,10 +343,13 @@ class attach_control extends common_control {
 			$arr['filesize'] = filesize($file['tmp_name']);
 			$this->attach->update($arr);
 			
-			if(move_uploaded_file($file['tmp_name'], $destfile)) {
+			if(copy($file['tmp_name'], $destfile)) {
 				
 				// hook attach_uploadfile_after.php
 				$arr['desturl'] = $desturl;
+				
+				is_file($file['tmp_name']) && unlink($file['tmp_name']);
+				
 				$this->message($arr);
 			} else {
 				// 回滚
