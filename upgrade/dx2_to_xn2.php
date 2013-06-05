@@ -862,7 +862,7 @@ function upgrade_post() {
 			$post = $db->get("post-fid-$newfid-pid-$pid");
 			if($post) continue;
 			if(isset($policy['fuparr'][$fup]) && $policy['fuparr'][$fup] != 0) continue; // type = sub
-			
+
 			// 帖子附件
 			if($old['attachment']) {
 				$attachlist = $db->index_fetch('attach', 'aid', array('fid'=>$newfid, 'pid'=>$pid), array('aid'=>1), array(), 0, 1000);
@@ -879,6 +879,9 @@ function upgrade_post() {
 				// 如果没有 aid 不在 message 中，则直接粘帖到内容末尾
 			}
 			$old['message'] = bbcode2html($old['message']);
+			
+			$old['message'] = preg_replace('#<img\s+src="static/image/[^"]+"[^>]+>#is', '', $old['message']);
+			$old['message'] = preg_replace('#<a[^>]+></a>#is', '', $old['message']);
 			
 			//$s = preg_replace('#\[attach\]([^[]*?)\[/attach\]#i', '', $s);
 			
@@ -1370,7 +1373,7 @@ function laststep() {
 	//$db->query("ALTER TABLE {$db->tablepre}thread_type DROP COLUMN oldtypeid;");
 	
 	// 修改管理员用户组
-	message('升级完毕，请<b>删除 dx2_to_xn2.php </b>，防止重复升级！！！<a href="../">【进入论坛】</a>');
+	message('升级完毕，请<b>删除 dx2_to_xn2.php </b>，防止重复升级！！！<a href="./">【进入论坛】</a>');
 }
 
 function int_to_string($arr) {
