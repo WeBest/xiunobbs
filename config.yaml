@@ -1,7 +1,8 @@
 appname: axiuno
-version: 1
+version: 5
 
 handle:
 
 #URL重写
-- rewrite: if( query_string ~ ([^/]+\.htm)$ ) goto "index.php?%1"
+- rewrite: if( !is_file() && path ~ "/admin/" ) goto "/admin/index.php?%{QUERY_STRING}"
+- rewrite: if( !is_file() ) goto "index.php?%{QUERY_STRING}"
