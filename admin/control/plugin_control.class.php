@@ -209,7 +209,7 @@ class plugin_control extends admin_control {
 				$next = "?plugin-install-dir-$dir.htm";
 				$this->message("SAE 环境安装，需要<br />
 					1. 手工<a href=\"$url\" target=\"_blank\"><b>【下载压缩包】</b></a><br />
-					2. 然后解压后，上传到 <b>plugin/$dir</b> 目录
+					2. 然后解压后，上传到 <b>plugin/$dir</b> 目录<br />
 					3. 点击<a href=\"$next\"><b>【下一步】</b></a>安装。");
 			} else {
 				// 服务端开始下载

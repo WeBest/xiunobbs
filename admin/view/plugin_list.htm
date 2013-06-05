@@ -69,6 +69,17 @@
 			</table>
 		</div>
 		<div>$pages</div>
+		
+		<br />
+		<!--{if !IN_SAE}-->
+		<p>
+			【注意】：为了安全，插件安装完毕以后请修改 conf/conf.php 中的 plugin_on 为 0 （请使用 UTF-8 文本编辑器，不要使用 Windows 记事本）。
+		<p>
+		<!--{else}-->
+		<p>
+			【注意】：SAE 环境需要下载 TMP 包才能使新安装设置的插件生效！点击<input type="button" class="button smallblue" onclick="window.location='?plugin-saetmp.htm'" value="下载 TMP 包" />
+		<p>
+		<!--{/if}-->
 	</form>
 </div>
 
