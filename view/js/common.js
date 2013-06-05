@@ -597,7 +597,8 @@ function ajaxdialog_request(url, recall, options) {
 		// 弹出对话框
 		var optionsbefore = $.extend({width: 700, modal: true, open: true}, options);
 		jdialog.dialog(optionsbefore);
-		$.get(url, {ajax: 1}, function(s) {
+		var arg = url.indexOf('-ajax-1') == -1 ? {ajax: 1} : null;
+		$.get(url, arg, function(s) {
 			var json = json_decode(s);
 			if((error = json_error(json)) || json.status <= 0) {
 				error = error.replace(/\n/ig, '<br />');
