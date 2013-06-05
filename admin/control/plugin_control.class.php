@@ -317,7 +317,7 @@ class plugin_control extends admin_control {
 				<li>解压本地的'.$pluginzip.'后，将得到的目录'.$dir.'上传到 plugin/ 下</li>
 				<li>点击下载<a href="'.$saetmp.'" target="_blank"><b>【tmp.zip】</b></a></li>
 				<li>解压 tmp.zip 得到 tmp 目录，FTP 上传到线上 tmp/ 目录下</li>
-				</ul>', 1, $referer);
+				</ul>');
 		} else {
 			
 			// 检查版本
@@ -406,7 +406,7 @@ class plugin_control extends admin_control {
 				<li>删除<b>'.$this->conf['plugin_path'].$dir.'</b></li>
 				<li>下载<a href="'.$saetmp.'" target="_blank"><b>tmp.zip</b></a></li>
 				<li>解压 tmp.zip 得到 tmp 目录，FTP 上传到线上 tmp/ 目录下</li>
-				', 1, $referer);
+				');
 		} else {
 			//  删除目录
 			misc::rmdir($this->conf['plugin_path'].$dir);
