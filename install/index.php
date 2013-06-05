@@ -336,6 +336,7 @@ if(empty($step) || $step == 'checklicense') {
 			$s = preg_replace('#\'auth_key\'\s*=\>\s*\'?.*?\'?,#is', "'auth_key' => '$auth_key',", $s);
 			$s = preg_replace('#\'siteid\'\s*=\>\s*\'?.*?\'?,#is', "'siteid' => '$siteid',", $s);
 			$s = preg_replace('#\'timeoffset\'\s*=\>\s*\'?.*?\'?,#is', "'timeoffset' => '$timeoffset',", $s);
+			$s = preg_replace('#\'urlrewrite\'\s*=\>\s*\'?.*?\'?,#is', "'urlrewrite' => ".(IN_SAE ? 1 : 0).",", $s);
 			$s = preg_replace('#\'installed\'\s*=\>\s*\'?.*?\'?,#is', "'installed' => 1,", $s);
 			
 			// 修改密码
@@ -367,7 +368,6 @@ if(empty($step) || $step == 'checklicense') {
 			$kv = new kv($conf);
 			$kvconf = array(
 				'app_name' => 'Xiuno BBS',		// 站点名称
-				'urlrewrite' => IN_SAE ? 1 : 0,			// 是否开启 URL-Rewrite
 				'timeoffset' => '+8',
 				'forum_index_pagesize' => 20,		// 列表页的 pagesie，可以修改，建议不要超出100。
 				'cookie_keeptime' => 86400,
