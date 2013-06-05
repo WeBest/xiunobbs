@@ -656,7 +656,7 @@ class plugin_control extends admin_control {
 			
 			// 如果有相关的 app path, 这只读取该目录
 			if(is_dir($path.$conf['app_id'])) {
-				$path = $path.$conf['app_id'];
+				$path = $path.$conf['app_id'].'/';
 			}
 			foreach((array)glob($path."*_control.class.php") as $file) {
 				if(!is_file($file)) continue;
@@ -677,7 +677,7 @@ class plugin_control extends admin_control {
 		foreach(($conf['view_path'] + $pluginpaths) as $path) {
 			// 如果有相关的 app path, 这只读取该目录
 			if(is_dir($path.$conf['app_id'])) {
-				$path = $path.$conf['app_id'];
+				$path = $path.$conf['app_id'].'/';
 			}
 			foreach((array)glob($path."*.htm") as $file) {
 				if(!is_file($file)) continue;
@@ -715,7 +715,7 @@ class plugin_control extends admin_control {
 			
 			// 如果有相关的 app path, 这只读取该目录
 			if(is_dir($path.$conf['app_id'])) {
-				$path = $path.$conf['app_id'];
+				$path = $path.$conf['app_id'].'/';
 			}
 			foreach((array)glob($path."*_control.class.php") as $file) {
 				if(!is_file($file)) continue;
@@ -736,7 +736,7 @@ class plugin_control extends admin_control {
 		foreach(($conf['view_path'] + $pluginpaths) as $path) {
 			// 如果有相关的 app path, 则只读取该目录
 			if(is_dir($path.$conf['app_id'])) {
-				$path = $path.$conf['app_id'];
+				$path = $path.$conf['app_id'].'/';
 			}
 			foreach((array)glob($path."*.htm") as $file) {
 				if(!is_file($file)) continue;
@@ -747,6 +747,9 @@ class plugin_control extends admin_control {
 			}
 		}
 		unset($view);
+		
+		// 遍历插件目录，找到插件目录下的 control, view
+		// start end before after
 		
 		$conf = $conf2;
 		

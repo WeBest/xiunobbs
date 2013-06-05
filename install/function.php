@@ -134,7 +134,7 @@ function make_tmp($conf) {
 		
 		// 如果有相关的 app path, 这只读取该目录
 		if(is_dir($path.$conf['app_id'])) {
-			$path = $path.$conf['app_id'];
+			$path = $path.$conf['app_id'].'/';
 		}
 		foreach((array)glob($path."*_control.class.php") as $file) {
 			if(!is_file($file)) continue;
@@ -155,7 +155,7 @@ function make_tmp($conf) {
 	foreach(($conf['view_path'] + $pluginpaths) as $path) {
 		// 如果有相关的 app path, 这只读取该目录
 		if(is_dir($path.$conf['app_id'])) {
-			$path = $path.$conf['app_id'];
+			$path = $path.$conf['app_id'].'/';
 		}
 		foreach((array)glob($path."*.htm") as $file) {
 			if(!is_file($file)) continue;
@@ -193,7 +193,7 @@ function make_tmp($conf) {
 		
 		// 如果有相关的 app path, 这只读取该目录
 		if(is_dir($path.$conf['app_id'])) {
-			$path = $path.$conf['app_id'];
+			$path = $path.$conf['app_id'].'/';
 		}
 		foreach((array)glob($path."*_control.class.php") as $file) {
 			if(!is_file($file)) continue;
@@ -214,7 +214,7 @@ function make_tmp($conf) {
 	foreach(($conf['view_path'] + $pluginpaths) as $path) {
 		// 如果有相关的 app path, 这只读取该目录
 		if(is_dir($path.$conf['app_id'])) {
-			$path = $path.$conf['app_id'];
+			$path = $path.$conf['app_id'].'/';;
 		}
 		foreach((array)glob($path."*.htm") as $file) {
 			if(!is_file($file)) continue;
