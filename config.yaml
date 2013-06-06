@@ -4,6 +4,5 @@ version: *
 handle:
 
 #URL重写
-- rewrite: if( !is_file() && path ~ "/admin/" ) goto "/admin/index.php?%{QUERY_STRING}"
-- rewrite: if( !is_file() && path ~ "/install/" ) goto "/install/index.php?%{QUERY_STRING}"
-- rewrite: if( !is_file() ) goto "index.php?%{QUERY_STRING}"
+- rewrite: if( path ~ "^/admin/(.*\.htm)$") goto "/admin/index.php?$1"
+- rewrite: if( path ~ "^/(.*\.htm)$") goto "/index.php?$1"
