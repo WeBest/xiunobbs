@@ -30,9 +30,26 @@ class post_control extends common_control {
 		$this->check_login();
 		$this->check_forbidden_group();
 		
+		$groupid = $this->_user['groupid'];
+		
 		$fid =  core::gpc('fid', 'P') ?  intval(core::gpc('fid', 'P')) : intval(core::gpc('fid'));
 		if(empty($fid)) {
-			list($fid, $forumname) = each($this->conf['forumarr']);
+			//list($fid, $forumname) = each($this->conf['forumarr']); // 获取第一个板块
+			// 遍历查找有权限的板块
+			foreach($this->conf['forumarr'] as $_fid=>$_name) {
+				if(!empty($this->conf['forumaccesson'][$_fid])) {
+					$access = $this->forum_access->read($_fid, $groupid);
+					if($access['allowthread']) {
+						$fid = $_fid;
+						break;
+					} else {
+						continue;
+					}
+				} else {
+					$fid = $_fid;
+					break;
+				}
+			}
 			$forumselect = form::get_select('fid', $this->conf['forumarr'], $fid);
 			$this->view->assign('forumselect', $forumselect);
 		} else {

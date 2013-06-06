@@ -172,6 +172,12 @@ class forum extends base_model {
 		$this->mcache->real_set('forum', $fid, $cache);
 	}
 	
+	public function unset_nopriv_forum(&$forumarr) {
+		foreach($forumarr as $arr) {
+			// 
+		}
+	}
+	
 	// hook forum_model_end.php
 	
 }
