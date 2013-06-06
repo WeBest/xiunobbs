@@ -7,7 +7,16 @@
 		<dd>$threads (篇)</dd>
 		
 		<dt><label for="typeid">主题分类：</label></dt>
-		<dd>$typeselect1 $typeselect2 $typeselect3 $typeselect4 &nbsp;</dd>
+		<dd>
+		<!--{if $typeselect1 || $typeselect2 || $typeselect3 || $typeselect4}-->
+			<!--{loop $forum[types] $cateid $types}-->
+				<!--{if $cateid == 1 && $typeselect1}-->$typeselect1<!--{/if}-->
+				<!--{if $cateid == 2 && $typeselect2}-->$typeselect2<!--{/if}-->
+				<!--{if $cateid == 3 && $typeselect3}-->$typeselect3<!--{/if}-->
+				<!--{if $cateid == 4 && $typeselect4}-->$typeselect4<!--{/if}-->
+			<!--{/loop}-->
+		<!--{/if}-->
+		</dd>
 	
 		<dt><label for="type_comment">版主备注：</label></dt>
 		<dd>

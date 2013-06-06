@@ -306,6 +306,7 @@ class mod_control extends common_control {
 			$this->init_type_select($forum, $typeid1, $typeid2, $typeid3, $typeid4);
 			
 			$this->view->assign('fid', $fid);
+			$this->view->assign('forum', $forum);
 			
 			// hook mod_type_before.php
 			$this->view->display('mod_type_ajax.htm');
