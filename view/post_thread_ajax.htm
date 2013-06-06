@@ -12,12 +12,14 @@
 		<dd style="white-space: nowrap">
 			<!--{if $forumselect}-->$forumselect<!--{/if}-->
 			<span id="typeselect">
-			<!--{if $typeselect1 || $typeselect2 || $typeselect3 || $typeselect4}-->
-			<!--{if $typeselect1}-->$typeselect1<!--{/if}-->
-			<!--{if $typeselect2}-->$typeselect2<!--{/if}-->
-			<!--{if $typeselect3}-->$typeselect3<!--{/if}-->
-			<!--{if $typeselect4}-->$typeselect4<!--{/if}-->
-			<!--{/if}-->
+		<!--{if $typeselect1 || $typeselect2 || $typeselect3 || $typeselect4}-->
+			<!--{loop $forum[types] $cateid $types}-->
+				<!--{if $cateid == 1 && $typeselect1}-->$typeselect1<!--{/if}-->
+				<!--{if $cateid == 2 && $typeselect2}-->$typeselect2<!--{/if}-->
+				<!--{if $cateid == 3 && $typeselect3}-->$typeselect3<!--{/if}-->
+				<!--{if $cateid == 4 && $typeselect4}-->$typeselect4<!--{/if}-->
+			<!--{/loop}-->
+		<!--{/if}-->
 			</span>
 			<input type="text" name="subject" id="subject_$pid" value="$thread[subject]" style="width: 500px;" /> <span class="small grey">(200字)</span>
 		</dd>

@@ -15,10 +15,14 @@
 				$forumoptions
 			</select>
 			<span id="typeselect">
-			<!--{if $typeselect1}-->$typeselect1<!--{/if}-->
-			<!--{if $typeselect2}-->$typeselect2<!--{/if}-->
-			<!--{if $typeselect3}-->$typeselect3<!--{/if}-->
-			<!--{if $typeselect4}-->$typeselect4<!--{/if}-->
+		<!--{if $typeselect1 || $typeselect2 || $typeselect3 || $typeselect4}-->
+			<!--{loop $forum[types] $cateid $types}-->
+				<!--{if $cateid == 1 && $typeselect1}-->$typeselect1<!--{/if}-->
+				<!--{if $cateid == 2 && $typeselect2}-->$typeselect2<!--{/if}-->
+				<!--{if $cateid == 3 && $typeselect3}-->$typeselect3<!--{/if}-->
+				<!--{if $cateid == 4 && $typeselect4}-->$typeselect4<!--{/if}-->
+			<!--{/loop}-->
+		<!--{/if}-->
 			</span>
 		</dd>
 		

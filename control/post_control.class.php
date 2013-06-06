@@ -69,6 +69,7 @@ class post_control extends common_control {
 			$pid = 0;
 			$this->view->assign('fid', $fid);
 			$this->view->assign('pid', $pid);
+			$this->view->assign('forum', $forum);
 			
 			// 初始化 select 控件
 			$this->init_type_select($forum, $typeid1, $typeid2, $typeid3, $typeid4);
