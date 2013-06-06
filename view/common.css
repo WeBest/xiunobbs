@@ -146,6 +146,8 @@ a.icon:hover {background-image: url(image/icon-hover.gif)}
 /* 第八行 */
 .icon-qq {background-position: -0px -112px;}
 .icon-setting {background-position: -16px -112px;}
+.icon-image {background-position: -32px -112px;}
+.icon-attach {background-position: -48px -112px;}
 
 /* 其他动画图标 */
 span.icon-pm, span.icon-pm:hover{background-image: url(image/icon-pm.gif); _vertical-align: bottom;}
