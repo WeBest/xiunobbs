@@ -221,11 +221,11 @@ class post_control extends common_control {
 					$this->user->set_login_cookie($user);
 				}
 				
-				// 加入 $mypost
-				if(!$forum['accesson']) {
+				// 加入 $mypost，可能导致隐私泄露，需要在我的帖子那里进行过滤。
+				//if(!$forum['accesson']) {
 					$this->mypost->create(array('uid'=>$uid, 'fid'=>$fid, 'tid'=>$tid, 'pid'=>$pid));
 					$user['myposts']++;
-				}
+				//}
 				
 				// 更新 user
 				$this->user->update($user);
@@ -398,7 +398,7 @@ class post_control extends common_control {
 				}
 				
 				// 加入 $mypost
-				if(!$this->mypost->have_tid($uid, $fid, $tid) && !$forum['accesson']) {
+				if(!$this->mypost->have_tid($uid, $fid, $tid)) {
 					$this->mypost->create(array('uid'=>$uid, 'fid'=>$fid, 'tid'=>$tid, 'pid'=>$pid));
 					$user['myposts']++;
 				}
