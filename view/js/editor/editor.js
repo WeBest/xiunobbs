@@ -779,7 +779,7 @@ $.editor = function(textarea, settings) {
 			}
 			$('#__range_end__', _doc).remove();
 		}
-		$(_body).scrollTop(_this.bookmark.top);
+		if(range) $(_body).scrollTop(_this.bookmark.top);
 		if(clear) {
 			_this.bookmark.range = null;
 			_this.bookmark.top = 0;
