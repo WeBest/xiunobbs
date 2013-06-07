@@ -63,7 +63,19 @@ class you_control extends common_control {
 		$mypostlist = $this->mypost->get_list_by_uid($uid, $page, $pagesize);
 		$pages = misc::simple_pages("?you-post-uid-$uid.htm", count($mypostlist), $page, $pagesize);
 		
+		
 		foreach($mypostlist as &$post) {
+			
+			// 权限判断
+			$fid = $post['fid'];
+			if(!empty($this->conf['forumaccesson'][$fid])) {
+				$access = $this->forum_access->read($_fid, $groupid);
+				if(empty($access['allowread'])) {
+					$post = array();
+					continue;
+				}
+			}
+			
 			$post['forumname'] = isset($this->conf['forumarr'][$post['fid']]) ? $this->conf['forumarr'][$post['fid']] : '';
 			$this->mypost->format($post);
 		}

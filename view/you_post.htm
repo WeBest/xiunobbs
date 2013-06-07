@@ -15,11 +15,13 @@
 			<div class="header">参与主题</div>
 			<div class="body">
 				<!--{loop $mypostlist $post}-->
+				<!--{if $post}-->
 				<div style="line-height: 2.0">
 					<span class="grey"><a href="?forum-index-fid-$post[fid].htm" target="_blank">【$post[forumname]】</a></span><a href="?thread-index-fid-$post[fid]-tid-$post[tid]-page-$post[post][page].htm" target="_blank">$post[thread][subject]</a>
 					<span class="tiny grey">- $post[thread][dateline_fmt]</span>
 				</div>
 				<hr />
+				<!--{/if}-->
 				<!--{/loop}-->
 			<div class="footer"></div>
 		</div>
