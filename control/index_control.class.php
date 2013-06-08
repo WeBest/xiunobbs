@@ -21,16 +21,6 @@ class index_control extends common_control {
 	// 给插件预留个位置
 	public function on_index() {
 		
-		/*$expiry = 10;
-		$n = $this->online->index_delete(array('lastvisit'=>array('<'=>$expiry)));
-		$this->conf['onlines'] -= $n;
-		var_dump($n);
-		var_dump($this->conf['onlines']);
-		*/
-		
-		//$this->runtime->xset('onlines', 100);
-		
-		//exit;
 		// hook index_index_before.php
 		$this->on_bbs();
 	}

@@ -63,7 +63,7 @@ return array(
 		'type'=>'memcache',
 		'memcache'=>array (
 			'multi'=>0,
-			'host'=>'10.0.0.253',
+			'host'=>'127.0.0.1',
 			'port'=>'11211',
 		)
 	),
