@@ -192,6 +192,7 @@ class user_control extends common_control {
 					$error['user']['username'] = $userdb['username'];
 					$error['user']['auth'] = $this->user->get_xn_auth($userdb);
 					$error['user']['groupid'] = $userdb['groupid'];
+					$error['user']['uid'] = $uid; // 此处遗漏，感谢杨永全细心指正。
 					
 					$this->user->set_login_cookie($userdb, $clienttime + 86400 * 30);
 					$this->runtime->xset('users', '+1');
