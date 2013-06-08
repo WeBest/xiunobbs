@@ -51,11 +51,13 @@
 					<h2 id="subject_$tid">
 					
 						<!--{if $thread[top]}--><span class="icon icon-top-$thread[top]" style="margin-right: 2px;" title="置顶主题"></span><!--{/if}-->
-					
-						<!--{if $thread[typeid1]}--><a href="?forum-index-fid-$fid-typeid1-$thread[typeid1].htm" target="_blank" rel="nofollow">[{$thread[typename1]}]</a><!--{/if}-->
-						<!--{if $thread[typeid2]}--><a href="?forum-index-fid-$fid-typeid2-$thread[typeid2].htm" target="_blank" rel="nofollow">[{$thread[typename2]}]</a><!--{/if}-->
-						<!--{if $thread[typeid3]}--><a href="?forum-index-fid-$fid-typeid3-$thread[typeid3].htm" target="_blank" rel="nofollow">[{$thread[typename3]}]</a><!--{/if}-->
-						<!--{if $thread[typeid4]}--><a href="?forum-index-fid-$fid-typeid4-$thread[typeid4].htm" target="_blank" rel="nofollow">[{$thread[typename4]}]</a><!--{/if}-->
+									
+					<!--{loop $forum[types] $cateid $types}-->
+						<!--{if $cateid == 1 && $thread[typeid1]}--><a href="?forum-index-fid-$fid-typeid1-$thread[typeid1].htm" target="_blank" rel="nofollow">[{$thread[typename1]}]</a><!--{/if}-->
+						<!--{if $cateid == 2 && $thread[typeid2]}--><a href="?forum-index-fid-$fid-typeid2-$thread[typeid2].htm" target="_blank" rel="nofollow">[{$thread[typename2]}]</a><!--{/if}-->
+						<!--{if $cateid == 3 && $thread[typeid3]}--><a href="?forum-index-fid-$fid-typeid3-$thread[typeid3].htm" target="_blank" rel="nofollow">[{$thread[typename3]}]</a><!--{/if}-->
+						<!--{if $cateid == 4 && $thread[typeid4]}--><a href="?forum-index-fid-$fid-typeid4-$thread[typeid4].htm" target="_blank" rel="nofollow">[{$thread[typename4]}]</a><!--{/if}-->
+					<!--{/loop}-->
 					
 						$thread[subject]
 						

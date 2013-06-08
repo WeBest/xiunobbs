@@ -72,7 +72,7 @@ class my_control extends common_control {
 				$user['homepage'] = $homepage;
 				$this->user->update($user);
 				$error = array();
-				// hook my_homepage_after.php
+				// hook my_homepage_submit.php
 			}
 		}
 		$this->user->format($user);

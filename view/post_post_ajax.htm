@@ -102,6 +102,7 @@ function delay_execute(dialog, recall) {
 					button_text_style: ".theFont {font-size: 16;}",
 					button_window_mode: SWFUpload.WINDOW_MODE.TRANSPARENT,	// chrome may be does not work!
 					file_dialog_complete_handler : function(numFilesSelected, numFilesQueued) {
+						//_this.save_bookmark();
 						this.startUpload();
 					},
 					upload_start_handler : function(file) {

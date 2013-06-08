@@ -4,7 +4,7 @@
  * Copyright (C) xiuno.com
  */
 
-// 本程序用来重设管理员密码
+// 本程序用将 mysql 数据转换到 Mongodb
 /*
 	流程：
 		1. 上传 reset_admin.php 到网站根目录
@@ -30,8 +30,11 @@ include FRAMEWORK_PATH.'core.php';
 core::init();
 core::ob_start();
 
-$muser = new user($conf);
-$muser->update_password(1, '1');
+$mysql = new db_mysql($conf['db']['mysql']);
+$mogo = new db_mysql($conf['db']['mongodb']);
 
-echo '<h1>管理员(uid=1) 的密码已经重置为 1，请尽快登陆以后修改密码。</h1>';
+$tables = get_tables();
+foreach($tables as $table) {
+	// 获取id, 插入到数据库，按照正序
+}
 ?>
