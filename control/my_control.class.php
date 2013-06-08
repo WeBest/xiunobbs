@@ -222,8 +222,8 @@ class my_control extends common_control {
 		$this->_checked['my_follow'] = 'class="checked"';
 		$this->_checked['pm'] = 'class="checked"';
 		
-		$_user = $this->_user;
-		$uid = $_user['uid'];
+		$user = $this->_user;
+		$uid = $user['uid'];
 		
 		$this->_title[] = '最近联系人';
 		$this->_nav[] = '最近联系人';
@@ -232,6 +232,12 @@ class my_control extends common_control {
 		
 		// hook my_pm_before.php
 		$userlist = $this->pmnew->get_recent_userlist($uid);
+		
+		// 清理掉新短消息标志
+		if($user['newpms'] > 0) {
+			$user['newpms'] = 0;
+			$this->user->update($user);
+		}
 		
 		$this->view->assign('newlist', $newlist);
 		$this->view->assign('userlist', $userlist);
