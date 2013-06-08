@@ -234,6 +234,7 @@ class my_control extends common_control {
 		$userlist = $this->pmnew->get_recent_userlist($uid);
 		
 		// 清理掉新短消息标志
+		$user = $this->user->read($uid);
 		if($user['newpms'] > 0) {
 			$user['newpms'] = 0;
 			$this->user->update($user);
