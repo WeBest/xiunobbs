@@ -596,10 +596,10 @@ class mod_control extends common_control {
 			
 			// 判断积分是否足够
 			if($credits > 0 && $credits > $remain_credits) {
-				$this->message("本次评价积分不够！需要积分：$n, 剩余积分：$remain_credits", 0);
+				$this->message("本次评价积分不够！需要积分：$credits, 剩余积分：$remain_credits", 0);
 			}
 			if($golds > 0 && $golds > $remain_golds) {
-				$this->message("本次评价金币不够！需要金币：$n, 剩余金币：$remain_golds", 0);
+				$this->message("本次评价金币不够！需要金币：$golds, 剩余金币：$remain_golds", 0);
 			}
 			
 			/*
