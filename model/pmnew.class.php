@@ -12,6 +12,9 @@ class pmnew extends base_model{
 		parent::__construct($conf);
 		$this->table = 'pmnew';
 		$this->primarykey = array('recvuid', 'senduid');
+		
+		// 复制的方式
+		$this->conf = $conf;
 		$this->conf['cache']['enable'] = FALSE;	// 关闭 Memcached，短消息直接走MYSQL
 		
 		// hook pmnew_construct_end.php

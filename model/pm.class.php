@@ -11,6 +11,9 @@ class pm extends base_model {
 		$this->table = 'pm';
 		$this->primarykey = array('pmid');
 		$this->maxcol = 'pmid';
+		
+		// 复制的方式
+		$this->conf = $conf;
 		$this->conf['cache']['enable'] = FALSE;	// 关闭 Memcached，短消息直接走MYSQL
 		
 		// hook pm_construct_end.php
@@ -88,6 +91,9 @@ class pm extends base_model {
 			// 如果为两人的某轮第一条短消息
 			if($pmnew['count'] == 0) {
 				$recvuser['newpms']++;
+				$this->user->update($recvuser);
+			} else {
+				$recvuser['newpms'] = 2;
 				$this->user->update($recvuser);
 			}
 			$pmnew['count']++;

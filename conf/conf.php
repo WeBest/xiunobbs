@@ -59,7 +59,7 @@ return array(
 	// 1. 局域网内多台 cache server, 本机(127.0.0.1)，写操作通过UDP同步来保持一致性（Memcached UDP组播服务，可能存在安全性问题）。
 	// 2. 单台 proxy 管理多台 worker。
 	'cache' => array(
-		'enable'=>0,
+		'enable'=>1,
 		'type'=>'memcache',
 		'memcache'=>array (
 			'multi'=>0,
@@ -123,10 +123,10 @@ return array(
 	'click_server' => 'http://x.net/service/clickd/',	// 记录主题点击数，论坛点击数
 	
 	// 加密KEY，
-	'auth_key' => '141fa26eb516cc5918ae14001193b414',
+	'auth_key' => 'ea0abf56789bc6450b49834dcdfdee11',
 	
 	// 站点的ID，用来和官方通信，下载，安装插件。
-	'siteid' => '2caccfa837ba7cfeaa7a0e208561a3f7',
+	'siteid' => '9a1494d5ef99093c300813701b02b092',
 	
 	'cookie_pre' => 'bbs_',
 	'cookie_domain' => '',

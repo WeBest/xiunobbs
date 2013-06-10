@@ -10,6 +10,9 @@ class pmcount extends base_model{
 		parent::__construct($conf);
 		$this->table = 'pmcount';
 		$this->primarykey = array('uid1', 'uid2');
+		
+		// 复制的方式
+		$this->conf = $conf;
 		$this->conf['cache']['enable'] = FALSE;	// 关闭 Memcached，短消息直接走MYSQL
 		
 		// hook pmcount_construct_end.php
