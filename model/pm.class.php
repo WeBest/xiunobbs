@@ -12,8 +12,9 @@ class pm extends base_model {
 		$this->primarykey = array('pmid');
 		$this->maxcol = 'pmid';
 		
-		// 复制的方式
+		unset($this->conf);// 解除引用
 		$this->conf = $conf;
+		$this->old_conf = &$conf;
 		$this->conf['cache']['enable'] = FALSE;	// 关闭 Memcached，短消息直接走MYSQL
 		
 		// hook pm_construct_end.php
@@ -93,7 +94,7 @@ class pm extends base_model {
 				$recvuser['newpms']++;
 				$this->user->update($recvuser);
 			} else {
-				$recvuser['newpms'] = 2;
+				$recvuser['newpms'] = 1;
 				$this->user->update($recvuser);
 			}
 			$pmnew['count']++;
