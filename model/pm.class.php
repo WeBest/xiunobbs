@@ -93,9 +93,6 @@ class pm extends base_model {
 			if($pmnew['count'] == 0) {
 				$recvuser['newpms']++;
 				$this->user->update($recvuser);
-			} else {
-				$recvuser['newpms'] = 1;
-				$this->user->update($recvuser);
 			}
 			$pmnew['count']++;
 			$pmnew['dateline'] = $_SERVER['time'];

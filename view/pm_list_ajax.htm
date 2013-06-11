@@ -193,7 +193,15 @@ function delay_execute(dialog, recall) {
 							}
 							if(!g_newpm_userlist) {
 								$('#pm a.pm').show();
-								$('#pm a.newpm').hide()
+								$('#pm a.newpm').hide();
+								/*
+								// 如果没有新消息，去除节点
+								$('#pm_userlist a[uid={$touser[uid]}]').remove();
+								if($('#pm_userlist a').length == 0) {
+									$('#pm_userlist').closest('div.alert').remove();
+									$('#pm a.pm').show();
+									$('#pm a.newpm').hide();
+								}*/
 							}
 							// copy end.
 						});
@@ -207,7 +215,7 @@ function delay_execute(dialog, recall) {
 		}, 1000);
 	}
 	
-	// 去除节点, 有必要么？
+	// 如果没有新消息，去除节点
 	$('#pm_userlist a[uid={$touser[uid]}]').remove();
 	if($('#pm_userlist a').length == 0) {
 		$('#pm_userlist').closest('div.alert').remove();
