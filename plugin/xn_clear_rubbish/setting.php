@@ -5,18 +5,17 @@ $error = $input = array();
 $start = intval(core::gpc('start', 'R'));
 $fid = intval(core::gpc('fid', 'R'));
 $keepcredits = intval(core::gpc('keepcredits', 'R'));
-$startdate_html = core::gpc('startdate', 'R');
-$enddate_html = core::gpc('enddate', 'R');
-$keyword = core::gpc('keyword', 'R');
-$username = core::gpc('username', 'R');
+$startdate_html = urldecode(core::gpc('startdate', 'R'));
+$enddate_html = urldecode(core::gpc('enddate', 'R'));
+$keyword = urldecode(core::gpc('keyword', 'R'));
+$username = urldecode(core::gpc('username', 'R'));
 
 $startdate_url = core::urlencode($startdate_html);
 $enddate_url = core::urlencode($enddate_html);
 $startdate = strtotime($startdate_html);
-$enddate = strtotime($enddate_html);
+$enddate = strtotime($enddate_html) + 86400;
 $keyword_url = core::urlencode($keyword);
 $username_url = core::urlencode($username);
-
 if(!$this->form_submit() && empty($start)) {
 	
 	$input = array();
@@ -35,23 +34,24 @@ if(!$this->form_submit() && empty($start)) {
 	$this->view->display('xn_clear_rubbish.htm');
 } else {
 	
+	//echo date('Y-n-j H:i', $startdate);
+	//echo date('Y-n-j H:i', $enddate);
 	if(empty($start)) {
 		// 全站只读
 		$this->runtime->xset('site_runlevel', 4, 'runtime');
 		$this->kv->xset('site_runlevel', 4, 'conf');
 	}
 	
-	$limit = DEBUG ? 20 : 200;
+	$limit = DEBUG ? 1 : 200;
 	$arrlist = $this->thread->index_fetch(array('fid'=>$fid, 'tid'=>array('>'=>$start)), array('tid'=>1), 0, $limit);
 	if(!empty($arrlist)) {
 		$thread_return = array();
 		foreach($arrlist as $arr) {
 			$fid = $arr['fid'];
 			$tid = $arr['tid'];
-			if($starttime && $arr['dateline'] <= $starttime) continue;
-			if($endtime && $arr['dateline'] >= $endtime) continue;
+			if($startdate && $arr['dateline'] <= $startdate) continue;
+			if($enddate && $arr['dateline'] >= $enddate) continue;
 			if($keyword && stripos($arr['subject'], $keyword) !== FALSE) continue;
-			
 			$return = $this->thread->xdelete($fid, $tid, FALSE);
 			$this->thread->xdelete_merge_return($thread_return, $return);
 		}
