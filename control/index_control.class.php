@@ -42,9 +42,19 @@ class index_control extends common_control {
 			
 			// 去掉没有权限访问的版块数据
 			$fid = $thread['fid'];
-			if(!isset($this->conf['forumarr'][$fid])) {
+			// 略显粗暴，找到某些站长吐槽
+			/*if(!isset($this->conf['forumarr'][$fid])) {
 				unset($threadlist[$k]);
 				continue;
+			}*/
+			
+			// 那就多消耗点资源吧，谁让你不听话要设置权限。
+			if(!empty($this->conf['forumaccesson'][$fid])) {
+				$access = $this->forum_access->read($fid, $this->_user['groupid']); // 框架内部有变量缓存，此处不会重复查表。
+				if($access && !$access['allowread']) {
+					unset($threadlist[$k]);
+					continue;
+				}
 			}
 			
 			$readtids .= ','.$thread['tid'];
