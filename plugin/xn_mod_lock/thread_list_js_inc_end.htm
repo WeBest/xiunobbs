@@ -1,0 +1,12 @@
+<script>
+// 锁贴
+$('#mod_lock').click(function() {
+	var postdata = sep;
+	$.each($('#body input[name="tidarr[]"]:checked'), function(k, v) {
+		postdata += '&tidarr[]='+v.value;
+	});
+	ajaxdialog_request('?mod-lock-fid-$fid.htm'+postdata, function() {
+		window.location = '?forum-index-fid-$fid.htm';
+	});
+});
+</script>
