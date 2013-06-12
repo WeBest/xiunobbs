@@ -1,4 +1,3 @@
-<?php
 
 	// b 中位为1，设置对应的 a 的位为0
 	private function bit_set_zero($a, $b) {
