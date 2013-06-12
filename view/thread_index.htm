@@ -284,6 +284,10 @@ $('#mod_top').click(function() {
 	$.each($('#body input[name="tidarr[]"]:checked'), function(k, v) {
 		postdata += '&tidarr[]='+v.value;
 	});
+	if(postdata == sep) {
+		alert('请选择主题！');
+		return false;
+	}
 	ajaxdialog_request('?mod-top-fid-$fid.htm'+postdata, function() {
 		window.location.reload();
 	});
@@ -295,6 +299,10 @@ $('#mod_type').click(function() {
 	$.each($('#body input[name="tidarr[]"]:checked'), function(k, v) {
 		postdata += '&tidarr[]='+v.value;
 	});
+	if(postdata == sep) {
+		alert('请选择主题！');
+		return false;
+	}
 	ajaxdialog_request('?mod-type-fid-$fid.htm'+sep+postdata, function() {
 		window.location.reload();
 	});
@@ -322,6 +330,10 @@ $('#mod_delete').click(function() {
 	$.each($('#body input[name="tidarr[]"]:checked'), function(k, v) {
 		postdata += '&tidarr[]='+v.value;
 	});
+	if(postdata == sep) {
+		alert('请选择主题！');
+		return false;
+	}
 	ajaxdialog_request('?mod-delete-fid-$fid.htm'+postdata, function() {
 		window.location = '?forum-index-fid-$fid.htm';
 	});
@@ -333,6 +345,10 @@ $('#mod_move').click(function() {
 	$.each($('#body input[name="tidarr[]"]:checked'), function(k, v) {
 		postdata += '&tidarr[]='+v.value;
 	});
+	if(postdata == sep) {
+		alert('请选择主题！');
+		return false;
+	}
 	ajaxdialog_request('?mod-move-fid-$fid.htm'+postdata, function() {
 		window.location = '?forum-index-fid-$fid.htm';
 	});

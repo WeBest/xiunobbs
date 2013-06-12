@@ -17,7 +17,7 @@
 		define('XN_LOCK_STATUS_POST', 1);
 		define('XN_LOCK_STATUS_EDIT', 2);
 		define('XN_LOCK_STATUS_TYPE', 4);
-		define('XN_LOCK_STATUS_ATTACH', 5);
+		define('XN_LOCK_STATUS_ATTACH', 8);
 		
 		$fid = intval(core::gpc('fid'));
 		$tidarr = $this->get_tidarr();
@@ -36,12 +36,11 @@
 			$this->check_thread_exists($thread);
 			
 			$input = array();
-			$input['lockpost'] = form::get_checkbox_yes_no('lockpost', array(0, 1), $thread['closed'] & XN_LOCK_STATUS_POST);
-			$input['lockedit'] = form::get_checkbox_yes_no('lockedit', array(0, 1), $thread['closed'] & XN_LOCK_STATUS_EDIT);
-			$input['locktype'] = form::get_checkbox_yes_no('locktype', array(0, 1), $thread['closed'] & XN_LOCK_STATUS_TYPE);
-			$input['lockattach'] = form::get_checkbox_yes_no('lockattach', array(0, 1), $thread['closed'] & XN_LOCK_STATUS_ATTACH);
-			
-			$this->view->$input('input', $input);
+			$input['lockpost'] = form::get_checkbox_yes_no('lockpost', ($thread['closed'] & XN_LOCK_STATUS_POST) ? 1 : 0);
+			$input['lockedit'] = form::get_checkbox_yes_no('lockedit', ($thread['closed'] & XN_LOCK_STATUS_EDIT) ? 1 : 0);
+			$input['locktype'] = form::get_checkbox_yes_no('locktype', ($thread['closed'] & XN_LOCK_STATUS_TYPE) ? 1 : 0);
+			$input['lockattach'] = form::get_checkbox_yes_no('lockattach', ($thread['closed'] & XN_LOCK_STATUS_ATTACH) ? 1 : 0);
+			$this->view->assign('input', $input);
 			$this->view->assign('thread', $thread);
 			$this->view->assign('fid', $fid);
 			$this->view->assign('tid', $tid);
@@ -53,6 +52,7 @@
 			$lockedit = intval(core::gpc('lockedit', 'P'));
 			$locktype = intval(core::gpc('locktype', 'P'));
 			$lockattach = intval(core::gpc('lockattach', 'P'));
+			$systempm = intval(core::gpc('systempm', 'P'));
 			
 			$comment = core::gpc('comment', 'P');
 			$this->check_comment($comment);
@@ -69,9 +69,10 @@
 				if(empty($thread)) continue;
 					
 				$thread['closed'] = $lockpost ? ($thread['closed'] |= XN_LOCK_STATUS_POST) : $this->bit_set_zero($thread['closed'], XN_LOCK_STATUS_POST);
-				$thread['closed'] = $lockedit ? ($thread['closed'] |= XN_LOCK_STATUS_POST) : $this->bit_set_zero($thread['closed'], XN_LOCK_STATUS_POST);
+				$thread['closed'] = $lockedit ? ($thread['closed'] |= XN_LOCK_STATUS_EDIT) : $this->bit_set_zero($thread['closed'], XN_LOCK_STATUS_EDIT);
 				$thread['closed'] = $locktype ? ($thread['closed'] |= XN_LOCK_STATUS_TYPE) : $this->bit_set_zero($thread['closed'], XN_LOCK_STATUS_TYPE);
 				$thread['closed'] = $lockattach ? ($thread['closed'] |= XN_LOCK_STATUS_ATTACH) : $this->bit_set_zero($thread['closed'], XN_LOCK_STATUS_ATTACH);
+				$this->thread->update($thread);
 				
 				// 记录到版主操作日志
 				$this->modlog->create(array(
@@ -87,8 +88,6 @@
 					'action'=>$thread['closed'] == 0 ? 'unlock' : 'lock',
 					'comment'=>$comment,
 				));
-				
-				$this->thread->update($thread);
 				
 				$this->inc_modnum($fid, $tid);
 				

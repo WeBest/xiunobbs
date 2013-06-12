@@ -43,6 +43,8 @@ class cron extends base_model {
 			// $this->runtime->xsave();
 			
 			log::write('cron_1_next_time:'.date('Y-n-j H:i', $nexttime), 'cron.php');
+			
+			// hook cron_model_run_1_end.php
 		}
 		
 		// execute on 0:00 perday.
@@ -101,10 +103,14 @@ class cron extends base_model {
 			$this->conf['todayposts'] = 0;
 			$this->conf['todayusers'] = 0;
 			// $this->runtime->xsave();
+			
+			// hook cron_model_run_2_end.php
 		}
 		
 		// 释放锁
 		$this->runtime->set('cronlock', 0);
+		
+		// hook cron_model_run_end.php
 		
 	}
 }
