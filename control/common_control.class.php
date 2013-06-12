@@ -400,6 +400,8 @@ class common_control extends base_control {
 		$uid = $user['uid'];
 		$actiontext = array('read'=>'阅读帖子', 'thread'=>'发表帖子', 'post'=>'回帖', 'attach'=>'上传附件', 'down'=>'下载附件');
 		
+		// hook common_control_check_user_access_actiontext_after.php
+		
 		// 跳过检测
 		if(!isset($actiontext[$action])) return TRUE;
 		if($user['groupid'] == 1) return TRUE;
@@ -438,6 +440,9 @@ class common_control extends base_control {
 	// 检测用户组权限，优先级:2
 	protected function check_group_access($group, $action, &$message) {
 		$actiontext = array('read'=>'阅读帖子', 'thread'=>'发表帖子', 'post'=>'回帖', 'attach'=>'上传附件', 'down'=>'下载附件', 'top'=>'设置置顶', 'digest'=>'设置精华', 'move'=>'移动主题', 'update'=>'编辑主题', 'delete'=>'删除帖子', 'banuser'=>'禁止用户', 'deleteuser'=>'删除用户');
+		
+		// hook common_control_check_group_access_actiontext_after.php
+		
 		if(empty($group['allow'.$action])) {
 			$message = '您所在的用户组('.$this->_group['name'].')没有('.$actiontext[$action].')的权限。如果您有疑问，请联系管理员！';
 			return FALSE;
@@ -449,6 +454,8 @@ class common_control extends base_control {
 	// 检测版块权限，优先级:3
 	protected function check_forum_access($forum, $action = 'post', &$message) {
 		$actiontext = array('read'=>'阅读帖子', 'thread'=>'发表帖子', 'post'=>'回贴', 'attach'=>'上传附件', 'down'=>'下载附件');
+		
+		// hook common_control_check_forum_access_actiontext_after.php
 		
 		// 跳过检测
 		if(!isset($actiontext[$action])) return TRUE;
@@ -474,6 +481,8 @@ class common_control extends base_control {
 		$group = $this->_group;
 	
 		$adminaction = array('top'=>'设置置顶', 'digest'=>'设置精华', 'move'=>'移动主题', 'update'=>'编辑主题', 'delete'=>'删除帖子', 'banuser'=>'禁止用户', 'deleteuser'=>'删除用户');
+		
+		// hook common_control_check_access_adminaction_after.php
 		
 		if(!isset($adminaction[$action])) {
 			// 判断该用户是否已经被禁止该权限。
