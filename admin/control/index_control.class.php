@@ -90,7 +90,7 @@ class index_control extends admin_control {
 		$stat['posts'] = $this->post->count();
 		$stat['users'] = $this->user->count();
 		$stat['attachs'] = $this->attach->count();
-		$stat['disk_free_space'] = misc::humansize(disk_free_space('./'));
+		$stat['disk_free_space'] = function_exists('disk_free_space') ? misc::humansize(disk_free_space('./')) : '未知';
 		
 		
 		// 潜在错误检测，目录可写检测，避免搬家导致的问题。
