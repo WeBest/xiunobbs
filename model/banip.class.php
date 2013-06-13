@@ -52,8 +52,7 @@ class banip extends base_model {
 			$arrlist = $this->index_fetch(array('ip0'=>$ip[0], 'ip1'=>-1), array(), 0, 1);
 			empty($arrlist) && $this->index_fetch(array('ip0'=>$ip[0], 'ip1'=>$ip[1], 'ip2'=>-1), array(), 0, 1);
 			empty($arrlist) && $this->index_fetch(array('ip0'=>$ip[0], 'ip1'=>$ip[1], 'ip2'=>$ip[2], 'ip3'=>-1), array(), 0, 1);
-			empty($arrlist) && $this->index_fetch(array('ip0'=>$ip[0], 'ip1'=>$ip[1], 'ip2'=>$ip[2], 'ip3'=>$ip[3], 'ip4'=>-1), array(), 0, 1);
-			empty($arrlist) && $this->index_fetch(array('ip0'=>$ip[0], 'ip1'=>$ip[1], 'ip2'=>$ip[2], 'ip3'=>$ip[3], 'ip4'=>$ip[4]), array(), 0, 1);
+			empty($arrlist) && $this->index_fetch(array('ip0'=>$ip[0], 'ip1'=>$ip[1], 'ip2'=>$ip[2], 'ip3'=>$ip[3]), array(), 0, 1);
 			if($arrlist) return array_pop($arrlist);
 		}
 		return array();
