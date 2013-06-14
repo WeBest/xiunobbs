@@ -59,7 +59,7 @@ return array(
 	// 1. 局域网内多台 cache server, 本机(127.0.0.1)，写操作通过UDP同步来保持一致性（Memcached UDP组播服务，可能存在安全性问题）。
 	// 2. 单台 proxy 管理多台 worker。
 	'cache' => array(
-		'enable'=>1,
+		'enable'=>0,
 		'type'=>'memcache',
 		'memcache'=>array (
 			'multi'=>0,

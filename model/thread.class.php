@@ -76,20 +76,23 @@ class thread extends base_model {
 		$thread['posts_fmt'] = max(0, $thread['posts'] - 1);	// 用来前端显示
 		$thread['lastpost_fmt'] = misc::humandate($thread['lastpost']);
 		empty($thread['lastpost']) && $thread['lastpost'] = $thread['dateline'];
+		$fid = $thread['fid'];
 		if($forum) {
+			$thread['forum_types'] = &$forum['types'];
 			$thread['typename1'] = $thread['typeid1'] && isset($forum['types'][1][$thread['typeid1']]) ? $forum['types'][1][$thread['typeid1']] : '';
 			$thread['typename2'] = $thread['typeid2'] && isset($forum['types'][2][$thread['typeid2']]) ? $forum['types'][2][$thread['typeid2']] : '';
 			$thread['typename3'] = $thread['typeid3'] && isset($forum['types'][3][$thread['typeid3']]) ? $forum['types'][3][$thread['typeid3']] : '';
 			$thread['typename4'] = $thread['typeid4'] && isset($forum['types'][4][$thread['typeid4']]) ? $forum['types'][4][$thread['typeid4']] : '';
 		} else {
-			static $typearr = FALSE;
-			$typearr === FALSE && $typearr = $this->thread_type->get_typearr_from_cache();
-			$thread['typename1'] = $thread['typeid1'] && !empty($typearr[$thread['fid']][$thread['typeid1']]) ? $typearr[$thread['fid']][$thread['typeid1']] : '';
-			$thread['typename2'] = $thread['typeid2'] && !empty($typearr[$thread['fid']][$thread['typeid2']]) ? $typearr[$thread['fid']][$thread['typeid2']] : '';
-			$thread['typename3'] = $thread['typeid3'] && !empty($typearr[$thread['fid']][$thread['typeid3']]) ? $typearr[$thread['fid']][$thread['typeid3']] : '';
-			$thread['typename4'] = $thread['typeid4'] && !empty($typearr[$thread['fid']][$thread['typeid4']]) ? $typearr[$thread['fid']][$thread['typeid4']] : '';
+			static $types = FALSE;
+			$types === FALSE && $types = $this->thread_type->get_types_from_cache();
+			$thread['typename1'] = $thread['typeid1'] && !empty($types[$fid][1][$thread['typeid1']]) ? $types[$fid][1][$thread['typeid1']] : '';
+			$thread['typename2'] = $thread['typeid2'] && !empty($types[$fid][2][$thread['typeid2']]) ? $types[$fid][2][$thread['typeid2']] : '';
+			$thread['typename3'] = $thread['typeid3'] && !empty($types[$fid][3][$thread['typeid3']]) ? $types[$fid][3][$thread['typeid3']] : '';
+			$thread['typename4'] = $thread['typeid4'] && !empty($types[$fid][4][$thread['typeid4']]) ? $types[$fid][4][$thread['typeid4']] : '';
+			$thread['forum_types'] = &$types[$fid];
 		}
-		$thread['forumname'] = isset($this->conf['forumarr'][$thread['fid']]) ? $this->conf['forumarr'][$thread['fid']] : '';
+		$thread['forumname'] = isset($this->conf['forumarr'][$fid]) ? $this->conf['forumarr'][$fid] : '';
 		
 		// 精华 火帖 新帖 老帖
 		if($thread['digest'] > 0) {
