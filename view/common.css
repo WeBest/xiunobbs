@@ -295,7 +295,7 @@ span.nopic {width: 54px; height: 54px; background: url(image/nopic.gif) no-repea
 #footer pre {background: none repeat scroll 0 0 #4C525F; border: 1px solid #363C4A; color: #7D828E; margin: 8px;}
 
 /* 内容显示区域的宽度 */
-.width {width: 980px; margin: auto; overflow: hidden;}
+.width {width: 960px; margin: auto; overflow: hidden;}
 /* 最大最小宽度范围的写法：
 .width {
 	width: 98%; min-width: 984px; max-width: 1280px; padding: 0px 8px; 
