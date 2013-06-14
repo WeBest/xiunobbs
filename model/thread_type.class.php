@@ -72,19 +72,37 @@ class thread_type extends base_model {
 		return $typelist;
 	}
 	
-	// 获取所有的 thread_type
+	// 获取所有的 thread_type, 2.0.3 2013/6/14 以后废弃此方法
 	public function get_typearr_from_cache() {
 		// 主题分类数据
 		$typearr = $this->runtime->get('typearr');
 		if($typearr === FALSE) {
 			$threadtypelist = $this->get_list();
 			$typearr = array();
+			misc::arrlist_multisort($threadtypelist, 'rank', 1);
 			foreach($threadtypelist as $threadtype) {
 				$typearr[$threadtype['fid']][$threadtype['typeid']] = $threadtype['typename'];
 			}
 			$this->runtime->set('typearr', $typearr, 600000); // todo:一分钟的缓存时间！这里可以根据负载进行调节。
 		}
 		return $typearr;
+	}
+	
+	// 2.0.3 2013/6/14 以后启用此方法
+	public function get_types_from_cache() {
+		// 主题分类数据
+		$types = $this->runtime->get('types');
+		if($types === FALSE) {
+			// 所有板块的主题分类数据
+			$forumarr = $this->conf['forumarr'];
+			foreach($forumarr as $fid=>$forumname) {
+				$forum = $this->forum->read($fid);
+				$this->forum->format_thread_type($forum);
+				$types[$fid] = $forum['types'];
+			}
+			$this->runtime->set('types', $types, 600000); // todo:一分钟的缓存时间！这里可以根据负载进行调节。
+		}
+		return $types;
 	}
 	
 	// 返回非空的主题分类, cateid = 1, 2, 3，排序？

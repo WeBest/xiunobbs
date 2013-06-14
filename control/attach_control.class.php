@@ -124,7 +124,10 @@ class attach_control extends common_control {
 		$this->attach->update($attach);
 		
 		// 不管是否为收费附件，隐藏附件真实地址！主要是为了安全，盗链，IE图片解析。
-		if($attach['golds'] > 0) {
+		
+		// iis 6.0 居然不支持 xxx.torrent 这种文件名的直接请求，很无语！
+		$iis6 = isset($_SERVER['SERVER_SOFTWARE']) && $_SERVER['SERVER_SOFTWARE'] == 'Microsoft-IIS/6.0';
+		if($attach['golds'] > 0 || $iis6) {
 			
 			// 默认开启压缩加快下载速度！
 			//$_SERVER['ob_no_gzip'] = 1;

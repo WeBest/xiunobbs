@@ -27,6 +27,8 @@ class post_control extends common_control {
 		$this->_title[] = '发表帖子';
 		$this->_nav[] = '发表帖子';
 		
+		// hook post_control_on_thread_start.php
+		
 		$this->check_login();
 		$this->check_forbidden_group();
 		
@@ -77,6 +79,8 @@ class post_control extends common_control {
 		$this->check_access($forum, 'thread');
 		
 		$this->check_user_delete($user);
+		
+		// hook post_control_on_thread_submit_before.php
 		
 		if(!$this->form_submit()) {
 			
@@ -256,6 +260,8 @@ class post_control extends common_control {
 		$tid = intval(core::gpc('tid'));
 		$quickpost = intval(core::gpc('quickpost'));
 		
+		// hook post_control_on_post_start.php
+		
 		$this->check_login();
 		$this->check_forbidden_group();
 		
@@ -279,6 +285,8 @@ class post_control extends common_control {
 		$forum = $this->mcache->read('forum', $fid);
 		$this->check_forum_exists($forum);
 		$this->check_access($forum, 'post');
+		
+		// hook post_control_on_post_submit_before.php
 		
 		if(!$this->form_submit()) {
 			
@@ -448,6 +456,8 @@ class post_control extends common_control {
 		$this->_title[] = '修改帖子';
 		$this->_nav[] = '修改帖子';
 		
+		// hook post_control_on_update_start.php
+		
 		$this->check_login();
 		$this->check_forbidden_group();
 		
@@ -486,6 +496,8 @@ class post_control extends common_control {
 		
 		// 是否为首帖
 		$isfirst = $thread['firstpid'] == $pid;
+		
+		// hook post_control_on_update_submit_before.php
 		
 		$input = $error = array();
 		if(!$this->form_submit()) {
@@ -613,6 +625,8 @@ class post_control extends common_control {
 	public function on_delete() {
 		$this->_title[] = '删除帖子';
 		$this->_nav[] = '删除帖子';
+		
+		// hook post_control_on_delete_start.php
 		
 		// 检查是否为 post 提交
 		if(!core::gpc('formhash', 'P')) {
