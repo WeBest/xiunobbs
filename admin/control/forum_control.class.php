@@ -365,6 +365,7 @@ class forum_control extends admin_control {
 			
 			$this->runtime->xupdate('forumarr');
 			$this->runtime->delete('typearr');
+			$this->mcache->clear('forum', $fid);
 			$this->message("删除 fid: $fid 完毕 ...", 1, "?forum-delete-fid-$fid.htm");
 		} else {
 			// 分批删除主题。
