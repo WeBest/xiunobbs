@@ -5,13 +5,13 @@ $error = $input = array();
 $start = intval(core::gpc('start', 'R'));
 $fid = intval(core::gpc('fid', 'R'));
 $keepcredits = intval(core::gpc('keepcredits', 'R'));
-$startdate_html = urldecode(core::gpc('startdate', 'R'));
-$enddate_html = urldecode(core::gpc('enddate', 'R'));
+$startdate_html = str_replace('_', '-', core::gpc('startdate', 'R'));
+$enddate_html = str_replace('_', '-', core::gpc('enddate', 'R'));
 $keyword = urldecode(core::gpc('keyword', 'R'));
 $username = urldecode(core::gpc('username', 'R'));
 
-$startdate_url = core::urlencode($startdate_html);
-$enddate_url = core::urlencode($enddate_html);
+$startdate_url = str_replace('-', '_', $startdate_html);
+$enddate_url = str_replace('-', '_', $enddate_html);
 $startdate = strtotime($startdate_html);
 $enddate = strtotime($enddate_html) + 86400;
 $keyword_url = core::urlencode($keyword);
