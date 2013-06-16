@@ -117,7 +117,10 @@ if(empty($step) || $step == 'checklicense') {
 		$timeoffset = core::gpc('timeoffset', 'P');
 		$error = '';
 		if($type == 'mysql') {
-			$link = @mysql_connect($host, $user, $pass, TRUE);
+			if(!function_exists('mysql_connect')) {
+				message('函数 mysql_connect() 不存在，请检查 php.ini 是否加载了 mysql 模块。');
+			}
+			$link = mysql_connect($host, $user, $pass, TRUE);
 			if(!$link) {
 				$error = 'MySQL 账号密码可能有误：<span class="small">'.mysql_error().'</span>';
 			} else {
