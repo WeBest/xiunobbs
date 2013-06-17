@@ -33,11 +33,11 @@
 		<tr>
 			<td width="70" valign="top">
 				<div>
-					<a href_real="?you-index-uid-$u[uid].htm" target="_blank" href="?you-profile-uid-$u[uid]-ajax-1.htm" class="ajaxdialog_hover" ajaxdialog="{position: 5, modal: false, timeout: 1000, showtitle: false}" onclick="return false;" style="display: block" rel="nofollow">
+					<a href_real="?you-index-uid-$u[uid].htm" target="_blank" href="?you-profile-uid-$u[uid]-ajax-1.htm" class="ajaxdialog_hover" ajaxdialog="{position: 5, modal: false, timeout: 1000, showtitle: false}" onclick="return false;" style="display: block" rel="nofollow" aria-label="$u[username] $post[floor]楼">
 						<span class="avatar_middle border bg1" {if $u[avatar_middle]}style="background-image: url($u[avatar_middle])"{/if}></span>
 					</a>
 				</div>
-				<div style="word-break:break-all;" aria-label="$u[username] $post[floor]楼">$u[username]</div>
+				<div style="word-break:break-all;">$u[username]</div>
 				<!--{hook thread_index_userinfo.htm}-->
 			</td>
 			<td width="15"></td>
@@ -225,7 +225,7 @@
 				<div class="bg1 border shadow" style="padding: 8px;">
 					<form action="?post-post-fid-$thread[fid]-tid-$thread[tid]-ajax-1-quickpost-1.htm" method="post" id="quick_post_form" target="_blank">
 						<input type="hidden" name="FORM_HASH" value="{FORM_HASH}" />
-						<textarea name="message" id="quick_message" style="width: 100%; height: 60px; font-size: 14px; overflow: hidden;"></textarea>
+						<textarea name="message" id="quick_message" style="width: 100%; height: 60px; font-size: 14px; overflow: hidden;" aria-label="快速回复内容"></textarea>
 						<div style="margin-top: 4px;">
 							<div style="width: 50%; float: left;">
 								<input type="submit" class="button smallblue" id="quick_post_submit" value="快速回复" />
