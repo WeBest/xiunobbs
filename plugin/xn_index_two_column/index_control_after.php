@@ -20,7 +20,6 @@
 			$fid = $thread['fid'];
 			if(!isset($this->conf['forumarr'][$fid])) {
 				unset($threadlist[$k]);
-				$unset1++;
 				continue;
 			}
 			$thread['subject_fmt'] = utf8::substr($thread['subject'], 0, 32);
@@ -64,7 +63,6 @@
 			$fid = $thread['fid'];
 			if(!isset($this->conf['forumarr'][$fid])) {
 				unset($digestlist[$k]);
-				$unset1++;
 				continue;
 			}
 			$thread['subject_fmt'] = utf8::substr($thread['subject'], 0, 18);
