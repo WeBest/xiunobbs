@@ -6,18 +6,20 @@
 <!--{hook footer_start.htm}-->
 
 <div id="footer" role="contentinfo">
-	<div style="height: 35px; padding: 8px;" class="width">
-		<div style="width: 40%; float: left;">
-			$conf[app_copyright]<br />
-			Powered by  <a href="http://www.xiuno.com" target="_blank" class="grey">Xiuno BBS <b>$conf[version]</b></a>
-			<!--{hook footer_version_after.htm}-->
-		</div>
-		<div style="width: 60%; float: right; text-align: right;">
-			$conf[china_icp]<br />
-			$_SERVER[time_fmt], 耗时:<!--{php echo number_format(microtime(1) - $_SERVER['starttime'], 4);}-->s
-			<!--{hook footer_time_after.htm}-->
-		</div>
-	</div>
+	<table class="width">
+		<tr>
+			<td class="left">
+				$conf[app_copyright]<br />
+				Powered by  <a href="http://www.xiuno.com" target="_blank" class="grey">Xiuno BBS <b>$conf[version]</b></a>
+				<!--{hook footer_version_after.htm}-->
+			</td>
+			<td class="right">
+				$conf[china_icp]<br />
+				$_SERVER[time_fmt], 耗时:<!--{php echo number_format(microtime(1) - $_SERVER['starttime'], 4);}-->s
+				<!--{hook footer_time_after.htm}-->
+			</td>
+		</tr>
+	</table>
 	<!--{require footer_debug.htm}-->
 </div>
 
