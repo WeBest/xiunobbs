@@ -79,7 +79,7 @@ class common_control extends base_control {
 	
 	private function init_ip() {
 		// 通过代理发送的头获取用户真实IP
-		if(!empty($this->conf['cdn_ip'])) {
+		if(!empty($this->conf['cdn_ip']) && in_array($_SERVER['ip'], $this->conf['cdn_ip'])) {
 			$realip = core::gpc('HTTP_X_FORWARDED_FOR', 'S');
 			empty($realip) && $realip = core::gpc('HTTP_CLIENT_IP', 'S');
 			if(preg_match('#^\d+(\.\d+){3}$#', $realip)) {
