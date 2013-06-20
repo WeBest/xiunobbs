@@ -1,20 +1,20 @@
 <style>
-body {background: #000000 url(plugin/xn_view_sc/body_bg.jpg) top center; color: #424242;}
+html {background: url(plugin/xn_view_sc/body_bg.gif) top center repeat-y;}
+body {background: url(plugin/xn_view_sc/body_bg.jpg) top center no-repeat; color: #424242;}
 a {color: #424242;}
 a:hover{color: #0088CC;}
 #threadtype a.checked{font-weight: 100; color: #0088CC;}
 
-#logo {background: url(plugin/xn_view_apple/logo.gif) no-repeat; width: 76px; height: 38px; margin-left: 0px;}
-#menu {background: transparent; margin-top: 130px;}
+#menu {height: 38px; background: transparent; padding-top: 130px;}
 #menu td{height: 38px; line-height: 38px; white-space: nowrap;}
 #menu td.left{width: 14px; height: 38px; }
-#menu td.logo{width: 82px; text-align: ceznter;}
-#menu td.right{width: 14px; height: 38px; background: url(plugin/xn_view_apple/menu.gif) -14px 0px no-repeat;}
-#menu td.center a{height: 38px; background: url(plugin/xn_view_apple/menu.gif) -0px -38px; color: #FFFFFF; font-weight: normal; padding-left: 16px; padding-right: 16px;}
-#menu td.center a:hover{height: 38px; background: url(plugin/xn_view_apple/menu.gif) -0px -76px;}
-#menu td.center a.checked{height: 38px; background: url(plugin/xn_view_apple/menu.gif) -0px -114px;}
-#menu td.center span.sep {width: 3px; height: 38px; background: url(plugin/xn_view_apple/menu.gif) 0px -152px no-repeat;}
-	#search {width: 109px; height: 21px; background: url(plugin/xn_view_apple/nav_search.gif) no-repeat;}
+#menu td.logo{background: none; width: 0px; text-align: ceznter; overflow: hidden;}
+#menu td.right{width: 0px;}
+#menu td.center a{height: 38px; background: transparent none; color: #FFFFFF; font-weight: normal; padding-left: 16px; padding-right: 16px;}
+#menu td.center a:hover{height: 38px; background: url(plugin/xn_view_sc/menu.gif) 0px -38px;}
+#menu td.center a.checked{height: 38px; background: url(plugin/xn_view_sc/menu.gif) 0px 0px;}
+#menu td.center span.sep {width: 3px; height: 38px; background: url(plugin/xn_view_sc/menu.gif) -0px -76px no-repeat;}
+	#search {width: 109px; height: 21px; background: url(plugin/xn_view_apple/nav_search.gif) no-repeat; margin-top: -40px; z-index:10; position: absolute;}
 	#search.hover {width: 109px; height: 21px; background: url(plugin/xn_view_apple/nav_search.gif) 0px -21px no-repeat;}
 	#search input{width: 109px; height: 21px;}
 	#pm_userlist a{margin-left: 0px;}
