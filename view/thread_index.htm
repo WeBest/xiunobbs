@@ -212,9 +212,9 @@
 		<tr>
 			<td width="70" valign="top">
 				<div>
-					<a href_real="?you-index-uid-$_user[uid].htm" target="_blank" href="?you-profile-uid-$_user[uid]-ajax-1.htm" class="ajaxdialog_hover" ajaxdialog="{position: 5, modal: false, timeout: 1000, showtitle: false}" onclick="return false;" style="display: block" rel="nofollow">
+					<!--{if $_user[uid]}--><a href_real="?you-index-uid-$_user[uid].htm" target="_blank" href="?you-profile-uid-$_user[uid]-ajax-1.htm" class="ajaxdialog_hover" ajaxdialog="{position: 5, modal: false, timeout: 1000, showtitle: false}" onclick="return false;" style="display: block" rel="nofollow"><!--{/if}-->
 						<span class="avatar_middle border bg1" {if !empty($_user[avatar_middle])}style="background-image: url($_user[avatar_middle])"{/if}></span>
-					</a>
+					<!--{if $_user[uid]}--></a><!--{/if}-->
 				</div>
 				<div style="word-break:break-all;">$_user[username]</div>
 				<div class="grey small">$_user[groupname]</div>

@@ -25,6 +25,11 @@ class you_control extends common_control {
 		
 		$this->you = $user;
 		$this->view->assign('you', $this->you);
+				
+		if(misc::is_robot()) {
+			header("HTTP/1.0 403 Forbidden");
+			exit;
+		}
 	}
 	
 	// 我看别人的空间首页，个人资料
