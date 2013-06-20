@@ -33,6 +33,7 @@ class common_control extends base_control {
 		// hook common_control_construct_after.php
 		
 		$this->init_conf();
+		$this->init_ip();
 		$this->init_timezone();
 		$this->init_view();
 		$this->init_sid();
@@ -74,6 +75,19 @@ class common_control extends base_control {
 		isset($runtime['view_convert_button']) && $this->conf['view_convert_button'] = $runtime['view_convert_button'];
 		
 		// hook common_control_init_runtime_after.php
+	}
+	
+	private function init_ip() {
+		// 通过代理发送的头获取用户真实IP
+		if(!empty($this->conf['cdn_ip'])) {
+			$realip = core::gpc('HTTP_X_FORWARDED_FOR', 'S');
+			empty($realip) && $realip = core::gpc('HTTP_CLIENT_IP', 'S');
+			if(preg_match('#^\d+(\.\d+){3}$#', $realip)) {
+				$_SERVER['ip'] = $realip;
+			}
+		}
+		
+		// hook common_control_init_ip_after.php
 	}
 	
 	private function init_timezone() {
