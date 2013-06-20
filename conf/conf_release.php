@@ -77,7 +77,7 @@ return array(
 	// CDN 缓存的静态域名，如 http://static.domain.com/
 	'static_url' => 'http://xiuno.net/',
 	
-	// CDN IP 列表，设置以后，IP 地址的获取将以 X-FORWARD-FOR 为准。
+	// CDN IP 列表，设置以后，IP 地址的获取将以 X-FORWARD-FOR 为准，多个IP格式：array('192.168.1.1', '192.168.1.2', '192.168.1.3')
 	'cdn_ip' => array(),
 	
 	// 模板使用的目录，按照顺序搜索，这样可以支持风格切换,结果缓存在 tmp/bbs_xxx.htm.php
