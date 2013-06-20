@@ -38,7 +38,12 @@ class thread_control extends common_control {
 		// SEO 优化
 		$this->_title[] = $thread['subject'];
 		$this->_title[] = $forum['name'];
-		
+		foreach($forum['types'] as $cateid=>$types) {
+			if($cateid == 1 && $thread['typeid1']) $this->_title[] = $thread['typename1'];
+			if($cateid == 2 && $thread['typeid2']) $this->_title[] = $thread['typename2'];
+			if($cateid == 3 && $thread['typeid3']) $this->_title[] = $thread['typename3'];
+			if($cateid == 4 && $thread['typeid4']) $this->_title[] = $thread['typename4'];
+		}
 		
 		// hook thread_index_fetch_before.php
 		
