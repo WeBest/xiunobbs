@@ -128,8 +128,6 @@ a.icon:hover {background-image: url(image/icon-hover.gif)}
 .icon-delete { background-position: -64px -64px; }
 
 /* 第六行 */
-.icon-toggle-open {width: 10px; height: 10px; background-position: -0px -80px;}
-.icon-toggle-close {width: 10px; height: 10px; background-position: -16px -80px;}
 .icon-left-arrow {width: 10px; height: 9px; background-position: -32px -80px;}
 .icon-pm-left-arrow {width: 14px; height: 9px; background-position: -64px -80px;}
 .icon-pm-right-arrow {width: 14px; height: 9px; background-position: -80px -80px;}

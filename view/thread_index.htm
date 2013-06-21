@@ -516,7 +516,7 @@ $(function() {
 bind_document_keyup_page();
 
 $('.post').bind( {
-	'mouseover':function() {$('div.mod', this).stop(true, false).css({background: '#FFFFFF'}).fadeTo(600, 1);}, 
+	'mouseover':function() {$('div.mod', this).stop(true, false).addClass('bg2').fadeTo(600, 1);}, 
 	'mouseout':function() {$('div.mod', this).stop(true, false).delay(500).fadeTo(600, 0);}
 });
 
