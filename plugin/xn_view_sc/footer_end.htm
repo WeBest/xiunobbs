@@ -2,7 +2,7 @@
 var win_height = $(window).height();
 var body_height = $(body).height();
 var footer_height = 281;
-if(win_height > body_height) {
+if(win_height > body_height + 281) {
 	$('#footer').css('margin-top', (win_height - body_height - footer_height) + 'px');
 }
 </script>
