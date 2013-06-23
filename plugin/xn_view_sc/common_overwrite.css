@@ -19,7 +19,7 @@ a:hover{color: #FFFFFF;}
 	#search input{width: 188px; height: 28px; padding-left: 8px;}
 	#pm_userlist a{margin-left: 0px;}
 #body {background: none;}
-input, textarea, select {background: #5E240B; border: 1px solid #85330F; color: #EF7742; padding: 2px;}
+input, textarea, select {background: #290E02; border: 1px solid #471A08; color: #E9AE02; padding: 2px;}
 textarea {background: #3B1707; border: 1px solid #662A11;}
 
 
@@ -76,19 +76,19 @@ a.icon:hover {background-image: url(icon-hover.gif);}
 
 .grey, .grey a {color: #70523D;}
 .grey2, .grey2 a {color: #552C09;}
-div.div {background: #2B1507; border: 1px solid #512514;}
+div.div {background: #190E08; border: 1px solid #36190D;}
 div.div div.header {background: #2B1507 url(bg6.gif) repeat-x; border-bottom: #48230C; color: #EBDBC4; text-shadow: none;}
-div.div div.body {background: #2B1507;}
-.list {background: none repeat scroll 0 0 #2B1507; border-color: #512514;}
+div.div div.body {background: #190E08;}
+.list {background: none repeat scroll 0 0 #2B1507; border-color: #36190D;}
 .list .table td {border-bottom: 1px solid #48230C;}
-.list .table .header td{background: #2B1507 url(bg6.gif) repeat-x; border-bottom: 1px solid #512514; text-shadow: none;}
-.list .table tr.odd {background: #512514;}	/* 奇数行的背景色 */
+.list .table .header td{background: #2B1507 url(bg6.gif) repeat-x; border-bottom: 1px solid #36190D; text-shadow: none;}
+.list .table tr.odd {background: #36190D;}	/* 奇数行的背景色 */
 
 #user a{color: #FAB004;}
 #user a:hover{color: #FFFFFF;}
 
-.bg1 {background: #2B1507}
-.bg2 {background: #391C0A;}
+.bg1 {background: #190E08}
+.bg2 {background: #25140A;}/**/
 .bg3 {background: #4D1A03} 
 .bg4 {background: #7D3413}
 .bg5 {background: url(bg5.gif) repeat-x;}
@@ -108,7 +108,7 @@ span.nopic {background: url(nopic.gif) no-repeat;}
 .thread-hot.read, .thread-hot.read:hover {color: #751E07}
 .thread-digest-1.read, .thread-digest-1.read:hover {color: #0D5F30;}
 .thread-digest-2.read, .thread-digest-2.read:hover {color: #15447E;}
-.thread-digest-3.read, .thread-digest-3.read:hover {color: #6E1E3E;}
+.thread-digest-3.read, .thread-digest-3.read:hover {color: #68002E;}
 .subject_type.read {color: #552C09}
 .page a, .page a.checked{background-image: url(page.gif); border: 1px solid #361707}
 .page a {color: #190E08}
@@ -122,7 +122,10 @@ span.icon-newpm, span.icon-newpm:hover {background-image: url(icon-newpm.gif);}
 
 .dialog div.header {border-bottom: 1px solid #48230C;}
 
-hr {border-top: 1px solid #4C2810;}
-.code, .quote, pre {background: #401A0A; border-color: #6C2C12; color: #AA4922;}
-
+hr {border-top: 1px solid #281105;}
+.code, .quote, pre {background: #281006; border-color: #451C0B; color: #AA4922;}
 .post table td {border: 1px solid #7D3413;}
+
+
+.leftmsg {background: none repeat scroll 0 0 #46210C; border: 1px solid #662A11;}
+.rightmsg {background: none repeat scroll 0 0 #1A4D1A; border: 1px solid #196519;}
