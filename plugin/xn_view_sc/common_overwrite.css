@@ -14,9 +14,9 @@ a:hover{color: #FFFFFF;}
 #menu td.center a:hover{height: 38px; background: none; color: #FFFFFF;}
 #menu td.center a.checked{height: 38px; background: url(menu.gif) 0px 0px; color: #FFFFFF;}
 #menu td.center span.sep {width: 3px; height: 38px; background: url(menu.gif) -0px -76px no-repeat;}
-	#search { display: none; width: 109px; height: 21px; background: url(nav_search.gif) no-repeat; margin-top: -40px; z-index:10; position: absolute;}
-	#search.hover {width: 109px; height: 21px; background: url(nav_search.gif) 0px -21px no-repeat;}
-	#search input{width: 109px; height: 21px;}
+	#search {width: 188px; height: 28px; background: url(search.jpg) no-repeat; margin-top: -71px; margin-left: -60px; z-index:10; position: absolute;}
+	#search.hover {width: 188px; height: 28px; background: url(search.jpg) 0px -28px no-repeat;}
+	#search input{width: 188px; height: 28px; padding-left: 8px;}
 	#pm_userlist a{margin-left: 0px;}
 #body {background: none;}
 input, textarea, select {background: #5E240B; border: 1px solid #85330F; color: #EF7742; padding: 2px;}
@@ -123,6 +123,6 @@ span.icon-newpm, span.icon-newpm:hover {background-image: url(icon-newpm.gif);}
 .dialog div.header {border-bottom: 1px solid #48230C;}
 
 hr {border-top: 1px solid #4C2810;}
-.code, .quote, pre {background: #521E09; border-color: #6C2C12; color: #AA4922;}
+.code, .quote, pre {background: #401A0A; border-color: #6C2C12; color: #AA4922;}
 
 .post table td {border: 1px solid #7D3413;}
