@@ -240,7 +240,8 @@ $.editor = function(textarea, settings) {
 		//var baseadd = _this.settings.baseurl ? '' : '';// <base href="' +  + '" />
 		var baseadd = '';
 		// 针对ie, 这里不能加 <!doctype , 否则不能编辑, document.documentElement 设置为可编辑模式也不行，只能使用非标准模型。
-		_doc.write('<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="zh-CN" dir="ltr" style="overflow: auto"><head>'+baseadd+'<meta content="text/html; charset=UTF-8" http-equiv="Content-Type"/><link rel="stylesheet" href="' + _this.settings.baseurl + 'iframe.css"/></head><body spellcheck="false" hidefocus="false" contentEditable="yes" designMode="on" style="overflow: auto; min-height: '+(_this.settings.height - 60)+'px" class="post">'+$(textarea).val()+'</body><script>function myfocus(){if(navigator.userAgent.indexOf("Firefox")>0){window.focus();}else{document.body.focus();}} </script></html>');
+		var headeradd = settings.header ? settings.header : '';
+		_doc.write('<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="zh-CN" dir="ltr" style="overflow: auto"><head>'+baseadd+'<meta content="text/html; charset=UTF-8" http-equiv="Content-Type"/><link rel="stylesheet" href="' + _this.settings.baseurl + 'iframe.css"/>'+headeradd+'</head><body spellcheck="false" hidefocus="false" contentEditable="yes" designMode="on" style="overflow: auto; min-height: '+(_this.settings.height - 60)+'px" class="post">'+$(textarea).val()+'</body><script>function myfocus(){if(navigator.userAgent.indexOf("Firefox")>0){window.focus();}else{document.body.focus();}} </script></html>');
 		_doc.close();
 		_body = _doc.body;
 		

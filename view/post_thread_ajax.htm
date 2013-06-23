@@ -45,6 +45,8 @@
 
 <link href="view/js/editor/editor.css" type="text/css" rel="stylesheet" />
 
+<!--{hook common_editor_css_after.htm}-->
+
 <script type="text/javascript">
 
 function attach_file_type(type) {
@@ -328,6 +330,9 @@ function delay_execute(dialog, recall) {
 				// hook post_thread_ajax_onhook_end.htm
 			},
 			baseurl: 'view/js/editor/'
+			
+			// hook common_editor_arg_end.htm
+			
 		});
 		
 		// hook post_thread_ajax_editor_end.htm
