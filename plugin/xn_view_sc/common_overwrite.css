@@ -126,7 +126,11 @@ hr {border-top: 1px solid #281105;}
 .code, .quote, pre {background: #281006; border-color: #451C0B; color: #AA4922;}
 .post table td {border: 1px solid #7D3413;}
 
-.icon-post-new {background-image: url(fire.gif);}
-
+.icon-post-new {background-image: none;}
+.icon-post-fire {background-image: none;}
+/*
+.icon-post-new {background-image: url(new.gif);}
+.icon-post-fire {background-image: url(fire.gif);}
+*/
 .leftmsg {background: none repeat scroll 0 0 #46210C; border: 1px solid #662A11;}
 .rightmsg {background: none repeat scroll 0 0 #1A4D1A; border: 1px solid #196519;}
