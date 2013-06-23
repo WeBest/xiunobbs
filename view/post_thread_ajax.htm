@@ -156,6 +156,9 @@ function delay_execute(dialog, recall) {
 						$('a.imageloading', _this.toolbar).hide();
 					}
 				};
+				
+				// hook swf_settings_uploadimage_after.htm
+				
 				var swfu = new SWFUpload(swf_settings);
 				// --------------------------------------> 设置上传附件的回调附件
 				
@@ -299,6 +302,9 @@ function delay_execute(dialog, recall) {
 					},
 					queue_complete_handler : function(numFilesUploaded){}
 				};
+				
+				// hook swf_settings_uploadfile_after.htm
+				
 				var swfu = new SWFUpload(swf_settings);
 				
 				$('#file_upload_submit_'+pid).click(function() {
