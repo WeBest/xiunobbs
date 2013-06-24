@@ -22,46 +22,45 @@
 </head>
 <body>
 
-<!--{hook header_body_before.htm}-->
-
-<div id="header_body">
-	
-	<!--{hook header_menu_before.htm}-->
-	
-	<div id="menu" role="navigation">
-		<div class="width">
-			<table cellpadding="0" cellspacing="0" width="100%" style="table-layout: fixed;">
-				<tr>
-					<td class="left"></td>
-					<td class="logo"><a href="./" title="$conf[app_name]"><span id="logo"></span></a></td>
-					<td class="center">
-						<!--{hook header_menu_start.htm}-->
-						<span class="sep"></span>
-						<a href="./" $_checked[index]>首页</a>
-						<!--{loop $conf[forumarr] $_fid $_name}-->
-						<span class="sep"></span>
-						<a href="?forum-index-fid-$_fid.htm" $_checked[forum_$_fid]>$_name</a>	
-						<!--{/loop}-->
-						<!--{hook header_menu_end.htm}-->
-					</td>
-					<td class="center2">
-						<!--{hook header_menu_search_before.htm}-->
-						<!--{if $conf[search_type]}-->
-						<form action="?search-index.htm" target="_blank" id="search_form" method="post">
-							<div id="search"><input type="text" id="search_keyword" name="keyword" /></div>
-							<!--{hook header_menu_search_end.htm}-->
-						</form>
-						<!--{/if}-->
-						<!--{hook header_menu_search_after.htm}-->
-					</td>
-					<td class="right"></td>
-				</tr>
-			</table>
+<!--{hook wrapper1_before.htm}-->
+<div id="wrapper1">
+	<!--{hook wrapper2_before.htm}-->
+	<div id="wrapper2">
+		<!--{hook header_menu_before.htm}-->
+		<div id="menu" role="navigation">
+			<div class="width">
+				<table cellpadding="0" cellspacing="0" width="100%" style="table-layout: fixed;">
+					<tr>
+						<td class="left"></td>
+						<td class="logo"><a href="./" title="$conf[app_name]"><span id="logo"></span></a></td>
+						<td class="center">
+							<!--{hook header_menu_start.htm}-->
+							<span class="sep"></span>
+							<a href="./" $_checked[index]>首页</a>
+							<!--{loop $conf[forumarr] $_fid $_name}-->
+							<span class="sep"></span>
+							<a href="?forum-index-fid-$_fid.htm" $_checked[forum_$_fid]>$_name</a>	
+							<!--{/loop}-->
+							<!--{hook header_menu_end.htm}-->
+						</td>
+						<td class="center2">
+							<!--{hook header_menu_search_before.htm}-->
+							<!--{if $conf[search_type]}-->
+							<form action="?search-index.htm" target="_blank" id="search_form" method="post">
+								<div id="search"><input type="text" id="search_keyword" name="keyword" /></div>
+								<!--{hook header_menu_search_end.htm}-->
+							</form>
+							<!--{/if}-->
+							<!--{hook header_menu_search_after.htm}-->
+						</td>
+						<td class="right"></td>
+					</tr>
+				</table>
+			</div>
 		</div>
-	</div>
-						
-	<!--{hook header_menu_after.htm}-->
-	
-	<div id="body" role="main">
-	
-	<!--{hook header_body_start.htm}-->
+							
+		<!--{hook header_menu_after.htm}-->
+		
+		<div id="body" role="main">
+		
+		<!--{hook header_body_start.htm}-->
