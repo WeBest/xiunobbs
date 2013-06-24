@@ -1,0 +1,54 @@
+<!doctype html>
+<html>
+<head>
+	<title>wordpress转换成xiunoblog功能</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<meta name="generator" content="Xiuno BBS" />
+	<meta name="author" content="Xiuno Team" />
+	<meta name="copyright" content="2008-2012 xiuno.com" />
+	<meta name="MSSmartTagsPreventParsing" content="True" />
+	<meta http-equiv="MSThemeCompatible" content="Yes" />
+<style>
+li { padding:5px; 0;}
+</style>
+</head>
+<body>
+<div>流程：
+<ul>
+	<li>1. 备份原站点、备份数据库</li>
+	<li>2. 上传 XiunoBBS  upload_me 文件夹下的源代码到根目录，通过 url 访问，安装，安装成功以后进入第3步。</li>
+	<li>3. 安装插件 友情链接、xiunoBlog </li>
+	<li>4. 确认xiunobbs的数据库和wordpress数据库都在同一主机下</li>
+	<li>5. 升级完毕后，删除升级程序：wp_to_xnblog.php</li>
+	<li>6. 由于博客详情页宽度变窄，需要修改配置文件conf.php "upload_image_max_width"为620，<br />&nbsp; &nbsp;或者在common_control.class.php __construct()构造方法里面添加 $this->conf['upload_image_max_width'] = 620;</li>
+</ul>
+</div>
+<div>说明：
+<ul>
+	<li>1.用户全部导入，由于加密不同，密码统一为用户邮箱， 如 用户邮箱：test1@qq.com  密码：test1@qq.com</li>
+	<li>2.增加一个后台管理用户 admin@admin.com 初始密码为 1  升级完成后记得修改密码</li>
+	<li>3.板块评论用户，自动注册成为用户，有邮箱的用户和第一步注册一样  登录用户和密码一样。 没有邮箱的随机(僵尸用户)，详情页评论显示用到。</li>
+	<li>4.wordpress分类作为xiunoblog的板块，(wordpress文章中的标签作为xiunoblog的主题分类，发现有问题，先忽略。管理员可以在后台添加)</li>
+	<li>5.文章详情导入，评论导入(所有评论改为一级评论)、友情链接(需要安装有钱链接插件)，基本正常</li>
+	<li>6.暂时不支持图片附件导入。wordpress图片附件直接拷贝到xiunobbs根目录。</li>
+	<li>7.如有疑问请 <a href="http://www.xiuno.com" target"_blank">http://www.xiuno.com</a> 提问留言。</li></ul>
+</div>
+<p style="color:red;">升级有风险，请谨慎升级！</p>
+<p></p>
+<p></p>
+<p></p>
+<p></p>
+<div style="text-align:center;">
+	<div>wordpress配置信息:	</div>
+		<form action="./wp_to_xnblog.php" method="POST">
+		主机:&nbsp; <input type="text" size="24" name="host" value="" /><br />
+		用户名:<input type="text" size="24" name="user" value="" /><br />
+		密码:&nbsp; <input type="text" size="24" name="pass" value="" /><br />
+		数据库:<input type="text" size="24" name="name" value="" /><br />
+		表前缀:<input type="text" size="24" name="tablepre" value="" /><br />
+		<input type="submit" value="我有备份，我要升级！" />
+		</form>
+</div>
+</body>
+
+</html>

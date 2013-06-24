@@ -1,0 +1,12 @@
+<!--{if !empty($friendlinklist)}-->
+<div class="div">
+	<div class="header">友情链接</div>
+	<div class="body threadlist">
+		<ul>
+			<!--{loop $friendlinklist $friendlink}-->
+				<li style="padding:3px; font-size:14px;"><a href="$friendlink[url]" target="_blank">$friendlink[sitename]</a></li>
+			<!--{/loop}-->
+		</ul>
+	</div>
+</div>
+<!--{/if}-->

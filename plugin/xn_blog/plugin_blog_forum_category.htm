@@ -1,0 +1,12 @@
+<!--{if !empty($typelist)}-->
+<div class="div">
+	<div class="header">主题分类</div>
+	<div class="body threadlist">
+		<ul>
+			<!--{loop $typelist $type}-->
+				<li style="padding:3px; font-size:14px;"><a href="?forum-index-fid-$type[fid]-typeid1-$type[typeid].htm" rel="nofollow">$type[name]</a> <span class="grey">(<b>$type[num]</b>)</span></li>
+			<!--{/loop}-->
+		</ul>
+	</div>
+</div>
+<!--{/if}-->

@@ -1,0 +1,12 @@
+<!--{if !empty($plist)}-->
+<div class="div">
+	<div class="header">评论排行</div>
+	<div class="body threadlist">
+		<ul>
+			<!--{loop $plist $type}-->
+				<li style="padding:3px; font-size:14px;"><a href="?thread-index-fid-$type[fid]-tid-$type[tid].htm" rel="nofollow" title="$type[subject]">$type[subject_substr]</a> ($type[posts])</li>
+			<!--{/loop}-->
+		</ul>
+	</div>
+</div>
+<!--{/if}-->

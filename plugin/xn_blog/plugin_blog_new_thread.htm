@@ -1,0 +1,11 @@
+<div class="div">
+	<div class="header">最新文章</div>
+	<div class="body threadlist">
+		<ul>
+		<!--{loop $newthreadlist $newthread}-->
+		<li style="padding:3px; font-size:14px;"><a href="?thread-index-fid-$newthread[fid]-tid-$newthread[tid].htm" target="_blank">$newthread[subject_substr]</a></li>
+		<!--{/loop}-->
+		</ul>
+		
+	</div>
+</div>

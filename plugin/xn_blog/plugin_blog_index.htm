@@ -1,0 +1,118 @@
+<!--{include header.htm}-->
+
+<div class="width">
+	<!--{hook index_index_nav_before.htm}-->
+	
+	<table id="nav" cellpadding="0" cellspacing="0" style="margin-bottom: 4px;">
+		<tr>
+			<td class="left"></td>
+			<td class="center">
+				<a class="icon icon-home" href="./"></a>
+				<span class="sep"></span>
+				<span $_checked[index]>首页</span>
+				<!--{hook index_index_nav_center_after.htm}-->
+			</td>
+			<td class="center2">
+				<!--{include header_user.inc.htm}-->
+				<!--{if $_user['groupid'] == 1}-->
+				<a href="?post-thread-fid-$fid-ajax-1.htm" target="_blank" class="ajaxdialog" ajaxdialog="{fullicon: true}" onclick="return false;" id="create_thread"  rel="nofollow"><span class="icon icon-post-newthread"></span> 发新帖</a>
+				<!--{/if}-->
+			</td>
+			<td class="right"></td>
+		</tr>
+	</table>
+	
+	<!--{hook index_index_nav_after.htm}-->
+	
+	<table width="100%">
+		<tr>
+			<td width="70%" valign="top">
+				<div class="div">
+					<div class="body threadlist">
+						<!--{if !empty($threadlist)}-->
+						<!--{loop $threadlist $thread}-->
+						<table width="100%" cellspacing="0" cellpadding="0" tid="$thread[tid]" class="thread" lastpost="$thread[lastpost]" style="table-layout: fixed; padding:5px 0;">
+							<tr height="30">
+								<td valign="middle" class="subject" style="padding:0 8px;">
+									<a href="?thread-index-fid-$thread[fid]-tid-$thread[tid].htm" target="_blank" title="点击图标，新窗口打开" class="thread_icon" style="margin-right: 1px; font-size:16px;" rel="nofollow">	
+										<b>$thread[subject]</b>
+									</a>
+								</td>
+							</tr>
+							<tr>
+								<!--{if $thread[imagenum] > 0}-->
+								<td style="word-break:break-all; padding:0 8px;">
+									<div style="word-break:break-all; white-space:normal;">
+										<p style="width:145px; float:left;"><a href="?thread-index-fid-$thread[fid]-tid-$thread[tid].htm" target="_blank"><img src="./upload/attach/$thread[coverimg]" title="封面图" style="vertical-align:top;" /></a></p>
+										<p class="big" style="line-height:1.6;"><a href="?thread-index-fid-$thread[fid]-tid-$thread[tid].htm" target="_blank">$thread[brief]</a></p>
+									</div>
+								</td>
+								<!--{else}-->
+								<td style="white-space:pre-wrap; padding:0 8px;"><p class="big"><a href="?thread-index-fid-$thread[fid]-tid-$thread[tid].htm" target="_blank">$thread[brief]</a></p></td>
+								<!--{/if}-->
+							</tr>
+							<tr height="30">
+								<td style="padding:0 8px;" class="grey">
+									$thread[dateline_fmt]&nbsp;&nbsp; |&nbsp; &nbsp;分类：<!--{if $thread[typeid1]}--><a href="?forum-index-fid-$thread[fid]-typeid1-$thread[typeid1].htm" target="_blank" rel="nofollow" style="color:blue;">{$thread[typename1]}</a> <!--{/if}-->&nbsp;&nbsp;|&nbsp;&nbsp;
+									评论：<span class="grey">$thread[posts_fmt]</span>&nbsp;&nbsp;|&nbsp;&nbsp;阅读：<span class="views" tid="$thread[tid]"><span>
+								</td>
+							</tr>
+						</table>
+						<hr />
+						<!--{/loop}-->
+						<!--{else}-->
+						此分类下无数据
+						<!--{/if}-->
+						<!--{if $pages}-->
+						<div class="page" style="text-align: center; margin-top: 8px;">$pages</div>
+						<!--{/if}-->
+						
+					</div>
+				</div>
+			</td>
+			<td width="30%" valign="top">
+				<!--{if empty($forum)}-->
+				<!--{hook plugin_blog_info.htm}-->
+				<!--{else}-->
+				<!--{hook plugin_blog_forum_category.htm}-->
+				<!--{/if}-->
+				
+				<!--评论排行-->
+				<!--{hook plugin_blog_thread_posts.htm}-->
+				
+				<!--推荐文章 or 相关阅读 or 全站热门 -->
+				
+				<!--友情链接-->
+				<!--{hook plugin_blog_friendlink.htm}-->
+				
+				<!--统计信息-->
+				<!--{hook plugin_blog_count_info.htm}-->
+			</td>
+		</tr>
+	</table>
+</div>
+
+<!--{include footer.htm}-->
+
+
+<script type="text/javascript">
+// 点击服务器，火帖
+$.getScript('$click_server&'+Math.random(), function() {
+	if(!xn_json) return;
+	var json = xn_json;
+	for(tid in json) {
+		var viewspan = $('span.views[tid='+tid+']');
+		viewspan.html(json[tid]);
+		if(json[tid] > $conf[threadlist_hotviews]) {
+			viewspan.addClass('red bold');
+			//$('table[tid='+tid+'] a.subject_link').after(' <span class="icon icon-post-fire" title="火帖"></span>'); // 根据回复数
+			//viewspan.html(viewspan.html() + '<span class="icon icon-post-fire"></span>');
+		}
+	}
+});
+</script>
+
+$conf[footer_js]
+
+</body>
+</html>
