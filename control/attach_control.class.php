@@ -127,7 +127,7 @@ class attach_control extends common_control {
 		
 		// iis 6.0 居然不支持 xxx.torrent 这种文件名的直接请求，很无语！
 		$iis6 = isset($_SERVER['SERVER_SOFTWARE']) && $_SERVER['SERVER_SOFTWARE'] == 'Microsoft-IIS/6.0';
-		if($attach['golds'] > 0 || $iis6) {
+		if($attach['golds'] > 0 || $iis6 || empty($this->conf['cdn_ip'])) {
 			
 			// 默认开启压缩加快下载速度！
 			//$_SERVER['ob_no_gzip'] = 1;
