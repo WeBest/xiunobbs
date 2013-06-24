@@ -227,6 +227,7 @@ class common_control extends base_control {
 		if($host != $m[1]) {
 			$currurl = misc::get_script_uri();
 			$newurl = preg_replace('#^https?://([^/]+)/#', "http://$installhost/", $currurl);
+			header("HTTP/1.1 301 Moved Permanently");
 			header("Location: $newurl");
 			exit;
 		}
@@ -252,6 +253,7 @@ class common_control extends base_control {
 				// 去掉 ?
 				$_SERVER['REQUEST_URI'] = substr($_SERVER['REQUEST_URI'], 0, $pos + 1).substr($_SERVER['REQUEST_URI'], $pos + 2);
 				$newurl = misc::get_script_uri();
+				header("HTTP/1.1 301 Moved Permanently");
 				header("Location: $newurl");
 				exit;
 			}
