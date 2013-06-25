@@ -1,5 +1,7 @@
-html {background: url(body_bg.gif) top center repeat-y;}
-body {background: url(body_bg.jpg) top center no-repeat;}
+body {background: #000000;}
+#wrapper1 {background: url(body_bg.gif) top center repeat-y;}
+#wrapper2 {background: url(body_bg.jpg) top center no-repeat;}
+
 body, textarea, td {color: #D3AC6B;}
 a {color: #FF9600;}
 a:hover{color: #FFFFFF;}
