@@ -418,6 +418,15 @@ $.fn.xn_delay = function(time) {
 		return this;
 	}
 };
+/*
+$.fn.xn_fadeIn = function(time) {
+	if($.browser.msie && $.browser.version == '6.0' ||  $.browser.version == '7.0') {
+		return this;
+	} else {
+		this.animate({left:'+=0'}, time);
+		return this;
+	}
+};*/
 
 // 闪烁效果，用来特别提示输入框
 /*
