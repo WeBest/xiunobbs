@@ -90,7 +90,7 @@ class index_control extends common_control {
 		
 		// hook index_bbs_after.php
 		
-		$this->view->display('index.htm');
+		$this->view->display('index_index.htm');
 	}
 	
 	private function get_toplist($forum = array()) {

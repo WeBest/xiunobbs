@@ -293,7 +293,7 @@ function delay_execute(dialog, recall) {
 					file_queued_handler : function(file) {},
 					file_queue_error_handler : function(file, errorCode, message) {
 						if(errorCode == SWFUpload.QUEUE_ERROR.FILE_EXCEEDS_SIZE_LIMIT) {
-							alert('您选择的文件'+file.name+'大小为'+humansize(file.size)+'，超出了服务器端允许的最大值:$upload_max_filesize！');
+							alert('您选择的文件'+file.name+'大小为'+humansize(file.size)+'，超出了服务器端允许的最大值:$upload_max_filesize');
 							return true;
 						} else {
 							alert('upload_queue_error: file:'+file+', errorCode:'+errorCode+', message:'+message);
@@ -416,7 +416,7 @@ function delay_execute(dialog, recall) {
 		
 		// hook post_thread_js_end.htm
 		
-	}); // end xload()
+	});
 	
 	// hook post_thread_delay_execute_end.htm
 	

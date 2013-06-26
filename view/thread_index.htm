@@ -527,6 +527,8 @@ if(is_w3c) {
 		'mouseout':function() {$('div.mod', this).stop(true, false).delay(500).fadeTo(600, 0);}
 	});
 } else {
+	$('.post div.mod').fadeTo(600, 0);
+	/*
 	$('.post').bind({
 		'mouseover':function() {
 			if(this.t) clearTimeout(this.t);
@@ -537,7 +539,7 @@ if(is_w3c) {
 			if(this.t) clearTimeout(this.t);
 			this.t = setTimeout(function() {$('div.mod', _this).addClass('bg2').css('filter', 'Alpha(Opacity=0)');}, 50);
 		}
-	});
+	});*/
 }
 </script>
 
