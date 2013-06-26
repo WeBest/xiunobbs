@@ -11,4 +11,12 @@ $('#mod_lock').click(function() {
 	});
 });
 
+
+// 判断是否锁帖
+{if !$ismod && $thread[closed]}
+	$('#quick_message').attr('disabled', 'disabled').val('本帖已锁，不能回复。');
+	$('#quick_post_submit').hide();
+	$('#create_post').hide();
+{/if}
+
 </script>

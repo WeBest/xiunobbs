@@ -130,7 +130,7 @@ function make_tmp($conf) {
 	$pluginpaths = $conf['plugin_disable'] ? array() : core::get_paths($conf['plugin_path'], TRUE);
 	
 	// 遍历 control
-	foreach(($conf['control_path'] + $pluginpaths) as $path) {
+	foreach(($pluginpaths + $conf['control_path']) as $path) {
 		
 		// 如果有相关的 app path, 这只读取该目录
 		if(is_dir($path.$conf['app_id'])) {
@@ -152,7 +152,7 @@ function make_tmp($conf) {
 	
 	// 遍历 view，插入点的 .htm 编译是多余的，不过不碍事。
 	$view = new template($conf);
-	foreach(($conf['view_path'] + $pluginpaths) as $path) {
+	foreach(($pluginpaths + $conf['view_path']) as $path) {
 		// 如果有相关的 app path, 这只读取该目录
 		if(is_dir($path.$conf['app_id'])) {
 			$path = $path.$conf['app_id'].'/';
@@ -168,7 +168,7 @@ function make_tmp($conf) {
 	unset($view);
 	
 	// 遍历 model，公共
-	foreach(($conf['model_path'] + $pluginpaths) as $path) {
+	foreach(($pluginpaths + $conf['model_path']) as $path) {
 		foreach((array)glob($path."*.class.php") as $file) {
 			if(!is_file($file)) continue;
 			$filename = substr(strrchr($file, '/'), 1);
@@ -189,7 +189,7 @@ function make_tmp($conf) {
 	$conf = $adminconf;
 	
 	// 遍历 bbsadmin control
-	foreach(($conf['control_path'] + $pluginpaths) as $path) {
+	foreach(($pluginpaths + $conf['control_path']) as $path) {
 		
 		// 如果有相关的 app path, 这只读取该目录
 		if(is_dir($path.$conf['app_id'])) {
@@ -211,7 +211,7 @@ function make_tmp($conf) {
 	
 	// 遍历 bbsadmin view
 	$view = new template($conf);
-	foreach(($conf['view_path'] + $pluginpaths) as $path) {
+	foreach(($pluginpaths + $conf['view_path']) as $path) {
 		// 如果有相关的 app path, 这只读取该目录
 		if(is_dir($path.$conf['app_id'])) {
 			$path = $path.$conf['app_id'].'/';;
