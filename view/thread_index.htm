@@ -514,31 +514,23 @@ $(function() {
 // 快捷键翻页
 bind_document_keyup_page();
 
-/*$('.post').bind( {
-	'mouseover':function() {$('div.mod', this).stop(true, false).addClass('bg2').fadeTo(600, 1);}, 
-	'mouseout':function() {$('div.mod', this).stop(true, false).delay(500).fadeTo(600, 0);}
-});*/
+/*$('.post').hover({
+	function() {alert(123);$('div.mod', this).stop(true, false).addClass('bg2').fadeTo(600, 1);}, 
+	function() {$('div.mod', this).stop(true, false).delay(500).fadeTo(100, 0);}
+});
+*/
 
-//alert($('.post').fadeTo);
 if(is_w3c) {
-	$('.post').bind({
-		'mouseover':function() {$('div.mod', this).stop(true, false).addClass('bg2').fadeTo(600, 1);}, 
-		'mouseout':function() {$('div.mod', this).stop(true, false).delay(500).fadeTo(600, 0);}
+	$('.post').each(function() {
+		this.onmouseover = function() {
+			$('div.mod', this).stop(true, false).addClass('bg2').fadeTo(600, 1);
+		}
+		this.onmouseout = function() {
+			$('div.mod', this).stop(true, false).delay(500).fadeTo(100, 0);
+		}
 	});
 } else {
-	$('.post div.mod').fadeTo(600, 0);
-	/*
-	$('.post').bind({
-		'mouseover':function() {
-			if(this.t) clearTimeout(this.t);
-			$('div.mod', this).addClass('bg2').css('filter', 'Alpha(Opacity=60)');
-		}, 
-		'mouseout':function() {
-			var _this = this;
-			if(this.t) clearTimeout(this.t);
-			this.t = setTimeout(function() {$('div.mod', _this).addClass('bg2').css('filter', 'Alpha(Opacity=0)');}, 50);
-		}
-	});*/
+	$('.post div.mod').css('filter', 'Alpha(Opacity=500)');
 }
 </script>
 
