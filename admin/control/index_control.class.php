@@ -56,7 +56,7 @@ class index_control extends admin_control {
 	
 	
 	public function on_index() {
-		$this->view->display('index.htm');
+		$this->view->display('index_index.htm');
 	}
 	
 	function on_top() {
