@@ -14,7 +14,7 @@ class plugin_control extends admin_control {
 	private $cates = array(0=>'未分类', 1=>'风格模板', 2=>'小型插件', 3=>'大型插件', 4=>'接口整合');
 	private $styles = array(0=>'未分类', 1=>'红', 2=>'橙', 3=>'黄', 4=>'绿', 5=>'青', 6=>'蓝', 7=>'紫', 8=>'黑白', 9=>'古典', 10=>'现代', 11=>'商务', 12=>'科技', 13=>'中国风');
 	
-	private $official_plugin_site = 'http://plugin.xiuno.net/';
+	private $official_plugin_site = 'http://plugin.xiuno.com/';
 	function __construct(&$conf) {
 		parent::__construct($conf);
 		$this->check_admin_group();
