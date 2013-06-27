@@ -34,7 +34,7 @@ if(IN_SAE) {
 	message('不支持SAE环境。');
 }
 
-core::init();
+core::init($conf);
 core::ob_start();
 $step = core::gpc('step');
 empty($step) && $step = 'complete';

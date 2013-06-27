@@ -114,7 +114,7 @@ return array(
 	'plugin_path' => BBS_PATH.'plugin/',
 	'plugin_url' => 'http://x.net/plugin/',
 	'plugin_disable' => 0,			// 禁止掉所有插件
-	'plugin_on' => 2,			// 是否开启后台插件安装，0: 关闭后台安装插件模式，1:为开启线上插件模式，2:为开启本地插件模式
+	'plugin_on' => 1,			// 是否开启后台插件安装，0: 关闭后台安装插件模式，1:为开启线上插件模式，2:为开启本地插件模式
 	
 	'urlrewrite' => 0,			// 手工开启 URL-Rewrite 后，需要清空下 tmp 目录！
 	
@@ -145,7 +145,7 @@ return array(
 	'avatar_width_big' => 88,		// 用户头像宽度:大
 	'avatar_width_huge' => 120,		// 用户头像宽度:更大
 	'thread_icon_middle' => 54,		// 主题的缩略图:中
-	'upload_image_max_width' => 1210,	// 上传图片最大宽度
+	'upload_image_max_width' => 1920,	// 上传图片最大宽度
 	
 	'version' => '2.0.3',			// 版本号
 	'installed' => 1,			// 是否安装的标志位

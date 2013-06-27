@@ -93,15 +93,18 @@ class common_control extends base_control {
 	private function init_timezone() {
 		
 		// 第一次访问，默认为系统所在时区。以后为用户所在时区。
+		
 		if(!isset($_COOKIE['timeoffset'])) {
 			$timeoffset = $this->conf['timeoffset'];
 		} else {
 			$timeoffset = misc::mid(intval($_COOKIE['timeoffset']), -12, 12);
 			$timeoffset = sprintf('%+d', $timeoffset);
 		}
+		/* 框架内已经按照配置文件正确设置，这里没有必要再设置。
 		$timeoffset2 = $timeoffset;
 		$timeoffset2[0] = $timeoffset[0] == '+' ? '-' : '+';
 		date_default_timezone_set('Etc/GMT'.$timeoffset2);	// 覆盖掉框架设置的默认值
+		*/
 		$_SERVER['timeoffset'] = $timeoffset;
 		
 		// 今日凌晨0点的开始时间！

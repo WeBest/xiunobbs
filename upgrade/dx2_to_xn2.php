@@ -47,7 +47,7 @@ define('FRAMEWORK_PATH', BBS_PATH.'xiunophp/');
 define('FRAMEWORK_TMP_PATH', $conf['tmp_path']);
 define('FRAMEWORK_LOG_PATH', $conf['log_path']);
 include FRAMEWORK_PATH.'core.php';
-core::init();
+core::init($conf);
 core::ob_start();
 
 // 初始化参数
