@@ -168,24 +168,26 @@
 					<!--{hook thread_index_attachlist_after.htm}-->
 					
 					<div class="grey mod" pid="$post[pid]" style="zoom: 1;">
-						<!--{if $thread[firstpid] != $post[pid]}-->
-						<span style="width: 150px; float: left; text-align: left;" class="small">$post[dateline_fmt]</span>
-						<!--{/if}-->
-						
-						<!--{if $_user[uid]}-->
-						<a href="?post-post-fid-$fid-tid-$post[tid]-pid-$post[pid].htm" class="ajaxdialog" ajaxdialog="{fullicon: true, cache: true}" onclick="return false;">引用</a>
-						<!--{/if}-->
-						
-						<!--{if $ismod}-->	
-						<a href="?mod-rate-fid-$fid-pid-$post[pid].htm" class="ajaxdialog" ajaxdialog="{position: 1, modal: false, cache: false}">评分</a>
-						<!--{/if}-->
-						
-						<!--{if $ismod || $_user[uid] == $post[uid]}-->	
-						<a href="?post-update-fid-$thread[fid]-pid-$post[pid]-ajax-1.htm" class="ajaxdialog" ajaxdialog="{fullicon: true, modal: false, cache: false}" onclick="return false;">编辑</a>
-						<a href="?post-delete-fid-$fid-pid-$post[pid].htm" class="ajaxconfirm" ajaxconfirm="{message: '确定删除吗？'}" onclick="return false;">删除</a>
-						<!--{/if}-->
-						
-						#$post[floor]楼
+						<div>
+							<!--{if $thread[firstpid] != $post[pid]}-->
+							<span style="width: 150px; float: left; text-align: left;" class="small">$post[dateline_fmt]</span>
+							<!--{/if}-->
+							
+							<!--{if $_user[uid]}-->
+							<a href="?post-post-fid-$fid-tid-$post[tid]-pid-$post[pid].htm" class="ajaxdialog" ajaxdialog="{fullicon: true, cache: true}" onclick="return false;">引用</a>
+							<!--{/if}-->
+							
+							<!--{if $ismod}-->	
+							<a href="?mod-rate-fid-$fid-pid-$post[pid].htm" class="ajaxdialog" ajaxdialog="{position: 1, modal: false, cache: false}">评分</a>
+							<!--{/if}-->
+							
+							<!--{if $ismod || $_user[uid] == $post[uid]}-->	
+							<a href="?post-update-fid-$thread[fid]-pid-$post[pid]-ajax-1.htm" class="ajaxdialog" ajaxdialog="{fullicon: true, modal: false, cache: false}" onclick="return false;">编辑</a>
+							<a href="?post-delete-fid-$fid-pid-$post[pid].htm" class="ajaxconfirm" ajaxconfirm="{message: '确定删除吗？'}" onclick="return false;">删除</a>
+							<!--{/if}-->
+							
+							#$post[floor]楼
+						</div>
 					</div>
 				</div>
 			</td>
@@ -513,25 +515,17 @@ $(function() {
 
 // 快捷键翻页
 bind_document_keyup_page();
-
-/*$('.post').hover({
-	function() {alert(123);$('div.mod', this).stop(true, false).addClass('bg2').fadeTo(600, 1);}, 
-	function() {$('div.mod', this).stop(true, false).delay(500).fadeTo(100, 0);}
+$('div.post').each(function(i) {
+	var _this = this;
+	$(_this).hover(
+		function() {
+			$(_this).find('div.mod div').show().css('opacity', 0).stop().animate({opacity:1}, 500);
+		},
+		function() {
+			$(_this).find('div.mod div').animate({opacity:0}, 500);
+		}
+	)
 });
-*/
-
-if(is_w3c) {
-	$('.post').each(function() {
-		this.onmouseover = function() {
-			$('div.mod', this).stop(true, false).addClass('bg2').fadeTo(600, 1);
-		}
-		this.onmouseout = function() {
-			$('div.mod', this).stop(true, false).delay(500).fadeTo(100, 0);
-		}
-	});
-} else {
-	$('.post div.mod').css('filter', 'Alpha(Opacity=500)');
-}
 </script>
 
 <!--{hook thread_index_end.htm}-->
