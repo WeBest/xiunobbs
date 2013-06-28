@@ -83,8 +83,6 @@ class cron extends base_model {
 				$this->stat->create($stat);
 			}
 		
-			$this->kv->delete('resetpw');
-			
 			// 清理最新主题，超过100篇，则开始清理，保留2天内的数据，方便 sphinx 搜索引擎做增量索引
 			if($this->thread_new->count() > 100) {
 				// 查找两天内的数据是否足够100条，不足则不予处理

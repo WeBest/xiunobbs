@@ -274,66 +274,52 @@ class user_control extends common_control {
 		}
 		
 		$error = array();
-		$username = '';
 		$email = '';
 		if($this->form_submit()) {
-			$username = core::gpc('username', 'P');
 			$email = core::gpc('email', 'P');
-			if(empty($username)) {
-				$error['username'] = '请输入用户名。';
-			} else {
-				// 发送验证邮箱，todo:如何防止重复不停的发送？每天只能找回一次。tmp 目录保存今日的 username，每日计划任务清空一次
-				$user = $this->user->get_user_by_username($username);
-				if(empty($user)) {
-					$error['username'] = '该用户不存在。';
-				} else {
-					if($user['email'] != $email) {
-						$error['email'] = 'EMAIL 与用户名不匹配。';
-					} else {
-						// 保存用户 uid
-						$s = $this->kv->get('resetpw');
-						if(strpos($s, " $user[uid] ") !== FALSE) {
-							$this->message("密码邮件已经发送，每天只能找回一次密码。", 0);
-						} else {
-							// 发送链接
-							$time = substr($_SERVER['time'], 0, -4);
-							$verify = md5($username.$time.md5($this->conf['auth_key']));
-							
-							$username_url = core::urlencode($username);
-							$url = "?user-resetpw2-username-$username_url-verify-$verify.htm";
-							
-							$emailarr = explode('@',$email);
-							$emailinfo = $this->mmisc->get_email_site($emailarr[1]);	
-							$email_smtp_url = $emailinfo['url'];
-							$email_smtp_name = $emailinfo['name'];
-							
-							$subject = "您的找回密码邮件！-".$this->conf['app_name'];
-							$message = "
-								<html>
-									<head>
-										<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\" />
-									</head>
-									<body>
-										<h2>尊敬的用户 $username, 您好！</h2>
-										<h3>点击以下链接找回您在【".$this->conf['app_name']."】的密码（该链接有效时间：三小时）：<br /><a href=\"$url\" target=\"_blank\">$url</a></h3>
-									</body>
-								</html>
-							";
-							$emailsend = $this->mmisc->sendmail($username, $email, $subject, $message);
-							if(empty($emailsend)) {
-								$s .= ' '.$user['uid'].' ';
-								$this->kv->set('resetpw', $s);
-								$this->message("密码重设邮件发送成功！<a href=\"$email_smtp_url\" target=\"_blank\">请点击进入【{$email_smtp_name}】查收</a>", 1, $email_smtp_url);
-							} else {
-								$this->message("发送邮件碰到了错误：$emailsend", 0);
-							}
-						}
-					}
+			// 发送验证邮箱，todo:如何防止重复不停的发送？每天只能找回一次。tmp 目录保存今日的 username，每日计划任务清空一次
+			// 保存用户 uid
+			// 发送链接
+			$userdb = $this->user->get_user_by_email($email);
+			if(empty($userdb)) {
+				$userdb = $this->user->get_user_by_username($email);
+				if(empty($userdb)) {
+					$error['email'] = '用户名/Email 不存在';
+					$this->message($error);
 				}
+			}
+			$username = $userdb['username'];
+			$time = substr($_SERVER['time'], 0, -4);
+			$verify = md5($username.$time.md5($this->conf['auth_key']));
+			
+			$username_url = core::urlencode($username);
+			$url = "?user-resetpw2-username-$username_url-verify-$verify.htm";
+			
+			$emailarr = explode('@',$email);
+			$emailinfo = $this->mmisc->get_email_site($emailarr[1]);	
+			$email_smtp_url = $emailinfo['url'];
+			$email_smtp_name = $emailinfo['name'];
+			
+			$subject = "您的找回密码邮件！-".$this->conf['app_name'];
+			$message = "
+				<html>
+					<head>
+						<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\" />
+					</head>
+					<body>
+						<h2>尊敬的用户 $username, 您好！</h2>
+						<h3>点击以下链接找回您在【".$this->conf['app_name']."】的密码（该链接有效时间：三小时）：<br /><a href=\"$url\" target=\"_blank\">$url</a></h3>
+					</body>
+				</html>
+			";
+			$emailsend = $this->mmisc->sendmail($username, $email, $subject, $message);
+			if(empty($emailsend)) {
+				$this->message("密码重设邮件发送成功！<a href=\"$email_smtp_url\" target=\"_blank\">请点击进入【{$email_smtp_name}】查收</a>", 1, $email_smtp_url);
+			} else {
+				$this->message("发送邮件碰到了错误：$emailsend", 0);
 			}
 		}
 		
-		$this->view->assign('username', $username);
 		$this->view->assign('email', $email);
 		$this->view->assign('error', $error);
 		$this->view->display('user_resetpw.htm');
