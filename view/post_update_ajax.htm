@@ -460,6 +460,8 @@ function delay_execute(dialog, recall) {
 					return false;
 				}
 				
+				// hook post_update_submit_after_js.htm
+				
 				// 更新当前页面
 	<!--{if $isfirst}-->	$('#subject_$tid').html($('#update_subject_$pid').val());	<!--{/if}-->
 	 			$('#message_$pid').html($('#update_message_$pid').val());
