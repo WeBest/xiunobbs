@@ -443,14 +443,12 @@ function delay_execute(dialog, recall) {
 			$('div.alert').remove();
 			$('#update_submit_$pid').disable();
 			var postdata = $("#update_form_$pid").serialize();
-			$.post($('#update_form_$pid').attr('action'), postdata,  function(json){
+			$.post($('#update_form_$pid').attr('action'), postdata,  function(s){
 				$('#update_submit_$pid').enable();
-				if(error = json_error(json)) {alert(error); return false;}
-				if(json.status <=0) {
-					alert(json.message);
-					return false;
-				}
 				
+				var json = json_decode(s);
+				if(error = json_error(json)) {alert(error); return false;}
+				if(json.status <= 0) {alert(json.message); return false;}
 				json = json.message;
 				
 				if(json.subject) {
@@ -472,7 +470,7 @@ function delay_execute(dialog, recall) {
 	 			dialog.set_body('<div class="ok">编辑成功！</div>');
 		 		setTimeout(function() {dialog.close();}, 500);
 				
-			}, "json");
+			});
 			
 			// hook post_update_js_end.htm
 					 	
