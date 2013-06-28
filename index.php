@@ -11,6 +11,7 @@ define('DEBUG', 2);
 
 // 有些环境关闭了错误显示
 DEBUG && function_exists('ini_set') && @ini_set('display_errors', 'On');
+//print_r($_SERVER);exit;
 
 // 站点根目录，在单元测试时候，此文件可能被包含
 define('BBS_PATH', str_replace('\\', '/', dirname(__FILE__)).'/');
