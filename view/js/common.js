@@ -964,7 +964,7 @@ function bind_document_keyup_page() {
 	});
 }
 
-// cookie 时效: 一个小时，每隔一个小时判断一次客户端的时区，默认：+8
+// cookie 时效: 一个小时，每隔一个小时判断一次客户端的时区，默认：+8，据说带夏令营时差，没有测试过。
 function set_client_zone() {
 	var munites = new Date().getTimezoneOffset();
 	var hour = parseInt(munites / 60);
