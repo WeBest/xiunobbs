@@ -20,7 +20,7 @@ class admin_control extends common_control {
 		$this->view->assign('bbsconf', $bbsconf);
 		
 		// 设置风格不受前台影响
-		$this->conf['view_path'] = array(BBS_PATH.'admin/view/', BBS_PATH.'view/');
+		$this->conf['first_view_path'] = array(BBS_PATH.'admin/view/', BBS_PATH.'view/');
 		
 		// 检查IP 屏蔽
 		$this->check_ip();
