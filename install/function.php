@@ -211,7 +211,7 @@ function make_tmp($conf) {
 	
 	// 遍历 bbsadmin view
 	$view = new template($conf);
-	foreach(($pluginpaths + $conf['view_path']) as $path) {
+	foreach(($conf['view_path'] + $pluginpaths) as $path) {
 		// 如果有相关的 app path, 这只读取该目录
 		if(is_dir($path.$conf['app_id'])) {
 			$path = $path.$conf['app_id'].'/';;
