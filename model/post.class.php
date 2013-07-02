@@ -35,7 +35,14 @@ class post extends base_model {
 	
 	public function check_message(&$message) {
 		$message = trim($message);
-		if(empty($message) || str_replace(array('<br>', '<br/>', '<br />', '&nbsp;', ' ', "\r", "\n", "\t"), '', $message) == '') {
+		if(empty($message)) {
+			return '内容不能为空。';
+		}
+		$s = str_replace(array('<br>', '<br/>', '<br />', '&nbsp;', ' ', "\r", "\n", "\t"), '', $message);
+		$s = str_replace('　', '', $s);
+		$s = preg_replace('#<p+[^>]*>\s*</p>#i', '', $s);
+		$s = preg_replace('#<div[^>]*>\s*</div>#i', '', $s);
+		if($s == '') {
 			return '内容不能为空。';
 		}
 		if(utf8::strlen($message) > 2000000) {

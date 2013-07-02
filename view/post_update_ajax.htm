@@ -440,12 +440,6 @@ function delay_execute(dialog, recall) {
 		
 		$('#update_message_$pid')[0].editor._focus();
 		$('#update_submit_$pid').click(function() {
-			if($('#update_message_$pid').attr('editor_is_empty') == 1) {
-				$('#update_message_$pid').parent().alert('请填写内容，内容不能为空！', {width: 250, delay: 3000}).focus();
-				$('#update_message_$pid')[0].editor._focus();
-				return false;
-			}
-			
 			$('div.alert').remove();
 			$('#update_submit_$pid').disable();
 			var postdata = $("#update_form_$pid").serialize();
@@ -462,7 +456,8 @@ function delay_execute(dialog, recall) {
 					return false;
 				}
 				if(json.message) {
-					$('#update_message_$pid').parent().alert(json.message).focus();
+					$('#update_message_$pid').parent().alert(json.message);
+					$('#update_message_$pid')[0].editor._focus();
 					return false;
 				}
 				
