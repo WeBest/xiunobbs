@@ -605,6 +605,11 @@ $.editor = function(textarea, settings) {
 		if(_issource) {
 			$(_doc.body).html(s);
 		} else {
+			if($.trim($(_doc.body).text()) == '') {
+				$(textarea).attr('editor_is_empty', 1);
+			} else {
+				$(textarea).attr('editor_is_empty', 0);
+			}
 			$(textarea).val(s);
 		}
 		$.pdata('editor_html_' + textarea.id, s);
