@@ -143,7 +143,7 @@ class mmisc extends base_model {
 		$badword = $this->kv->get('badword');
 		if(!empty($badword)) {
 			foreach($badword as $k=>$v) {
-				if(strpos($s, $k) !== FALSE) {
+				if($k && strpos($s, $k) !== FALSE) {
 					return $k;
 				}
 			}
@@ -159,7 +159,7 @@ class mmisc extends base_model {
 		$badword = $this->kv->get('badword');
 		if(!empty($badword)) {
 			foreach($badword as $k=>$v) {
-				if($v == '#' && strpos($s, $k) !== FALSE) {
+				if($v == '#' && $k && strpos($s, $k) !== FALSE) {
 					return '包含有敏感词：'.$k.'';
 				}
 			}
