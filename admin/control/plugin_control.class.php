@@ -664,7 +664,10 @@ class plugin_control extends admin_control {
 				
 				$s = file_get_contents($file);
 				core::process_include($conf, $s);
-				$s = preg_replace('#\t*\/\/\s*hook\s+([^\s]+)#ies', "core::process_hook(\$conf, '\\1')", $s);
+				
+				$_SERVER['preg_replace_callback_arg'] = $conf;
+				$s = preg_replace_callback('#\t*\/\/\s*hook\s+([^\s]+)#is', 'core::process_hook_callback', $s);
+				
 				core::process_urlrewrite($conf, $s);
 				file_put_contents($objfile, $s);
 				unset($s);
@@ -695,7 +698,10 @@ class plugin_control extends admin_control {
 				$filename = substr(strrchr($file, '/'), 1);
 				$objfile = $tmppath."model_$filename";
 				$s = file_get_contents($file);
-				$s = preg_replace('#\t*\/\/\s*hook\s+([^\s]+)#ies', "core::process_hook(\$conf, '\\1')", $s);
+				
+				$_SERVER['preg_replace_callback_arg'] = $conf;
+				$s = preg_replace_callback('#\t*\/\/\s*hook\s+([^\s]+)#is', 'core::process_hook_callback', $s);
+				
 				core::process_urlrewrite($conf, $s);
 				file_put_contents($objfile, $s);
 				unset($s);
@@ -723,7 +729,10 @@ class plugin_control extends admin_control {
 				
 				$s = file_get_contents($file);
 				core::process_include($conf, $s);
-				$s = preg_replace('#\t*\/\/\s*hook\s+([^\s]+)#ies', "core::process_hook(\$conf, '\\1')", $s);
+				
+				$_SERVER['preg_replace_callback_arg'] = $conf;
+				$s = preg_replace_callback('#\t*\/\/\s*hook\s+([^\s]+)#is', 'core::process_hook_callback', $s);
+
 				core::process_urlrewrite($conf, $s);
 				file_put_contents($objfile, $s);
 				unset($s);

@@ -256,6 +256,14 @@ $.editor = function(textarea, settings) {
 			_doc.designMode = 'On';
 		}
 		
+		// 设置 _doc 编辑模式
+		setTimeout(function() {
+			_this.exec_cmd('enableObjectResizing', true);
+			//_this.exec_cmd('enableInlineTableEditing', true);
+			if(is_ie) _this.exec_cmd('BackgroundImageCache', true);
+		}, 350);
+		
+		
 		// 可视化编辑模式
 		_issource = false;
 		
