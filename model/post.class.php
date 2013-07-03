@@ -42,6 +42,7 @@ class post extends base_model {
 		$s = str_replace('　', '', $s);
 		$s = preg_replace('#<p+[^>]*>\s*</p>#i', '', $s);
 		$s = preg_replace('#<div[^>]*>\s*</div>#i', '', $s);
+		$s = preg_replace('#<span[^>]*>\s*</span>#i', '', $s);
 		if($s == '') {
 			return '内容不能为空。';
 		}
