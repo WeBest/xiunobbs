@@ -38,8 +38,6 @@ class follow extends base_model{
 			'fuid'=>$fuid,
 			'direction'=>$direction,
 		));
-		// user.follows++
-		// fuser.followeds++
 	}
 	
 	// 关注 & 相互关注关系也查到了
@@ -80,17 +78,33 @@ class follow extends base_model{
 		}
 	}
 	
+	// 取消关注, $uid 为自己
 	public function xdelete($uid, $fuid) {
 		$follow = $this->read($fuid, $uid);
-		if(!empty($follow) && $follow['direction'] == 2) {
-			$follow['direction'] = 1;
-			$this->update($follow);
+		// 互相关注
+		$user = $this->user->read($uid);
+		$fuser = $this->user->read($fuid);
+		if(!empty($follow)) {
+			if($follow['direction'] == 2) {
+				$follow['direction'] = 1;
+				$this->update($follow);
+				
+				$ffollow = $this->read($uid, $fuid);
+				$ffollow['direction'] = 1;
+				$this->update($ffollow);
+				
+			} elseif($follow['direction'] == 1) {
+				//$this->delete($uid, $fuid);
+			}
 		}
-		$return = $this->delete(array($uid, $fuid));
-		if($return) {
-			$this->count('-1');
-		}
-		return $return;
+		
+		$user['follows']--;
+		$fuser['followeds']--;
+		
+		$this->user->update($user);
+		$this->user->update($fuser);
+		
+		$this->delete($uid, $fuid);
 	}
 	
 }
