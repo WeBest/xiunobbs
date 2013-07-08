@@ -37,7 +37,7 @@ if(!$this->form_submit() && empty($start)) {
 	if(!empty($arrlist)) {
 		$user_digests = $user_threads = $forum_threads = $forum_digests = array();
 		foreach($arrlist as $arr) {
-			if($thread['digest'] > 0) {
+			if($arr['digest'] > 0) {
 				$this->thread_digest->create(array('fid'=>$arr['fid'], 'tid'=>$arr['tid'], 'digest'=>$arr['digest']));
 			}
 			if($count_user) {
