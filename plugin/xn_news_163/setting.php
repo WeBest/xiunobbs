@@ -17,7 +17,7 @@ if(!$this->form_submit() && empty($start)) {
 } else {
 	
 	$limit = DEBUG ? 1 : 200;
-	$threadlist = $this->thread->index_fetch(array('fid'=>$fid, 'tid'=>array('>'=>$start)), array('tid'=>1), 0, $limit);
+	$threadlist = $this->thread->index_fetch(array('fid'=>$fid, 'tid'=>array('>'=>$start)), array('tid'=>-1), 0, $limit);
 	if(!empty($threadlist)) {
 		$thread_return = array();
 		foreach($threadlist as $thread) {
