@@ -417,6 +417,8 @@ class user_control extends common_control {
 		$this->check_ip();
 		
 		$uid = $this->_user['uid'];
+		$this->check_login();
+		
 		$this->check_forbidden_group();
 		$user = $this->user->read($uid);
 		if(!$this->check_user_access($user, 'attach', $message)) {
@@ -427,7 +429,9 @@ class user_control extends common_control {
 		$destfile = $this->conf['upload_path']."avatar/$dir/{$uid}_tmp.jpg";
 		$desturl = $this->conf['upload_url']."avatar/$dir/{$uid}_tmp.jpg?".$_SERVER['time'];
 		
-
+		if(empty($_FILES['Filedata']['tmp_name'])) {
+			$this->message('请上传图片！', 0);
+		}
 		if(!$this->attach->is_safe_image($_FILES['Filedata']['tmp_name'])) {
 			$this->message('系统检测到你上传的图片不是安全的，请更换其他图片试试！', 0);
 		}
