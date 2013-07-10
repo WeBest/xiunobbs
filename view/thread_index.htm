@@ -369,7 +369,7 @@ var g_uid = $_user[uid];
 
 $('#create_post').click(function() {
 	if(g_uid == 0) {
-		ajaxdialog_request('?user-login-ajax-1.htm', function() {
+		ajaxdialog_request('?user-login.htm', function() {
 			$('#create_post').unbind('click');
 			ajaxdialog_request($('#create_post').attr('href'));
 			$('#create_post').click(function() {
@@ -464,7 +464,7 @@ $('#quick_post_submit').click(function() {
 	}
 
 	if(g_uid == 0) {
-		ajaxdialog_request('?user-login-ajax-1.htm', function() {
+		ajaxdialog_request('?user-login.htm', function() {
 			quick_post_submit_func();
 			return false;
 		});
