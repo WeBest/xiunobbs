@@ -160,9 +160,7 @@ function make_tmp($conf) {
 		if(is_dir($path.$conf['app_id'])) {
 			$path = $path.$conf['app_id'].'/';
 		}
-		echo "path:".$path."\r\n";
 		foreach((array)glob($path."*.htm") as $file) {
-			echo "file:".$file."\r\n";
 			if(!is_file($file)) continue;
 			$filename = substr(strrchr($file, '/'), 1);
 			$objfile = $tmppath.$conf['app_id']."_view_$filename.php";
