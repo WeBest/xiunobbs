@@ -1008,6 +1008,23 @@ $.editor = function(textarea, settings) {
 				}
 			});
 		}
+		s = this.clear_code(s);
+		return s;
+	}
+	
+	// 清理 code
+	this.clear_code = function(s) {
+		s = s.replace(/<code([^>]*)>(.*?)<\/code>/ig, function(all, attrs, text) {
+			/*attrs = $.trim(attrs);
+			attrs = attrs.replace(/(\w+)\s*=\s*['"]?([^'"]*)['"]?/ig, function(all, name, value) {
+				if(name == "class") {
+					return 'class="'+value+'"';
+				} else {
+					return '';
+				}
+			});*/
+			return '<code>'+text+'</code>';
+		});
 		return s;
 	}
 	
