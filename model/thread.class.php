@@ -109,7 +109,7 @@ class thread extends base_model {
 		
 		if($thread['top'] > 0) {
 			$thread['icon'] = "icon-top-$thread[top]";
-		} elseif($thread['digest'] > 0) {
+		} elseif(isset($thread['digest']) && $thread['digest'] > 0) {
 			$thread['icon'] = "icon-digest-$thread[digest]";
 		} elseif($thread['color'] == 'thread-new') {
 			$thread['icon'] = "icon-post-blue";
