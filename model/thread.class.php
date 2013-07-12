@@ -95,7 +95,8 @@ class thread extends base_model {
 		$thread['forumname'] = isset($this->conf['forumarr'][$fid]) ? $this->conf['forumarr'][$fid] : '';
 		
 		// 精华 火帖 新帖 老帖
-		if($thread['digest'] > 0) {
+		// todo: 居然有记录没有 digest
+		if(isset($thread['digest']) && $thread['digest'] > 0) {
 			$thread['color'] = "thread-digest-$thread[digest]";
 		} elseif($thread['posts'] > $this->conf['threadlist_hotviews']) {
 			$thread['color'] = "thread-hot";
