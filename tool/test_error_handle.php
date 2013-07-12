@@ -1,7 +1,7 @@
 <?php
 
 error_reporting(E_ALL | E_STRICT);
-ini_set('display_error', 'ON');
+ini_set('display_errors', 'ON');
 ini_set('default_charset', 'UTF-8');
 
 function error_handle($errno, $errstr, $errfile, $errline) {

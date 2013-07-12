@@ -651,7 +651,7 @@ class plugin_control extends admin_control {
 		$pluginpaths = $conf['plugin_disable'] ? array() : core::get_paths($conf['plugin_path'], TRUE);
 		
 		// 遍历 control
-		foreach(($pluginpaths + $conf['control_path']) as $path) {
+		foreach(array_merge($pluginpaths, $conf['control_path']) as $path) {
 			
 			// 如果有相关的 app path, 这只读取该目录
 			if(is_dir($path.$conf['app_id'])) {
@@ -676,7 +676,7 @@ class plugin_control extends admin_control {
 		
 		// 遍历 view，插入点的 .htm 编译是多余的，不过不碍事。
 		$view = new template($conf);
-		foreach(($pluginpaths + $conf['view_path']) as $path) {
+		foreach(array_merge($pluginpaths, $conf['view_path']) as $path) {
 			// 如果有相关的 app path, 这只读取该目录
 			if(is_dir($path.$conf['app_id'])) {
 				$path = $path.$conf['app_id'].'/';
@@ -692,7 +692,7 @@ class plugin_control extends admin_control {
 		unset($view);
 		
 		// 遍历 model，公共
-		foreach(($pluginpaths + $conf['model_path']) as $path) {
+		foreach(array_merge($pluginpaths, $conf['model_path']) as $path) {
 			foreach((array)glob($path."*.class.php") as $file) {
 				if(!is_file($file)) continue;
 				$filename = substr(strrchr($file, '/'), 1);
@@ -716,7 +716,7 @@ class plugin_control extends admin_control {
 		$conf = $adminconf;
 		
 		// 遍历 bbsadmin control
-		foreach(($pluginpaths + $conf['control_path']) as $path) {
+		foreach(array_merge($pluginpaths, $conf['control_path']) as $path) {
 			
 			// 如果有相关的 app path, 这只读取该目录
 			if(is_dir($path.$conf['app_id'])) {
@@ -741,7 +741,7 @@ class plugin_control extends admin_control {
 		
 		// 遍历 bbsadmin view
 		$view = new template($conf);
-		foreach(($conf['view_path'] + $pluginpaths) as $path) {
+		foreach(array_merge($conf['view_path'], $pluginpaths) as $path) {
 			// 如果有相关的 app path, 则只读取该目录
 			if(is_dir($path.$conf['app_id'])) {
 				$path = $path.$conf['app_id'].'/';
