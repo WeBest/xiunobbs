@@ -439,7 +439,7 @@ class post_control extends common_control {
 					$pmsubject = utf8::substr(htmlspecialchars(strip_tags($quote['message'])), 0, 16);
 					$pmmessage = "【{$this->_user['username']}】引用了您的帖子：<a href=\"?thread-index-fid-$fid-tid-$tid-page-$page.htm\" target=\"_blank\">【{$pmsubject}】</a>。";
 					$this->pm->system_send($quote['uid'], $quote['username'], $pmmessage);
-				} elseif($this->_user['groupid'] <= 5 && $this->_user['uid'] != $thread['uid']) {
+				} elseif(($this->_user['groupid'] <= 5 || ($this->conf['site_pv'] < 1000000 && $thread['posts'] < 60))  && $this->_user['uid'] != $thread['uid']) {
 					$pmsubject = utf8::substr($thread['subject'], 0, 16);
 					$pmmessage = "【{$this->_user['username']}】回复了您的主题：<a href=\"?thread-index-fid-$fid-tid-$tid.htm\" target=\"_blank\">【{$pmsubject}】</a>。";
 					$this->pm->system_send($thread['uid'], $thread['username'], $pmmessage);
