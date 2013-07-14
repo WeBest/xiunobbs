@@ -251,8 +251,7 @@ class attach_control extends common_control {
 			} else {
 				$r = image::safe_thumb($file['tmp_name'], $aid, '.jpg', $uploadpath, $this->conf['upload_image_max_width'], 240000, 1);	// 1210 800
 				$thumbfile = $uploadpath.image::thumb_name($r['fileurl']);
-				image::clip_thumb($file['tmp_name'], $thumbfile, $this->conf['thread_icon_middle'], 2256);
-				image::clip($thumbfile, $thumbfile, 0, 0, $this->conf['thread_icon_middle'], $this->conf['thread_icon_middle']);	// 对付金箍棒图片
+				image::clip_thumb($file['tmp_name'], $thumbfile, $this->conf['thread_icon_middle'], $this->conf['thread_icon_middle']);
 			}
 			
 			$arr['aid'] = $aid;
