@@ -281,11 +281,11 @@ if(!$.fn.dialog) {
 			$('div.header:first span', $(_div)).html(title);
 		};
 		
-		this.set_body = function(body) {
+		this.set_body = function(s) {
 			try {
-				$('div.body', _div).html(body);
+				$('div.body', _div).html(s);
 			} catch(e) {
-				alert('dialog.set_body() error: ' + e.message + "\nbody:" + body);
+				alert('dialog.set_body() error: ' + e.message + "\nbody:" + s);
 			}
 		};
 		
