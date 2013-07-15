@@ -28,6 +28,7 @@ class mmisc extends base_model {
 			
 			$smtp = $mailconf['smtplist'][$key];
 			
+			$message = str_replace("<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\" />", "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=GBK\" />", $message);
 			$subject = iconv('UTF-8', 'GBK', $subject);
 			$message = iconv('UTF-8', 'GBK', $message);
 			$username = iconv('UTF-8', 'GBK', $username);
