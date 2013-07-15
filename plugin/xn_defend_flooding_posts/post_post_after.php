@@ -15,6 +15,7 @@ if($this->_user['groupid'] > 5) {
 	}
 	
 	// 同一篇主题回帖的限制
+	$continuous = 0;
 	$totalpage = ceil($thread['posts'] / $this->conf['pagesize']);
 	$postlist = $this->post->index_fetch(array('fid'=>$fid, 'tid'=>$tid, 'page'=>$totalpage), array(), 0, 20);
 	foreach($postlist as $v) {
@@ -23,4 +24,13 @@ if($this->_user['groupid'] > 5) {
 	if($maxposts <= 10) {
 		$this->message('系统启用了防止灌水插件，2分钟内同一篇主题的回帖量不能超过10篇，如果对您带来麻烦，我们表示抱歉。', 0);
 	}
+	for($i=0; $i<5; $i++) {
+		$_post = array_pop($postlist);
+		if($_post['uid'] == $uid) $continuous++;
+	}
+	if($continuous == 5) {
+		// $this->message('系统启用了防止灌水插件，检测到您的行为与灌水机相似。', 0);
+		$this->message('系统启用了防止灌水插件，连续回帖不能超过3篇，如果对您带来麻烦，我们表示抱歉。', 0);
+	}
+	
 }
