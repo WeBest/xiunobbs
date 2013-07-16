@@ -10,7 +10,7 @@ if($this->_user['groupid'] > 5) {
 		$last = array_pop($mypostlist);
 		$lastpost = $this->post->read($last['fid'], $last['pid']);
 		if($_SERVER['time'] - $lastpost['dateline'] < 300) {
-			$this->message('系统启用了防止灌水插件，5分钟内发帖量不能超过20篇，如果对您带来麻烦，我们表示抱歉。', 0);
+			$this->message('系统启用了防止灌水插件，5分钟内发帖量不能超过5篇，如果对您带来麻烦，我们表示抱歉。', 0);
 		}
 	}
 	
@@ -24,7 +24,7 @@ if($this->_user['groupid'] > 5) {
 	}
 	if($newposts == 5) {
 		//$this->message('系统启用了防止灌水插件，探测到您在频繁发贴，发贴请求被拒绝。', 0);
-		$this->message('系统启用了防止灌水插件，连续发贴不能超过3篇，如果对您带来麻烦，我们表示抱歉。', 0);
+		$this->message('系统启用了防止灌水插件，连续发贴不能超过5篇，如果对您带来麻烦，我们表示抱歉。', 0);
 	}
 }
 	
