@@ -303,7 +303,7 @@ if(empty($step) || $step == 'checklicense') {
 				$s = str_line_replace($s, 46, 52, $replacearr);
 			}
 			$typearr = array('type'=>$type);
-			$s = str_line_replace($s, 24, 25, $typearr);
+			$s = str_line_replace($s, 20, 21, $typearr);
 			$url = misc::get_url_path();
 			$auth_key = md5(rand(1, 10000000).$_SERVER['ip']);
 			$appurl = substr($url, 0, -8); // 带 /
