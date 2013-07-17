@@ -606,7 +606,13 @@ function ajaxdialog_request(url, recall, options) {
 		// 弹出对话框
 		var optionsbefore = $.extend({width: 700, modal: true, open: true}, options);
 		jdialog.dialog(optionsbefore);
-		var arg = url.indexOf('-ajax-1') == -1 ? {ajax: 1} : null;
+		// 追加 -ajax-1 参数
+		var arg = null;
+		if(url.indexOf('-ajax-1') == -1 && url.substr(url.length - 4, 4) == '.htm') {
+			url = url.substr(0, url.length - 4) + '-ajax-1.htm';
+		} else {
+			var arg = {ajax: 1};
+		}
 		$.get(url, arg, function(s) {
 			var json = json_decode(s);
 			if((error = json_error(json)) || json.status <= 0) {
