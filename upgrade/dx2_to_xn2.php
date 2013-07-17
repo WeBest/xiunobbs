@@ -29,6 +29,8 @@ define('DEBUG', 0);
 
 define('BBS_PATH', './');
 
+define('DO_NOT_MOVE_OLD_ATTACH', 0); // 保留老的附件目录，不进行移动，附件很多的时候，修改此项。
+
 // DX2_PATH 需要配置正确！ linux 下可以用如下命令行： ln -s /data/www/oldbbs.com /data/www/xiunobbs/dx2
 define('DX2_PATH', BBS_PATH.'dx2/');
 
@@ -783,24 +785,34 @@ function upgrade_attach() {
 			$newfid = get_fid_by_policy($fid, $policy);
 			if(empty($newfid)) continue;
 			
-			$oldattach = '';
-			is_file($dx2_attach_path.'forum/'.$old['attachment']) && $oldattach = $dx2_attach_path.'forum/'.$old['attachment'];
-			is_file(DX2_PATH.$old['attachment']) && $oldattach = DX2_PATH.$old['attachment'];
-			if(empty($oldattach)) continue;
-			
-			$filetype = get_filetype($old['filename']);
-			if($filetype == 'image') {
-				list($width, $height, $type, $attr) = getimagesize($oldattach);
+			if(DO_NOT_MOVE_OLD_ATTACH) {
+				$oldattach = '';
+				$width = $height = $type = $attr = '';
+				$filetype = get_filetype($old['filename']);
 			} else {
-				$height = 0;
+				$oldattach = '';
+				is_file($dx2_attach_path.'forum/'.$old['attachment']) && $oldattach = $dx2_attach_path.'forum/'.$old['attachment'];
+				is_file(DX2_PATH.$old['attachment']) && $oldattach = DX2_PATH.$old['attachment'];
+				if(empty($oldattach)) continue;
+				
+				$filetype = get_filetype($old['filename']);
+				if($filetype == 'image') {
+					list($width, $height, $type, $attr) = getimagesize($oldattach);
+				} else {
+					$height = 0;
+				}
 			}
 			
 			// copy
-			$ext = strrchr($old['filename'], '.');
-			$pathadd = image::set_dir($aid, $conf['upload_path'].'attach/');
-			$newfilename = $pathadd.'/'.$aid.$ext;
-			$newfile = $conf['upload_path'].'attach/'.$newfilename;
-			!is_file($newfile) && copy($oldattach, $newfile);
+			if(DO_NOT_MOVE_OLD_ATTACH) {
+				$newfilename = $old['attachment'];
+			} else {
+				$ext = strrchr($old['filename'], '.');
+				$pathadd = image::set_dir($aid, $conf['upload_path'].'attach/');
+				$newfilename = $pathadd.'/'.$aid.$ext;
+				$newfile = $conf['upload_path'].'attach/'.$newfilename;
+				!is_file($newfile) && copy($oldattach, $newfile);
+			}
 			$forum = $dx2->get("forum_thread-tid-$old[tid]");
 			
 			$arr = array (
@@ -826,8 +838,10 @@ function upgrade_attach() {
 		}
 		
 		message("正在升级 attach, maxaid: $maxaid, 当前: $start...", "?step=upgrade_attach&start=$start&maxaid=$maxaid", 0);
-	} else {	
+	} else {
+		exit;	
 		message('升级 attach 完成，接下来升级 post ...', '?step=upgrade_post&start=0', 5);
+		
 	}
 }
 
