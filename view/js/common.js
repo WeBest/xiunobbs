@@ -608,10 +608,13 @@ function ajaxdialog_request(url, recall, options) {
 		jdialog.dialog(optionsbefore);
 		// 追加 -ajax-1 参数
 		var arg = null;
-		if(url.indexOf('-ajax-1') == -1 && url.substr(url.length - 4, 4) == '.htm') {
-			url = url.substr(0, url.length - 4) + '-ajax-1.htm';
-		} else {
-			var arg = {ajax: 1};
+		if(url.indexOf('-ajax-1') == -1 && url.indexOf('ajax=1') == -1) {
+			if(url.substr(url.length - 4, 4) == '.htm') {
+				url = url.substr(0, url.length - 4) + '-ajax-1.htm';
+				arg = null;
+			} else {
+				arg = {ajax: 1};
+			}
 		}
 		$.get(url, arg, function(s) {
 			var json = json_decode(s);
