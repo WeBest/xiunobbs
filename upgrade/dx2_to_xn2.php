@@ -1395,8 +1395,10 @@ function int_to_string($arr) {
 
 // dx2 db instance
 function get_dx2() {
+	$conf = include BBS_PATH.'conf/conf.php';
 	include DX2_CONF_FILE;
-	$dx2 = new db_mysql(array(
+	$classname = $conf['db']['type'] == 'mysql' ? 'db_mysql' : 'db_pdo_mysql';
+	$dx2 = new $classname(array(
 		'master' => array (
 			'host' => $_config['db'][1]['dbhost'],
 			'user' => $_config['db'][1]['dbuser'],
@@ -1415,9 +1417,11 @@ function get_dx2() {
 
 // ucenter db instance
 function get_uc() {
+	$conf = include BBS_PATH.'conf/conf.php';
 	include UCENTER_CONF_FILE;;
 	$tablepre = explode('.', UC_DBTABLEPRE);
-	$uc = new db_mysql(array(
+	$classname = $conf['db']['type'] == 'mysql' ? 'db_mysql' : 'db_pdo_mysql';
+	$uc = new $classname(array(
 		'master' => array (
 			'host' => UC_DBHOST,
 			'user' => UC_DBUSER,
@@ -1436,7 +1440,8 @@ function get_uc() {
 // xn2 db instance
 function get_db() {
 	$conf = include BBS_PATH.'conf/conf.php';
-	$db = new db_mysql($conf['db'][$conf['db']['type']]);
+	$classname = $conf['db']['type'] == 'mysql' ? 'db_mysql' : 'db_pdo_mysql';
+	$db = new $classname($conf['db'][$conf['db']['type']]);
 	return $db;
 }
 
