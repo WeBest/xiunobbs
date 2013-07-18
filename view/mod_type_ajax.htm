@@ -2,6 +2,7 @@
 
 <form action="?mod-type-fid-$fid-ajax-1.htm" method="post" id="mod_type_form">
 	<input type="hidden" name="FORM_HASH" value="{FORM_HASH}" />
+	<input type="hidden" name="tids" value="$tidsurl" />
 	<dl>
 		<dt><label>主题：</label></dt>
 		<dd>$threads (篇)</dd>
@@ -36,15 +37,13 @@
 
 <script type="text/javascript">
 
-var sep = $conf[urlrewrite] ? '?' : '&';
-var tidsurl = '$tidsurl';
 // 延迟执行的脚本，约定名字为：delay_execute()
 function delay_execute(dialog, recall) {
 	$('#mod_type_submit').focus();
 	$('#mod_type_submit').click(function() {
 		$('#mod_type_submit').disable();
 		var postdata = $("#mod_type_form").serialize();
-		$.post($('#mod_type_form').attr('action') + sep + tidsurl, postdata,  function(s){
+		$.post($('#mod_type_form').attr('action'), postdata,  function(s){
 			$('#mod_type_submit').enable();
 			var json = json_decode(s);
 			if(error = json_error(json)) {alert(error); return false;}

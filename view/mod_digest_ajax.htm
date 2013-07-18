@@ -5,6 +5,7 @@
 </style>
 <form action="?mod-digest-fid-$fid-ajax-1.htm" method="post" id="mod_digest_form">
 	<input type="hidden" name="FORM_HASH" value="{FORM_HASH}" />
+	<input type="hidden" name="tids" value="$tidsurl" />
 	<input type="hidden" name="cateids" id="cateids" value="$cateids" />
 	<dl>
 		<dt><label>主题：</label></dt>
@@ -35,15 +36,13 @@
 </form>
 
 <script type="text/javascript">
-var sep = $conf[urlrewrite] ? '?' : '&';
-var tidsurl = '$tidsurl';
 // 延迟执行的脚本，约定名字为：delay_execute()
 function delay_execute(dialog, recall) {
 	$('#mod_digest_submit').focus();
 	$('#mod_digest_submit').click(function() {
 		$('#mod_digest_submit').disable();
 		var postdata = $("#mod_digest_form").serialize();
-		$.post($('#mod_digest_form').attr('action') + sep + tidsurl, postdata,  function(s){
+		$.post($('#mod_digest_form').attr('action'), postdata,  function(s){
 			$('#mod_digest_submit').enable();
 			var json = json_decode(s);
 			if(error = json_error(json)) {alert(error); return false;}
