@@ -839,7 +839,6 @@ function upgrade_attach() {
 		
 		message("正在升级 attach, maxaid: $maxaid, 当前: $start...", "?step=upgrade_attach&start=$start&maxaid=$maxaid", 0);
 	} else {
-		exit;	
 		message('升级 attach 完成，接下来升级 post ...', '?step=upgrade_post&start=0', 5);
 		
 	}
@@ -879,7 +878,7 @@ function upgrade_post() {
 
 			// 帖子附件
 			if($old['attachment']) {
-				$attachlist = $db->index_fetch('attach', 'aid', array('fid'=>$newfid, 'pid'=>$pid), array('aid'=>1), array(), 0, 1000);
+				$attachlist = $db->index_fetch('attach', array('fid', 'aid'), array('fid'=>$newfid, 'pid'=>$pid), array('aid'=>1), array(), 0, 1000);
 				if($attachlist) {
 					foreach($attachlist as $attach) {
 						$attachinsert = '[attach]'.$attach['aid'].'[/attach]';
