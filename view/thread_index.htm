@@ -250,7 +250,7 @@
 		<div class="page" style="text-align: center;">$pages</div>
 		<!--{if $ismod}-->
 		<div style="text-align: center;">
-			<input type="checkbox" name="tidarr[]" value="$thread[fid]-$thread[tid]" checked="checked" style="display: none;" />
+			<input type="checkbox" name="fid_tid[]" value="$thread[fid]_$thread[tid]" checked="checked" style="display: none;" />
 			<input type="button" class="button smallblue" id="mod_top"  value="置顶" />
 			<!--{if $forum[typecates]}-->
 			<input type="button" class="button smallblue" id="mod_type"  value="主题分类" />
@@ -279,49 +279,50 @@
 <!--{if $ismod}-->
 <script type="text/javascript">
 // copy from forum_index.htm
-var sep = $conf[urlrewrite] ? '?' : '&';
-
 // 置顶 弹出 dialog 设置为置顶
 $('#mod_top').click(function() {
-	var postdata = sep;
-	$.each($('#body input[name="tidarr[]"]:checked'), function(k, v) {
-		postdata += '&tidarr[]='+v.value;
+	var fid_tids = '';
+	$.each($('#body input[name="fid_tid[]"]:checked'), function(k, v) {
+		fid_tids += (fid_tids ? '__' : '') + v.value;
 	});
-	if(postdata == sep) {
+	if(fid_tids == '') {
 		alert('请选择主题！');
 		return false;
 	}
-	ajaxdialog_request('?mod-top-fid-$fid.htm'+postdata, function() {
+	var url = url_add_arg('?mod-top-fid-$fid.htm', 'fid_tids', fid_tids);
+	ajaxdialog_request(url, function() {
 		window.location.reload();
 	});
 });
 
 // 主题分类 
 $('#mod_type').click(function() {
-	var postdata = sep;
-	$.each($('#body input[name="tidarr[]"]:checked'), function(k, v) {
-		postdata += '&tidarr[]='+v.value;
+	var fid_tids = '';
+	$.each($('#body input[name="fid_tid[]"]:checked'), function(k, v) {
+		fid_tids += (fid_tids ? '__' : '') + v.value;
 	});
-	if(postdata == sep) {
+	if(fid_tids == '') {
 		alert('请选择主题！');
 		return false;
 	}
-	ajaxdialog_request('?mod-type-fid-$fid.htm'+sep+postdata, function() {
+	var url = url_add_arg('?mod-type-fid-$fid.htm', 'fid_tids', fid_tids);
+	ajaxdialog_request(url, function() {
 		window.location.reload();
 	});
 });
 
 // 精华
 $('#mod_digest').click(function() {
-	var postdata = sep;
-	$.each($('#body input[name="tidarr[]"]:checked'), function(k, v) {
-		postdata += '&tidarr[]='+v.value;
+	var fid_tids = '';
+	$.each($('#body input[name="fid_tid[]"]:checked'), function(k, v) {
+		fid_tids += (fid_tids ? '__' : '') + v.value;
 	});
-	if(postdata == sep) {
+	if(fid_tids == '') {
 		alert('请选择主题！');
 		return false;
 	}
-	ajaxdialog_request('?mod-digest-fid-$fid.htm'+sep+postdata, function() {
+	var url = url_add_arg('?mod-digest-fid-$fid.htm', 'fid_tids', fid_tids);
+	ajaxdialog_request(url, function() {
 		window.location.reload();
 	});
 	return false;
@@ -329,30 +330,32 @@ $('#mod_digest').click(function() {
 
 // 删除
 $('#mod_delete').click(function() {
-	var postdata = sep;
-	$.each($('#body input[name="tidarr[]"]:checked'), function(k, v) {
-		postdata += '&tidarr[]='+v.value;
+	var fid_tids = '';
+	$.each($('#body input[name="fid_tid[]"]:checked'), function(k, v) {
+		fid_tids += (fid_tids ? '__' : '') + v.value;
 	});
-	if(postdata == sep) {
+	if(fid_tids == '') {
 		alert('请选择主题！');
 		return false;
 	}
-	ajaxdialog_request('?mod-delete-fid-$fid.htm'+postdata, function() {
+	var url = url_add_arg('?mod-delete-fid-$fid.htm', 'fid_tids', fid_tids);
+	ajaxdialog_request(url, function() {
 		window.location = '?forum-index-fid-$fid.htm';
 	});
 });
 
 // 移动
 $('#mod_move').click(function() {
-	var postdata = sep;
-	$.each($('#body input[name="tidarr[]"]:checked'), function(k, v) {
-		postdata += '&tidarr[]='+v.value;
+	var fid_tids = '';
+	$.each($('#body input[name="fid_tid[]"]:checked'), function(k, v) {
+		fid_tids += (fid_tids ? '__' : '') + v.value;
 	});
-	if(postdata == sep) {
+	if(fid_tids == '') {
 		alert('请选择主题！');
 		return false;
 	}
-	ajaxdialog_request('?mod-move-fid-$fid.htm'+postdata, function() {
+	var url = url_add_arg('?mod-move-fid-$fid.htm', 'fid_tids', fid_tids);
+	ajaxdialog_request(url, function() {
 		window.location = '?forum-index-fid-$fid.htm';
 	});
 });

@@ -1,11 +1,11 @@
 <script>
 // 锁贴
 $('#mod_lock').click(function() {
-	var fid_tids = sep;
+	var fid_tids = '';
 	$.each($('#body input[name="fid_tid[]"]:checked'), function(k, v) {
 		fid_tids += (fid_tids ? '__' : '') + v.value;
 	});
-	if(fid_tids == sep) {
+	if(fid_tids == '') {
 		alert('请选择主题！');
 		return false;
 	}

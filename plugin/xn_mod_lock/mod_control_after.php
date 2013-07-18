@@ -31,7 +31,8 @@
 			
 			// 第一个元素作为选中状态
 			$fid_tid = array_shift($fidtidarr);
-			list($fid, $tid) = explode('-', $fid_tid);
+			$fid = $fid_tid[0];
+			$tid = $fid_tid[1];
 			$thread = $this->thread->read($fid, $tid);
 			$this->check_thread_exists($thread);
 			

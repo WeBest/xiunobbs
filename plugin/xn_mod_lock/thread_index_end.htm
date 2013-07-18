@@ -2,11 +2,12 @@
 
 // 锁贴
 $('#mod_lock').click(function() {
-	var postdata = sep;
-	$.each($('#body input[name="tidarr[]"]:checked'), function(k, v) {
-		postdata += '&tidarr[]='+v.value;
+	var fid_tids = '';
+	$.each($('#body input[name="fid_tid[]"]:checked'), function(k, v) {
+		fid_tids += (fid_tids ? '__' : '') + v.value;
 	});
-	ajaxdialog_request('?mod-lock-fid-$fid.htm'+postdata, function() {
+	var url = url_add_arg('?mod-lock-fid-$fid.htm', 'fid_tids', fid_tids);
+	ajaxdialog_request(url, function() {
 		window.location = '?forum-index-fid-$fid.htm';
 	});
 });

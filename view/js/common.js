@@ -611,6 +611,7 @@ function url_add_arg(url, k, v) {
 // 检查 cache，如果存在，则先从CACHE中取
 function ajaxdialog_request(url, recall, options) {
 	// 如果有cache 直接显示 cache 数据
+	var url = url_add_arg(url, 'ajax', 1);
 	var dialogid = url_to_id(url);
 	var dialogdiv = document.getElementById(dialogid);
 	if(!dialogdiv) {
@@ -631,14 +632,13 @@ function ajaxdialog_request(url, recall, options) {
 		jdialog[0].dialog.open();
 		jdialog[0].dialog.settings.xcaller = options.xcaller;
 		jdialog[0].dialog.set_position(options.position);
-		
 	// 没有 cache, ajax 请求 url
 	} else {
 		// 弹出对话框
 		var optionsbefore = $.extend({width: 700, modal: true, open: true}, options);
 		jdialog.dialog(optionsbefore);
 		// 追加 -ajax-1 参数
-		var url = url_add_arg(url, 'ajax', 1);
+		
 		$.get(url, function(s) {
 			var json = json_decode(s);
 			if((error = json_error(json)) || json.status <= 0) {
