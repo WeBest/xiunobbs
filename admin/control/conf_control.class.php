@@ -231,11 +231,6 @@ class conf_control extends admin_control {
 			$this->clear_tmp();
 		}
 		
-		// 清空 runtime
-		if($runtime) {
-			$this->runtime->truncate();
-		}
-		
 		// 清空版块缓存
 		if($forum) {
 			$forumarr = $this->conf['forumarr'];
@@ -289,7 +284,19 @@ class conf_control extends admin_control {
                         $n = $this->online->index_count();
                         $this->online->count($n);
                         $this->runtime->xset('onlines', $n);
+                        
+                        $posts = $this->post->count();
+                        $users = $this->user->count();
+                        $this->kv->xset('posts', $posts);
+                        $this->kv->xset('users', $users);
+                        $this->runtime->xset('posts', $posts);
+                        $this->runtime->xset('users', $users);
                 }
+                
+                // 清空 runtime
+		if($runtime) {
+			$this->runtime->truncate();
+		}
                 
 		// hook admin_conf_cache_view_before.php
 		

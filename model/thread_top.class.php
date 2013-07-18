@@ -89,8 +89,9 @@ class thread_top extends base_model {
 	
 	private function update_thread_top($fidtidarr, $top) {
 		// 更新到 $thread
-		foreach($fidtidarr as $fid_tid) {
-			list($fid, $tid) = explode('-', $fid_tid);
+		foreach($fidtidarr as $v) {
+			$fid = $v[0];
+			$tid = $v[1];
 			$thread = $this->thread->read($fid, $tid);
 			if(!empty($thread)) {
 				$thread['top'] = $top;
@@ -102,11 +103,9 @@ class thread_top extends base_model {
 	// 返回格式 "123-12345 123-12346 123-12347"
 	private function tidarr_to_fidtid($fidtidarr) {
 		$fidtids = '';
-		foreach($fidtidarr as $fid_tid) {
-			list($fid, $tid) = explode('-', $fid_tid);
-			$fidtids .= " $fid-$tid";
+		foreach($fidtidarr as $v) {
+			$fidtids .= " $v[0]-$v[1]";
 		}
-		$fidtids = trim($fidtids);
 		return $fidtids;
 	}
 	

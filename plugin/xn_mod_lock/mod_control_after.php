@@ -20,7 +20,7 @@
 		define('XN_LOCK_STATUS_ATTACH', 8);
 		
 		$fid = intval(core::gpc('fid'));
-		$tidarr = $this->get_tidarr();
+		$fidtidarr = $this->get_fid_tids();
 		
 		$forum = $this->forum->read($fid);
 		$this->check_forum_exists($forum);
@@ -30,7 +30,7 @@
 		if(!$this->form_submit()) {
 			
 			// 第一个元素作为选中状态
-			$fid_tid = array_shift($tidarr);
+			$fid_tid = array_shift($fidtidarr);
 			list($fid, $tid) = explode('-', $fid_tid);
 			$thread = $this->thread->read($fid, $tid);
 			$this->check_thread_exists($thread);
@@ -60,11 +60,10 @@
 			$fidarr = $lockarr = array();
 			
 			// hook mod_lock_after.php
-			foreach($tidarr as &$v) {			// 此处也得用 &
+			foreach($fidtidarr as &$v) {			// 此处也得用 &
 				// 初始化数据
-				list($fid, $tid) = explode('-', $v);
-				$fid = intval($fid);
-				$tid = intval($tid);
+				$fid = intval($v[0]);
+				$tid = intval($v[1]);
 				$thread = $this->thread->read($fid, $tid);
 				if(empty($thread)) continue;
 					

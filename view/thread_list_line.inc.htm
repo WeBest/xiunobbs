@@ -3,7 +3,7 @@
 	<tr height="32">
 		<td valign="middle" class="subject">
 			<!--{if $fid && $ismod}-->
-			<input type="checkbox" name="tidarr[]" value="$thread[fid]-$thread[tid]" />
+			<input type="checkbox" name="fid_tid[]" value="$thread[fid]_$thread[tid]" />
 			<!--{/if}-->
 		
 			<!--{hook thread_list_line_inc_subject_icon_before.htm}-->

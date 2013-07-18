@@ -36,25 +36,24 @@ class mod_control extends common_control {
 		$this->check_login();
 		
 		$fid = intval(core::gpc('fid'));
-		$tidarr = $this->get_tidarr();
+		$fidtidarr = $this->get_fid_tids();
 		
 		$forum = $this->forum->read($fid);
 
 		$this->check_access($forum, 'top');
 		
 		// 去除非本版块的置顶主题
-		foreach($tidarr as $k=>$v) {
-			list($_fid, $_tid) = explode('-', $v);
-			$_fid = intval($_fid);
-			$_tid = intval($_tid);
+		foreach($fidtidarr as $k=>$v) {
+			$_fid = $v[0];
+			$_tid = $v[1];
 			$thread = $this->thread->read($_fid, $_tid);
-			if(empty($thread)) unset($tidarr[$k]);
+			if(empty($thread)) unset($fidtidarr[$k]);
 		}
 		
 		if(!$this->form_submit()) {
 			
 			// 初始化控件状态
-			$this->init_view_thread($tidarr, 'top');
+			$this->init_view_thread($fidtidarr, 'top');
 			
 			$this->view->assign('fid', $fid);
 			
@@ -70,7 +69,7 @@ class mod_control extends common_control {
 			}
 			
 			// -------> 统计 top_1 2 3 的总数，是否超过5个。
-			$n = count($tidarr);
+			$n = count($fidtidarr);
 			if($rank == 1) {
 				// 1 级置顶
 				$keys = array();
@@ -90,23 +89,22 @@ class mod_control extends common_control {
 			// hook mod_top_after.php
 			
 			// 先去除已有，然后加入
-			$this->thread_top->delete_top_1($forum, $tidarr);
-			$this->thread_top->delete_top_3($tidarr);
+			$this->thread_top->delete_top_1($forum, $fidtidarr);
+			$this->thread_top->delete_top_3($fidtidarr);
 			
 			if($rank == 0) {
 				
 			} elseif($rank == 1) {
-				$this->thread_top->add_top_1($forum, $tidarr);
+				$this->thread_top->add_top_1($forum, $fidtidarr);
 			} elseif($rank == 3) {
-				$this->thread_top->add_top_3($tidarr);
+				$this->thread_top->add_top_3($fidtidarr);
 			}
 			
 			// 记录到版主操作日志
-			foreach($tidarr as &$v) {			// 此处也得用 &
+			foreach($fidtidarr as &$v) {			// 此处也得用 &
 				// 初始化数据
-				list($fid, $tid) = explode('-', $v);
-				$fid = intval($fid);
-				$tid = intval($tid);
+				$fid = $v[0];
+				$tid = $v[1];
 				
 				$thread = $this->thread->read($fid, $tid);
 				if(empty($thread)) continue;
@@ -149,7 +147,7 @@ class mod_control extends common_control {
 		$this->check_login();
 		
 		$fid = intval(core::gpc('fid'));
-		$tidarr = $this->get_tidarr();
+		$fidtidarr = $this->get_fid_tids();
 		
 		$forum = $this->forum->read($fid);
 		$this->check_forum_exists($forum);
@@ -159,8 +157,9 @@ class mod_control extends common_control {
 		if(!$this->form_submit()) {
 			
 			// 第一个元素作为选中状态
-			$fid_tid = array_shift($tidarr);
-			list($fid, $tid) = explode('-', $fid_tid);
+			$fid_tid = array_shift($fidtidarr);
+			$fid = $fid_tid[0];
+			$tid = $fid_tid[0];
 			$thread = $this->thread->read($fid, $tid);
 			$this->check_thread_exists($thread);
 			
@@ -181,11 +180,10 @@ class mod_control extends common_control {
 			
 			// hook mod_digest_after.php
 			$tidnum = 0;
-			foreach($tidarr as &$v) {			// 此处也得用 &
+			foreach($fidtidarr as &$v) {			// 此处也得用 &
 				// 初始化数据
-				list($fid, $tid) = explode('-', $v);
-				$fid = intval($fid);
-				$tid = intval($tid);
+				$fid = intval($v[0]);
+				$tid = intval($v[1]);
 				$thread = $this->thread->read($fid, $tid);
 				if(empty($thread) || !isset($thread['digest'])) continue;
 				
@@ -282,7 +280,7 @@ class mod_control extends common_control {
 		$this->check_login();
 		
 		$fid = intval(core::gpc('fid'));
-		$tidarr = $this->get_tidarr();
+		$fidtidarr = $this->get_fid_tids();
 		
 		$forum = $this->mcache->read('forum', $fid);
 		
@@ -293,8 +291,9 @@ class mod_control extends common_control {
 		if(!$this->form_submit()) {
 			
 			// 初始化控件状态
-			$fidtid = array_pop($tidarr);
-			list($fid, $tid) = explode('-', $fidtid);
+			$fidtid = array_pop($fidtidarr);
+			$fid = $fidtid[0];
+			$tid = $fidtid[1];
 			$thread = $this->thread->read(intval($fid), intval($tid));
 			$this->check_thread_exists($thread);
 			$typeid1 = $thread['typeid1'];
@@ -302,7 +301,7 @@ class mod_control extends common_control {
 			$typeid3 = $thread['typeid3'];
 			$typeid4 = $thread['typeid4'];
 			
-			$this->init_view_thread($tidarr, 'type');
+			$this->init_view_thread($fidtidarr, 'type');
 			$this->init_type_select($forum, $typeid1, $typeid2, $typeid3, $typeid4);
 			
 			$this->view->assign('fid', $fid);
@@ -321,11 +320,10 @@ class mod_control extends common_control {
 			$this->check_comment($comment);
 			
 			// hook mod_type_after.php
-			foreach($tidarr as &$v) {			// 此处也得用 &
+			foreach($fidtidarr as &$v) {			// 此处也得用 &
 				// 初始化数据
-				list($fid, $tid) = explode('-', $v);
-				$fid = intval($fid);
-				$tid = intval($tid);
+				$fid = intval($v[0]);
+				$tid = intval($v[1]);
 				
 				// 过滤非本版块的主题分类
 				if($fid != intval(core::gpc('fid'))) continue;
@@ -378,7 +376,7 @@ class mod_control extends common_control {
 		$this->check_login();
 		
 		$fid = intval(core::gpc('fid'));
-		$tidarr = $this->get_tidarr();
+		$fidtidarr = $this->get_fid_tids();
 		
 		$forum = $this->mcache->read('forum', $fid);
 
@@ -427,10 +425,9 @@ class mod_control extends common_control {
 			
 			// hook mod_move_after.php
 			
-			foreach($tidarr as $v) {
-				list($fid, $tid) = explode('-', $v);
-				$fid = intval($fid);
-				$tid = intval($tid);
+			foreach($fidtidarr as $v) {
+				$fid = $v[0];
+				$tid = $v[1];
 				$thread = $this->thread->read($fid, $tid);
 				if(empty($thread)) continue;
 				if($thread['top'] > 0) {
@@ -440,10 +437,9 @@ class mod_control extends common_control {
 			
 			// 查找主题。更新 fid
 			$tidnum = $pidnum = $digestnum = 0;
-			foreach($tidarr as $v) {
-				list($fid, $tid) = explode('-', $v);
-				$fid = intval($fid);
-				$tid = intval($tid);
+			foreach($fidtidarr as $v) {
+				$fid = $v[0];
+				$tid = $v[1];
 				$thread = $this->thread->read($fid, $tid);
 				if(empty($thread)) continue;
 				$tidnum++;	// 帖子数
@@ -671,7 +667,7 @@ class mod_control extends common_control {
 		$this->check_login();
 		
 		$fid = intval(core::gpc('fid'));
-		$tidarr = $this->get_tidarr();
+		$fidtidarr = $this->get_fid_tids();
 		
 		$forum = $this->forum->read($fid);
 		
@@ -690,10 +686,9 @@ class mod_control extends common_control {
 			$this->check_comment($comment);
 			
 			// hook mod_delete_after.php
-			foreach($tidarr as $v) {
-				list($fid, $tid) = explode('-', $v);
-				$fid = intval($fid);
-				$tid = intval($tid);
+			foreach($fidtidarr as $v) {
+				$fid = intval($v[0]);
+				$tid = intval($v[1]);
 				
 				// 记录到版主操作日志
 				$thread = $this->thread->read($fid, $tid);
@@ -747,14 +742,19 @@ class mod_control extends common_control {
 	}
 	
 	// 传递 tid
-	private function get_tidarr() {
-		$tidarr = (array)core::gpc('tidarr');
-		$tidsurl = '';
-		foreach($tidarr as $fid_tid) {$tidsurl .= '&tidarr[]='.$fid_tid;}
-		$threads = count($tidarr);
-		$this->view->assign('tidsurl', $tidsurl);
+	private function get_fid_tids() {
+		$fid_tids = core::gpc('fid_tids'); // 字符串: 123_100__123_101__123_102
+		$r = array();
+		$arr = explode('__', $fid_tids);
+		foreach((array)$arr as $v) {
+			$arr2 = explode('_', $v);
+			$r[] = array(intval($arr2[0]), intval($arr2[1]));
+		}
+		//$fidtidarr = misc::explode('_', '__', $fid_tids);
+		$threads = count($r);
+		$this->view->assign('fid_tids', $fid_tids);
 		$this->view->assign('threads', $threads);
-		return $tidarr;
+		return $r;
 	}
 	
 	// 增加版主操作次数
@@ -765,12 +765,11 @@ class mod_control extends common_control {
 	}
 
 	// 初始化控件的初始值。
-	private function init_view_thread($tidarr, $action = '') {
+	private function init_view_thread($fidtidarr, $action = '') {
 		$thread = $modlog = array();
-		foreach($tidarr as &$v) {
-			list($fid, $tid) = explode('-', $v);
-			$fid = intval($fid);
-			$tid = intval($tid);
+		foreach($fidtidarr as &$v) {
+			$fid = $v[0];
+			$tid = $v[1];
 			$thread = $this->thread->read($fid, $tid);
 			break;
 		}

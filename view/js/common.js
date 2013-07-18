@@ -577,6 +577,37 @@ function url_to_id(url) {
 	return escape(url).replace(/[%.\/\-]/ig, '_');	// 此处不过滤特殊字符在 jquery 下会有奇怪的bug, $('abc%.') 会让 jquery 彻底傻掉，1.4.3 通过，1.6未测试。
 }
 
+// 添加参数到 url，去除重复
+/*
+	兼容以下格式：
+	?a-1-b-2.htm
+	a-1-b-2.htm
+	/?a-1-b-2.htm
+	/a-1-b-2.htm
+	/?a=1&b=2
+	?a=1&b=2
+*/
+function url_add_arg(url, k, v) {
+	if(url.indexOf('/?') != -1) {
+		var sep = url.indexOf('/?');
+		var prefix = url.substr(0, sep);
+		var suffix = url.substr(sep, url.length);
+	} else if(url.indexOf('?') != -1) {
+		var sep = url.indexOf('?');
+		var prefix = url.substr(0, sep);
+		var suffix = url.substr(sep, url.length);
+	} else {
+		var prefix = '';
+		var suffix = url;
+	}
+	if(suffix.substr(suffix.length - 4, 4) == '.htm') {
+		suffix = suffix.substr(0, suffix.length - 4) + '-'+k+'-'+v+'.htm';
+	} else {
+		suffix += (suffix.indexOf('?') == -1 ? '?' : '&') + k + '=' + v;
+	}
+	return prefix + suffix;
+}
+
 // 检查 cache，如果存在，则先从CACHE中取
 function ajaxdialog_request(url, recall, options) {
 	// 如果有cache 直接显示 cache 数据
@@ -607,16 +638,8 @@ function ajaxdialog_request(url, recall, options) {
 		var optionsbefore = $.extend({width: 700, modal: true, open: true}, options);
 		jdialog.dialog(optionsbefore);
 		// 追加 -ajax-1 参数
-		var arg = null;
-		if(url.indexOf('-ajax-1') == -1 && url.indexOf('ajax=1') == -1) {
-			if(url.substr(url.length - 4, 4) == '.htm') {
-				url = url.substr(0, url.length - 4) + '-ajax-1.htm';
-				arg = null;
-			} else {
-				arg = {ajax: 1};
-			}
-		}
-		$.get(url, arg, function(s) {
+		var url = url_add_arg(url, 'ajax', 1);
+		$.get(url, function(s) {
 			var json = json_decode(s);
 			if((error = json_error(json)) || json.status <= 0) {
 				error = error.replace(/\n/ig, '<br />');

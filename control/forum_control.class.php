@@ -141,6 +141,7 @@ class forum_control extends common_control {
 		if($s) {
 			$fidtidlist = explode(' ', trim($s));
 			foreach($fidtidlist as $fidtid) {
+				if(empty($fidtid)) continue;
 				list($fid, $tid) = explode('-', $fidtid);
 				$fidtids["$fid-$tid"] = array($fid, $tid);
 			}
