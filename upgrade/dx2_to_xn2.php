@@ -834,7 +834,6 @@ function upgrade_attach() {
 				'golds'=> 0,
 			);
 			$db->set("attach-fid-$newfid-aid-$aid", $arr);
-			
 		}
 		
 		message("正在升级 attach, maxaid: $maxaid, 当前: $start...", "?step=upgrade_attach&start=$start&maxaid=$maxaid", 0);
