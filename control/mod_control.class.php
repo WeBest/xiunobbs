@@ -159,7 +159,7 @@ class mod_control extends common_control {
 			// 第一个元素作为选中状态
 			$fid_tid = array_shift($fidtidarr);
 			$fid = $fid_tid[0];
-			$tid = $fid_tid[0];
+			$tid = $fid_tid[1];
 			$thread = $this->thread->read($fid, $tid);
 			$this->check_thread_exists($thread);
 			
