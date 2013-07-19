@@ -29,7 +29,7 @@ define('DEBUG', 0);
 
 define('BBS_PATH', './');
 
-define('DO_NOT_MOVE_OLD_ATTACH', 0); // 保留老的附件目录，不进行移动，附件很多的时候，修改此项。
+//define('DO_NOT_MOVE_OLD_ATTACH', 0); // 保留老的附件目录，不进行移动，附件很多的时候，修改此项。
 
 // DX2_PATH 需要配置正确！ linux 下可以用如下命令行： ln -s /data/www/oldbbs.com /data/www/xiunobbs/dx2
 define('DX2_PATH', BBS_PATH.'dx2/');
@@ -752,6 +752,11 @@ function upgrade_attach() {
 	
 	$maxaid = intval(core::gpc('maxaid'));
 	!isset($_GET['maxaid']) && $maxaid = $dx2->index_maxid('forum_attachment-aid');
+	
+	// 自动判断是否移动附件，如果附件个数超过50W，则不移动
+	if(!defined('DO_NOT_MOVE_OLD_ATTACH')) {
+		define('DO_NOT_MOVE_OLD_ATTACH', $maxaid > 500000 ? 1 : 0);
+	}
 	
 	if($start < $maxaid) {
 		$limit = DEBUG ? 20 : 500;
