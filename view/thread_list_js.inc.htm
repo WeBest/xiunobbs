@@ -44,7 +44,7 @@ $('#mod_digest').click(function() {
 $('#mod_type').click(function() {
 	var other_forum_flag = 0;
 	$.each($('#body input[name="fid_tid[]"]:checked'), function(k, v) {
-		var currfid = $(this).val().split('-')[0];
+		var currfid = $(this).val().split('_')[0];
 		if(currfid != $fid) {
 			$(this).attr('checked', '');
 			other_forum_flag = 1;
