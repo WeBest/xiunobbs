@@ -3,7 +3,7 @@
 
 // 二级置顶，三级置顶，检查 fid，如果fid不等于当前fid，则只能选择一篇
 $('#mod_checkall').click(function() {
-	$('#body input[name="tidarr[]"]').attr('checked', this.checked);
+	$('#body input[name="fid_tid[]"]').attr('checked', this.checked);
 });
 
 // 置顶 弹出 dialog 设置为置顶
