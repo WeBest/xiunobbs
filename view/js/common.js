@@ -296,7 +296,7 @@ $.fn.alert = function(s, setting) {
 	setting = $.extend({
 		width: 0,
 		pos: 2,
-		delay: 0,
+		delay: 3000,
 		alerticon: 1
 	}, setting);
 	
