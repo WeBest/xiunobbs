@@ -92,10 +92,13 @@ class pm extends base_model {
 			// 如果为两人的某轮第一条短消息
 			if($pmnew['count'] == 0) {
 				$recvuser['newpms']++;
+			} else {
+				// 如果出了故障，这里修复意外。
+				$recvuser['newpms'] == 0 && $recvuser['newpms'] = 1;
 			}
 			$pmnew['count']++;
 			$pmnew['dateline'] = $_SERVER['time'];
-			$this->user->update($recvuser); // 这里考虑到 memcached 中途开启, 不能放在 pmnew.count == 0 的判断里！否则短消息永远不闪了！ 
+			$this->user->update($recvuser);
 			$this->pmnew->update($pmnew);
 		}
 		
