@@ -122,8 +122,9 @@ class attach_control extends common_control {
 		// iis 6.0 居然不支持 xxx.torrent 这种文件名的直接请求，很无语！
 		$iis6 = isset($_SERVER['SERVER_SOFTWARE']) && $_SERVER['SERVER_SOFTWARE'] == 'Microsoft-IIS/6.0';
 		
-		// 只有当启用了 cdn, 并且非ie6, 并且金币为0，才直接跳转到URL。
-		if(!empty($this->conf['cdn_ip']) && !$iis6 && $attach['golds'] == 0) {
+		// 并且非ie6, 并且金币为0，才直接跳转到URL。
+		$is_default_upload_url = ($this->conf['upload_url'] == $this->conf['app_url'].'upload/');
+		if($is_default_upload_url && !$iis6 && $attach['golds'] == 0) {
 			
 			// hook attach_download_free_after.php
 			$this->attach->format($attach);
