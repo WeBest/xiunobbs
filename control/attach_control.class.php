@@ -124,7 +124,7 @@ class attach_control extends common_control {
 		
 		// 并且非ie6, 并且金币为0，才直接跳转到URL。
 		$is_default_upload_url = ($this->conf['upload_url'] == $this->conf['app_url'].'upload/');
-		if($is_default_upload_url && !$iis6 && $attach['golds'] == 0) {
+		if(!$is_default_upload_url && !$iis6 && $attach['golds'] == 0) {
 			
 			// hook attach_download_free_after.php
 			$this->attach->format($attach);
