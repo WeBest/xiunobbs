@@ -832,7 +832,7 @@ function upgrade_attach() {
 				'filename'=> $newfilename,
 				'orgfilename'=> $old['filename'],
 				'filetype'=> $filetype,
-				'dateline'=> intval($old['dateline']),
+				'dateline'=> intval($old['dateline'] ? $old['dateline'] : $thread['dateline']),
 				'comment'=> $old['description'],
 				'downloads'=> $old2['downloads'],
 				'isimage'=> 0,
