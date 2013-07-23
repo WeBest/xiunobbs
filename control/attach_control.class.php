@@ -114,12 +114,6 @@ class attach_control extends common_control {
 			}
 		}
 			
-		$attachpath = $this->conf['upload_path'].'attach/'.$attach['filename'];
-		if(!is_file($attachpath)) {
-			$this->message('附件不存在，如果有问题请联系管理员。');
-		}
-		$filesize = filesize($attachpath);
-		
 		$attach['downloads']++;
 		$this->attach->update($attach);
 		
@@ -142,6 +136,12 @@ class attach_control extends common_control {
 			//$_SERVER['ob_no_gzip'] = 1;
 			
 			// hook attach_download_gold_after.php
+			
+			$attachpath = $this->conf['upload_path'].'attach/'.$attach['filename'];
+			if(!is_file($attachpath)) {
+				$this->message('附件不存在，如果有问题请联系管理员。');
+			}
+			$filesize = filesize($attachpath);
 			
 			// 头部
 			if(stripos($_SERVER["HTTP_USER_AGENT"], 'MSIE') !== FALSE) {
