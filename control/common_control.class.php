@@ -85,7 +85,7 @@ class common_control extends base_control {
 					$realip = core::gpc('HTTP_X_FORWARDED_FOR', 'S');
 					empty($realip) && $realip = core::gpc('HTTP_CLIENT_IP', 'S');
 					if(preg_match('#^\d+(\.\d+){3}$#', $realip)) {
-						$_SERVER['ip'] = $realip;
+						$_SERVER['ip'] = long2ip(ip2long($realip));
 					}
 				}
 			}
