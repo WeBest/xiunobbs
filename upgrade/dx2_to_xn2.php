@@ -889,12 +889,11 @@ function upgrade_post() {
 						if(strpos($old['message'], $attachinsert) !== FALSE) {
 							$old['message'] = str_replace($attachinsert, get_attach_html($attach), $old['message']);
 						} else {
+							// 如果没有 aid 不在 message 中，则直接粘帖到内容末尾
 							$old['message'] .= get_attach_html($attach);
 						}
 					}
 				}
-				// 如果没有 aid 不在 message 中，则直接粘帖到内容末尾
-				
 			}
 			$old['message'] = bbcode2html($old['message']);
 			
@@ -1142,8 +1141,8 @@ function upgrade_postpage() {
 	$policy = load_upgrade_policy();
 	
 	$starttid = intval(core::gpc('starttid'));
-	$startpid = intval(core::gpc('startpid'));
 	$floor = intval(core::gpc('floor'));
+	$start2 = intval(core::gpc('start2'));
 	$limit = DEBUG ? 10 : 500;	// 每次升级 100
 	$limit2 = DEBUG ? 20 : 500;
 	$floorlimit = DEBUG ? 20 : 500; // 每次升级的楼层数， 
@@ -1194,13 +1193,15 @@ function upgrade_postpage() {
 		//$count2 = $dx2->index_count('forum_post', array('tid'=>1));
 		
 		// 保证一次能取出 $limit2 个 post，$limit2 次用完，则进入下一轮跳转循环。
-		$pidkeys = $dx2->index_fetch_id('forum_post', array('pid'), array('tid'=>$tid, 'pid'=>array('>'=>$startpid)), array('dateline'=>1), 0, $limit2);
+		// 取出 firstpid 放到第一页！
+		// , 'pid'=>array('>'=>$startpid)
+		$pidkeys = $dx2->index_fetch_id('forum_post', array('pid'), array('tid'=>$tid), array('dateline'=>1), $start2, $limit2);
 		$n = count($pidkeys);
 		
 		// 进入下一轮 tid 循环
 		if($n == 0) {
 			$floor = 0;
-			$startpid = 0;
+			$start2 = 0;
 			$starttid = $thread['tid'];
 			continue;
 		// 进入下一轮 pid 循环
@@ -1227,7 +1228,7 @@ function upgrade_postpage() {
 			}
 			
 			$floor += $n;
-			$startpid = $pid;	   // 不停的增加 startpid
+			$start2 += $limit2;
 			$floorlimit -= $n; // 多轮循环后 $floorlimit 将会 <= 0
 			
 			// $floorlimit 用完，中断 tid 大循环，进入下一轮跳转。
@@ -1238,7 +1239,7 @@ function upgrade_postpage() {
 				// 进入下一轮 tid 循环，并且将 floor, startpid 重设
 				if($n < $limit2) {
 					$floor = 0;
-					$startpid = 0;
+					$start2 = 0;
 					$starttid = $thread['tid'];
 					continue;
 				}
@@ -1246,7 +1247,7 @@ function upgrade_postpage() {
 		}
 	}
 
-	message("正在升级 post.page, 进度 starttid: $starttid, startpid: $startpid...", "?step=upgrade_postpage&startpid=$startpid&starttid=$starttid&floor=$floor", 0);
+	message("正在升级 post.page, 进度 starttid: $starttid, startpid: $startpid...", "?step=upgrade_postpage&start2=$start2&starttid=$starttid&floor=$floor", 0);
 }
 
 /*
