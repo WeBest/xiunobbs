@@ -419,14 +419,14 @@ class attach_control extends common_control {
 		$this->check_forum_exists($forum);
 		$this->check_access($forum, 'attach');
 		
-		// hook attach_deletefile_before.php
-		
 		$ismod = $this->is_mod($forum, $this->_user);
 		$attach = $this->attach->read($fid, $aid);
 		if(empty($attach)) $this->message('附件不存在。');
 		if($attach['uid'] != $this->_user['uid']) {
 			$this->check_access($forum, 'delete');
 		}
+		
+		// hook attach_deletefile_before.php
 		
 		// 如果附件没有归属，那么可能存在于 kv.uid_aids.tmp 文件中
 		if($attach['pid'] == 0) {
