@@ -111,7 +111,9 @@ class index_control extends common_control {
 		if($s) {
 			$fidtidlist = explode(' ', trim($s));
 			foreach($fidtidlist as $fidtid) {
-				list($fid, $tid) = explode('-', $fidtid);
+				if(empty($fidtid)) continue;
+				$arr = explode('-', $fidtid);
+				list($fid, $tid) = $arr;
 				$fidtids["$fid-$tid"] = array($fid, $tid);
 			}
 		}
