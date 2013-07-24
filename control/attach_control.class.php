@@ -391,7 +391,14 @@ class attach_control extends common_control {
 		
 		// hook attach_updatefile_before.php
 		
-		if(isset($_FILES['Filedata']['tmp_name']) && is_file($_FILES['Filedata']['tmp_name'])) {
+		if(!empty($_FILES['Filedata']['tmp_name'])) {
+			// 对付一些变态的 iis 环境， is_file() 无法检测无权限的目录。
+			$tmpfile = FRAMEWORK_TMP_TMP_PATH.md5(rand(0, 1000000000).$_SERVER['time'].$_SERVER['ip']).'.tmp';
+			$succeed = IN_SAE ? copy($_FILES['Filedata']['tmp_name'], $tmpfile) : move_uploaded_file($_FILES['Filedata']['tmp_name'], $tmpfile);
+			if(!$succeed) {
+				$this->message('移动临时文件错误，请检查临时目录的可写权限。', 0);
+			}
+			
 			$file = $_FILES['Filedata'];
 			$attach['filesize'] = filesize($file['tmp_name']);
 			$this->attach->update($attach);
