@@ -42,6 +42,10 @@ return array(
 			),
 			'slaves' => array()
 		),
+		'pdo_sqlite' => array(
+			'host' => 'sqlite.db',
+			'tablepre' => 'bbs_',
+		),
 		'mongodb' => array(
 			'master' => array(
 				'host' => '10.0.0.253:27017',

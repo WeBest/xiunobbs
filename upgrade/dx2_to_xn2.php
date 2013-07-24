@@ -1149,6 +1149,7 @@ function upgrade_postpage() {
 	$tidkeys = $dx2->index_fetch_id('forum_thread', array('tid'), array('tid'=>array('>'=>$starttid)), array('tid'=>1), 0, $limit);
 	// 结束循环
 	if(empty($tidkeys)) {
+		exit('over');
 		message('升级 upgrade_postpage 完成，接下来升级 upgrade_forum2 ...', '?step=upgrade_forum2&start=0');
 	}
 	foreach($tidkeys as $key) {

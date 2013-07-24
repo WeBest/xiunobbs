@@ -276,7 +276,46 @@ if(empty($step) || $step == 'checklicense') {
 		} elseif($type == 'pdo_oracle') {
 			
 		} elseif($type == 'pdo_sqlite') {
+			$conf['db']['pdo_sqlite'] = array(
+				'host' => $host,
+				'tablepre' => 'bbs_',
+			);
+			try {
+				$db = new db_pdo_sqlite($conf['db']['pdo_sqlite']);
+				$db->connect($host);
+				$db->query("SELECT VERSION()");
+			} catch (Exception $e) {
+				$error = $e->getMessage();
+			}
+			if($error) {
+				if(strpos($error, 'Unknown database') !== FALSE) {
+					$error = "Database $name 不存在：<span class=\"small\">$error</span>";
+				} else {
+					$error = 'Sqlite 错误：<span class="small">'.$error.'</span>';
+				}
+			} else {
 			
+				$s = file_get_contents(BBS_PATH.'install/install_mysql.sql');
+				
+				$s = str_replace("\r\n", "\n", $s);
+				$s = preg_replace('#\n\#[^\n]*?\n#is', "\n", $s);	// 去掉注释行
+				$sqlarr = explode(";\n", $s);
+				
+				foreach($sqlarr as $sql) {
+					$sql = sql_mysql_to_sqlite($sql);
+					if(trim($sql)) {
+						$sql = str_replace('bbs_', $tablepre, $sql);
+						try {
+							$db->query($sql);
+						} catch (Exception $e) {
+							$error = $e->getMessage();
+							break;
+						}
+					}
+				}
+				$db->truncate('framework_count');
+				$db->truncate('framework_maxid');
+			}
 		}
 		
 		if(!$error) {
@@ -299,6 +338,8 @@ if(empty($step) || $step == 'checklicense') {
 				$s = str_line_replace($s, 22, 30, $replacearr);
 			} elseif($type == 'pdo_mysql') {
 				$s = str_line_replace($s, 34, 42, $replacearr);
+			} elseif($type == 'pdo_sqlite') {
+				$s = str_line_replace($s, 46, 52, $replacearr);
 			} elseif($type == 'mongodb') {
 				$s = str_line_replace($s, 46, 52, $replacearr);
 			}

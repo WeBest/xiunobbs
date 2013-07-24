@@ -31,6 +31,10 @@ function clear_tmp($pre = '', $tmppath = '') {
 	closedir($dh);
 }
 
+function sql_mysql_to_sqlite($sql) {
+	
+}
+
 function get_env(&$env, &$write) {
 	$env['php_version']['name'] = 'PHP Version';
 	$env['php_version']['must'] = TRUE;
