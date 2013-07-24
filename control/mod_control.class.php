@@ -185,7 +185,7 @@ class mod_control extends common_control {
 				$fid = intval($v[0]);
 				$tid = intval($v[1]);
 				$thread = $this->thread->read($fid, $tid);
-				if(empty($thread) || !isset($thread['digest'])) continue;
+				if(empty($thread)) continue;
 				
 				$tidnum++;	// 帖子数，用来统计精华数
 				
