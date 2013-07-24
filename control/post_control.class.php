@@ -123,6 +123,7 @@ class post_control extends common_control {
 				'attachnum'=>0,	// 需要最后更新
 				'modnum'=>0,	// 评分次数
 				'closed'=>0,
+				'digest'=>0,
 				'firstpid'=>0,	// 需要最后更新，也就是最小的pid，冗余存储，提高速度
 				'typeid1'=>$typeid1,	//
 				'typeid2'=>$typeid2,	//
