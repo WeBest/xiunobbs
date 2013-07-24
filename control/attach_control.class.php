@@ -151,10 +151,10 @@ class attach_control extends common_control {
 			}
 			$timefmt = date('D, d M Y H:i:s', $_SERVER['time']).' GMT';
 			header('Date: '.$timefmt);
-                        header('Last-Modified: '.$timefmt);
+			header('Last-Modified: '.$timefmt);
 			header('Expires: '.$timefmt);
-                       // header('Cache-control: max-age=0, must-revalidate, post-check=0, pre-check=0');
-                        header('Cache-control: max-age=86400');
+		       // header('Cache-control: max-age=0, must-revalidate, post-check=0, pre-check=0');
+			header('Cache-control: max-age=86400');
 			header('Content-Transfer-Encoding: binary');
 			header("Pragma: public");
 			header('Content-Disposition: attachment; filename="'.$attach['orgfilename'].'"');
