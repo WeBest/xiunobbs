@@ -425,6 +425,8 @@ class user_control extends common_control {
 			$this->message($message, 0);
 		}
 		
+		// hook user_uploadavatar_before.php
+		
 		$dir = image::set_dir($uid, $this->conf['upload_path'].'avatar/');
 		$destfile = $this->conf['upload_path']."avatar/$dir/{$uid}_tmp.jpg";
 		$desturl = $this->conf['upload_url']."avatar/$dir/{$uid}_tmp.jpg?".$_SERVER['time'];
