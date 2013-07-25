@@ -469,6 +469,8 @@ class user_control extends common_control {
 		$hugefile = $this->conf['upload_path']."avatar/$dir/$user[uid]_huge.gif";
 		$hugeurl = $this->conf['upload_url']."avatar/$dir/$user[uid]_huge.gif?".$_SERVER['time'];
 		
+		// hook user_clipavatar_before.php
+		
 		image::clip($srcfile, $tmpfile, $x, $y, $w, $h);
 		
 		image::thumb($tmpfile, $smallfile, $this->conf['avatar_width_small'], $this->conf['avatar_width_small']);
