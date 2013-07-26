@@ -149,7 +149,7 @@ $.drag = function(ele, settings) {
 				var x = e.pageX - _this.jcorn.mouse_offset_x;
 				var y = e.pageY - _this.jcorn.mouse_offset_y;
 				$(_this.jcorn).css({ left: x, top: y});
-				$(_this).css({ left: x, top: y});
+				$(_this).css({ left: x - _this.width + 8, top: y + 8});
 			}
 		};
 		
