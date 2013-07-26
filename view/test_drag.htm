@@ -57,14 +57,16 @@ $.fn.to_relative = function(ele) {
 
 $.drag = function(ele, settings) {
 	//var jfirstchild = $(':first-child', ele);
-	ele.ismoving = 1;	// 正在拖动
+	ele.startdrag = false;	// 正在拖动
 	ele.movingobj = null;	// 正在拖动的元素
 	ele.lastobj = null;	// 上一个激活的元素
 	
 	$(ele).children().each(function() {
+		// -----------------------> 一下为各个元素定时器逻辑
 		var _this = this;
-		this.jcorn = $('<span class="icon icon-move" style="position: absolute; z-index: 201; cursor: pointer"></span>').appendTo('body');// 创建 move 图标
+		this.jcorn = $('<span class="icon icon-move" style="position: absolute; width: 16px; height: 16px; z-index: 201; cursor: pointer"></span>').appendTo('body');// 创建 move 图标
 		$(this).mouseover(function() {
+			if(ele.startdrag) return true;
 			if(this.htime) {
 				this.htime_func(this);
 				clearTimeout(this.htime);
@@ -104,38 +106,79 @@ $.drag = function(ele, settings) {
 		};
 		
 		$(this).mouseout(function() {
+			if(ele.startdrag) return true;
 			if(!this.htime) {
-				this.htime = setTimeout(function() {_this.htime_func(_this); _this.jcorn.hide(); _this.htime = null; trace('111');}, 1000);
+				this.htime = setTimeout(function() {_this.htime_func(_this); _this.jcorn.hide(); _this.htime = null;}, 1000);
 				ele.lastobj = this;
 			}
 		});
 		
-		
-		this.jcorn.unbind('mouseover').mouseover(function() {
+		this.jcorn.mouseover(function() {
 			if(_this.htime) {
 				clearTimeout(_this.htime);
 				_this.htime = null;
 			}
 			return false;
 		});
-		this.jcorn.unbind('mouseout').mouseout(function() {
+		this.jcorn.mouseout(function() {
 			if(!_this.htime) {
-				_this.htime = setTimeout(function() {_this.htime_func(_this); _this.jcorn.hide(); _this.htime = null; trace('222');}, 1000);
+				_this.htime = setTimeout(function() {_this.htime_func(_this); _this.jcorn.hide(); _this.htime = null;}, 1000);
 				ele.lastobj = _this;
 			}
-			trace('jcorn ...');
 			return false;
 		});
 		
+		// ------------------------------> 以下为拖动逻辑
+		
+		this.jcorn.mousedown(function(e) {
+			ele.startdrag = true;
+			document.unselectable = 'on';
+			document.body.onselectstart = function() {return false;};
+			
+			_this.jcorn.mouse_offset_x = e.pageX - _this.jcorn.attr('offsetLeft');
+			_this.jcorn.mouse_offset_y = e.pageY - _this.jcorn.attr('offsetTop');
+			
+			// 保存 <body> style overflow 属性，设置为 overflow: hidden;
+			//$('body').css('overflow', 'hidden');
+			$(document).bind('mousemove', _this.jcorn_mousemove);
+			$(document).bind('mouseup', _this.jcorn_mouseup);
+		});
+			
+		this.jcorn_mousemove = function(e) {
+			if(ele.startdrag) {
+				var x = e.pageX - _this.jcorn.mouse_offset_x;
+				var y = e.pageY - _this.jcorn.mouse_offset_y;
+				$(_this.jcorn).css({ left: x, top: y});
+				$(_this).css({ left: x, top: y});
+			}
+		};
+		
+		this.jcorn_mouseup = function(e) {
+			$(document).unbind('mousemove', _this.jcorn_mousemove);	// 比较耗费资源，用完 unbind 掉。
+			$(document).unbind('mouseup', _this.jcorn_mouseup);		// 比较耗费资源，用完 unbind 掉。
+			ele.startdrag = 0;
+			
+			document.unselectable = 'off';
+			document.body.onselectstart = function() {return true;};
+		};
+		
 		// 开始拖动
-		this.jcorn.unbind('mousedown').mousedown(function() {
+		this.jcorn.mousedown(function(e) {
 			// 清理定时器
+			ele.startdrag = true;
+			document.unselectable = 'on';
+			document.body.onselectstart = function() {return false;};
+			
+			_this.jcorn.mouse_offset_x = e.pageX - _this.jcorn.attr('offsetLeft');
+			_this.jcorn.mouse_offset_y = e.pageY - _this.jcorn.attr('offsetTop');
+			
+			// 保存 <body> style overflow 属性，设置为 overflow: hidden;
+			//$('body').css('overflow', 'hidden');
+			$(document).bind('mousemove', _this.jcorn_mousemove);
+			$(document).bind('mouseup', _this.jcorn_mouseup);
 			
 		});
 		
-		this.jcorn.unbind('mouseup').mouseup(function() {
-			
-		});
 	});
 	
 }
