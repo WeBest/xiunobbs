@@ -1,5 +1,7 @@
 <?php
 
+!defined('FRAMEWORK_PATH') && exit('FRAMEWORK_PATH not defined.');
+
 $error = $input = array();
 
 $start = intval(core::gpc('start', 'R'));

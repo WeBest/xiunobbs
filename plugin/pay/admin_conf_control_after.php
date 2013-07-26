@@ -1,4 +1,3 @@
-<?php
 	// 数据全部写入 kv db
 
 	// 支付相关 ?
@@ -112,5 +111,3 @@
 		$this->view->display('conf_pay.htm');
 	}
 	
-	
-?>

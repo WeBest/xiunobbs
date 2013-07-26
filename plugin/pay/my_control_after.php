@@ -1,5 +1,3 @@
-<?php
-
 	// 我的金币，支付记录
 	public function on_pay() {
 		$this->_checked['my_wealth'] = 'class="checked"';
@@ -60,5 +58,3 @@
 		$this->view->assign('error', $error);
 		$this->view->display('my_exchange.htm');
 	}
-	
-?>
