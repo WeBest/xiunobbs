@@ -41,18 +41,10 @@ return array(
 				'engine'=>'MyISAM',
 			),
 			'slaves' => array()
-		),		
+		),
 		'pdo_sqlite' => array(
-			'master' => array(
-				'host' => 'sqlite.db',
-				'user' => '',
-				'password' => '',
-				'name' => '',
-				'charset' => '',
-				'tablepre' => '',
-				'engine'=>'',
-			),
-			'slaves' => array()
+			'host' => 'sqlite.db',
+			'tablepre' => 'bbs_',
 		),
 		'mongodb' => array(
 			'master' => array(
