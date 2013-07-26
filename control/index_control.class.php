@@ -92,6 +92,10 @@ class index_control extends common_control {
 		$this->view->display('index_index.htm');
 	}
 	
+	public function on_test() {
+		$this->view->display('test_drag.htm');
+	}
+	
 	private function get_toplist($forum = array()) {
 		$fidtids = array();
 		// 3 级置顶

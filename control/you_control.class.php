@@ -74,7 +74,7 @@ class you_control extends common_control {
 			// 权限判断
 			$fid = $post['fid'];
 			if(!empty($this->conf['forumaccesson'][$fid])) {
-				$access = $this->forum_access->read($_fid, $groupid);
+				$access = $this->forum_access->read($fid, $this->_user['groupid']);
 				if(empty($access['allowread'])) {
 					$post = array();
 					continue;
