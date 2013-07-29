@@ -52,7 +52,7 @@ function trace(s) {
 
 function print_r(arrlist, level) {
 	var s = print_r_real(arrlist, 1);
-	$('body').append('<div style="background: #FFFFFF;">'+s+'</div>');
+	$('body').append('<div style="background: #FFFFFF; width: 90%;">'+s+'</div>');
 }
 
 function print_r_real(arrlist, level) {

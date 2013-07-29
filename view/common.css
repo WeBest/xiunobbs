@@ -291,7 +291,7 @@ span.nopic {width: 54px; height: 54px; background: url(image/nopic.gif) no-repea
 	#user {color: #AEB2BE; font-size: 12px; *margin-top: 8px;}
 	#user a {color: #AAAAAA; margin-left: 20px;}
 	#create_thread {margin-left: 20px;}
-#footer {width: 100%; height: 59px; margin: auto; background: #3D4351 url(image/footer_bg.jpg) repeat-x;}
+#footer {width: 100%; height: 59px; margin: auto; background: #3D4351 url(image/footer_bg.jpg) repeat-x; overflow: hidden;}
 #footer td{color: #888888; height: 59px;}
 #footer pre {background: none repeat scroll 0 0 #4C525F; border: 1px solid #363C4A; color: #7D828E; margin: 8px;}
 #footer td.right {text-align: right;}
