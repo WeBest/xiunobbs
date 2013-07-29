@@ -27,6 +27,7 @@ $conf = include BBS_PATH.'conf/conf.php';
 define('FRAMEWORK_PATH', BBS_PATH.'xiunophp/');
 define('FRAMEWORK_TMP_PATH', $conf['tmp_path']);
 define('FRAMEWORK_LOG_PATH', $conf['log_path']);
+define('CLICKD_WRITE_MAX', 1); // 一次最大的写入个数
 
 include FRAMEWORK_PATH.'core.php';
 core::init();
@@ -79,6 +80,7 @@ foreach($tids as &$_tid) {
 	$_tid = intval($_tid);
 }
 if(!empty($tids)) {
+	$tids = array_slice($tids, 0, CLICKD_WRITE_MAX); // 只允许写一个
 	$arr = $mthread_views->mget($tids);
 	foreach($arr as $k=>$v) {
 		if(empty($v)) {
