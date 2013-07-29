@@ -14,6 +14,7 @@ if($this->conf['db']['type'] != 'mongodb') {
 		  PRIMARY KEY(channelid)
 	);");
 	
+	// 每个频道下最多20个分类
 	$db->query("CREATE TABLE IF NOT EXISTS {$tablepre}cms_cate (
 		  channelid int(11) unsigned NOT NULL DEFAULT '0',
 		  cateid int(11) unsigned NOT NULL DEFAULT '0',

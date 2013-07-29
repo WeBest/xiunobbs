@@ -24,29 +24,44 @@ class cms_control extends admin_control {
 		$this->cms_cate = core::model($this->conf, 'cms_cate', array('channelid', 'cateid'));
 		$this->cms_article = core::model($this->conf, 'cms_article', array('channelid', 'cateid', 'articleid'), 'articleid');
 		
+		$channelid = intval(core::gpc('channelid'));
+		
 		if(!$this->form_submit()) {
 			
-			$channellist = $this->cms_channel->get_list();
+			$channellist = $this->cms_channel->index_fetch(array(), array(), 0, 20);
+			if(count($channellist) > 0) {
+				$channel = array_shift($channellist);
+				$channelid = $channel['channel'];
+			} else {
+				$channel = array();
+				$channelid = 0;
+			}
 			
-			// 默认为第一个频道
-			$channel = array_shift($channellist);
-			
-			// 一篇文章
-			if($channel['layout'] == 0) {
+			if($channel) {
+				// 一篇文章
+				if($channel['layout'] == 0) {
+					$catelist = array();
+					$article = $this->cms_article->index_fetch(array('channelid'=>$channelid, 'cateid'=>0), array(), 0, 1);
+				// 几篇文章
+				} elseif($channel['layout'] == 1) {
+					$catelist = $this->cms_cate->index_fetch(array('channelid'=>$channelid), array(), 0, 1);
+					$articlelist = $this->cms_article->index_fetch(array('channelid'=>$channelid));
+				// 文章列表，分页
+				} elseif($channel['layout'] == 2) {
+					$page = misc::page();
+					$catelist = $this->cms_cate->index_fetch(array('channelid'=>$channelid), array(), 0, 20);
+					$articlelist = $this->cms_article->index_fetch(array('channelid'=>$channelid));
+					
+				}
+			} else {
 				$catelist = array();
-				$article = $this->cms_article->index_fetch(array('channelid'=>$channelid, 'cateid'=>0), array(), 0, 1);
-			} elseif($channel['layout'] == 1) {
-				$catelist = $this->cms_cate->index_fetch(array('channelid'=>$channelid), array(), 0, 1);
-				
-				$articlelist = $this->cms_article->index_fetch(array('channel'));
+				$articlelist = array();
 			}
 			
 			// layout
 			$layoutradios = form::get_radio('layout', array(0=>'一篇文章', 1=>'多篇文章', 2=>'分类+文章列表'), $channel['layout']);
 			
-			
-			
-			$this->view->display('xn_cms_setting.htm');
+			$this->view->display('xn_cms_admin_setting.htm');
 		} else {
 			
 			$enable = core::gpc('enable', 'R');
