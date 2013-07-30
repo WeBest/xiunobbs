@@ -214,6 +214,7 @@ if(empty($step) || $step == 'checklicense') {
 			}
 		} elseif($type == 'pdo_sqlite') {
 			
+			$host = $conf['upload_path'].$host;
 			$conf['db']['pdo_sqlite'] = array(
 				'master' => array (
 					'host' => $host,
@@ -222,8 +223,8 @@ if(empty($step) || $step == 'checklicense') {
 				'slaves' => array (
 				)
 			);
-			if($host == '../upload/sqlite.db') {
-				$error = '请填写一个复杂的 SQLite 数据库文件名，比如 ../upload/'.md5(rand(10000000000, 9999999999).time()).'.db，防止别人猜测到！';
+			if($host == 'sqlite.db') {
+				$error = '请填写一个复杂的 SQLite 数据库文件名，比如 upload/'.md5(rand(10000000000, 9999999999).time()).'.db，防止别人猜测到！';
 			} else {
 				try {
 					$db = new db_pdo_sqlite($conf['db']['pdo_sqlite']);
@@ -438,8 +439,8 @@ if(empty($step) || $step == 'checklicense') {
 		
 	if($type == 'pdo_sqlite') {
 		$host = empty($host) ? '' : trim($host);
-		if(empty($host) || $host == '../upload/sqlite.db') {
-			$host = '../upload/sqlite_'.substr(md5(rand(10000000000, 9999999999).time()), 0, 10).'.db';
+		if(empty($host) || $host == 'sqlite.db') {
+			$host = 'sqlite_'.substr(md5(rand(10000000000, 9999999999).time()), 0, 10).'.db';
 		}
 		$conf['db'][$type]['master']['host'] = $host;
 	}

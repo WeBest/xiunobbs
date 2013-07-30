@@ -44,7 +44,7 @@ return array(
 		),
 		'pdo_sqlite' => array(
 			'master' => array(
-				'host' => '../upload/sqlite.db',
+				'host' => 'sqlite.db',
 				'user' => '',
 				'tablepre' => 'bbs_',
 				'password' => '',
