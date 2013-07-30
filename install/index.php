@@ -5,7 +5,7 @@
  */
 
 // 调试模式: 1 打开，0 关闭, SAE 环境，必须为 2，否则会去加载 tmp/_runtime.php
-define('DEBUG', class_exists('SaeKV') ? 2 : 0);
+define('DEBUG', class_exists('SaeKV') ? 2 : 2);
 
 // 站点根目录
 define('BBS_PATH', str_replace('\\', '/', substr(dirname(__FILE__), 0, -7)));
@@ -72,6 +72,7 @@ if(empty($step) || $step == 'checklicense') {
 	$mysql_support = function_exists('mysql_connect');
 	$mongodb_support = extension_loaded('Mongo');
 	$pdo_mysql_support = extension_loaded('pdo_mysql');
+	$pdo_sqlite_support = extension_loaded('pdo_sqlite');
 	
 	$type = core::gpc('type', 'G');
 	empty($type) && $type = 'mysql';
@@ -131,10 +132,9 @@ if(empty($step) || $step == 'checklicense') {
 				if(mysql_errno() == 1049) {
 					mysql_query("CREATE DATABASE $name");
 					$r = mysql_select_db($name);
-				}
-				if(!$r) {
 					$error = 'MySQL 账户权限可能受限：<span class="small">'.mysql_error().mysql_errno().'</span>';
-				} else {
+				}
+				if(empty($error)) {
 					$conf['db']['mysql'] = array(
 						// 主 MySQL Server
 						'master' => array (
@@ -150,39 +150,17 @@ if(empty($step) || $step == 'checklicense') {
 						'slaves' => array (
 						)
 					);
-					$db = new db_mysql($conf['db']['mysql']);
-					
-					// 清空表
-					foreach($db_table as $table=>$cols) {
-						$db->table_drop($table);
-						$engineer = 'MyISAM';
-						$db->table_create($table, $cols, $engineer);
+					try {
+						$db = new db_mysql($conf['db']['mysql']);
+					} catch(Exception $e) {
+						$error = $e->getMessage();
 					}
-					
-					// 主要是建立索引
-					foreach($db_index as $table=>$indexes) {
-						foreach($indexes as $index) {
-							$db->index_create($table, $index);
-						}
+					if($error) {
+						$error = 'MySQL 错误：<span class="small">'.$error.'</span>';
 					}
-					
-					// 插入初始化数据
-					foreach($db_data as $table=>$arrlist) {
-						$db->truncate($table);
-						$primarykey = $db_index[$table][0];
-						foreach($arrlist as $arr) {
-							$key = get_key_add($primarykey, $arr);
-							$keystring = $table.$key;
-							$db->set($keystring, $arr);
-						}
-					}
-					
-					$db->truncate('framework_count');
-					$db->truncate('framework_maxid');
 				}
 			}
 		} elseif($type == 'mongodb') {
-			
 			$conf['db']['mongodb'] = array(
 				'master' => array (
 					'host' => $host,
@@ -191,43 +169,16 @@ if(empty($step) || $step == 'checklicense') {
 					'name' => $name,
 					'charset' => 'utf8',
 				),
-				'slaves' => array (
-				)
+				'slaves' => array ()
 			);
-			
 			// 主要是建立索引
 			try {
 				$db = new db_mongodb($conf['db']['mongodb']);
 			} catch(Exception $e) {
 				$error = $e->getMessage();
 			}
-			if(!$error) {
-				
-				// 清空表
-				foreach($db_index as $table=>$indexes) {
-					$db->truncate($table);
-				}
-				
-				// 插入初始化数据
-				foreach($db_data as $table=>$arrlist) {
-					$db->truncate($table);
-					$primarykey = $db_index[$table][0];
-					foreach($arrlist as $arr) {
-						$key = get_key_add($primarykey, $arr);
-						$keystring = $table.$key;
-						$db->set($keystring, $arr);
-					}
-				}
-				
-				// 主要是建立索引
-				foreach($db_index as $table=>$indexes) {
-					foreach($indexes as $index) {
-						$db->index_create($table, $index);
-					}
-				}
-				
-				$db->truncate('framework_count');
-				$db->truncate('framework_maxid');
+			if($error) {
+				$error = 'Mongodb 错误：<span class="small">'.$error.'</span>';
 			}
 		} elseif($type == 'pdo_mysql') {
 			$conf['db']['pdo_mysql'] = array(
@@ -260,74 +211,64 @@ if(empty($step) || $step == 'checklicense') {
 				} else {
 					$error = 'MySQL 错误：<span class="small">'.$error.'</span>';
 				}
-			} else {
+			}
+		} elseif($type == 'pdo_sqlite') {
 			
-				$s = file_get_contents(BBS_PATH.'install/install_mysql.sql');
-				
-				$s = str_replace("\r\n", "\n", $s);
-				$s = preg_replace('#\n\#[^\n]*?\n#is', "\n", $s);	// 去掉注释行
-				$sqlarr = explode(";\n", $s);
-				
-				foreach($sqlarr as $sql) {
-					if(trim($sql)) {
-						$sql = str_replace('bbs_', $tablepre, $sql);
-						try {
-							$db->query($sql);
-						} catch (Exception $e) {
-							$error = $e->getMessage();
-							break;
-						}
-					}
+			$conf['db']['pdo_sqlite'] = array(
+				'master' => array (
+					'host' => $host,
+					'tablepre' => $tablepre,
+				),
+				'slaves' => array (
+				)
+			);
+			if($host == 'upload/sqlite.db') {
+				$error = '请填写一个复杂的 SQLite 数据库文件名，比如 upload/'.md5(rand(10000000000, 9999999999).time()).'.db，防止别人猜测到！';
+			} else {
+				try {
+					$db = new db_pdo_sqlite($conf['db']['pdo_sqlite']);
+					$db->connect($host);
+				} catch (Exception $e) {
+					$error = $e->getMessage();
 				}
-				$db->truncate('framework_count');
-				$db->truncate('framework_maxid');
+				if($error) {
+					$error = 'Sqlite 错误：<span class="small">'.$error.'</span>';
+				}
 			}
 		} elseif($type == 'pdo_oracle') {
 			
-		} elseif($type == 'pdo_sqlite') {
-			$conf['db']['pdo_sqlite'] = array(
-				'host' => $host,
-				'tablepre' => 'bbs_',
-			);
-			try {
-				$db = new db_pdo_sqlite($conf['db']['pdo_sqlite']);
-				$db->connect($host);
-				$db->query("SELECT VERSION()");
-			} catch (Exception $e) {
-				$error = $e->getMessage();
-			}
-			if($error) {
-				if(strpos($error, 'Unknown database') !== FALSE) {
-					$error = "Database $name 不存在：<span class=\"small\">$error</span>";
-				} else {
-					$error = 'Sqlite 错误：<span class="small">'.$error.'</span>';
-				}
-			} else {
-			
-				$s = file_get_contents(BBS_PATH.'install/install_mysql.sql');
-				
-				$s = str_replace("\r\n", "\n", $s);
-				$s = preg_replace('#\n\#[^\n]*?\n#is', "\n", $s);	// 去掉注释行
-				$sqlarr = explode(";\n", $s);
-				
-				foreach($sqlarr as $sql) {
-					$sql = sql_mysql_to_sqlite($sql);
-					if(trim($sql)) {
-						$sql = str_replace('bbs_', $tablepre, $sql);
-						try {
-							$db->query($sql);
-						} catch (Exception $e) {
-							$error = $e->getMessage();
-							break;
-						}
-					}
-				}
-				$db->truncate('framework_count');
-				$db->truncate('framework_maxid');
-			}
 		}
 		
 		if(!$error) {
+			
+			// --------> 插入数据 start
+			// 清空表
+			foreach($db_table as $table=>$cols) {
+				$db->table_drop($table);
+				//$engineer = 'MyISAM';
+				$db->table_create($table, $cols);
+			}
+			
+			// 主要是建立索引
+			foreach($db_index as $table=>$indexes) {
+				foreach($indexes as $index) {
+					$db->index_create($table, $index);
+				}
+			}
+			
+			// 插入初始化数据
+			foreach($db_data as $table=>$arrlist) {
+				$db->truncate($table);
+				$primarykey = $db_index[$table][0];
+				foreach($arrlist as $arr) {
+					$key = get_key_add($primarykey, $arr);
+					$keystring = $table.$key;
+					$db->set($keystring, $arr);
+				}
+			}
+			
+			$db->truncate('framework_count');
+			$db->truncate('framework_maxid');
 			
 			// 预设 count maxid
 			$db->count('group', 16);
@@ -348,9 +289,9 @@ if(empty($step) || $step == 'checklicense') {
 			} elseif($type == 'pdo_mysql') {
 				$s = str_line_replace($s, 34, 42, $replacearr);
 			} elseif($type == 'pdo_sqlite') {
-				$s = str_line_replace($s, 46, 52, $replacearr);
+				$s = str_line_replace($s, 46, 54, $replacearr);
 			} elseif($type == 'mongodb') {
-				$s = str_line_replace($s, 46, 52, $replacearr);
+				$s = str_line_replace($s, 58, 64, $replacearr);
 			}
 			$typearr = array('type'=>$type);
 			$s = str_line_replace($s, 20, 21, $typearr);
@@ -391,6 +332,8 @@ if(empty($step) || $step == 'checklicense') {
 			$s = preg_replace('#\'timeoffset\'\s*=\>\s*\'?.*?\'?,#is', "'timeoffset' => '$timeoffset',", $s);
 			$s = preg_replace('#\'urlrewrite\'\s*=\>\s*\'?.*?\'?,#is', "'urlrewrite' => ".(IN_SAE ? 1 : 0).",", $s);
 			$s = preg_replace('#\'installed\'\s*=\>\s*\'?.*?\'?,#is', "'installed' => 1,", $s);
+			file_put_contents($configfile, $s);
+			$conf = include $configfile;
 			
 			// 修改密码
 			$muser = new user($conf);
@@ -417,7 +360,7 @@ if(empty($step) || $step == 'checklicense') {
 			// 清理
 			!IN_SAE && clear_tmp('', $conf['tmp_path']);
 			
-			// 生成全局配置
+			// 生成全局配置\
 			$kv = new kv($conf);
 			$kvconf = array(
 				'app_name' => 'Xiuno BBS',		// 站点名称
@@ -493,6 +436,14 @@ if(empty($step) || $step == 'checklicense') {
 	
 	$timeoffset_select = form::get_select('timeoffset', $timezones, $timeoffset);
 		
+	if($type == 'pdo_sqlite') {
+		$host = empty($host) ? '' : trim($host);
+		if(empty($host) || $host == 'upload/sqlite.db') {
+			$host = 'upload/sqlite_'.substr(md5(rand(10000000000, 9999999999).time()), 0, 10).'.db';
+		}
+		$conf['db'][$type]['master']['host'] = $host;
+	}
+	
 	$master = $conf['db'][$type]['master'];
 	if(IN_SAE && empty($_POST)) {
 		$master['host'] = SAE_MYSQL_HOST_M.(SAE_MYSQL_PORT == 3306 ? '' : ':'.SAE_MYSQL_PORT);// SAE_MYSQL_HOST_S

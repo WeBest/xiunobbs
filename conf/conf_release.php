@@ -43,8 +43,16 @@ return array(
 			'slaves' => array()
 		),
 		'pdo_sqlite' => array(
-			'host' => 'sqlite.db',
-			'tablepre' => 'bbs_',
+			'master' => array(
+				'host' => 'upload/sqlite.db',
+				'user' => '',
+				'tablepre' => 'bbs_',
+				'password' => '',
+				'name' => '',
+				'charset' => '',
+				'engine'=>'',
+			),
+			'slaves' => array()
 		),
 		'mongodb' => array(
 			'master' => array(

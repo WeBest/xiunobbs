@@ -16,12 +16,17 @@ div.error {height: auto;}
 					<input type="radio" name="type" id="type_mysql" value="mysql"<?php echo $type == 'mysql'  ? 'checked="checked"' : '';?> <?php echo !$mysql_support ? 'disabled="disabled" onclick="alert(\'当前环境不支持MySQL\')"' : ''; ?> />MySQL
 					<?php echo IN_SAE ? '<b>(SAE内置)</b>' : ''; ?>
 					<input type="radio" name="type" id="type_pdo_mysql" value="pdo_mysql"<?php echo $type == 'pdo_mysql' ? 'checked="checked"' : '';?> <?php echo !$pdo_mysql_support ? 'disabled="disabled" onclick="alert(\'当前环境不支持PDO_MYSQL\')"' : ''; ?> />pdo_mysql
+					<input type="radio" name="type" id="type_pdo_sqlite" value="pdo_sqlite"<?php echo $type == 'pdo_sqlite' ? 'checked="checked"' : '';?> <?php echo !$pdo_sqlite_support ? 'disabled="disabled" onclick="alert(\'当前环境不支持PDO_SQLITE\')"' : ''; ?> />pdo_sqlite
 					<input type="radio" name="type" id="type_mongodb" value="mongodb"<?php echo $type == 'mongodb' ? 'checked="checked"' : '';?> <?php echo !$mongodb_support ? 'disabled="disabled" onclick="alert(\'当前环境不支持MongoDB\')"' : ''; ?> />MongoDB
 				</dd>
+				<?php if($type != 'pdo_sqlite') { ?>
 				<dt>主机: </dt><dd><input type="text" size="24" name="host" value="<?php echo isset($_POST['host']) ? core::gpc('host', 'P') : $master['host'];?>" /><span class="grey"> 端口号格式：127.0.0.1:10123</span></dd>
 				<dt>用户名: </dt><dd><input type="text" size="24" name="user" value="<?php echo isset($_POST['user']) ? core::gpc('user', 'P') : $master['user'];?>" /></dd>
 				<dt>密码: </dt><dd><input type="text" size="24" name="pass" value="<?php echo isset($_POST['pass']) ? core::gpc('pass', 'P') : $master['password'];?>" /></dd>
 				<dt>数据库: </dt><dd><input type="text" size="24" name="name" value="<?php echo isset($_POST['name']) ? core::gpc('name', 'P') : $master['name'];?>" /></dd>
+				<?php } else {?>
+				<dt>数据库文件: </dt><dd><input type="text" size="24" name="host" value="<?php echo isset($_POST['host']) ? core::gpc('host', 'P') : $master['host'];?>" /><span class="grey"> 为防止别人猜测到，请填写一个复杂文件名</span></dd>
+				<?php }?>
 				<?php if($type != 'mongodb') { ?>
 					<dt>表前缀:   </dt><dd><input type="text" size="24" name="tablepre" value="<?php echo isset($_POST['tablepre']) ? core::gpc('tablepre', 'P') : $master['tablepre'];?>" /></dd>
 				<?php }?>
@@ -81,6 +86,10 @@ getid('type_pdo_mysql').onclick = function() {
 };
 getid('type_mongodb').onclick = function() {
 	window.location = 'index.php?step=checkdb&type=mongodb';
+	//getid('db_div').style.display = 'none';
+};
+getid('type_pdo_sqlite').onclick = function() {
+	window.location = 'index.php?step=checkdb&type=pdo_sqlite';
 	//getid('db_div').style.display = 'none';
 };
 
