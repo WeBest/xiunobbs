@@ -445,7 +445,7 @@ if(empty($step) || $step == 'checklicense') {
 	}
 	
 	$master = $conf['db'][$type]['master'];
-	if(IN_SAE && empty($_POST)) {
+	if(IN_SAE && ($type == 'mysql' || $type == 'pdo_mysql') && empty($_POST)) {
 		$master['host'] = SAE_MYSQL_HOST_M.(SAE_MYSQL_PORT == 3306 ? '' : ':'.SAE_MYSQL_PORT);// SAE_MYSQL_HOST_S
 		$master['user'] = SAE_MYSQL_USER;
 		$master['password'] = SAE_MYSQL_PASS;
