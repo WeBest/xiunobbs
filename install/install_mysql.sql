@@ -1,5 +1,8 @@
 #
+#
 #	SQL + 注释用来定义自动生成的代码
+#
+#	注意：此文件已经废弃，仅用作字段参考注释！
 #
 
 DROP TABLE IF EXISTS bbs_group;
@@ -228,7 +231,7 @@ CREATE TABLE bbs_thread_views (
   tid int(11) unsigned NOT NULL auto_increment,		# 主题id
   views int(11) unsigned NOT NULL default '0',		# 点击数
   PRIMARY KEY (tid)
-);
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 # 论坛帖子数据 fid->tid->pid, 根据fid分区
 DROP TABLE IF EXISTS bbs_post;

@@ -116,6 +116,9 @@ if(empty($step) || $step == 'checklicense') {
 		$adminpass2 = core::gpc('adminpass2', 'P');
 		$timeoffset = core::gpc('timeoffset', 'P');
 		$error = '';
+		
+		include './install_data.php';
+		
 		if($type == 'mysql') {
 			if(!function_exists('mysql_connect')) {
 				message('函数 mysql_connect() 不存在，请检查 php.ini 是否加载了 mysql 模块。');
@@ -149,21 +152,28 @@ if(empty($step) || $step == 'checklicense') {
 					);
 					$db = new db_mysql($conf['db']['mysql']);
 					
-					$s = file_get_contents(BBS_PATH.'install/install_mysql.sql');
+					// 清空表
+					foreach($db_table as $table=>$cols) {
+						$db->table_drop($table);
+						$engineer = 'MyISAM';
+						$db->table_create($table, $cols, $engineer);
+					}
 					
-					$s = str_replace("\r\n", "\n", $s);
-					$s = preg_replace('#\n\#[^\n]*?\n#is', "\n", $s);	// 去掉注释行
-					$sqlarr = explode(";\n", $s);
+					// 主要是建立索引
+					foreach($db_index as $table=>$indexes) {
+						foreach($indexes as $index) {
+							$db->index_create($table, $index);
+						}
+					}
 					
-					foreach($sqlarr as $sql) {
-						if(trim($sql)) {
-							$sql = str_replace('bbs_', $tablepre, $sql);
-							try {
-								$db->query($sql);
-							} catch (Exception $e) {
-								$error = $e->getMessage();
-								break;
-							}
+					// 插入初始化数据
+					foreach($db_data as $table=>$arrlist) {
+						$db->truncate($table);
+						$primarykey = $db_index[$table][0];
+						foreach($arrlist as $arr) {
+							$key = get_key_add($primarykey, $arr);
+							$keystring = $table.$key;
+							$db->set($keystring, $arr);
 						}
 					}
 					
@@ -172,7 +182,6 @@ if(empty($step) || $step == 'checklicense') {
 				}
 			}
 		} elseif($type == 'mongodb') {
-			include './install_mongodb.php';
 			
 			$conf['db']['mongodb'] = array(
 				'master' => array (
