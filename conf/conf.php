@@ -44,7 +44,7 @@ return array(
 		),
 		'pdo_sqlite' => array(
 			'master' => array(
-				'host' => 'D:/www/xxx.net/upload/sqlite_0bc3ff13a0.db',
+				'host' => 'D:/www/xxx.net/upload/sqlite_4dca9992ce.db',
 				'user' => '',
 				'tablepre' => 'bbs_',
 				'password' => '',
@@ -138,10 +138,10 @@ return array(
 	'click_server' => 'http://x.net/service/clickd/',	// 记录主题点击数，论坛点击数
 	
 	// 加密KEY，
-	'auth_key' => 'bcb93c8f8f650516c9128a360f35104b',
+	'auth_key' => '9d86ac64bed4cb53cd2d2d184c619101',
 	
 	// 站点的ID，用来和官方通信，下载，安装插件。
-	'siteid' => '285d8fce7a3ccdef52559934607b3dcb',
+	'siteid' => '15a3123be2faf04c25754b8cbaf79b9a',
 	
 	'cookie_pre' => 'bbs_',
 	'cookie_domain' => '',
