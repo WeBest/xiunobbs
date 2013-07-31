@@ -75,13 +75,13 @@ class mod_control extends common_control {
 				$keys = array();
 				$this->tidkeys_to_keys($keys, $forum['toptids']);
 				if(count($keys) + $n > 8) {
-					$this->message('一级置顶的个数不能超过8个。', 0);
+					$this->message('版块置顶的个数不能超过8个。', 0);
 				}
 			} elseif($rank == 3) {
 				$keys = array();
 				$this->tidkeys_to_keys($keys, $this->conf['toptids']);
 				if(count($keys) + $n > 8) {
-					$this->message('三级置顶的个数不能超过8个。', 0);
+					$this->message('全站置顶的个数不能超过8个。', 0);
 				}
 			}
 			// end

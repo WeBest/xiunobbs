@@ -218,7 +218,12 @@ if(empty($step) || $step == 'checklicense') {
 			$conf['db']['pdo_sqlite'] = array(
 				'master' => array (
 					'host' => $host,
+					'user' => '',
 					'tablepre' => $tablepre,
+					'password' => '',
+					'name' => '',
+					'charset' => '',
+					'engine'=>'',
 				),
 				'slaves' => array (
 				)
@@ -294,12 +299,12 @@ if(empty($step) || $step == 'checklicense') {
 			} elseif($type == 'mongodb') {
 				$s = str_line_replace($s, 58, 64, $replacearr);
 			}
+			$conf['db']['type'] = $type;
 			$typearr = array('type'=>$type);
 			$s = str_line_replace($s, 20, 21, $typearr);
 			$url = misc::get_url_path();
 			$auth_key = md5(rand(1, 10000000).$_SERVER['ip']);
 			$appurl = substr($url, 0, -8); // 带 /
-			
 			
 			$plugin_path = "BBS_PATH.'plugin/',";
 			$plugin_url = "{$appurl}plugin/";
@@ -333,10 +338,18 @@ if(empty($step) || $step == 'checklicense') {
 			$s = preg_replace('#\'timeoffset\'\s*=\>\s*\'?.*?\'?,#is', "'timeoffset' => '$timeoffset',", $s);
 			$s = preg_replace('#\'urlrewrite\'\s*=\>\s*\'?.*?\'?,#is', "'urlrewrite' => ".(IN_SAE ? 1 : 0).",", $s);
 			$s = preg_replace('#\'installed\'\s*=\>\s*\'?.*?\'?,#is', "'installed' => 1,", $s);
+			/*$fp = fopen($configfile, 'w');
+			flock($fp, 3);
+			fwrite($fp, $s);
+			fclose($fp);*/
 			file_put_contents($configfile, $s);
-			sleep(1); // 此处很重要！file_put_contents() 貌似是一个异步，include 可能会缓存。
-			clearstatcache();
-			$conf = include $configfile;
+			
+			//echo $s;
+			//sleep(1); // 此处很重要！file_put_contents() 貌似是一个异步，include 可能会缓存。
+			//clearstatcache();
+			//$conf = include $configfile;
+			//print_r($conf);
+			//exit;
 			
 			// 修改密码
 			$muser = new user($conf);
