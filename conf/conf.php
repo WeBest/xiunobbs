@@ -17,7 +17,7 @@ return array(
 	// ------------------> 以下为框架依赖:
 	// 数据库配置， type 为默认的数据库类型，可以支持多种数据库: mysql|pdo_mysql|pdo_oracle|mongodb	
 	'db' => array(				
-		'type' => 'pdo_sqlite',			
+		'type' => 'mysql',			
 		'mysql' => array(			
 			'master' => array(	
 				'host' => 'localhost',								
@@ -138,10 +138,10 @@ return array(
 	'click_server' => 'http://x.net/service/clickd/',	// 记录主题点击数，论坛点击数
 	
 	// 加密KEY，
-	'auth_key' => '9d86ac64bed4cb53cd2d2d184c619101',
+	'auth_key' => 'aeb85194a8b896252a8173db7e3d612d',
 	
 	// 站点的ID，用来和官方通信，下载，安装插件。
-	'siteid' => '15a3123be2faf04c25754b8cbaf79b9a',
+	'siteid' => '6f99c2b2c491e9b580514cf763ec2f79',
 	
 	'cookie_pre' => 'bbs_',
 	'cookie_domain' => '',

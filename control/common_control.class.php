@@ -66,8 +66,6 @@ class common_control extends base_control {
 	
 	private function init_conf() {
 		$runtime = $this->runtime->xget();
-		print_r($runtime);
-		print_r($this->conf);exit;
 		$this->conf += $runtime; // view_path 占位，保留了 conf.view_path
 		
 		// 优先扫描 runtime 中的 view_path
