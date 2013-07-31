@@ -334,6 +334,8 @@ if(empty($step) || $step == 'checklicense') {
 			$s = preg_replace('#\'urlrewrite\'\s*=\>\s*\'?.*?\'?,#is', "'urlrewrite' => ".(IN_SAE ? 1 : 0).",", $s);
 			$s = preg_replace('#\'installed\'\s*=\>\s*\'?.*?\'?,#is', "'installed' => 1,", $s);
 			file_put_contents($configfile, $s);
+			sleep(1); // 此处很重要！file_put_contents() 貌似是一个异步，include 可能会缓存。
+			clearstatcache();
 			$conf = include $configfile;
 			
 			// 修改密码
@@ -434,7 +436,7 @@ if(empty($step) || $step == 'checklicense') {
 			}
 		}
 	}
-	
+	//exit;
 	$timeoffset_select = form::get_select('timeoffset', $timezones, $timeoffset);
 		
 	if($type == 'pdo_sqlite') {

@@ -48,6 +48,7 @@ class runtime extends base_model {
 				// 冗余存储了 toptids, 在 runtime 数据丢失的时候，可以恢复。
 				$toptids = $this->kv->get('toptids');
 				$this->data[$key] = (array)$this->kv->get('conf');
+				
 				$forumlist = $this->forum->get_list();
 				$forumarr = misc::arrlist_key_values($forumlist, 'fid', 'name');
 				$grouplist = $this->group->get_list();
