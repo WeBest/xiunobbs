@@ -5,7 +5,7 @@
  */
 
 // 调试模式: 1 打开，0 关闭, SAE 环境，必须为 2，否则会去加载 tmp/_runtime.php
-define('DEBUG', class_exists('SaeKV') ? 2 : 2);
+define('DEBUG', class_exists('SaeKV') ? 2 : 0);
 
 // 站点根目录
 define('BBS_PATH', str_replace('\\', '/', substr(dirname(__FILE__), 0, -7)));
@@ -338,18 +338,11 @@ if(empty($step) || $step == 'checklicense') {
 			$s = preg_replace('#\'timeoffset\'\s*=\>\s*\'?.*?\'?,#is', "'timeoffset' => '$timeoffset',", $s);
 			$s = preg_replace('#\'urlrewrite\'\s*=\>\s*\'?.*?\'?,#is', "'urlrewrite' => ".(IN_SAE ? 1 : 0).",", $s);
 			$s = preg_replace('#\'installed\'\s*=\>\s*\'?.*?\'?,#is', "'installed' => 1,", $s);
-			/*$fp = fopen($configfile, 'w');
-			flock($fp, 3);
-			fwrite($fp, $s);
-			fclose($fp);*/
 			file_put_contents($configfile, $s);
 			
-			//echo $s;
 			//sleep(1); // 此处很重要！file_put_contents() 貌似是一个异步，include 可能会缓存。
 			//clearstatcache();
 			//$conf = include $configfile;
-			//print_r($conf);
-			//exit;
 			
 			// 修改密码
 			$muser = new user($conf);
