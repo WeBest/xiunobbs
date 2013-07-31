@@ -49,6 +49,7 @@ class cron extends base_model {
 		
 		// execute on 0:00 perday.
 		if($time > $cron_2_next_time) {
+			
 			// update the next time of cron
 			$nexttime = $_SERVER['time_today'] + 86400;
 			$this->runtime->xset('cron_2_next_time', $nexttime);
@@ -60,6 +61,8 @@ class cron extends base_model {
 				$forum['todayposts'] = 0;
 				$this->forum->xupdate($forum);
 			}
+			
+			
 			
 			// 统计
 			$arr = explode(' ', $_SERVER['time_fmt']);
@@ -108,6 +111,7 @@ class cron extends base_model {
 		// 释放锁
 		$this->runtime->set('cronlock', 0);
 		
+		//$this->runtime->xsave('runtime');
 		// hook cron_model_run_end.php
 		
 	}
