@@ -132,7 +132,7 @@ if(empty($step) || $step == 'checklicense') {
 				if(mysql_errno() == 1049) {
 					mysql_query("CREATE DATABASE $name");
 					$r = mysql_select_db($name);
-					$error = 'MySQL 账户权限可能受限：<span class="small">'.mysql_error().mysql_errno().'</span>';
+					if(!$r) $error = 'MySQL 账户权限可能受限：<span class="small">'.mysql_error().mysql_errno().'</span>';
 				}
 				if(empty($error)) {
 					$conf['db']['mysql'] = array(

@@ -23,7 +23,7 @@ return array(
 				'host' => 'localhost',								
 				'user' => 'root',				
 				'password' => 'root',				
-				'name' => 'test_mysql',				
+				'name' => 'test',				
 				'charset' => 'utf8',				
 				'tablepre' => 'bbs_',								
 				'engine'=>'MyISAM',
@@ -44,7 +44,7 @@ return array(
 		),
 		'pdo_sqlite' => array(
 			'master' => array(
-				'host' => 'D:/www/xxx.net/upload/sqlite_7b7b727df7.db',
+				'host' => 'D:/www/xxx.net/upload/sqlite_be7c5ce924.db',
 				'user' => '',
 				'tablepre' => 'bbs_',
 				'password' => '',
@@ -138,10 +138,10 @@ return array(
 	'click_server' => 'http://x.net/service/clickd/',	// 记录主题点击数，论坛点击数
 	
 	// 加密KEY，
-	'auth_key' => '470a703449401ec39f529e07cacc11e6',
+	'auth_key' => '86291241db4a9139b498abb09e70675f',
 	
 	// 站点的ID，用来和官方通信，下载，安装插件。
-	'siteid' => 'b22709fb9a39f3c81a9ff784e1515a90',
+	'siteid' => '158cbd5cffe736dcc5605db807b35fc6',
 	
 	'cookie_pre' => 'bbs_',
 	'cookie_domain' => '',
