@@ -17,13 +17,13 @@ return array(
 	// ------------------> 以下为框架依赖:
 	// 数据库配置， type 为默认的数据库类型，可以支持多种数据库: mysql|pdo_mysql|pdo_oracle|mongodb	
 	'db' => array(				
-		'type' => 'mysql',			
+		'type' => 'pdo_sqlite',			
 		'mysql' => array(			
 			'master' => array(	
 				'host' => 'localhost',								
 				'user' => 'root',				
 				'password' => 'root',				
-				'name' => 'test',				
+				'name' => 'test1',				
 				'charset' => 'utf8',				
 				'tablepre' => 'bbs_',								
 				'engine'=>'MyISAM',
@@ -44,7 +44,7 @@ return array(
 		),
 		'pdo_sqlite' => array(
 			'master' => array(
-				'host' => 'D:/www/xxx.net/upload/sqlite_be7c5ce924.db',
+				'host' => 'E:/www/xiuno.2.0.0/upload/sqlite_04b8ca86db.db',
 				'user' => '',
 				'tablepre' => 'bbs_',
 				'password' => '',
@@ -138,10 +138,10 @@ return array(
 	'click_server' => 'http://x.net/service/clickd/',	// 记录主题点击数，论坛点击数
 	
 	// 加密KEY，
-	'auth_key' => '86291241db4a9139b498abb09e70675f',
+	'auth_key' => '252c7ea512fb4b079c258460edbe7159',
 	
 	// 站点的ID，用来和官方通信，下载，安装插件。
-	'siteid' => '158cbd5cffe736dcc5605db807b35fc6',
+	'siteid' => 'd2048eef2b6e16c33accf007977c0795',
 	
 	'cookie_pre' => 'bbs_',
 	'cookie_domain' => '',
