@@ -21,82 +21,80 @@ class cms_control extends admin_control {
 	
 	// 考虑默认过期时间
 	public function on_index() {
-			
 		
 		$channelid = intval(core::gpc('channelid'));
 		$layout = intval(core::gpc('layout'));
+		// 写入 channel
+		if(isset($_GET['layout'])) {
+			$channel = $this->cms_channel->read($channelid);
+			$channel['layout'] = $layout;
+			$this->cms_channel->update($channel);
+		}
 		
 		$error = $input = array();
 		
-		if(!$this->form_submit()) {
-			
-			$channellist = $this->cms_channel->index_fetch(array(), array(), 0, 20);
-			if(count($channellist) > 0) {
-				$channel = array_shift($channellist);
-				$channelid = $channel['channel'];
-			} else {
-				$channel = array();
-				$channelid = 0;
-			}
-			
-			
-			if($channel) {
-				// 一篇文章
-				if($channel['layout'] == 0) {
-					$catelist = array();
-					$article = $this->cms_article->index_fetch(array('channelid'=>$channelid, 'cateid'=>0), array(), 0, 1);
-			
-				// 几篇文章
-				} elseif($channel['layout'] == 1) {
-					$catelist = $this->cms_cate->index_fetch(array('channelid'=>$channelid), array(), 0, 1);
-					$articlelist = $this->cms_article->index_fetch(array('channelid'=>$channelid));
-				// 文章列表，分页
-				} elseif($channel['layout'] == 2) {
-					$page = misc::page();
-					$catelist = $this->cms_cate->index_fetch(array('channelid'=>$channelid), array(), 0, 20);
-					$articlelist = $this->cms_article->index_fetch(array('channelid'=>$channelid, 'cateid'=>$cateid));
-				}
-				$layout = $channel['layout'];
-			} else {
-				$layout = 0;
-				$catelist = array();
-				$articlelist = array();
-			}
-			
-			$layoutradios = form::get_radio('layout', array(0=>'一篇文章', 1=>'多篇文章', 2=>'分类+文章列表'), $layout);
-			
-			$this->view->assign('channellist', $channellist);
-			$this->view->assign('catelist', $catelist);
-			$this->view->assign('articlelist', $articlelist);
-			$this->view->display('xn_cms_admin_setting.htm');
+		$channellist = $this->cms_channel->index_fetch(array(), array(), 0, 20);
+		if(isset($_GET['channelid'])) {
+			$channel = $this->cms_channel->read($channelid);
 		} else {
-			
-			$enable = core::gpc('enable', 'R');
-			$meta = core::gpc('meta', 'R');
-			$appid = core::gpc('appid', 'R');
-			$appkey = core::gpc('appkey', 'R');
-			
-			if($meta) {
-				if(!preg_match('#<meta[^<>]+/>#is', $meta)) {
-					$this->message('meta标签格式不正确！');
-				}
-				$file = BBS_PATH.'plugin/xn_qq_login/header_css_before.htm';
-				if(!file_put_contents($file, $meta)) {
-					$this->message('写入文件 plugin/xn_qq_login/header_css_before.htm 失败，请检查文件是否可写<br />或者手工编辑此文件内容为：'.htmlspecialchars($meta));
-				}
-				// 删除 tmp 下的缓存文件
-				misc::rmdir($this->conf['tmp_path'], 1);
-			}
-			
-			$this->kv->set('qqlogin', array('enable'=>$enable, 'meta'=>$meta, 'appid'=>$appid, 'appkey'=>$appkey));
-			$this->kv->xset('qqlogin_enable', $enable);
-			$this->runtime->xset('qqlogin_enable', $enable);
-			
-			// 如果是 mysql 新建表
-			
-			$this->message('设置成功！', 1, $this->url('plugin-setting-dir-xn_qq_login.htm'));
-			
+			$channel = array_shift($channellist);
 		}
+		
+		if($channel) {
+			// 一篇文章
+			if($channel['layout'] == 0) {
+				$catelist = array();
+				$articlelist = $this->cms_article->index_fetch(array('channelid'=>$channelid, 'cateid'=>0), array(), 0, 1);
+				$article = array_pop($articlelist);
+			// 几篇文章
+			} elseif($channel['layout'] == 1) {
+				$catelist = $this->cms_cate->index_fetch(array('channelid'=>$channelid), array(), 0, 1);
+				$articlelist = $this->cms_article->index_fetch(array('channelid'=>$channelid));
+			// 文章列表，分页
+			} elseif($channel['layout'] == 2) {
+				$page = misc::page();
+				$catelist = $this->cms_cate->index_fetch(array('channelid'=>$channelid), array(), 0, 20);
+				$articlelist = $this->cms_article->index_fetch(array('channelid'=>$channelid, 'cateid'=>$cateid));
+			}
+			$layout = $channel['layout'];
+		} else {
+			$layout = 0;
+			$catelist = array();
+			$articlelist = array();
+			$article = array();
+		}
+		
+		$layoutradios = form::get_radio('layout', array(0=>'一篇文章', 1=>'多篇文章', 2=>'分类+文章列表'), $layout);
+		
+		$newchannelid = $this->cms_channel->maxid() + 1;
+		
+		$this->view->assign('newchannelid', $newchannelid);
+		$this->view->assign('channel', $channel);
+		$this->view->assign('channelid', $channelid);
+		$this->view->assign('layout', $layout);
+		$this->view->assign('article', $article);
+		$this->view->assign('channellist', $channellist);
+		$this->view->assign('catelist', $catelist);
+		$this->view->assign('articlelist', $articlelist);
+		$this->view->display('xn_cms_admin_setting.htm');
+	}
+	
+	// 修改 channel.name
+	public function on_updatechannel() {
+		$newchannelid = intval(core::gpc('newchannelid'));
+		$newname = core::gpc('newname');
+		
+		// channelid
+		$channel = $this->cms_channel->read($newchannelid);
+		if(empty($channel)) {
+			$this->cms_channel->create(array('channelid'=>$newchannelid, 'name'=>$newname));
+		} else {
+			$channel['name'] = $newname;
+			$this->cms_channel->update($channel);
+		}
+		
+		$this->message('成功！');
+		
 	}
 }
 

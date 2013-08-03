@@ -105,6 +105,13 @@ function empty(s) {
 	return (typeof s == 'undefined') || !s || s == '0';
 }
 
+function urlencode(s) {
+	s = encodeURIComponent(s);
+	s = s.replace(/-/ig, '%2D');
+	s = s.replace(/\./ig, '%2E');
+	return s;
+}
+
 // 对字符串转义。只保留字母数字加下划线
 $.escape = function(s) {
 	return s ? s.replace(/[^\w]/ig, '_') : '';
