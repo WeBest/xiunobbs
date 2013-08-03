@@ -38,6 +38,7 @@ class cms_control extends admin_control {
 			$channel = $this->cms_channel->read($channelid);
 		} else {
 			$channel = array_shift($channellist);
+			array_unshift($channellist, $channel);
 		}
 		
 		if($channel) {
@@ -81,20 +82,25 @@ class cms_control extends admin_control {
 	
 	// 修改 channel.name
 	public function on_updatechannel() {
-		$newchannelid = intval(core::gpc('newchannelid'));
-		$newname = core::gpc('newname');
+		$channelid = intval(core::gpc('channelid'));
+		$name = core::gpc('name');
 		
 		// channelid
-		$channel = $this->cms_channel->read($newchannelid);
+		$channel = $this->cms_channel->read($channelid);
 		if(empty($channel)) {
-			$this->cms_channel->create(array('channelid'=>$newchannelid, 'name'=>$newname));
+			$this->cms_channel->create(array('channelid'=>$channelid, 'name'=>$name));
 		} else {
-			$channel['name'] = $newname;
+			$channel['name'] = $name;
 			$this->cms_channel->update($channel);
 		}
 		
 		$this->message('成功！');
-		
+	}
+	
+	public function on_deletechannel() {
+		$channelid = intval(core::gpc('channelid'));
+		$this->cms_channel->delete($channelid);
+		$this->message('成功！');
 	}
 }
 
