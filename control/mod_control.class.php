@@ -748,6 +748,7 @@ class mod_control extends common_control {
 		$arr = explode('__', $fid_tids);
 		foreach((array)$arr as $v) {
 			$arr2 = explode('_', $v);
+			//if(!isset($arr2[1])) continue;
 			$r[] = array(intval($arr2[0]), intval($arr2[1]));
 		}
 		//$fidtidarr = misc::explode('_', '__', $fid_tids);

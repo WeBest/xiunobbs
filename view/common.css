@@ -133,7 +133,7 @@ a.icon:hover {background-image: url(image/icon-hover.gif)}
 .icon-pm-left-arrow {width: 14px; height: 9px; background-position: -64px -80px;}
 .icon-pm-right-arrow {width: 14px; height: 9px; background-position: -80px -80px;}
 .icon-zoom {width: 14px; height: 12px; background-position: -96px -80px;}
-.icon-move {width: 14px; height: 12px; background-position: -112px -80px;}
+.icon-move {width: 16px; height: 16px; background-position: -112px -80px;}
 
 /* 第七行 */
 .icon-post-fire {background: url(image/fire.gif); width: 11px; height: 19px; margin-top: -2px;}
