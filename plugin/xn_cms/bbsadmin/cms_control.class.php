@@ -52,8 +52,14 @@ class cms_control extends admin_control {
 			if($channel['layout'] == 0) {
 				$catelist = array();
 				$article = $this->cms_article->read($channelid, 0, $channelid);
-			// 几篇文章
 			} elseif($channel['layout'] > 0) {
+				if($channel['layout'] == 1) {
+					$articlelist = $this->cms_article->index_fetch(array('channelid'=>$channelid, 'cateid'=>$cateid), array(), 0, 1);
+					$article = array_pop($articlelist);
+				} else {
+					$article = array();
+				}
+			// 几篇文章
 				$newcateid = $this->get_newcateid($channelid);
 				$catelist = $this->cms_cate->index_fetch(array('channelid'=>$channelid), array(), 0, 20);
 				misc::arrlist_multisort($catelist, 'rank', TRUE);
@@ -72,7 +78,7 @@ class cms_control extends admin_control {
 				$catelist = $articlelist = $article = array();
 			} elseif($channel['layout'] > 0) {
 				$newcateid = $cateid = $page = 0;
-				$catelist = $articlelist = array();
+				$article = $catelist = $articlelist = array();
 			}
 		}
 		
@@ -103,7 +109,7 @@ class cms_control extends admin_control {
 		} else {
 			$subject = core::gpc('subject', 'P');
 			$message = core::gpc('message', 'P');
-			$arr = array(
+			$article = array(
 				'channelid'=>$channelid,
 				'cateid'=>$cateid,
 				'subject'=>$subject,
@@ -111,9 +117,9 @@ class cms_control extends admin_control {
 				'rank'=>100000,
 				'username'=>'',
 				'dateline'=>$_SERVER['time'],
-				'views'=>'',
+				'views'=>0,
 			);
-			$articleid = $this->cms_article->create($arr);
+			$articleid = $this->cms_article->create($article);
 			$this->message('提交成功！');
 		}
 	}
@@ -147,11 +153,25 @@ class cms_control extends admin_control {
 					$article['message'] = $message;
 					$this->cms_article->update($article);
 				}
-			} elseif($channel['layout'] > 0) {
-				$article = $this->cms_article->read($channelid, $cateid, $articleid);
-				empty($article) && $this->message('文章不存在。', 0);
-				$article['message'] = $message;
-				$this->cms_article->update($article);
+			} elseif($channel['layout'] == 1) {
+				$articlelist = $this->cms_article->index_fetch(array('channelid'=>$channelid, 'cateid'=>$cateid), array(), 0, 1);
+				$article = array_pop($articlelist);
+				if(empty($article)) {
+					$article = array(
+						'channelid'=>$channelid,
+						'cateid'=>$cateid,
+						'subject'=>'',
+						'message'=>$message,
+						'rank'=>100000,
+						'username'=>'',
+						'dateline'=>$_SERVER['time'],
+						'views'=>0,
+					);
+					$articleid = $this->cms_article->create($article);
+				} else {
+					$article['message'] = $message;
+					$this->cms_article->update($article);
+				}
 			}
 			$this->message('更新成功', 0);
 			
@@ -175,7 +195,7 @@ class cms_control extends admin_control {
 	// 修改 channel.name
 	public function on_updatechannel() {
 		$channelid = intval(core::gpc('channelid'));
-		$name = core::gpc('name');
+		$name = core::urldecode(core::gpc('name'));
 		
 		// channelid
 		$channel = $this->cms_channel->read($channelid);
@@ -216,7 +236,7 @@ class cms_control extends admin_control {
 	public function on_updatecate() {
 		$channelid = intval(core::gpc('channelid'));
 		$cateid = intval(core::gpc('cateid'));
-		$name = core::gpc('name');
+		$name = core::urldecode(core::gpc('name'));
 		
 		$channel = $this->cms_channel->read($channelid);
 		empty($channel) && $this->message('频道不存在!', 0);
