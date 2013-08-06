@@ -51,15 +51,15 @@ class cms_control extends admin_control {
 			// 一篇文章
 			if($channel['layout'] == 0) {
 				$catelist = array();
-				$article = $this->cms_article->read($channelid, 0, $channelid);
+				$articleid = $channelid;
+				$article = $this->cms_article->read($articleid);
 			} elseif($channel['layout'] > 0) {
 				if($channel['layout'] == 1) {
-					$articlelist = $this->cms_article->index_fetch(array('channelid'=>$channelid, 'cateid'=>$cateid), array(), 0, 1);
-					$article = array_pop($articlelist);
-				} else {
+					$articleid = $channelid * 20 + $cateid;
+					$article = $this->cms_article->read($articleid);
+				} elseif($channel['layout'] == 2) {
 					$article = array();
 				}
-			// 几篇文章
 				$newcateid = $this->get_newcateid($channelid);
 				$catelist = $this->cms_cate->index_fetch(array('channelid'=>$channelid), array(), 0, 20);
 				misc::arrlist_multisort($catelist, 'rank', TRUE);
@@ -290,16 +290,14 @@ class cms_control extends admin_control {
 	
 	// 设置 rank
 	public function on_rankarticle() {
-		print_r($_POST);exit;
 		$rank = core::gpc('rank', 'P');
-		print_r($rank);exit;
 		foreach($rank as $articleid=>$rank) {
 			$article = $this->cms_article->read($articleid);
 			if(empty($article)) continue;
 			$article['rank'] = $rank;
 			$this->cms_article->update($article);
 		}
-		$this->message('成功', 1);
+		$this->message('更新排序成功', 1);
 	}
 	
 	private function get_newchannelid() {

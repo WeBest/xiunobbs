@@ -72,6 +72,7 @@
 							<tr>
 								<td width="60">顺序</td>
 								<td>标题</td>
+								<td width="30">查看</td>
 								<td width="60">操作</td>
 							</tr>
 						</table>
@@ -80,15 +81,16 @@
 						<table width="100%">
 						<!--{loop $articlelist $article}-->
 							<tr>
-								<td width="60"><input type="text" name="articlerank[$article[articleid]]" value="$article[rank]" size="4" /></td>
+								<td width="60"><input type="text" name="articlerank[$article[articleid]]" articleid="$article[articleid]" value="$article[rank]" size="4" /></td>
 								<td><a href="../?article-$articleid.htm" target="_blank">$article[subject]</a></td>
+								<td>$article[views]</td>
 								<td width="60">
 									<a href="?cms-updatearticle-channelid-$article[channelid]-cateid-$article[cateid]-articleid-$article[articleid].htm" class="ajaxdialog" ajaxdialog="{fullicon: true, modal: false, cache: false}" onclick="return false;">编辑</a>
 									<a href="?cms-deletearticle-channelid-$article[channelid]-cateid-$article[cateid]-articleid-$article[articleid].htm" class="ajaxconfirm" ajaxconfirm="{message: '确定删除吗？'}" onclick="return false;">删除</a>
 								</td>
 							</tr>
 							<tr>
-								<td colspan="3"><hr /></td>
+								<td colspan="4"><hr /></td>
 							</tr>
 						<!--{/loop}-->
 						</table>
@@ -248,8 +250,8 @@ $('#editarticle_submit').click(function() {
 			alert(json.message);
 			return false;
 		}
-		alert(s);
-		json = json.message;
+		
+		$.alert(json.message);
 	});
 	return false;
 });
@@ -259,13 +261,14 @@ $('#editarticle_submit').click(function() {
 <!--{if $layout == 2}-->
 <script>
 $('#rank_setting').click(function() {
-	var data = $('input[name^=articlerank]').map(function() {return $(this).attr('name') + ':' + $(this).val()}).get();
-	print_r($data);
-	//var data = $("#ul2 li input").map(function() { return $(this).attr('cateid') + ':' + $(this).val(); }).get();
-	var rank = urlencode(data.join("|"));
-	$.post('?cms-rankarticle-channelid-$channelid-cateid-$cateid-ajax-1.htm', {'rank': rank}, function(s) {
+	var postdata = {};
+	var data = $('input[name^=articlerank]').map(function() {postdata[$(this).attr('articleid')] = $(this).val(); });
+	$.post('?cms-rankarticle-channelid-$channelid-cateid-$cateid-ajax-1.htm', {'rank': postdata}, function(s) {
 		var json = json_decode(s);
 		if(error = json_error(json)) {alert(error); return false;}
+		
+		$.alert(json.message);
+		window.location.reload();
 	});
 });
 </script>
