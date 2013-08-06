@@ -16,7 +16,7 @@ class cms_control extends admin_control {
 		
 		$this->cms_channel = core::model($this->conf, 'cms_channel', array('channelid'), 'channelid');
 		$this->cms_cate = core::model($this->conf, 'cms_cate', array('channelid', 'cateid'));
-		$this->cms_article = core::model($this->conf, 'cms_article', array('channelid', 'cateid', 'articleid'), 'articleid');
+		$this->cms_article = core::model($this->conf, 'cms_article', array('articleid'), 'articleid');
 	}
 	
 	// 考虑默认过期时间
@@ -145,21 +145,32 @@ class cms_control extends admin_control {
 			empty($channel) && $this->message('频道不存在。', 0);
 			
 			if($channel['layout'] == 0) {
-				$article = $this->cms_article->read($channelid, $cateid, $channelid);
+				$article = $this->cms_article->read($channelid);
 				if(empty($article)) {
-					$article = array('channelid'=>$channelid, 'cateid'=>0, 'articleid'=>$channelid, 'message'=>$message);
+					$article = array(
+						'channelid'=>$channelid,
+						'cateid'=>0,
+						'articleid'=>$channelid,
+						'subject'=>'',
+						'message'=>$message,
+						'rank'=>100000,
+						'username'=>'',
+						'dateline'=>$_SERVER['time'],
+						'views'=>0
+					);
 					$this->cms_article->create($article);
 				} else {
 					$article['message'] = $message;
 					$this->cms_article->update($article);
 				}
 			} elseif($channel['layout'] == 1) {
-				$articlelist = $this->cms_article->index_fetch(array('channelid'=>$channelid, 'cateid'=>$cateid), array(), 0, 1);
-				$article = array_pop($articlelist);
+				$articleid = $channelid * 10 + $cateid;
+				$article = $this->cms_article->read($articleid);
 				if(empty($article)) {
 					$article = array(
 						'channelid'=>$channelid,
 						'cateid'=>$cateid,
+						'articleid'=>$articleid,
 						'subject'=>'',
 						'message'=>$message,
 						'rank'=>100000,
@@ -185,11 +196,11 @@ class cms_control extends admin_control {
 		$cateid = intval(core::gpc('cateid'));
 		$articleid = intval(core::gpc('articleid'));
 		
-		$article = $this->cms_article->read($channelid, $cateid, $articleid);
+		$article = $this->cms_article->read($articleid);
 		empty($article) && $this->message('文章不存在。', 0);
-		$this->cms_article->delete($channelid, $cateid, $articleid);
+		$this->cms_article->delete($articleid);
 		
-		$this->message('删除成功。', 1);
+		$this->message('删除成功。', 1, "?cms-index-channelid-$channelid-cateid-$cateid.htm");
 	}
 	
 	// 修改 channel.name
@@ -279,7 +290,9 @@ class cms_control extends admin_control {
 	
 	// 设置 rank
 	public function on_rankarticle() {
+		print_r($_POST);exit;
 		$rank = core::gpc('rank', 'P');
+		print_r($rank);exit;
 		foreach($rank as $articleid=>$rank) {
 			$article = $this->cms_article->read($articleid);
 			if(empty($article)) continue;
