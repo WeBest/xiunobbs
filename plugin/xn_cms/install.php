@@ -19,10 +19,10 @@ if($this->conf['db']['type'] != 'mongodb') {
 		array('name', 'char(32)'), 
 	));
 	$db->index_create('cms_channel', array('channelid'=>1));
+	//$db->maxid('cms_article-articleid', 100);
 	//$cms_channel = core::model($this->conf, 'cms_channel', array('channelid'), 'channelid');
 	//$cms_channel->create();
-	
-	$db->set("cms_channel-channelid-1", array(''));
+	//$db->set("cms_channel-channelid-1", array(''));
 	
 	$db->table_create('cms_cate', array(
 		array('channelid', 'int(11)'), 
@@ -46,6 +46,8 @@ if($this->conf['db']['type'] != 'mongodb') {
 	));
 	$db->index_create('cms_article', array('channelid'=>1, 'cateid'=>1, 'articleid'=>1));
 	
+	// 预留100篇文章
+	$db->maxid('cms_article-articleid', 100);
 }
 
 ?>

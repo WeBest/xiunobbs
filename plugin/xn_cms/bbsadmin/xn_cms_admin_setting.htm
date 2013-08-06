@@ -31,24 +31,30 @@
 		<tr>
 			<!--{if $layout > 0}-->
 			<td width="30%">
-				<!--{loop $catelist $cate}-->
-				<li>
-					
-					<input type="text" size="6" channelid="$cate[cateid]" value="$cate[name]" /><br />
-					<a href="?cms-index-channelid-$channelid-cateid-$cate[cateid].htm" {if $cateid == $cate[cateid]} class="bold red"{/if}>查看</a>
-					&nbsp; <a href="" class="icon icon-move"></a>
-					<a href="" class="icon icon-delete"></a>
-				</li>
-				<!--{/loop}-->
-				xxx
+				<ul id="ul2">
+					<!--{loop $catelist $cate}-->
+					<li>
+						<input type="text" size="6" cateid="$cate[cateid]" value="$cate[name]" /><br />
+						<a href="?cms-index-channelid-$channelid-cateid-$cate[cateid].htm" {if $cateid == $cate[cateid]} class="bold red"{/if}>查看</a>
+						&nbsp; <a href="" class="icon icon-move"></a>
+						<a href="" class="icon icon-delete"></a>
+					</li>
+					<!--{/loop}-->
+					<li>
+						<input type="text" size="6" cateid="$cate[cateid]" value="" islast="1" /><br />
+						<a href="?cms-index-channelid-$channelid-cateid-$newcateid.htm">查看</a>
+						&nbsp; <a href="" class="icon icon-move"></a>
+						<a href="" class="icon icon-delete"></a>
+					</li>
+				</ul>
 			</td>
 			<!--{/if}-->
 			<td>
 				<!--{if $layout == 0}-->
 								
-				<form action="?cms-updatearticle-channelid-$channelid-cateid-0-articleid-1-ajax-1.htm" method="post" id="updatearticle_form" target="_blank">
+				<form action="?cms-updatearticle-channelid-$channelid-ajax-1.htm" method="post" id="updatearticle_form" target="_blank">
 					<input type="hidden" name="FORM_HASH" value="{FORM_HASH}" />
-					<div><textarea name="message" id="message" style="width: 780px; height: 400px;"></textarea></div>
+					<div><textarea name="message" id="message" style="width: 780px; height: 400px;">$article[message]</textarea></div>
 					<p><input type="submit" class="button bigblue" id="updatearticle_submit" value="保存" /></p>
 				</form>
 				
@@ -80,66 +86,131 @@
 
 <script type="text/javascript" src="../view/js/jquery.dragsort-0.5.1.min.js"></script>
 <script type="text/javascript">
-	$('input[name=layout]').click(function() {
-		var layout = intval($(this).val());
-		window.location = '?cms-index-channelid-$channelid-layout-'+layout+'.htm';
+
+var newchannelids = $newchannelids;
+var newcateids = $newcateids;
+newchannelids.reverse();
+newcateids.reverse();
+
+$('input[name=layout]').click(function() {
+	var layout = intval($(this).val());
+	window.location = '?cms-index-channelid-$channelid-layout-'+layout+'.htm';
+});
+
+// ----------> channel drag start
+$("#ul1").dragsort({dragEnd: function(s) {
+	var data = $("#ul1 li input").map(function() { return $(this).attr('channelid') + ':' + $(this).val(); }).get();
+	var s = urlencode(data.join("|"));
+	$.get('?cms-rankchannel-data-'+s+'-ajax-1.htm', function(s) {
+		var json = json_decode(s);
+		if(error = json_error(json)) {alert(error); return false;}
+	});
+}});
+function li_bind_event(jli) {
+	var jinput = jli.find('input');
+	var name = urlencode(jinput.val());
+	var channelid = intval(jinput.attr('channelid'));
+	
+	// 删除按钮
+	jli.find('a.icon-delete').click(function() {
+		if(jli.find('input').attr('islast') == 1) return false;
+		if(window.confirm('确定删除?')) {
+			$.get('?cms-deletechannel-channelid-'+channelid+'-ajax-1.htm', function(s) {
+				var json = json_decode(s);
+				if(error = json_error(json)) {alert(error); return false;}
+				if(json.status == 1) {
+					jli.remove();
+				}
+			});
+		}
+		return false;
 	});
 	
-	$("#ul1").dragsort({dragEnd: function(s) {
-		var data = $("#ul1 li input").map(function() { return $(this).attr('channelid') + ':' + $(this).val(); }).get();
-		var s = urlencode(data.join("|"));
-		$.get('?cms-rankchannel-data-'+s+'-ajax-1.htm', function(s) {
+	// input keyup
+	jinput.keyup(function() {
+		var name = urlencode(jinput.val());
+		var channelid = intval($(this).attr('channelid'));
+		$.get('?cms-updatechannel-channelid-'+channelid+'-name-'+name+'-ajax-1.htm', function(s) {
 			var json = json_decode(s);
 			if(error = json_error(json)) {alert(error); return false;}
 		});
-	}});
+		
+		if(jinput.attr('islast') == '1') {
+			var channelid = newchannelids.pop();
+			//var channelid = intval(jinput.attr('channelid')) + 1; // channelid + 1
+			var jliclone = jli.clone().appendTo(jli.parent());
+			jliclone.find('input').val('').attr('channelid', channelid).attr('islast', '1');
+			li_bind_event(jliclone);
+		}
+		jinput.attr('islast', '0');
+	});
+}
+$('#ul1 li').each(function() {
+	li_bind_event($(this));
+});
+// ----------> channel drag end
+
+
+
+
+// ----------> cate drag start
+$("#ul2").dragsort({dragEnd: function(s) {
+	var data = $("#ul2 li input").map(function() { return $(this).attr('cateid') + ':' + $(this).val(); }).get();
+	var s = urlencode(data.join("|"));
+	$.get('?cms-rankcate-channelid-$channelid-data-'+s+'-ajax-1.htm', function(s) {
+		var json = json_decode(s);
+		if(error = json_error(json)) {alert(error); return false;}
+	});
+}});
+function li_bind_event2(jli) {
+	var jinput = jli.find('input');
+	var name = urlencode(jinput.val());
+	var cateid = intval(jinput.attr('cateid'));
 	
-	function li_bind_event(jli) {
-		var jinput = jli.find('input');
-		var name = urlencode(jinput.val());
-		var channelid = intval(jinput.attr('channelid'));
-		
-		// 删除按钮
-		jli.find('a.icon-delete').click(function() {
-			if(jli.find('input').attr('islast') == 1) return false;
-			if(window.confirm('确定删除?')) {
-				$.get('?cms-deletechannel-channelid-'+channelid+'-ajax-1.htm', function(s) {
-					var json = json_decode(s);
-					if(error = json_error(json)) {alert(error); return false;}
-					if(json.status == 1) {
-						jli.remove();
-					}
-				});
-			}
-			return false;
-		});
-		
-		// input keyup
-		jinput.keyup(function() {
-			var name = urlencode(jinput.val());
-			var channelid = intval($(this).attr('channelid'));
-			$.get('?cms-updatechannel-channelid-'+channelid+'-name-'+name+'-ajax-1.htm', function(s) {
+	// 删除按钮
+	jli.find('a.icon-delete').click(function() {
+		if(jli.find('input').attr('islast') == 1) return false;
+		if(window.confirm('确定删除?')) {
+			$.get('?cms-deletecate-channelid-$channelid-cateid-'+cateid+'-ajax-1.htm', function(s) {
 				var json = json_decode(s);
 				if(error = json_error(json)) {alert(error); return false;}
+				if(json.status == 1) {
+					jli.remove();
+				}
 			});
-			
-			if(jinput.attr('islast') == '1') {
-				var channelid = intval(jinput.attr('channelid')) + 1; // channelid + 1
-				var jliclone = jli.clone().appendTo(jli.parent());
-				jliclone.find('input').val('').attr('channelid', channelid).attr('islast', '1');
-				li_bind_event(jliclone);
-			}
-			jinput.attr('islast', '0');
-		});
-	}
-	
-	$('#ul1 li').each(function() {
-		li_bind_event($(this));
+		}
+		return false;
 	});
+	
+	// input keyup
+	jinput.keyup(function() {
+		var name = urlencode(jinput.val());
+		var cateid = intval($(this).attr('cateid'));
+		$.get('?cms-updatecate-channelid-$channelid-cateid-'+cateid+'-name-'+name+'-ajax-1.htm', function(s) {
+			var json = json_decode(s);
+			if(error = json_error(json)) {alert(error); return false;}
+		});
+		
+		if(jinput.attr('islast') == '1') {
+			var cateid = newcateids.pop();
+			//var cateid = intval(jinput.attr('cateid')) + 1; // cateid + 1
+			var jliclone = jli.clone().appendTo(jli.parent());
+			jliclone.find('input').val('').attr('cateid', cateid).attr('islast', '1');
+			li_bind_event2(jliclone);
+		}
+		jinput.attr('islast', '0');
+	});
+}
+$('#ul2 li').each(function() {
+	li_bind_event2($(this));
+});
+// ----------> cate drag end
+
 </script>
 
 <!--{if $layout == 0}-->
 <script>
+
 $('#updatearticle_submit').click(function() {
 	$('div.alert').remove();
 	$('#updatearticle_submit').disable();
