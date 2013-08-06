@@ -27,7 +27,7 @@ class cms_control extends admin_control {
 		$layout = intval(core::gpc('layout'));
 		$channellist = $this->cms_channel->index_fetch(array(), array(), 0, 20);
 		misc::arrlist_multisort($channellist, 'rank', TRUE);
-		if(empty($channelid)) {
+		if(empty($channelid) && $channellist) {
 			$first = array_shift($channellist);
 			$channelid = $first['channelid'];
 			array_unshift($channellist, $first);
@@ -51,12 +51,14 @@ class cms_control extends admin_control {
 			// 一篇文章
 			if($channel['layout'] == 0) {
 				$catelist = array();
-				$articlelist = $this->cms_article->index_fetch(array('channelid'=>$channelid, 'cateid'=>0), array(), 0, 1);
-				$article = array_pop($articlelist);
+				$article = $this->cms_article->read($channelid, 0, $channelid);
+				//$articlelist = $this->cms_article->index_fetch(array('channelid'=>$channelid, 'cateid'=>0, 'article'), array(), 0, 1);
+				//$article = array_pop($articlelist);
 			// 几篇文章
 			} elseif($channel['layout'] == 1) {
-				$newcateid = $this->get_cate_max_rank($channelid);
+				$newcateid = $this->get_newcateid($channelid);
 				$catelist = $this->cms_cate->index_fetch(array('channelid'=>$channelid), array(), 0, 20);
+				misc::arrlist_multisort($catelist, 'rank', TRUE);
 				// 默认 cateid
 				if(empty($cateid) && !empty($catelist)) {
 					$first = array_shift($catelist);
@@ -68,9 +70,16 @@ class cms_control extends admin_control {
 				
 			// 文章列表，分页
 			} elseif($channel['layout'] == 2) {
-				$cateid = intval(core::gpc('cateid'));
+				$newcateid = $this->get_newcateid($channelid);
 				$page = misc::page();
 				$catelist = $this->cms_cate->index_fetch(array('channelid'=>$channelid), array(), 0, 20);
+				misc::arrlist_multisort($catelist, 'rank', TRUE);
+				// 默认 cateid
+				if(empty($cateid) && !empty($catelist)) {
+					$first = array_shift($catelist);
+					$cateid = $first['cateid'];
+					array_unshift($catelist, $first);
+				}
 				$articlelist = $this->cms_article->index_fetch(array('channelid'=>$channelid, 'cateid'=>$cateid));
 			}
 			$layout = $channel['layout'];
@@ -88,9 +97,9 @@ class cms_control extends admin_control {
 		
 		$layoutradios = form::get_radio('layout', array(0=>'单页面', 1=>'多篇文章', 2=>'分类+文章列表'), $layout);
 		
-		$newchannelid = $this->get_channel_max_rank();
-		
+		$newchannelid = $this->get_newchannelid();
 		$this->view->assign('newchannelid', $newchannelid);
+		$this->view->assign('newcateid', $newcateid);
 		$this->view->assign('channel', $channel);
 		$this->view->assign('channelid', $channelid);
 		$this->view->assign('cateid', $cateid);
@@ -103,8 +112,25 @@ class cms_control extends admin_control {
 		$this->view->display('xn_cms_admin_setting.htm');
 	}
 	
-	//
+	public function on_createarticle() {
+		if(!$this->form_submit()) {
+			$this->view->display('xn_cms_admin_article_create.htm');
+		} else {
+		
+		}
+	}
+	
+	// 编辑文章
 	public function on_updatearticle() {
+		if(!$this->form_submit()) {
+			$this->view->display('xn_cms_admin_article_update.htm');
+		} else {
+		
+		}
+	}
+	
+	// 更新文章
+	public function on_editarticle() {
 		if($this->form_submit()) {
 			$channelid = intval(core::gpc('channelid'));
 			$cateid = intval(core::gpc('cateid'));
@@ -156,7 +182,7 @@ class cms_control extends admin_control {
 		// channelid
 		$channel = $this->cms_channel->read($channelid);
 		if(empty($channel)) {
-			$this->get_newchannelid();
+			$channelid = $this->get_newchannelid();
 			$this->cms_channel->create(array('channelid'=>$channelid, 'name'=>$name));
 		} else {
 			$channel['name'] = $name;
@@ -194,11 +220,13 @@ class cms_control extends admin_control {
 		$cateid = intval(core::gpc('cateid'));
 		$name = core::gpc('name');
 		
+		$channel = $this->cms_channel->read($channelid);
+		empty($channel) && $this->message('频道不存在!', 0);
 		// cateid
 		$cate = $this->cms_cate->read($channelid, $cateid);
 		if(empty($cate)) {
 			$cateid = $this->get_newcateid($channelid);
-			$this->cms_cate->create(array('channelid'=>$channelid, 'cateid'=>$cateid, 'name'=>$name));
+			$this->cms_cate->create(array('channelid'=>$channelid, 'cateid'=>$cateid, 'name'=>$name, 'articles'=>0));
 		} else {
 			$cate['name'] = $name;
 			$cate['rank'] = $this->get_cate_max_rank($channelid) + 1;
@@ -232,7 +260,7 @@ class cms_control extends admin_control {
 	}
 	
 	private function get_newchannelid() {
-		for($i=1; $i<20; $i++) {
+		for($i=1; $i<=20; $i++) {
 			$channel = $this->cms_channel->read($i);
 			if(empty($channel)) {
 				return $i;
@@ -242,7 +270,7 @@ class cms_control extends admin_control {
 	}
 	
 	private function get_newcateid($channelid) {
-		for($i=1; $i<20; $i++) {
+		for($i=1; $i<=20; $i++) {
 			$cate = $this->cms_cate->read($channelid, $i);
 			if(empty($cate)) {
 				return $i;
@@ -253,7 +281,7 @@ class cms_control extends admin_control {
 	
 	private function get_newchannelids() {
 		$arr = array();
-		for($i=1; $i<20; $i++) {
+		for($i=1; $i<=20; $i++) {
 			$channel = $this->cms_channel->read($i);
 			if(empty($channel)) {
 				$arr[] = $i;
@@ -264,7 +292,7 @@ class cms_control extends admin_control {
 	
 	private function get_newcateids($channelid) {
 		$arr = array();
-		for($i=1; $i<20; $i++) {
+		for($i=1; $i<=20; $i++) {
 			$cate = $this->cms_cate->read($channelid, $i);
 			if(empty($cate)) {
 				$arr[] = $i;
@@ -275,7 +303,7 @@ class cms_control extends admin_control {
 	
 	private function get_channel_max_rank() {
 		$maxrank = 0;
-		for($i=1; $i<20; $i++) {
+		for($i=1; $i<=20; $i++) {
 			$channel = $this->cms_channel->read($i);
 			if(!empty($channel) && $channel['rank'] > $maxrank) {
 				$maxrank = $channel['rank'];
@@ -286,7 +314,7 @@ class cms_control extends admin_control {
 	
 	private function get_cate_max_rank($channelid) {
 		$maxrank = 0;
-		for($i=1; $i<20; $i++) {
+		for($i=1; $i<=20; $i++) {
 			$cate = $this->cms_cate->read($channelid, $i);
 			if(!empty($cate) && $cate['rank'] > $maxrank) {
 				$maxrank = $cate['rank'];

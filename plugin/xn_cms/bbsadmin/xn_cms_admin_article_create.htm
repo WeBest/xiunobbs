@@ -1,0 +1,87 @@
+<!--{json width:"880",title:"添加文章"}-->
+<style type="text/css">
+#create_article_form dt {width: 7%;}
+#create_article_form dd {width: 91%;}
+</style>
+<form action="?cms-createarticle-channelid-$channelid-cateid-$cateid-ajax-1.htm" method="post" id="create_article_form" target="_blank">
+	<input type="hidden" name="FORM_HASH" value="{FORM_HASH}" />
+	<dl>
+		<dt><label for="subject">标题：</label></dt>
+		<dd>
+			<input type="text" name="subject" id="subject" value="$article[subject]" style="width: 500px;" /> <span class="small grey">(200字)</span>
+		</dd>
+		
+		<dt><label for="message">内容：</label></dt>
+		<dd style="position: relative;"><textarea name="message" id="message" style="width: 780px; height: 400px;"></textarea></dd>
+		
+		<dt></dt>
+		<dd>
+			<input type="submit" class="button bigblue" id="create_article_submit" value="发表文章" />
+			<input type="button" class="button biggrey" value="取消" id="create_article_cancel" />
+		</dd>
+	</dl>
+</form>
+
+<link href="../view/js/editor/editor.css" type="text/css" rel="stylesheet" />
+
+<script type="text/javascript">
+
+function delay_execute(dialog, recall) {
+	
+	$('#create_article_form').submit(function() {return false;});
+	$.xload('view/js/editor/swfupload.js', "view/js/editor/editor.js", function() {
+		
+		$('#thread_message_$pid').editor({
+			onctrlenter: function() {
+				$('#create_article_submit').trigger('click');
+			},
+		});		
+		
+		$('#subject').focus().keydown(function(e) {
+			var keycode = e.keyCode ? e.keyCode : e.which;
+			if(keycode == 9) {
+				$('#message')[0].editor._focus();
+			}
+		});
+		$('#create_article_submit').click(function() {
+			$('div.alert').remove();
+			$('#create_article_submit').disable();
+			var postdata = $("#create_article_form").serialize();
+			$.post($('#create_article_form').attr('action'), postdata,  function(s){
+				$('#create_article_submit').enable();
+				var json = json_decode(s);
+				if(error = json_error(json)) {alert(error); return false;}
+				if(json.status <=0) {
+					alert(json.message);
+					return false;
+				}
+				
+				json = json.message;
+				if(json.subject) {
+					$('#subject').alert(json.subject, {width: 250, delay: 3000}).focus();
+					return false;
+				}
+				if(json.message) {
+					$('#message').parent().alert(json.message, {width: 250, delay: 3000});
+					$('#message')[0].editor._focus();
+					return false;
+				}
+				var thread = json.thread;
+		 		
+				// 清空编辑器内容
+				$('#message')[0].editor.set('');
+		 		
+		 		dialog.set_body('<div class="ok">发表成功，页面将自动跳转到列表页！</div>');
+		 		setTimeout(function() {
+		 			window.location= '?cms-index-channelid-$channelid-cateid-$cateid.htm';
+		 			dialog.close();
+		 		}, 500);
+			  });
+			  return false;
+		});
+		$('#create_article_cancel').click(function() {
+			dialog.close();
+		});
+	});
+}
+</script>

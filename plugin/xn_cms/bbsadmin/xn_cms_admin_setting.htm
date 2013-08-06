@@ -1,7 +1,8 @@
 <!--{include header.htm}-->
 <style>
-#ul1 {margin: 0px; padding: 0px;}
+#ul1, #ul2 {margin: 0px; padding: 0px;}
 #ul1 li {width: 100px; float: left; margin: 0px; padding: 0px; list-style: none;}
+#ul2 li {margin: 0px; padding: 0px; list-style: none;}
 </style>
 <div class="width">
 	<ul id="ul1">
@@ -10,7 +11,7 @@
 			
 			<input type="text" size="6" channelid="$channel[channelid]" value="$channel[name]" /><br />
 			<a href="?cms-index-channelid-$channel[channelid].htm" {if $channelid == $channel[channelid]} class="bold red"{/if}>查看</a>
-			&nbsp; <a href="" class="icon icon-move"></a>
+			&nbsp; <span class="icon icon-move"></span>
 			<a href="" class="icon icon-delete"></a>
 			
 		</li>
@@ -18,7 +19,7 @@
 		<li>
 			<input type="text" size="6" channelid="$newchannelid" value="" islast="1" /><br />
 			<a href="?cms-index-channelid-$newchannelid.htm">查看</a>
-			&nbsp; <a href="" class="icon icon-move"></a>
+			&nbsp; <span class="icon icon-move"></span>
 			<a href="" class="icon icon-delete"></a>
 		</li>
 	</ul>
@@ -34,32 +35,32 @@
 				<ul id="ul2">
 					<!--{loop $catelist $cate}-->
 					<li>
-						<input type="text" size="6" cateid="$cate[cateid]" value="$cate[name]" /><br />
+						<input type="text" size="10" cateid="$cate[cateid]" value="$cate[name]" />
 						<a href="?cms-index-channelid-$channelid-cateid-$cate[cateid].htm" {if $cateid == $cate[cateid]} class="bold red"{/if}>查看</a>
-						&nbsp; <a href="" class="icon icon-move"></a>
+						&nbsp; <span href="" class="icon icon-move"></span>
 						<a href="" class="icon icon-delete"></a>
 					</li>
 					<!--{/loop}-->
 					<li>
-						<input type="text" size="6" cateid="$cate[cateid]" value="" islast="1" /><br />
+						<input type="text" size="10" cateid="$newcateid" value="" islast="1" />
 						<a href="?cms-index-channelid-$channelid-cateid-$newcateid.htm">查看</a>
-						&nbsp; <a href="" class="icon icon-move"></a>
+						&nbsp; <span class="icon icon-move"></span>
 						<a href="" class="icon icon-delete"></a>
 					</li>
 				</ul>
 			</td>
 			<!--{/if}-->
-			<td>
+			<td valign="top">
 				<!--{if $layout == 0}-->
 								
-				<form action="?cms-updatearticle-channelid-$channelid-ajax-1.htm" method="post" id="updatearticle_form" target="_blank">
+				<form action="?cms-editarticle-channelid-$channelid-ajax-1.htm" method="post" id="editarticle_form" target="_blank">
 					<input type="hidden" name="FORM_HASH" value="{FORM_HASH}" />
 					<div><textarea name="message" id="message" style="width: 780px; height: 400px;">$article[message]</textarea></div>
-					<p><input type="submit" class="button bigblue" id="updatearticle_submit" value="保存" /></p>
+					<p><input type="submit" class="button bigblue" id="editarticle_submit" value="保存" /></p>
 				</form>
 				
 				<!--{elseif $layout == 1}-->
-				
+				<a href="?cms-createarticle-channelid-$channelid-cateid-$cateid-ajax-1.htm" class="ajaxdialog" onclick="return false;" id="create_thread" rel="nofollow"><span class="icon icon-post-newthread"></span> 添加文章</a>
 				<!--{loop $articlelist $article}-->
 				<table width="100%">
 					<tr>
@@ -89,8 +90,8 @@
 
 var newchannelids = $newchannelids;
 var newcateids = $newcateids;
-newchannelids.reverse();
-newcateids.reverse();
+newchannelids.reverse().pop();
+newcateids.reverse().pop();
 
 $('input[name=layout]').click(function() {
 	var layout = intval($(this).val());
@@ -137,6 +138,7 @@ function li_bind_event(jli) {
 		
 		if(jinput.attr('islast') == '1') {
 			var channelid = newchannelids.pop();
+			if(!channelid) alert('最多只能添加20个频道！');
 			//var channelid = intval(jinput.attr('channelid')) + 1; // channelid + 1
 			var jliclone = jli.clone().appendTo(jli.parent());
 			jliclone.find('input').val('').attr('channelid', channelid).attr('islast', '1');
@@ -193,6 +195,7 @@ function li_bind_event2(jli) {
 		
 		if(jinput.attr('islast') == '1') {
 			var cateid = newcateids.pop();
+			if(!cateid) alert('最多只能添加20个分类！');
 			//var cateid = intval(jinput.attr('cateid')) + 1; // cateid + 1
 			var jliclone = jli.clone().appendTo(jli.parent());
 			jliclone.find('input').val('').attr('cateid', cateid).attr('islast', '1');
@@ -211,12 +214,12 @@ $('#ul2 li').each(function() {
 <!--{if $layout == 0}-->
 <script>
 
-$('#updatearticle_submit').click(function() {
+$('#editarticle_submit').click(function() {
 	$('div.alert').remove();
-	$('#updatearticle_submit').disable();
-	var postdata = $("#updatearticle_form").serialize();
-	$.post($('#updatearticle_form').attr('action'), postdata,  function(s){
-		$('#updatearticle_form').enable();
+	$('#editarticle_submit').disable();
+	var postdata = $("#editarticle_form").serialize();
+	$.post($('#editarticle_form').attr('action'), postdata,  function(s){
+		$('#editarticle_form').enable();
 		var json = json_decode(s);
 		if(error = json_error(json)) {alert(error); return false;}
 		if(json.status <=0) {
