@@ -33,7 +33,6 @@ if($this->conf['db']['type'] != 'mongodb') {
 		array('channelid', 'int(11)'), 
 		array('cateid', 'int(11)'), 
 		array('articleid', 'int(11)'), 
-		array('name', 'char(32)'), 
 		array('subject', 'varchar(255)'), 
 		array('message', 'longtext'), 
 		array('username', 'char(16)'), 
@@ -41,7 +40,8 @@ if($this->conf['db']['type'] != 'mongodb') {
 		array('rank', 'int(11)'), 
 		array('views', 'int(11)'),
 	));
-	$db->index_create('cms_article', array('channelid'=>1, 'cateid'=>1, 'articleid'=>1));
+	$db->index_create('cms_article', array('channelid'=>1, 'cateid'=>1, 'rank'=>1));
+	$db->index_create('cms_article', array('articleid'=>1));
 	
 	// 预留100篇文章
 	$db->maxid('cms_article-articleid', 100);

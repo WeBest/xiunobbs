@@ -29,12 +29,13 @@
 function delay_execute(dialog, recall) {
 	
 	$('#create_article_form').submit(function() {return false;});
-	$.xload('view/js/editor/swfupload.js', "view/js/editor/editor.js", function() {
+	$.xload("../view/js/editor/editor.js", function() {
 		
-		$('#thread_message_$pid').editor({
+		$('#message').editor({
 			onctrlenter: function() {
 				$('#create_article_submit').trigger('click');
 			},
+			baseurl: '../view/js/editor/'
 		});		
 		
 		$('#subject').focus().keydown(function(e) {

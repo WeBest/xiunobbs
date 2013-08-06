@@ -52,45 +52,26 @@ class cms_control extends admin_control {
 			if($channel['layout'] == 0) {
 				$catelist = array();
 				$article = $this->cms_article->read($channelid, 0, $channelid);
-				//$articlelist = $this->cms_article->index_fetch(array('channelid'=>$channelid, 'cateid'=>0, 'article'), array(), 0, 1);
-				//$article = array_pop($articlelist);
 			// 几篇文章
-			} elseif($channel['layout'] == 1) {
+			} elseif($channel['layout'] > 0) {
 				$newcateid = $this->get_newcateid($channelid);
 				$catelist = $this->cms_cate->index_fetch(array('channelid'=>$channelid), array(), 0, 20);
 				misc::arrlist_multisort($catelist, 'rank', TRUE);
-				// 默认 cateid
 				if(empty($cateid) && !empty($catelist)) {
 					$first = array_shift($catelist);
 					$cateid = $first['cateid'];
 					array_unshift($catelist, $first);
 				}
-				
-				$articlelist = $this->cms_article->index_fetch(array('channelid'=>$channelid));
-				
-			// 文章列表，分页
-			} elseif($channel['layout'] == 2) {
-				$newcateid = $this->get_newcateid($channelid);
 				$page = misc::page();
-				$catelist = $this->cms_cate->index_fetch(array('channelid'=>$channelid), array(), 0, 20);
-				misc::arrlist_multisort($catelist, 'rank', TRUE);
-				// 默认 cateid
-				if(empty($cateid) && !empty($catelist)) {
-					$first = array_shift($catelist);
-					$cateid = $first['cateid'];
-					array_unshift($catelist, $first);
-				}
-				$articlelist = $this->cms_article->index_fetch(array('channelid'=>$channelid, 'cateid'=>$cateid));
+				$start = ($page - 1) * 20;
+				$articlelist = $this->cms_article->index_fetch(array('channelid'=>$channelid, 'cateid'=>$cateid), array('rank'=>1), $start, 20);
 			}
 			$layout = $channel['layout'];
 		} else {
 			if($channel['layout'] == 0) {
 				$catelist = $articlelist = $article = array();
-			} elseif($channel['layout'] == 1) {
-				$newcateid = $cateid = 0;
-				$catelist = $articlelist = array();
-			} elseif($channel['layout'] == 2) {
-				$cateid = $page = 0;
+			} elseif($channel['layout'] > 0) {
+				$newcateid = $cateid = $page = 0;
 				$catelist = $articlelist = array();
 			}
 		}
@@ -113,10 +94,27 @@ class cms_control extends admin_control {
 	}
 	
 	public function on_createarticle() {
+		$channelid = intval(core::gpc('channelid'));
+		$cateid = intval(core::gpc('cateid'));
 		if(!$this->form_submit()) {
+			$this->view->assign('channelid', $channelid);
+			$this->view->assign('cateid', $cateid);
 			$this->view->display('xn_cms_admin_article_create.htm');
 		} else {
-		
+			$subject = core::gpc('subject', 'P');
+			$message = core::gpc('message', 'P');
+			$arr = array(
+				'channelid'=>$channelid,
+				'cateid'=>$cateid,
+				'subject'=>$subject,
+				'message'=>$message,
+				'rank'=>100000,
+				'username'=>'',
+				'dateline'=>$_SERVER['time'],
+				'views'=>'',
+			);
+			$articleid = $this->cms_article->create($arr);
+			$this->message('提交成功！');
 		}
 	}
 	
@@ -255,6 +253,18 @@ class cms_control extends admin_control {
 			if(empty($cate)) continue;
 			$cate['rank'] = $rank;
 			$this->cms_cate->update($cate);
+		}
+		$this->message('成功', 1);
+	}
+	
+	// 设置 rank
+	public function on_rankarticle() {
+		$rank = core::gpc('rank', 'P');
+		foreach($rank as $articleid=>$rank) {
+			$article = $this->cms_article->read($articleid);
+			if(empty($article)) continue;
+			$article['rank'] = $rank;
+			$this->cms_article->update($article);
 		}
 		$this->message('成功', 1);
 	}

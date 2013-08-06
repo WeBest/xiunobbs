@@ -94,7 +94,7 @@ $.editor = function(textarea, settings) {
 					\
 					<a class="video" href="javascript:void(0)"></a>\
 					<a class="image" href="javascript:void(0)" title="上传图片"></a>\
-					<a class="imageloading" href="javascript:void(0)" title="上传图片进度"><span class="imageprocess"><span class="imageprocess_body"></span></span><img src="view/js/editor/loading.gif" width="18" height="18" /></a>\
+					<a class="imageloading" href="javascript:void(0)" title="上传图片进度"><span class="imageprocess"><span class="imageprocess_body"></span></span><img src="'+settings.baseurl+'loading.gif" width="18" height="18" /></a>\
 					<a class="file" href="javascript:void(0)" title="上传文件"></a>\
 					\
 				</div>\

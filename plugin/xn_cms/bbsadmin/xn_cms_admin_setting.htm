@@ -5,24 +5,26 @@
 #ul2 li {margin: 0px; padding: 0px; list-style: none;}
 </style>
 <div class="width">
-	<ul id="ul1">
-		<!--{loop $channellist $channel}-->
-		<li>
-			
-			<input type="text" size="6" channelid="$channel[channelid]" value="$channel[name]" /><br />
-			<a href="?cms-index-channelid-$channel[channelid].htm" {if $channelid == $channel[channelid]} class="bold red"{/if}>查看</a>
-			&nbsp; <span class="icon icon-move"></span>
-			<a href="" class="icon icon-delete"></a>
-			
-		</li>
-		<!--{/loop}-->
-		<li>
-			<input type="text" size="6" channelid="$newchannelid" value="" islast="1" /><br />
-			<a href="?cms-index-channelid-$newchannelid.htm">查看</a>
-			&nbsp; <span class="icon icon-move"></span>
-			<a href="" class="icon icon-delete"></a>
-		</li>
-	</ul>
+	<div>
+		<ul id="ul1">
+			<!--{loop $channellist $channel}-->
+			<li>
+				
+				<input type="text" size="6" channelid="$channel[channelid]" value="$channel[name]" /><br />
+				<a href="?cms-index-channelid-$channel[channelid].htm" {if $channelid == $channel[channelid]} class="bold red"{/if}>查看</a>
+				&nbsp; <span class="icon icon-move"></span>
+				<a href="" class="icon icon-delete"></a>
+				
+			</li>
+			<!--{/loop}-->
+			<li>
+				<input type="text" size="6" channelid="$newchannelid" value="" islast="1" /><br />
+				<a href="?cms-index-channelid-$newchannelid.htm">查看</a>
+				&nbsp; <span class="icon icon-move"></span>
+				<a href="" class="icon icon-delete"></a>
+			</li>
+		</ul>
+	</div>
 	
 	<div style="clear: both; text-align: center; line-height: 30px; padding-top: 10px;">
 		频道内容：$layoutradios
@@ -31,7 +33,7 @@
 	<table width="100%" width="100%">
 		<tr>
 			<!--{if $layout > 0}-->
-			<td width="30%">
+			<td width="25%" valign="top">
 				<ul id="ul2">
 					<!--{loop $catelist $cate}-->
 					<li>
@@ -59,22 +61,41 @@
 					<p><input type="submit" class="button bigblue" id="editarticle_submit" value="保存" /></p>
 				</form>
 				
-				<!--{elseif $layout == 1}-->
-				<a href="?cms-createarticle-channelid-$channelid-cateid-$cateid-ajax-1.htm" class="ajaxdialog" onclick="return false;" id="create_thread" rel="nofollow"><span class="icon icon-post-newthread"></span> 添加文章</a>
-				<!--{loop $articlelist $article}-->
-				<table width="100%">
-					<tr>
-						<td>$article[subject]</td>
-						<td>
-							<a href="?cms-updatearticle-channelid-$article[channelid]-cateid-$article[cateid]-article-$article[articleid].htm" class="ajaxdialog" ajaxdialog="{fullicon: true, modal: false, cache: false}" onclick="return false;">编辑</a>
-							<a href="?cms-deletearticle-channelid-$article[channelid]-cateid-$article[cateid]-article-$article[articleid].htm" class="ajaxconfirm" ajaxconfirm="{message: '确定删除吗？'}" onclick="return false;">删除</a>
-						</td>
-					</tr>
-				</table>
-				<!--{/loop}-->
+				<!--{elseif $layout > 0}-->
 				
-				<!--{elseif $layout == 2}-->
-				
+				<div style="text-align: right;">
+					<a href="?cms-createarticle-channelid-$channelid-cateid-$cateid-ajax-1.htm" class="ajaxdialog" onclick="return false;" id="create_thread" rel="nofollow"><span class="icon icon-post-newthread"></span> 添加文章</a>
+				</div>
+				<div class="div">
+					<div class="header">
+						<table width="100%">
+							<tr>
+								<td width="60">顺序</td>
+								<td>标题</td>
+								<td width="60">操作</td>
+							</tr>
+						</table>
+					</div>
+					<div class="body">
+						<table width="100%">
+						<!--{loop $articlelist $article}-->
+							<tr>
+								<td width="60"><input type="text" name="delete[$article[articleid]]" value="$article[rank]" size="4" /></td>
+								<td><a href="../?article-$articleid.htm" target="_blank">$article[subject]</a></td>
+								<td width="60">
+									<a href="?cms-updatearticle-channelid-$article[channelid]-cateid-$article[cateid]-article-$article[articleid].htm" class="ajaxdialog" ajaxdialog="{fullicon: true, modal: false, cache: false}" onclick="return false;">编辑</a>
+									<a href="?cms-deletearticle-channelid-$article[channelid]-cateid-$article[cateid]-article-$article[articleid].htm" class="ajaxconfirm" ajaxconfirm="{message: '确定删除吗？'}" onclick="return false;">删除</a>
+								</td>
+							</tr>
+							<tr>
+								<td colspan="3"><hr /></td>
+							</tr>
+						<!--{/loop}-->
+						</table>
+					</div>
+					<div class="footer"></div>
+				</div>
+				<div style="text-align: center;"><input type="button" class="button bigblue" value="批量设置顺序" id="rank_setting" /></div>
 				
 				<!--{/if}-->
 				
