@@ -20,6 +20,8 @@ class bbs_control extends common_control {
 	
 	public function on_index() {
 		
+		// hook index_bbs_before.php
+		
 		// 按照板块调用数据
 		
 		$pagesize = 30;
@@ -83,6 +85,8 @@ class bbs_control extends common_control {
 			$this->forum->format($forum);			
 		}		
 		$this->view->assign('forumlist', $forumlist);
+		
+		// hook index_bbs_after.php
 		
 		$this->view->display('bbs_index.htm');
 	}
