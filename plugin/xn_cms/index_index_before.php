@@ -55,7 +55,6 @@ if($channel['layout'] == 0) {
 }
 !empty($article) && $article['dateline_fmt'] = date('Y-n-j', $article['dateline']);
 $this->_checked['cate_'.$cateid] = ' class="checked"';
-$this->_checked['channelid_'.$channelid] = ' class="checked"';
 $this->view->assign('page', $page);
 $this->view->assign('pages', $pages);
 $this->view->assign('channel', $channel);

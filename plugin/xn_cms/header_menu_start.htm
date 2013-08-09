@@ -6,7 +6,7 @@
 
 <!--{loop $channellist $_channel}-->
 <!--{php $checkid = "channelid_".$_channel['channelid'];}-->
-<span class="sep"></span>
+<span class="sep"></span>$_channel[channelid]
 <a href="?cms-channel-channelid-$_channel[channelid].htm" $_checked[$checkid]>$_channel[name]</a>
 <!--{/loop}-->
 
