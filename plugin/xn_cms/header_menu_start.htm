@@ -3,9 +3,10 @@
 <a href="./"  $_checked[index]>首页</a>
 <!--{hook cms_header_index_after}-->
 
-<!--{loop $channellist $channel}-->
+<!--{loop $channellist $_channel}-->
+<!--{php $checkid = "channelid_".$_channel['channelid'];}-->
 <span class="sep"></span>
-<a href="?channel-index-channelid-$channel.htm" $_checked[channelid_$channel[channelid]]>$channel[name]</a>
+<a href="?cms-channel-channelid-$_channel[channelid].htm" $_checked[$checkid]>$_channel[name]</a>
 <!--{/loop}-->
 
 <!--{hook cms_header_bbs_before}-->

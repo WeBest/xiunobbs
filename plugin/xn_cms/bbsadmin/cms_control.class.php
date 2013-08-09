@@ -54,13 +54,6 @@ class cms_control extends admin_control {
 				$articleid = $channelid;
 				$article = $this->cms_article->read($articleid);
 			} elseif($channel['layout'] > 0) {
-				if($channel['layout'] == 1) {
-					$articleid = $channelid * 20 + $cateid;
-					$article = $this->cms_article->read($articleid);
-				} elseif($channel['layout'] == 2) {
-					$article = array();
-					$atticleid = $this->cms_article->maxid() + 1;
-				}
 				$newcateid = $this->get_newcateid($channelid);
 				$catelist = $this->cms_cate->index_fetch(array('channelid'=>$channelid), array(), 0, 20);
 				misc::arrlist_multisort($catelist, 'rank', TRUE);
@@ -69,6 +62,15 @@ class cms_control extends admin_control {
 					$cateid = $first['cateid'];
 					array_unshift($catelist, $first);
 				}
+				
+				if($channel['layout'] == 1) {
+					$articleid = $channelid * 20 + $cateid;
+					$article = $this->cms_article->read($articleid);
+				} elseif($channel['layout'] == 2) {
+					$article = array();
+					$atticleid = $this->cms_article->maxid() + 1;
+				}
+				
 				$page = misc::page();
 				$start = ($page - 1) * 20;
 				$articlelist = $this->cms_article->index_fetch(array('channelid'=>$channelid, 'cateid'=>$cateid), array('rank'=>1), $start, 20);
@@ -195,7 +197,7 @@ class cms_control extends admin_control {
 					$this->cms_article->update($article);
 				}
 			} elseif($channel['layout'] == 1) {
-				$articleid = $channelid * 10 + $cateid;
+				$articleid = $channelid * 20 + $cateid;
 				$article = $this->cms_article->read($articleid);
 				if(empty($article)) {
 					$article = array(

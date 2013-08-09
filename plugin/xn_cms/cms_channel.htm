@@ -1,0 +1,56 @@
+<!--{include header.htm}-->
+
+<div class="width">
+	<!--{if $channel[layout] == 0}-->
+	$article[message]
+	<!--{elseif $channel[layout] > 0}-->
+	<table width="100%" width="100%">
+		<tr>
+			<td width="25%" valign="top">
+				<ul id="ul2">
+					<!--{loop $catelist $cate}-->
+					<li>
+						<a href="?cms-channel-channelid-$channelid-cateid-$cate[cateid].htm" {if $cateid == $cate[cateid]} class="bold red"{/if}>$cate[name]</a>
+					</li>
+					<!--{/loop}-->
+				</ul>
+			</td>
+			<td valign="top">
+				<!--{if $channel[layout] == 1}-->
+				$article[message]
+				<!--{elseif $channel[layout] == 2}-->
+					<!--{if empty($articleid)}-->
+					<div class="div">
+						<div class="body">
+							<ul>
+							<!--{loop $articlelist $article}-->
+								<li><a href="?cms-channel-channelid-$channelid-articleid-$article[articleid].htm">$article[subject]</a> - $article[views]</li>
+							<!--{/loop}-->
+							</ul>
+							<div class="pages">$pages</div>
+						</div>
+						<div class="footer"></div>
+					</div>
+					<!--{else}-->
+					<h1>$article[subject]</h1>
+					<div style="text-align: center;">
+						添加时间：$article[dateline_fmt] 查看：$article[views] 次 
+						<!--{if $_user[groupid] == 1}--><a href="admin/?cms-updatearticle-articleid-$articleid.htm" target="_blank">编辑</a><!--{/if}-->
+						<!--{if $_user[groupid] == 1}--><a href="admin/?cms-deletearticle-channelid-$channelid-articleid-$articleid.htm" target="_blank" onclick="return window.confirm('确定删除？')">删除</a><!--{/if}-->
+					</div>
+					$article[message]
+					<div style="text-align: center; margin-top: 20px;"><input type="button" class="button bigblue" value="返回" onclick="history.back();" /></div>
+					<!--{/if}-->
+				<!--{/if}-->
+			</td>
+		</tr>
+	</table>
+	<!--{/if}-->
+</div>
+
+<!--{include footer.htm}-->
+
+$conf[footer_js]
+
+</body>
+</html>
