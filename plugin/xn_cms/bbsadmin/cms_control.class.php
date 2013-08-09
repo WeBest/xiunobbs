@@ -59,6 +59,7 @@ class cms_control extends admin_control {
 					$article = $this->cms_article->read($articleid);
 				} elseif($channel['layout'] == 2) {
 					$article = array();
+					$atticleid = $this->cms_article->maxid() + 1;
 				}
 				$newcateid = $this->get_newcateid($channelid);
 				$catelist = $this->cms_cate->index_fetch(array('channelid'=>$channelid), array(), 0, 20);
@@ -83,10 +84,10 @@ class cms_control extends admin_control {
 		}
 		
 		$layoutradios = form::get_radio('layout', array(0=>'单页面', 1=>'多篇文章', 2=>'分类+文章列表'), $layout);
-		
 		$newchannelid = $this->get_newchannelid();
 		$this->view->assign('newchannelid', $newchannelid);
 		$this->view->assign('newcateid', $newcateid);
+		$this->view->assign('articleid', $articleid);
 		$this->view->assign('channel', $channel);
 		$this->view->assign('channelid', $channelid);
 		$this->view->assign('cateid', $cateid);
@@ -105,7 +106,7 @@ class cms_control extends admin_control {
 		if(!$this->form_submit()) {
 			$this->view->assign('channelid', $channelid);
 			$this->view->assign('cateid', $cateid);
-			$this->view->display('xn_cms_admin_article_create.htm');
+			$this->view->display('xn_cms_admin_article_create_ajax.htm');
 		} else {
 			$subject = core::gpc('subject', 'P');
 			$message = core::gpc('message', 'P');
@@ -120,16 +121,46 @@ class cms_control extends admin_control {
 				'views'=>0,
 			);
 			$articleid = $this->cms_article->create($article);
+			$this->process_attach($articleid);
 			$this->message('提交成功！');
+		}
+	}
+	
+	// 删除无关联的垃圾附件！
+	private function process_attach($articleid) {
+		$article = $this->cms_article->read($articleid);
+		$path = $this->conf['upload_path'].'attach_cms'.'/'.date('Ymd', $article['dateline']).'/';
+		if(!is_dir($path)) return;
+		$files = misc::scandir($path);
+		foreach($files as $file) {
+			$arr = explode('_', $file);
+			if(!empty($arr[0]) && $arr[0] == $articleid) {
+				if(strpos($article['message'], $file) === FALSE) {
+					unlink($path.$file);
+				}
+			}
 		}
 	}
 	
 	// 编辑文章
 	public function on_updatearticle() {
-		if(!$this->form_submit()) {
-			$this->view->display('xn_cms_admin_article_update.htm');
-		} else {
+		$articleid = intval(core::gpc('articleid'));
+		$article = $this->cms_article->read($articleid);
+		empty($article) && $this->message('文章不存在！', 0);
 		
+		if(!$this->form_submit()) {
+			$article['message_html'] = htmlspecialchars($article['message']);
+			$this->view->assign('articleid', $articleid);
+			$this->view->assign('article', $article);
+			$this->view->display('xn_cms_admin_article_update_ajax.htm');
+		} else {
+			$message = core::gpc('message', 'P');
+			$subject = core::gpc('subject', 'P');
+			$article['subject'] = $subject;
+			$article['message'] = $message;
+			$this->cms_article->update($article);
+			$this->process_attach($articleid);
+			$this->message('更新成功' , 1);
 		}
 	}
 	
@@ -362,6 +393,74 @@ class cms_control extends admin_control {
 			}
 		}
 		return $maxrank;
+	}
+	
+	// 上传图片
+	public function on_uploadimage() {
+		
+		$atticleid = intval(core::gpc('articleid'));
+		
+		// 对付一些变态的 iis 环境， is_file() 无法检测无权限的目录。
+		$tmpfile = FRAMEWORK_TMP_TMP_PATH.md5(rand(0, 1000000000).$_SERVER['time'].$_SERVER['ip']).'.tmp';
+		$succeed = IN_SAE ? copy($_FILES['Filedata']['tmp_name'], $tmpfile) : move_uploaded_file($_FILES['Filedata']['tmp_name'], $tmpfile);
+		if(!$succeed) {
+			$this->message('移动临时文件错误，请检查临时目录的可写权限。', 0);
+		}
+		
+		$file = $_FILES['Filedata'];
+		$file['tmp_name'] = $tmpfile;
+		core::htmlspecialchars($file['name']);
+		$filetype = $this->attach->get_filetype($file['name']);
+		
+		$uploadpath = $this->conf['upload_path'].'attach_cms/';
+		$uploadurl = $this->conf['upload_url'].'attach_cms/';
+		
+		!is_dir($uploadpath) && mkdir($uploadpath, 0777);
+		
+		if($filetype == 'image') {
+			// 处理文件
+			$imginfo = getimagesize($file['tmp_name']);
+			
+			// 按照天存储
+			$day = date('Ymd', $_SERVER['time']);
+			!is_dir($uploadpath.$day) && mkdir($uploadpath.$day, 0777);
+			if($imginfo[2] == 1) {
+				$fileurl = $day.'/'.$atticleid.'_'.rand(1, 99999999).'.gif';
+				$thumbfile = $uploadpath.$fileurl;
+				copy($file['tmp_name'], $thumbfile);
+				$r['filesize'] = filesize($file['tmp_name']);
+				$r['width'] = $imginfo[0];
+				$r['height'] = $imginfo[1];
+				$r['fileurl'] = $fileurl;
+			} else {
+				$destext = image::ext($file['name']);
+				$fileurl = $day.'/'.$atticleid.'_'.rand(1, 99999999).'.'.$destext;
+				$thumbfile = $uploadpath.$fileurl;
+				image::thumb($file['tmp_name'], $thumbfile, 1600, 16000);
+				$imginfo = getimagesize($thumbfile);
+				$r['filesize'] = filesize($thumbfile);
+				$r['width'] = $imginfo[0];
+				$r['height'] = $imginfo[1];
+				$r['fileurl'] = $fileurl;
+			}
+			
+			is_file($file['tmp_name']) && unlink($file['tmp_name']);
+			
+			$this->message('<img src="'.$uploadurl.$r['fileurl'].'" width="'.$r['width'].'" height="'.$r['height'].'"/>');
+			
+		} else {
+			// 按照天存储
+			$day = date('Ymd', $_SERVER['time']);
+			!is_dir($uploadpath.$day) && mkdir($uploadpath.$day, 0777);
+			$ext = image::ext($file['name']);
+			$ext = $this->attach->safe_ext('.'.$ext);
+			$desturl = $day.'/'.$atticleid.'_'.rand(1, 99999999)."$ext";
+			$destfile = $uploadpath.$desturl;
+			copy($file['tmp_name'], $destfile);
+			global $bbsconf;
+			$this->message('<a href="'.$uploadurl.$desturl.'"><img src="'.$bbsconf['static_url'].'view/image/filetype/'.$filetype.'.gif" width="16" height="16" />'.$file['name'].'</a>');
+		}
+		
 	}
 }
 

@@ -82,7 +82,7 @@
 						<!--{loop $articlelist $article}-->
 							<tr>
 								<td width="60"><input type="text" name="articlerank[$article[articleid]]" articleid="$article[articleid]" value="$article[rank]" size="4" /></td>
-								<td><a href="../?article-$articleid.htm" target="_blank">$article[subject]</a></td>
+								<td><a href="../?article-$articleid.htm" target="_blank" class="subject" articleid="$article[articleid]">$article[subject]</a></td>
 								<td>$article[views]</td>
 								<td width="60">
 									<a href="?cms-updatearticle-channelid-$article[channelid]-cateid-$article[cateid]-articleid-$article[articleid].htm" class="ajaxdialog" ajaxdialog="{fullicon: true, modal: false, cache: false}" onclick="return false;">编辑</a>
@@ -107,6 +107,91 @@
 </div>
 
 <!--{include footer.htm}-->
+
+
+<link href="../view/js/editor/editor.css" type="text/css" rel="stylesheet" />
+
+<script type="text/javascript">
+$.xload('../view/js/editor/swfupload.js', "../view/js/editor/editor.js", function() {
+	$('#message').editor({
+		onctrlenter: function() {
+			$('#editarticle_submit').trigger('click');
+		},
+		
+		onhook: function(_this) {
+			var file_size_limit = '4MB';
+			var upload_image_id   = _this._textarea.id + '_upload_button';
+			$('a.image', _this.toolbar).append('<div id="' + upload_image_id + '" style=" width: 49px; height: 22px;"></div>');
+			$('a.file', _this.toolbar).hide();
+			var swf_settings = {
+				flash_url : '../view/js/editor/swfupload.swf',
+				upload_url: '?cms-uploadimage-articleid-$articleid-$conf[cookie_pre]sid-$_sid-$conf[cookie_pre]auth-$_auth-ajax-1.htm',
+				prevent_swf_caching : false,
+				preserve_relative_urls : false,
+				//post_params: {"sid":"","auth":""},	// 我只能说 swfupload 很狗屎，传个参数还不稳定
+				file_size_limit : file_size_limit,
+				file_types : "*",
+				file_types_description : "图片文件",
+				file_upload_limit : 100,
+				file_queue_limit : 0,
+				custom_settings : {
+					thumbnail_height: 120000,
+					thumbnail_width: 1600,
+					thumbnail_quality: 90
+				},					debug: false,
+				button_image_url: "../view/js/editor/uploadimage.png",
+				button_width: "49",
+				button_height: "22",
+				button_placeholder_id: upload_image_id,
+				button_text: '<span class="theFont">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>',
+				button_text_style: ".theFont {font-size: 16;}",
+				button_window_mode: SWFUpload.WINDOW_MODE.TRANSPARENT,	// chrome may be does not work!
+				file_dialog_complete_handler : function(numFilesSelected, numFilesQueued) {
+					//_this.save_bookmark();
+					this.startUpload();
+				},
+				upload_start_handler : function(file) {
+					$('a.image', _this.toolbar).width(0);
+					$('a.imageloading', _this.toolbar).show();
+					return true;
+				},
+				upload_progress_handler : function(file, bytesLoaded, bytesTotal) {
+					var w = Math.ceil((bytesLoaded / bytesTotal) * 26);
+					$('span.imageprocess_body', _this.toolbar).width(w);
+				},
+				upload_error_handler : function(file, errorCode, message) {
+					alert('upload_error: file:'+file.name+', errorCode:'+errorCode+', message:'+message);
+				},
+				upload_success_handler : function(file, serverData) {
+					var json = json_decode(serverData);
+					if(error = json_error(json)) {alert(error); return false;}
+					if(json.status <= 0) {alert(json.message); return false;}
+					var s = json.message;
+					_this.paste(s);
+					return true;
+				},
+				file_queue_error_handler : function(file, errorCode, message) {
+					if(errorCode == SWFUpload.QUEUE_ERROR.FILE_EXCEEDS_SIZE_LIMIT) {
+						alert('您选择的文件：'+file.name+' 尺寸('+file.size+')太大'+'！错误信息：'+message);
+						$('.toolbar a.imageloading', _this).hide();
+						return true;
+					} else {
+						alert('upload_queue_error: file:'+file+', errorCode:'+errorCode+', message:'+message);
+					}
+					return false;
+				},
+				queue_complete_handler : function(numFilesUploaded) {
+					$('a.image', _this.toolbar).width(49);
+					$('a.imageloading', _this.toolbar).hide();
+				}
+			};
+			var swfu = new SWFUpload(swf_settings);
+		},
+		
+		baseurl: '../view/js/editor/'
+	});	
+});
+</script>
 
 <script type="text/javascript" src="../view/js/jquery.dragsort-0.5.1.min.js"></script>
 <script type="text/javascript">

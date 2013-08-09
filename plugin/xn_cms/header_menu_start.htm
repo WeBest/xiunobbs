@@ -1,13 +1,15 @@
+<!--{hook cms_header_index_before}-->
 <span class="sep"></span>
 <a href="./"  $_checked[index]>首页</a>
-<!--{hook cms_header_1}-->
+<!--{hook cms_header_index_after}-->
+
+<!--{loop $channellist $channel}-->
 <span class="sep"></span>
-<a href="?article.htm" $_checked[article]>文章</a>
-<span class="sep"></span>
-<a href="?product.htm" $_checked[product]>产品</a>
-<span class="sep"></span>
-<!--{hook cms_header_2}-->
+<a href="?channel-index-channelid-$channel.htm" $_checked[channelid_$channel[channelid]]>$channel[name]</a>
+<!--{/loop}-->
+
+<!--{hook cms_header_bbs_before}-->
 <a href="?bbs.htm" $_checked[bbs]>论坛</a>
-<!--{hook cms_header_3}-->
+<!--{hook cms_header_bbs_after}-->
 
 <!--{if 0}-->

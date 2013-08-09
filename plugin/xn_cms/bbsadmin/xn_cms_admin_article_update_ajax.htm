@@ -1,0 +1,157 @@
+<!--{json width:"880",title:"编辑文章"}-->
+<style type="text/css">
+.update_article_form dt {width: 7%;}
+.update_article_form dd {width: 91%;}
+</style>
+<form action="?cms-updatearticle-articleid-$articleid-ajax-1.htm" method="post" id="update_article_form_$articleid" target="_blank" class="update_article_form">
+	<input type="hidden" name="FORM_HASH" value="{FORM_HASH}" />
+	<dl>
+		<dt><label for="subject_update">标题：</label></dt>
+		<dd>
+			<input type="text" name="subject" id="subject_update_$articleid" value="$article[subject]" style="width: 500px;" /> <span class="small grey">(200字)</span>
+		</dd>
+		
+		<dt><label for="message">内容：</label></dt>
+		<dd style="position: relative;"><textarea name="message" id="message_update_$articleid" style="width: 780px; height: 400px;">$article[message]</textarea></dd>
+		
+		<dt></dt>
+		<dd>
+			<input type="submit" class="button bigblue" id="update_article_submit_$articleid" value="更新文章" />
+			<input type="button" class="button biggrey" value="取消" id="update_article_cancel_$articleid" />
+		</dd>
+	</dl>
+</form>
+
+<link href="../view/js/editor/editor.css" type="text/css" rel="stylesheet" />
+
+<script type="text/javascript">
+
+function delay_execute(dialog, recall) {
+	
+	$('#update_article_form_$articleid').submit(function() {return false;});
+	$.xload('../view/js/editor/swfupload.js', "../view/js/editor/editor.js", function() {
+		
+		$('#message_update_$articleid').editor({
+			onctrlenter: function() {
+				$('#update_article_submit_$articleid').trigger('click');
+			},
+			onhook: function(_this) {
+				var file_size_limit = '4MB';
+				var upload_image_id   = _this._textarea.id + '_upload_button';
+				$('a.image', _this.toolbar).append('<div id="' + upload_image_id + '" style=" width: 49px; height: 22px;"></div>');
+				$('a.file', _this.toolbar).hide();
+				var swf_settings = {
+					flash_url : '../view/js/editor/swfupload.swf',
+					upload_url: '?cms-uploadimage-articleid-$articleid-$conf[cookie_pre]sid-$_sid-$conf[cookie_pre]auth-$_auth-ajax-1.htm',
+					prevent_swf_caching : false,
+					preserve_relative_urls : false,
+					//post_params: {"sid":"","auth":""},	// 我只能说 swfupload 很狗屎，传个参数还不稳定
+					file_size_limit : file_size_limit,
+					file_types : "*",
+					file_types_description : "图片文件",
+					file_upload_limit : 100,
+					file_queue_limit : 0,
+					custom_settings : {
+						thumbnail_height: 120000,
+						thumbnail_width: 1600,
+						thumbnail_quality: 90
+					},					debug: false,
+					button_image_url: "../view/js/editor/uploadimage.png",
+					button_width: "49",
+					button_height: "22",
+					button_placeholder_id: upload_image_id,
+					button_text: '<span class="theFont">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>',
+					button_text_style: ".theFont {font-size: 16;}",
+					button_window_mode: SWFUpload.WINDOW_MODE.TRANSPARENT,	// chrome may be does not work!
+					file_dialog_complete_handler : function(numFilesSelected, numFilesQueued) {
+						//_this.save_bookmark();
+						this.startUpload();
+					},
+					upload_start_handler : function(file) {
+						$('a.image', _this.toolbar).width(0);
+						$('a.imageloading', _this.toolbar).show();
+						return true;
+					},
+					upload_progress_handler : function(file, bytesLoaded, bytesTotal) {
+						var w = Math.ceil((bytesLoaded / bytesTotal) * 26);
+						$('span.imageprocess_body', _this.toolbar).width(w);
+					},
+					upload_error_handler : function(file, errorCode, message) {
+						alert('upload_error: file:'+file.name+', errorCode:'+errorCode+', message:'+message);
+					},
+					upload_success_handler : function(file, serverData) {
+						var json = json_decode(serverData);
+						if(error = json_error(json)) {alert(error); return false;}
+						if(json.status <= 0) {alert(json.message); return false;}
+						var s = json.message;
+						_this.paste(s);
+						return true;
+					},
+					file_queue_error_handler : function(file, errorCode, message) {
+						if(errorCode == SWFUpload.QUEUE_ERROR.FILE_EXCEEDS_SIZE_LIMIT) {
+							alert('您选择的文件：'+file.name+' 尺寸('+file.size+')太大'+'！错误信息：'+message);
+							$('.toolbar a.imageloading', _this).hide();
+							return true;
+						} else {
+							alert('upload_queue_error: file:'+file+', errorCode:'+errorCode+', message:'+message);
+						}
+						return false;
+					},
+					queue_complete_handler : function(numFilesUploaded) {
+						$('a.image', _this.toolbar).width(49);
+						$('a.imageloading', _this.toolbar).hide();
+					}
+				};
+				var swfu = new SWFUpload(swf_settings);
+			},
+			baseurl: '../view/js/editor/'
+		});		
+		
+		$('#subject_update_$articleid').focus().keydown(function(e) {
+			var keycode = e.keyCode ? e.keyCode : e.which;
+			if(keycode == 9) {
+				$('#message_update_$articleid')[0].editor._focus();
+			}
+		});
+		$('#update_article_submit_$articleid').click(function() {
+			$('div.alert').remove();
+			$('#update_article_submit_$articleid').disable();
+			var postdata = $("#update_article_form_$articleid").serialize();
+			$.post($('#update_article_form_$articleid').attr('action'), postdata,  function(s){
+				$('#update_article_submit_$articleid').enable();
+				var json = json_decode(s);
+				if(error = json_error(json)) {alert(error); return false;}
+				if(json.status <=0) {
+					alert(json.message);
+					return false;
+				}
+				
+				json = json.message;
+				if(json.subject) {
+					$('#subject_update_$articleid').alert(json.subject, {width: 250, delay: 3000}).focus();
+					return false;
+				}
+				if(json.message) {
+					$('#message_update_$articleid').parent().alert(json.message, {width: 250, delay: 3000});
+					$('#message_update_$articleid')[0].editor._focus();
+					return false;
+				}
+				var thread = json.thread;
+		 		
+				// 清空编辑器内容
+				var subject = $('#subject_update_$articleid').val();
+				$('a.subject[articleid=$articleid]').html(subject);
+				$('#message_update_$articleid')[0].editor.set('');
+		 		dialog.set_body('<div class="ok">更新成功。</div>');
+		 		setTimeout(function() {
+		 			dialog.close();
+		 		}, 500);
+			  });
+			  return false;
+		});
+		$('#update_article_cancel_$articleid').click(function() {
+			dialog.close();
+		});
+	});
+}
+</script>
