@@ -17,13 +17,13 @@ return array(
 	// ------------------> 以下为框架依赖:
 	// 数据库配置， type 为默认的数据库类型，可以支持多种数据库: mysql|pdo_mysql|pdo_oracle|mongodb	
 	'db' => array(				
-		'type' => 'pdo_sqlite',			
+		'type' => 'mysql',			
 		'mysql' => array(			
 			'master' => array(	
 				'host' => 'localhost',								
 				'user' => 'root',				
 				'password' => 'root',				
-				'name' => 'test1',				
+				'name' => 'test2',				
 				'charset' => 'utf8',				
 				'tablepre' => 'bbs_',								
 				'engine'=>'MyISAM',
@@ -138,10 +138,10 @@ return array(
 	'click_server' => 'http://x.net/service/clickd/',	// 记录主题点击数，论坛点击数
 	
 	// 加密KEY，
-	'auth_key' => '252c7ea512fb4b079c258460edbe7159',
+	'auth_key' => '5728d27f94595be20a85e273ad488c97',
 	
 	// 站点的ID，用来和官方通信，下载，安装插件。
-	'siteid' => 'd2048eef2b6e16c33accf007977c0795',
+	'siteid' => 'a8545da4e6f4f88fa60552c64b3a140b',
 	
 	'cookie_pre' => 'bbs_',
 	'cookie_domain' => '',

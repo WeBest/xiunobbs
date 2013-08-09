@@ -478,6 +478,7 @@ if(empty($step) || $step == 'checklicense') {
 	}
 } elseif($step == 'complete') {
 	
+	is_file($conf['upload_path'].'plugin.json') && unlink($conf['upload_path'].'plugin.json');
 	file_put_contents($conf['upload_path'].'install.lock', '');
 	
 	if(IN_SAE && !is_file($conf['tmp_path'].'_runtime.php')) {

@@ -65,7 +65,7 @@ class cms_control extends common_control {
 				}
 			}
 		}
-		$article && $this->format($article);
+		!empty($article) && $article['dateline_fmt'] = date('Y-n-j', $article['dateline']);
 		$this->_checked['cate_'.$cateid] = ' class="checked"';
 		$this->_checked['channelid_'.$channelid] = ' class="checked"';
 		$this->view->assign('page', $page);
@@ -83,10 +83,6 @@ class cms_control extends common_control {
 	public function on_article() {
 		$articleid = intval(core::gpc('articleid'));
 		$this->view->display('cms_article.htm');
-	}
-	
-	private function format(&$article) {
-		$article['dateline_fmt'] = date('Y-n-j', $article['dateline']);
 	}
 	
 }

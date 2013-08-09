@@ -1,6 +1,7 @@
 <!--{hook cms_header_index_before}-->
 <span class="sep"></span>
-<a href="./"  $_checked[index]>首页</a>
+<!--{php $firstchannel = array_shift($channellist);}-->
+<a href="./"  $_checked[index]>$firstchannel[name]</a>
 <!--{hook cms_header_index_after}-->
 
 <!--{loop $channellist $_channel}-->
