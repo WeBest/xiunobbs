@@ -54,6 +54,7 @@ class cms_control extends admin_control {
 				$articleid = $channelid;
 				$article = $this->cms_article->read($articleid);
 			} elseif($channel['layout'] > 0) {
+				
 				$newcateid = $this->get_newcateid($channelid);
 				$catelist = $this->cms_cate->index_fetch(array('channelid'=>$channelid), array(), 0, 20);
 				misc::arrlist_multisort($catelist, 'rank', TRUE);
@@ -62,6 +63,7 @@ class cms_control extends admin_control {
 					$cateid = $first['cateid'];
 					array_unshift($catelist, $first);
 				}
+				$cate = $this->cms_cate->read($channelid, $cateid);
 				
 				if($channel['layout'] == 1) {
 					$articleid = $channelid * 20 + $cateid;
@@ -71,9 +73,12 @@ class cms_control extends admin_control {
 					$atticleid = $this->cms_article->maxid() + 1;
 				}
 				
+				$pagesize = 20;
 				$page = misc::page();
-				$start = ($page - 1) * 20;
-				$articlelist = $this->cms_article->index_fetch(array('channelid'=>$channelid, 'cateid'=>$cateid), array('rank'=>1), $start, 20);
+				$pages = misc::pages("?cms-index-channelid-$channelid.htm", $cate['articles'], $page, $pagesize);
+				$start = ($page - 1) * $pagesize;
+				$articlelist = $this->cms_article->index_fetch(array('channelid'=>$channelid, 'cateid'=>$cateid), array('rank'=>1), $start, $pagesize);
+				$this->view->assign('pages', $pages);
 			}
 			$layout = $channel['layout'];
 		} else {
@@ -124,6 +129,9 @@ class cms_control extends admin_control {
 			);
 			$articleid = $this->cms_article->create($article);
 			$this->process_attach($articleid);
+			$cate = $this->cms_cate->read($channelid, $cateid);
+			$cate['articles']++;
+			$this->cms_cate->update($cate);
 			$this->message('提交成功！');
 		}
 	}
@@ -231,7 +239,16 @@ class cms_control extends admin_control {
 		
 		$article = $this->cms_article->read($articleid);
 		empty($article) && $this->message('文章不存在。', 0);
+		$channel = $this->cms_channel->read($article['channelid']);
 		$this->cms_article->delete($articleid);
+		
+		if($channel['layout'] == 2) {
+			$cate = $this->cms_cate->read($article['channelid'], $article['cateid']);
+			if($cate) {
+				$cate['articles']--;
+				$this->cms_cate->update($cate);
+			}
+		}
 		
 		$this->message('删除成功。', 1, "?cms-index-channelid-$channelid-cateid-$cateid.htm");
 	}
@@ -258,7 +275,16 @@ class cms_control extends admin_control {
 	public function on_deletechannel() {
 		$channelid = intval(core::gpc('channelid'));
 		$this->cms_channel->delete($channelid);
+		// 遍历 cate
+		$catelist = $this->cms_cate->index_fetch(array('channelid'=>$channelid), array(), 0, 20);
+		foreach($catelist as $cate) {
+			$this->delete_article_by_cateid($channelid, $cate['cateid']);
+		}
 		$this->message('成功！');
+	}
+	
+	private function delete_article_by_cateid($channelid, $cateid) {
+		return $this->cms_article->index_delete(array('channelid'=>$channelid, 'cateid'=>$cateid));
 	}
 	
 	// 设置 rank
@@ -302,6 +328,7 @@ class cms_control extends admin_control {
 		$channelid = intval(core::gpc('channelid'));
 		$cateid = intval(core::gpc('cateid'));
 		$this->cms_cate->delete($channelid, $cateid);
+		$this->delete_article_by_cateid($channelid, $cateid);
 		$this->message('成功！');
 	}
 	
