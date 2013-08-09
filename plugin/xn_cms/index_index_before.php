@@ -8,6 +8,7 @@ $firstchannel = array_shift($this->conf['channellist']);
 if(empty($firstchannel)) {
 	$this->message('正在建设中...');
 }
+array_unshift($this->conf['channellist'], $firstchannel);
 $channelid = $firstchannel['channelid'];
 
 // copy from cms_control.class.php start

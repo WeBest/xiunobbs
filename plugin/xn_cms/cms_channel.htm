@@ -5,7 +5,7 @@
 .cms_article_list {margin: 10px; padding: 0px;}
 .cms_article_list li {font-size: 14px; line-height: 2; list-style: none; margin: 0px; padding: 0px;}
 .cms_subject {margin: 10px; text-align: center;}
-.cms_article {font-size: 14px; line-height: 1.6; margin: 10px;}
+/*.cms_article {font-size: 14px; line-height: 1.6; margin: 10px;}*/
 </style>
 
 <!--{hook cms_channel_start.htm}-->
@@ -28,11 +28,7 @@
 	</table>
 
 	<!--{if $channel[layout] == 0}-->
-	<div class="div">
-		<div class="body">
-			<div class="cms_article">$article[message]</div>
-		</div>
-	</div>
+	<div class="cms_article">$article[message]</div>
 	<!--{elseif $channel[layout] > 0}-->
 	<table width="100%" width="100%" class="cms">
 		<tr>

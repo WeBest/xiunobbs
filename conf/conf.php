@@ -128,7 +128,7 @@ return array(
 	'plugin_disable' => 0,			// 禁止掉所有插件
 	'plugin_on' => 2,			// 是否开启后台插件安装，0: 关闭后台安装插件模式，1:为开启线上插件模式，2:为开启本地插件模式
 	
-	'urlrewrite' => 0,			// 手工开启 URL-Rewrite 后，需要清空下 tmp 目录！
+	'urlrewrite' => 1,			// 手工开启 URL-Rewrite 后，需要清空下 tmp 目录！
 	
 	'timeoffset' => '+8',			// 服务器所在的时区
 	

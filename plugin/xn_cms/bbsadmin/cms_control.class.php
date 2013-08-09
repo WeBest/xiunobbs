@@ -90,6 +90,7 @@ class cms_control extends admin_control {
 			}
 		}
 		
+		empty($article['message']) && $article['message'] = '<div class="div"><div class="body"><p><br /><br /></p></div></div>';
 		$layoutradios = form::get_radio('layout', array(0=>'单页面', 1=>'多篇文章', 2=>'分类+文章列表'), $layout);
 		$newchannelid = $this->get_newchannelid();
 		$this->view->assign('newchannelid', $newchannelid);

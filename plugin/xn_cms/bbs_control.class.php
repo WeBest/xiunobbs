@@ -33,7 +33,6 @@ class bbs_control extends common_control {
 			
 			// 去掉没有权限访问的版块数据
 			$fid = $thread['fid'];
-			// 略显粗暴，找到某些站长吐槽
 			/*if(!isset($this->conf['forumarr'][$fid])) {
 				unset($threadlist[$k]);
 				continue;

@@ -12,7 +12,6 @@ class cms_control extends common_control {
 	
 	function __construct(&$conf) {
 		parent::__construct($conf);
-		
 		$this->_title[] = $this->conf['seo_title'] ? $this->conf['seo_title'] : $this->conf['app_name'];
 		$this->_seo_keywords = $this->conf['seo_keywords'];
 		$this->_seo_description = $this->conf['seo_description'];
@@ -23,6 +22,7 @@ class cms_control extends common_control {
 	}
 	
 	public function on_channel() {
+		
 		$channelid = intval(core::gpc('channelid'));
 		$cateid = intval(core::gpc('cateid'));
 		$articleid = intval(core::gpc('articleid'));

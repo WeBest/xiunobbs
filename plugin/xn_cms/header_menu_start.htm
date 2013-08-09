@@ -6,11 +6,12 @@
 
 <!--{loop $channellist $_channel}-->
 <!--{php $checkid = "channelid_".$_channel['channelid'];}-->
-<span class="sep"></span>$_channel[channelid]
+<span class="sep"></span>
 <a href="?cms-channel-channelid-$_channel[channelid].htm" $_checked[$checkid]>$_channel[name]</a>
 <!--{/loop}-->
 
 <!--{hook cms_header_bbs_before}-->
+<span class="sep"></span>
 <a href="?bbs.htm" $_checked[bbs]>论坛</a>
 <!--{hook cms_header_bbs_after}-->
 
