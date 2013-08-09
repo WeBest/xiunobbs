@@ -1,30 +1,51 @@
 <!--{include header.htm}-->
 
+<style>
+#cms_left_menu li{line-height: 2; font-size: 14px;}
+.cms_article_list {margin: 10px; padding: 0px;}
+.cms_article_list li {font-size: 14px; line-height: 2; list-style: none; margin: 0px; padding: 0px;}
+.cms_subject {margin: 10px; text-align: center;}
+.cms_article {font-size: 14px; line-height: 1.6; margin: 10px;}
+</style>
+
+<!--{hook cms_channel_start.htm}-->
+
 <div class="width">
 	<!--{if $channel[layout] == 0}-->
-	$article[message]
+	<div class="div">
+		<div class="body">
+			<div class="cms_article">$article[message]</div>
+		</div>
+	</div>
 	<!--{elseif $channel[layout] > 0}-->
-	<table width="100%" width="100%">
+	<table width="100%" width="100%" class="cms">
 		<tr>
-			<td width="25%" valign="top">
-				<ul id="ul2">
-					<!--{loop $catelist $cate}-->
-					<li>
-						<a href="?cms-channel-channelid-$channelid-cateid-$cate[cateid].htm" {if $cateid == $cate[cateid]} class="bold red"{/if}>$cate[name]</a>
-					</li>
-					<!--{/loop}-->
-				</ul>
+			<td width="25%" valign="top" class="left">
+				<div class="bg1 border">
+					<ul id="cms_left_menu">
+						<!--{loop $catelist $cate}-->
+						<li>
+							<a href="?cms-channel-channelid-$channelid-cateid-$cate[cateid].htm" {if $cateid == $cate[cateid]} class="bold red"{/if}>$cate[name]</a>
+						</li>
+						<!--{/loop}-->
+					</ul>
+				</div>
 			</td>
-			<td valign="top">
+			<td valign="top" class="right">
 				<!--{if $channel[layout] == 1}-->
-				$article[message]
+				<div class="div">
+					<div class="body">
+						<div class="cms_article">$article[message]</div>
+					</div>
+				</div>
 				<!--{elseif $channel[layout] == 2}-->
 					<!--{if empty($articleid)}-->
 					<div class="div">
 						<div class="body">
-							<ul>
+							<ul class="cms_article_list">
 							<!--{loop $articlelist $article}-->
-								<li><a href="?cms-channel-channelid-$channelid-articleid-$article[articleid].htm">$article[subject]</a> - $article[views]</li>
+								<li><a href="?cms-channel-channelid-$channelid-articleid-$article[articleid].htm">$article[subject]</a></li>
+								<hr />
 							<!--{/loop}-->
 							</ul>
 							<div class="pages">$pages</div>
@@ -32,14 +53,20 @@
 						<div class="footer"></div>
 					</div>
 					<!--{else}-->
-					<h1>$article[subject]</h1>
-					<div style="text-align: center;">
-						添加时间：$article[dateline_fmt] 查看：$article[views] 次 
-						<!--{if $_user[groupid] == 1}--><a href="admin/?cms-updatearticle-articleid-$articleid.htm" target="_blank">编辑</a><!--{/if}-->
-						<!--{if $_user[groupid] == 1}--><a href="admin/?cms-deletearticle-channelid-$channelid-articleid-$articleid.htm" target="_blank" onclick="return window.confirm('确定删除？')">删除</a><!--{/if}-->
+					<div class="div">
+						<div class="body">
+							<h1 class="cms_subject">$article[subject]</h1>
+							<div style="text-align: center;" class="grey">
+								添加时间：$article[dateline_fmt] 查看：$article[views] 次 
+								<!--{if $_user[groupid] == 1}--><a href="admin/?cms-updatearticle-articleid-$articleid.htm" target="_blank">编辑</a><!--{/if}-->
+								<!--{if $_user[groupid] == 1}--><a href="admin/?cms-deletearticle-channelid-$channelid-articleid-$articleid.htm" target="_blank" onclick="return window.confirm('确定删除？')">删除</a><!--{/if}-->
+							</div>
+							
+							<div class="cms_article">$article[message]</div>
+							
+							<div style="text-align: center; margin-top: 20px;"><input type="button" class="button bigblue" value="返回" onclick="history.back();" /></div>
+						</div>
 					</div>
-					$article[message]
-					<div style="text-align: center; margin-top: 20px;"><input type="button" class="button bigblue" value="返回" onclick="history.back();" /></div>
 					<!--{/if}-->
 				<!--{/if}-->
 			</td>
@@ -47,6 +74,8 @@
 	</table>
 	<!--{/if}-->
 </div>
+
+<!--{hook cms_channel_end.htm}-->
 
 <!--{include footer.htm}-->
 
