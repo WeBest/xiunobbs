@@ -5,19 +5,17 @@
 // 改文件会被 include 执行。
 if($this->conf['db']['type'] != 'mongodb') {
 	$db = $this->user->db;	// 与 user model 同一台 db
-	$tablepre = $db->tablepre;
-	try {
-	$db->query("CREATE TABLE {$tablepre}friendlink(
-  linkid int(10) unsigned NOT NULL auto_increment ,
-  type tinyint(1) NOT NULL default '0',	
-  rank tinyint(1) unsigned NOT NULL default '0',
-  sitename char(16) NOT NULL default '',
-  url char(64) NOT NULL default '',
-  logo char(64) NOT NULL default '',
-  PRIMARY KEY (linkid),
-  KEY type (type, rank)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;");
-	} catch (Exception $e) {}
+	$db->table_drop('friendlink');
+	$db->table_create('friendlink', array(
+		array('linkid', 'int(11)'), 
+		array('type', 'int(11)'), 
+		array('rank', 'int(11)'), 
+		array('sitename', 'char(32)'), 
+		array('url', 'char(64)'), 
+		array('logo', 'char(64)'), 
+	));
+	$db->index_create('friendlink', array('linkid'=>1));
+	$db->index_create('friendlink', array('type'=>1, 'rank'=>1));
 }
 
 $dir1 = $this->conf['upload_path'].'friendlink/';
