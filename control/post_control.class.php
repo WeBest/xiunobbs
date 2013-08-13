@@ -725,20 +725,21 @@ class post_control extends common_control {
 		$start = 0;
 		$limit = 20;
 		while(!empty($last) && $last['fid'] == 0) {
-			$imagelist += $this->attach->index_fetch(array('uid'=>$uid, 'isimage'=>1), array('aid'=>-1), $start, $limit);
-			$last = array_pop($imagelist);
-			$last && array_push($imagelist, $last);
+			$arrlist = $this->attach->index_fetch(array('uid'=>$uid, 'isimage'=>1), array('aid'=>-1), $start, $limit);
+			if(empty($arrlist)) break; //  || count($imagelist)
+			($last = array_pop($arrlist)) && array_push($arrlist, $last);
+			$imagelist += $arrlist;
 			$start += $limit;
 		}
 		foreach($imagelist as $attach) {
-			if($attach['fid'] > 0) {
+			if(!isset($attach['fid']) || $attach['fid'] > 0) {
 				continue;// break;
 			}
 			$attach['fid'] = $fid;
 			$attach['tid'] = $tid;
 			$attach['pid'] = $pid;
 			$imagenum++;
-			$this->attach->db_cache_update("attach-fid-$fid-aid-$aid", $attach);
+			$this->attach->db_cache_update("attach-fid-0-aid-$attach[aid]", $attach);
 		}
 		
 		$attachlist = array();
@@ -746,20 +747,22 @@ class post_control extends common_control {
 		$start = 0;
 		$limit = 20;
 		while(!empty($last) && $last['fid'] == 0) {
-			$attachlist += $this->attach->index_fetch(array('uid'=>$uid, 'isimage'=>0), array('aid'=>-1), $start, $limit);
-			$last = array_pop($attachlist);
-			$last && array_push($attachlist, $last);
+			$arrlist = $this->attach->index_fetch(array('uid'=>$uid, 'isimage'=>0), array('aid'=>-1), $start, $limit);
+			if(empty($arrlist)) break; //  || count($imagelist)
+			($last = array_pop($arrlist)) && array_push($arrlist, $last);
+			$attachlist += $arrlist;
+			($last = array_pop($attachlist)) && array_push($attachlist, $last);
 			$start += $limit;
 		}
 		foreach($attachlist as $attach) {
-			if($attach['fid'] > 0) {
+			if(!isset($attach['fid']) || $attach['fid'] > 0) {
 				continue;// break;
 			}
 			$attach['fid'] = $fid;
 			$attach['tid'] = $tid;
 			$attach['pid'] = $pid;
 			$attachnum++;
-			$this->attach->db_cache_update("attach-fid-$fid-aid-$aid", $attach);
+			$this->attach->db_cache_update("attach-fid-0-aid-$attach[aid]", $attach);
 		}
 		return array($attachnum, $imagenum);
 	}
