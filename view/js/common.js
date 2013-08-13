@@ -935,7 +935,7 @@ function json_decode(s) {
 }
 
 function json_error(json) {
-	if(typeof json === 'string') {
+	if(typeof json === 'string' || typeof json === 'number') {
 		if(json == '') {
 			return '服务端数据为空，可能PHP碰到什么错误，您可以尝试通过后台“PHP错误日志”了解详情。';
 		} else {
@@ -944,6 +944,7 @@ function json_error(json) {
 	} else if(typeof json != 'object') {
 		return json;
 	}
+	
 	if(json.servererror) {return json.servererror;}
 	return '';
 }

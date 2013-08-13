@@ -347,7 +347,7 @@ $db_index = array(
 	'thread_new'=>array(array('tid'=>-1), array('fid'=>1, 'tid'=>-1), array('lastpost'=>-1)),
 	'thread_views'=>array(array('tid'=>1)),
 	'post'=>array(array('fid'=>1, 'pid'=>1), array('fid'=>1, 'tid'=>1, 'page'=>1)),
-	'attach'=>array(array('aid'=>1), array('fid'=>1, 'tid'=>1), array('fid'=>1, 'pid'=>1), array('uid'=>1, 'isimage'=>1)),
+	'attach'=>array(array('aid'=>1), array('fid'=>1, 'tid'=>1), array('fid'=>1, 'pid'=>1), array('uid'=>1, 'isimage'=>1, 'aid'=>1)),
 	'attach_download'=>array(array('uid'=>1, 'fid'=>1, 'aid'=>1), array('fid'=>1, 'aid'=>1), array('uploaduid'=>1, 'dateline'=>0)),
 	'mypost'=>array(array('uid'=>1, 'fid'=>1, 'pid'=>1), array('uid'=>1, 'fid'=>1, 'tid'=>1), array('uid'=>1, 'pid'=>0)),
 	'online'=>array(array('sid'=>1), array('lastvisit'=>1), array('uid'=>1)),

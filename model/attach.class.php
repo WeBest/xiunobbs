@@ -154,7 +154,7 @@ class attach extends base_model {
 		$attach['filesize_fmt'] = misc::humansize($attach['filesize']);
 		$attach['orgfilename_fmt'] = utf8::substr($attach['orgfilename'], 0, 12);
 		$attach['dateline_fmt'] = misc::humandate($attach['dateline']);
-		$attach['forumname'] = $this->conf['forumarr'][$attach['fid']];
+		$attach['forumname'] = $attach['fid'] ? $this->conf['forumarr'][$attach['fid']] : '';
 		$attach['incomes'] = $attach['golds'] * $attach['downloads'];
 		if($attach['isimage']) {
 			$attach['filename_thumb'] = substr($attach['filename'], 0, -4).'_thumb.jpg';

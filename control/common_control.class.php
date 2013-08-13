@@ -231,6 +231,9 @@ class common_control extends base_control {
 		preg_match('#^https?://([^/]+)/#', $appurl, $m);
 		$installhost = $m[1];
 		$host = core::gpc('HTTP_HOST', 'S');
+		if(core::gpc('REQUEST_METHOD', 'S') == 'POST' || strpos($_SERVER['REQUEST_URI'], '-ajax-') !== FALSE) {
+			return;
+		}
 		if($host != $m[1]) {
 			$currurl = misc::get_script_uri();
 			$newurl = preg_replace('#^https?://([^/]+)/#', "http://$installhost/", $currurl);

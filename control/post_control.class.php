@@ -102,7 +102,12 @@ class post_control extends common_control {
 			$subject = htmlspecialchars(core::gpc('subject', 'P'));
 			
 			$message = core::gpc('message', 'P');
-			$message = $this->post->html_safe($message);
+			
+			// hook post_thread_html_safe_before.php
+			if($this->_user['groupid'] != 1) {
+				$message = $this->post->html_safe($message);
+			}
+			// hook post_thread_html_safe_after.php
 			
 			$thread = $post = $error = array();
 		
@@ -146,6 +151,7 @@ class post_control extends common_control {
 				if(!$thread['tid']) {
 					$this->message('发帖过程中保存数据错误，请联系管理员。');
 				}
+				
 				// hook post_thread_create_after.php
 				
 				$this->thread_views->create(array('tid'=>$tid, 'views'=>0));
@@ -178,25 +184,7 @@ class post_control extends common_control {
 				
 				// 更新 $attach 上传文件的pid
 				$attachnum = $imagenum = 0;
-				$aidarr = $this->attach->get_aid_from_tmp($uid);
-				foreach($aidarr as $fid_aid) {
-					$arr = explode('_', $fid_aid);
-					$fid = intval($arr[0]);
-					$aid = intval($arr[1]);
-					$attach = $this->attach->read($fid, $aid);
-					if(empty($attach)) continue;
-					if($attach['uid'] != $uid) continue;
-					$attach['fid'] = $post['fid'];
-					$attach['pid'] = $post['pid'];
-					$attach['tid'] = $post['tid'];
-					if($attach['isimage'] == 1) {
-						$imagenum++;
-					} else {
-						$attachnum++;
-					}
-					$this->attach->db_cache_update("attach-fid-$fid-aid-$aid", $attach);
-				}
-				$this->attach->clear_aid_from_tmp($uid);
+				list($attachnum, $imagenum) = $this->process_attach($fid, $tid, $pid, $uid);
 				
 				// 加入到 thread_type
 				$this->thread_type_data->xcreate($fid, $tid, $typeid1, $typeid2, $typeid3, $typeid4);
@@ -330,10 +318,13 @@ class post_control extends common_control {
 				$message = misc::html_space($message);
 				$message = preg_replace('#(https?://[^\'"\\\\<>:\s]+(:\d+)?)([^\'"\\\\<>:\s]+?)#is', '<a href="\\0" target="_blank">\\0</a>', $message);
 				$message = preg_replace('#(ed2k://[^\s\'\"\\\\<>]+)#is', '<a href="\\1" target="_blank">\\1</a>', $message);
-				$message = $this->post->html_safe($message);
-			} else {
+			}
+			
+			// hook post_post_html_safe_before.php
+			if($this->_user['groupid'] != 1) {
 				$message = $this->post->html_safe($message);
 			}
+			// hook post_post_html_safe_after.php
 			
 			// -----------> 添加到 post
 			$attachnum = $imagenum = 0;
@@ -368,25 +359,8 @@ class post_control extends common_control {
 				// hook post_post_post_create_after.php
 				
 				// 更新 $attach 上传文件的pid
-				$aidarr = $this->attach->get_aid_from_tmp($uid);
-				foreach($aidarr as $fid_aid) {
-					$arr = explode('_', $fid_aid);
-					$fid = intval($arr[0]);
-					$aid = intval($arr[1]);
-					$attach = $this->attach->read($fid, $aid);
-					if(empty($attach)) continue;
-					if($attach['uid'] != $uid) continue;
-					$attach['fid'] = $post['fid'];
-					$attach['pid'] = $post['pid'];
-					$attach['tid'] = $post['tid'];
-					if($attach['isimage'] == 1) {
-						$imagenum++;
-					} else {
-						$attachnum++;
-					}
-					$this->attach->db_cache_update("attach-fid-$fid-aid-$aid", $attach);
-				}
-				$this->attach->clear_aid_from_tmp($uid);
+				$attachnum = $imagenum = 0;
+				list($attachnum, $imagenum) = $this->process_attach($fid, $tid, $pid, $uid);
 				
 				// 更新 $post
 				$post['attachnum'] = $attachnum;
@@ -502,6 +476,7 @@ class post_control extends common_control {
 		
 		$input = $error = array();
 		if(!$this->form_submit()) {
+			
 			$post['message_html'] = htmlspecialchars($post['message']);;
 			
 			// 附件相关
@@ -523,11 +498,16 @@ class post_control extends common_control {
 			$this->view->assign('error', $error);
 			// hook post_update_before.php
 			$this->view->display('post_update_ajax.htm');
-			//$this->view->display('__post_update.htm');
 		} else {
 			
 			$subject = htmlspecialchars(core::gpc('subject', 'P'));
-			$message = $this->post->html_safe(core::gpc('message', 'P'));
+			$message = core::gpc('message', 'P');
+			
+			// hook post_update_html_safe_before.php
+			if($this->_user['groupid'] != 1) {
+				$message = $this->post->html_safe($message);
+			}
+			// hook post_update_html_safe_after.php
 			
 			// 更新数据
 			if($isfirst) {
@@ -560,32 +540,12 @@ class post_control extends common_control {
 				$error = array();
 				
 				// 更新 $attach 上传文件的pid
+				// 更新 $attach 上传文件的pid
 				$attachnum = $imagenum = 0;
-				$aidarr = $this->attach->get_aid_from_tmp($uid);
-				foreach($aidarr as $fid_aid) {
-					$arr = explode('_', $fid_aid);
-					$fid = intval($arr[0]);
-					$aid = intval($arr[1]);
-					
-					$attach = $this->attach->read($fid, $aid);
-					if(empty($attach)) continue;
-					if($attach['uid'] != $uid) continue;
-					$attach['fid'] = $post['fid'];
-					$attach['pid'] = $post['pid'];
-					$attach['tid'] = $post['tid'];
-					if($attach['isimage'] == 1) {
-						$imagenum++;
-					} else {
-						$attachnum++;
-					}
-					// 修改主键
-					$this->attach->db_cache_update("attach-fid-$fid-aid-$aid", $attach);
-				}
-				$this->attach->clear_aid_from_tmp($uid);
+				list($attachnum, $imagenum) = $this->process_attach($fid, $tid, $pid, $uid);
 				
 				// 删除没有被引用的图片
 				$attachlist = $this->attach->get_list_by_fid_pid($fid, $pid, 1);
-				$rebuild_cover = 0;
 				foreach($attachlist as $attach) {
 					$url = $this->conf['upload_url'].$attach['filename'];
 					if($attach['filename'] && strpos($post['message'], $attach['filename']) === FALSE) {
@@ -593,9 +553,7 @@ class post_control extends common_control {
 						$this->attach->unlink($attach);
 						$this->attach->delete($attach['fid'], $attach['aid']);
 						$imagenum--;
-						//var_dump('deleted: '.$attach['filename'].', imagenum:'.$imagenum);
 					} else {
-						//var_dump($attach['filename']);
 					}
 				}
 				
@@ -616,7 +574,7 @@ class post_control extends common_control {
 				$this->forum->xupdate($forum);
 				
 				// hook post_update_succeed.php
-				$this->message('更新成功！');
+				$this->message(array('subject_html'=>$subject, 'message_html'=>$message), 1);
 			}
 			$this->message($error);
 		}
@@ -757,6 +715,53 @@ class post_control extends common_control {
 		$s = utf8::substr($s, 0, 200);
 		$s = "<div class=\"quote\"><span class=\"grey\">引用 $post[username]：</span><p>$s</p></div><br /><br />";
 		return $s;
+	}
+	
+	// 处理附件
+	private function process_attach($fid, $tid, $pid, $uid) {
+		$attachnum = $imagenum = 0;
+		$imagelist = array();
+		$last = array('fid'=>0);
+		$start = 0;
+		$limit = 20;
+		while(!empty($last) && $last['fid'] == 0) {
+			$imagelist += $this->attach->index_fetch(array('uid'=>$uid, 'isimage'=>1), array('aid'=>-1), $start, $limit);
+			$last = array_pop($imagelist);
+			$last && array_push($imagelist, $last);
+			$start += $limit;
+		}
+		foreach($imagelist as $attach) {
+			if($attach['fid'] > 0) {
+				continue;// break;
+			}
+			$attach['fid'] = $fid;
+			$attach['tid'] = $tid;
+			$attach['pid'] = $pid;
+			$imagenum++;
+			$this->attach->db_cache_update("attach-fid-$fid-aid-$aid", $attach);
+		}
+		
+		$attachlist = array();
+		$last = array('fid'=>0);
+		$start = 0;
+		$limit = 20;
+		while(!empty($last) && $last['fid'] == 0) {
+			$attachlist += $this->attach->index_fetch(array('uid'=>$uid, 'isimage'=>0), array('aid'=>-1), $start, $limit);
+			$last = array_pop($attachlist);
+			$last && array_push($attachlist, $last);
+			$start += $limit;
+		}
+		foreach($attachlist as $attach) {
+			if($attach['fid'] > 0) {
+				continue;// break;
+			}
+			$attach['fid'] = $fid;
+			$attach['tid'] = $tid;
+			$attach['pid'] = $pid;
+			$attachnum++;
+			$this->attach->db_cache_update("attach-fid-$fid-aid-$aid", $attach);
+		}
+		return array($attachnum, $imagenum);
 	}
 	//hook post_control_after.php
 }

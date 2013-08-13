@@ -159,7 +159,7 @@ return array(
 	'thread_icon_middle' => 54,		// 主题的缩略图:中
 	'upload_image_max_width' => 1920,	// 上传图片最大宽度
 	
-	'version' => '2.0.3',			// 版本号
+	'version' => '2.1.0',			// 版本号
 	'installed' => 1,			// 是否安装的标志位
 );
 ?>
