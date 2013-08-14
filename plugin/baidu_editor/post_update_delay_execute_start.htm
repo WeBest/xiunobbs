@@ -10,9 +10,9 @@ $.xload('plugin/baidu_editor/ueditor/ueditor.config.js', 'plugin/baidu_editor/ue
 		editor.setContent($('#update_message_$pid').val());
 		editor.focus();
 		//alert($('#file_upload_'+pid).html());
-		//var attachdialog = editor.ui._dialogs.attachmentDialog;
+		var attachdialog = editor.ui._dialogs.attachmentDialog;
 		
-		var attachdialog = editor.getDialog('attachment');
+		//var attachdialog = editor.getDialog('attachment');
 		attachdialog.iframeUrl = '?ueditor-attach-fid-$fid-pid-$pid-redirect-0.htm';
 		
 		attachdialog.onok = function() {
