@@ -255,8 +255,8 @@ class ueditor_control extends common_control {
 		$this->view->assign('filetyps', $filetyps);
 	}
 	
-	// 更新金币
-	public function on_updategold() {
+	// 获取远程图片
+	public function on_getremoteimage() {
 	
 	}
 }
