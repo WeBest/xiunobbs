@@ -58,6 +58,8 @@ class attach_control extends common_control {
 		
 		$fid = intval(core::gpc('fid'));
 		$aid = intval(core::gpc('aid'));
+		
+		
 		$attach = $this->attach->read($fid, $aid);
 		if(empty($attach)) $this->message('附件不存在。');
 		
@@ -182,14 +184,18 @@ class attach_control extends common_control {
 	public function on_uploadimage() {
 		$fid = intval(core::gpc('fid'));
 		$pid = intval(core::gpc('pid'));
+		$pid -= 0 && $fid =0;
+		
 		$uid = $this->_user['uid'];
 		$this->check_forbidden_group();
 		
-		$forum = $this->forum->read($fid);
-		$user = $this->user->read($uid);
+		if($fid > 0) {
+			$forum = $this->forum->read($fid);
+			$this->check_forum_exists($forum);
+			$this->check_access($forum, 'attach');
+		}
 		
-		$this->check_forum_exists($forum);
-		$this->check_access($forum, 'attach');
+		$user = $this->user->read($uid);
 		
 		// hook attach_uploadimage_before.php
 
@@ -234,7 +240,6 @@ class attach_control extends common_control {
 				'uid'=>$this->_user['uid'],
 			);
 			$aid = $this->attach->create($arr);
-			$this->attach->save_aid_to_tmp($fid, $aid, $uid);
 			
 			$uploadpath = $this->conf['upload_path'].'attach/';
 			$uploadurl = $this->conf['upload_url'].'attach/';
@@ -285,15 +290,19 @@ class attach_control extends common_control {
 	public function on_uploadfile() {
 		$fid = intval(core::gpc('fid'));
 		$pid = intval(core::gpc('pid'));	// 如果新发帖子，那么 pid 为 0
+		$pid == 0 && $fid = 0;
+		
 		$uid = $this->_user['uid'];
 		$this->check_forbidden_group();
 		
-		$forum = $this->forum->read($fid);
-		$user = $this->user->read($uid);
+		if($fid > 0) {
+			$forum = $this->forum->read($fid);
+			$user = $this->user->read($uid);
+			
+			$this->check_forum_exists($forum);
+			$this->check_access($forum, 'attach');
+		}
 		
-		$this->check_forum_exists($forum);
-		$this->check_access($forum, 'attach');
-
 		// hook attach_uploadfile_before.php
 		
 		if(!empty($_FILES['Filedata']['tmp_name'])) {
@@ -335,7 +344,6 @@ class attach_control extends common_control {
 			
 			// $aid 保存到临时文件，每个用户一个文件，里面记录 aid。在读取后删除该文件。
 			// 如果tmp为内存，则在用户未完成期间，可能会导致垃圾数据产生。可以通过 uid=123 and pid=0，来判断附件归属，不过这个查询未建立索引，可以定期清理，一般不需要。
-			$this->attach->save_aid_to_tmp($fid, $aid, $uid);
 			
 			$uploadpath = $this->conf['upload_path'].'attach/';
 			$uploadurl = $this->conf['upload_url'].'attach/';
@@ -374,19 +382,28 @@ class attach_control extends common_control {
 	// 更新一个文件，文件名不变！
 	public function on_updatefile() {
 		$fid = intval(core::gpc('fid'));
+		$pid = intval(core::gpc('pid'));
+		$pid == 0 && $fid = 0;
+		
 		$aid = intval(core::gpc('aid'));
 		$uid = $this->_user['uid'];
 		
 		// 版块权限检查
-		$forum = $this->mcache->read('forum', $fid);
-		$this->check_forum_exists($forum);
-		$this->check_access($forum, 'attach');
+		if($fid > 0) {
+			$forum = $this->mcache->read('forum', $fid);
+			$this->check_forum_exists($forum);
+			$this->check_access($forum, 'attach');
 		
-		$ismod = $this->is_mod($forum, $this->_user);
+			//$ismod = $this->is_mod($forum, $this->_user);
+		}
 		$attach = $this->attach->read($fid, $aid);
 		if(empty($attach)) $this->message('附件不存在。');
 		if($attach['uid'] != $this->_user['uid']) {
-			$this->check_access($forum, 'update');
+			if($fid > 0) {
+				$this->check_access($forum, 'update');
+			} elseif($this->_user['groupid'] > 2) {
+				$this->message('您没有权限编辑此附件。');
+			}
 		}
 		
 		// hook attach_updatefile_before.php
@@ -414,27 +431,31 @@ class attach_control extends common_control {
 		$this->check_login();
 		
 		$fid = intval(core::gpc('fid'));
+		$pid = intval(core::gpc('pid'));
 		$aid = intval(core::gpc('aid'));
+		$pid == 0 && $fid = 0;
 		
 		// 版块权限检查
-		$forum = $this->mcache->read('forum', $fid);
-		$this->check_forum_exists($forum);
-		$this->check_access($forum, 'attach');
-		
-		$ismod = $this->is_mod($forum, $this->_user);
+		if($fid > 0) {
+			$forum = $this->mcache->read('forum', $fid);
+			$this->check_forum_exists($forum);
+			$this->check_access($forum, 'attach');
+			//$ismod = $this->is_mod($forum, $this->_user);
+		}
 		$attach = $this->attach->read($fid, $aid);
 		if(empty($attach)) $this->message('附件不存在。');
 		if($attach['uid'] != $this->_user['uid']) {
-			$this->check_access($forum, 'delete');
+			if($fid > 0) {
+				$this->check_access($forum, 'delete');
+			} elseif($this->_user['groupid'] > 2) {
+				$this->message('您没有权限删除此附件。');
+			}
 		}
 		
 		// hook attach_deletefile_before.php
 		
-		// 如果附件没有归属，那么可能存在于 kv.uid_aids.tmp 文件中
-		if($attach['pid'] == 0) {
-			$this->attach->remove_aid_from_tmp($fid, $aid, $this->_user['uid']);
-		} else {
-			// 附件数--
+		// 附件数--
+		if($fid > 0) {
 			$post = $this->post->read($attach['fid'], $attach['pid']);
 			$thread = $this->thread->read($attach['fid'], $attach['tid']);
 			$this->check_post_exists($post);
@@ -451,8 +472,7 @@ class attach_control extends common_control {
 		// 清理资源比较重要，不考虑上面情况了。
 		$this->attach->unlink($attach);
 		$this->attach->delete($fid, $aid);
-		$this->attach_download->delete_by_fid_aid($fid, $aid);
-		
+		$fid > 0 && $this->attach_download->delete_by_fid_aid($fid, $aid);
 		// hook attach_deletefile_after.php
 		
 		$this->message('删除成功');

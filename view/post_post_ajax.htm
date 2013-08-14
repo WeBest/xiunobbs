@@ -1,7 +1,7 @@
-<!--{json width:"880",title:"回复帖子"}-->
+<!--{json width:"940",title:"回复帖子"}-->
 <style type="text/css">
-.post_form dt {width: 7%;}
-.post_form dd {width: 91%;}
+.post_form dt {width: 5%;}
+.post_form dd {width: 93%;}
 </style>
 <form action="?post-post-fid-$fid-tid-$tid-pid-$pid-ajax-1.htm" method="post" id="post_form_$pid" class="post_form" target="_blank">
 	<input type="hidden" name="FORM_HASH" value="{FORM_HASH}" />
@@ -14,7 +14,7 @@
 		<!--{hook post_post_subject_after.htm}-->
 		
 		<dt><label for="message">内容：</label></dt>
-		<dd style="position: relative;"><textarea name="message" id="post_message_$pid" style="width: 780px; height: 400px;">$message</textarea></dd>
+		<dd style="position: relative;"><textarea name="message" id="post_message_$pid" style="width: 855px; height: 400px;">$message</textarea></dd>
 		
 		<!--{hook post_post_message_after.htm}-->
 		
@@ -27,7 +27,7 @@
 	</dl>
 </form>
 
-<!--{hook post_post_ajax_js_before}-->
+<!--{hook post_post_ajax_js_before.htm}-->
 
 <script type="text/javascript">
 

@@ -84,7 +84,7 @@ class post_control extends common_control {
 		
 		if(!$this->form_submit()) {
 			
-			$attachlist = $this->get_attachlist_by_tmp($uid);
+			$attachlist = $this->attach->get_uploading_attachlist($uid);
 			$this->init_editor_attach($attachlist);
 		
 			$pid = 0;
@@ -291,7 +291,7 @@ class post_control extends common_control {
 			}
 			
 			// 附件相关
-			$attachlist = $this->get_attachlist_by_tmp($uid);
+			$attachlist = $this->attach->get_uploading_attachlist($uid);
 			$this->init_editor_attach($attachlist);
 			
 			$this->view->assign('fid', $fid);
@@ -659,21 +659,6 @@ class post_control extends common_control {
 		$typeselects = $this->init_type_select($forum);
 		$this->message($typeselects, 1);
 	}
-
-	private function get_attachlist_by_tmp($uid) {
-		$aids = $this->kv->get("upload_{$uid}_fid_aids.tmp");
-		$aidarr = $aids ? explode(' ', $aids) : array();
-		$attachlist = array();
-		foreach($aidarr as $fid_aid) {
-			list($fid, $aid) = explode('_', $fid_aid);
-			$attach = $this->attach->read($fid, $aid);
-			if($attach) {
-				$this->attach->format($attach);
-				$attachlist[$aid] = $attach;
-			}
-		}
-		return $attachlist;
-	}
 		
 	private function init_editor_attach($attachlist) {
 		$attachnum = count($attachlist);
@@ -720,52 +705,37 @@ class post_control extends common_control {
 	// 处理附件
 	private function process_attach($fid, $tid, $pid, $uid) {
 		$attachnum = $imagenum = 0;
-		$imagelist = array();
-		$last = array('fid'=>0);
-		$start = 0;
-		$limit = 20;
-		while(!empty($last) && $last['fid'] == 0) {
-			$arrlist = $this->attach->index_fetch(array('uid'=>$uid, 'isimage'=>1), array('aid'=>-1), $start, $limit);
-			if(empty($arrlist)) break; //  || count($imagelist)
-			($last = array_pop($arrlist)) && array_push($arrlist, $last);
-			$imagelist += $arrlist;
-			$start += $limit;
-		}
+		$imagelist = $this->attach->get_uploading_imagelist($uid);
 		foreach($imagelist as $attach) {
-			if(!isset($attach['fid']) || $attach['fid'] > 0) {
-				continue;// break;
-			}
 			$attach['fid'] = $fid;
 			$attach['tid'] = $tid;
 			$attach['pid'] = $pid;
 			$imagenum++;
 			$this->attach->db_cache_update("attach-fid-0-aid-$attach[aid]", $attach);
 		}
-		
-		$attachlist = array();
-		$last = array('fid'=>0);
-		$start = 0;
-		$limit = 20;
-		while(!empty($last) && $last['fid'] == 0) {
-			$arrlist = $this->attach->index_fetch(array('uid'=>$uid, 'isimage'=>0), array('aid'=>-1), $start, $limit);
-			if(empty($arrlist)) break; //  || count($imagelist)
-			($last = array_pop($arrlist)) && array_push($arrlist, $last);
-			$attachlist += $arrlist;
-			($last = array_pop($attachlist)) && array_push($attachlist, $last);
-			$start += $limit;
-		}
+		$attachlist = $this->attach->get_uploading_attachlist($uid);
 		foreach($attachlist as $attach) {
-			if(!isset($attach['fid']) || $attach['fid'] > 0) {
-				continue;// break;
-			}
 			$attach['fid'] = $fid;
 			$attach['tid'] = $tid;
 			$attach['pid'] = $pid;
 			$attachnum++;
 			$this->attach->db_cache_update("attach-fid-0-aid-$attach[aid]", $attach);
 		}
+		// 附件数++
+		$thread = $this->thread->read($fid, $tid);
+		$thread['attachnum'] += $attachnum;
+		$thread['imagenum'] += $imagenum;
+		$this->thread->update($thread);
+		
+		// 附件数++
+		$post = $this->post->read($fid, $pid);
+		$post['attachnum'] += $attachnum;
+		$post['imagenum'] += $imagenum;
+		$this->post->update($post);
+		
 		return array($attachnum, $imagenum);
 	}
+	
 	//hook post_control_after.php
 }
 

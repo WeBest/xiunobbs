@@ -1,7 +1,7 @@
-<!--{json width:"880",title:"发表新帖"}-->
+<!--{json width:"940",title:"发表新帖"}-->
 <style type="text/css">
-.post_thread_form dt {width: 7%;}
-.post_thread_form dd {width: 91%;}
+.post_thread_form dt {width: 5%;}
+.post_thread_form dd {width: 93%;}
 </style>
 <form action="?post-thread-fid-$fid-ajax-1.htm" method="post" id="post_thread_form_$pid" class="post_thread_form" target="_blank">
 	<input type="hidden" name="FORM_HASH" value="{FORM_HASH}" />
@@ -27,7 +27,7 @@
 		<!--{hook post_thread_subject_after.htm}-->
 		
 		<dt><label for="thread_message_$pid">内容：</label></dt>
-		<dd style="position: relative;"><textarea name="message" id="thread_message_$pid" style="width: 780px; height: 400px;" tabindex="101"></textarea></dd>
+		<dd style="position: relative;"><textarea name="message" id="thread_message_$pid" style="width: 855px; height: 400px;" tabindex="101"></textarea></dd>
 		
 		<!--{hook post_thread_message_after.htm}-->
 		
@@ -41,7 +41,7 @@
 	</dl>
 </form>
 
-<!--{hook post_thread_ajax_js_before}-->
+<!--{hook post_thread_ajax_js_before.htm}-->
 
 <script type="text/javascript">
 

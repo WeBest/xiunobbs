@@ -59,7 +59,7 @@ function print_r_real(arrlist, level) {
 	if(level > 2) {
 		try {
 			arrlist += '';	// toString();
-			arrlist = arrlist.substr(0, 500); 
+			if(arrlist.length > 50) arrlist = arrlist.substr(0, 50) + '...'; 
 		} catch(e) {
 			arrlist = typeof arrlist;
 		}
@@ -70,7 +70,7 @@ function print_r_real(arrlist, level) {
 	var type = typeof arrlist;
 	if(type == 'string' || type == 'number') {
 		arrlist += '';
-		arrlist = arrlist.substr(0, 500); 
+		if(arrlist.length > 50) arrlist = arrlist.substr(0, 50) + '...'; 
 		s += htmlspecialchars(arrlist);
 		return  '<span class="grey2">'+s+'</span>';
 	} else if(type == 'object') {

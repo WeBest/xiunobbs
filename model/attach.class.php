@@ -118,19 +118,6 @@ class attach extends base_model {
 		// hook attach_model_unlink_end.php
 	}
 	
-	// 如果文件名为不合法的文件名，则用 aid 来代替
-	/*
-	public function safe_filename($filename, $aid) {
-		$ext = strrchr($file['name'], '.');
-		if(preg_match('#^([\w\-]+\.)+[\w+\-]$#', $filename)) {
-			return $filename;
-		} else {
-			
-			return $aid.$ext;
-		}
-	}
-	*/
-	
 	// 根据文件名判断文件类型
 	public function get_filetype($filename) {
 		$filename = strtolower($filename);
@@ -199,30 +186,50 @@ class attach extends base_model {
 		return $m;
 	}
 	
-	// upload 相关，可能会给人偶然扫描到。todo: 安全性
-	public function get_aid_from_tmp($uid) {
-		$aids = $this->kv->get("upload_{$uid}_fid_aids.tmp");
-		return array_filter(explode(' ', trim($aids)));
+	
+	public function get_uploading_imagelist($uid, $filter = TRUE) {
+		$imagelist = array();
+		$last = array('pid'=>0);
+		$start = 0;
+		$limit = 20;
+		while(!empty($last) && $last['pid'] == 0) {
+			$arrlist = $this->index_fetch(array('uid'=>$uid, 'isimage'=>1), array('aid'=>-1), $start, $limit);
+			if(empty($arrlist)) break; //  || count($imagelist)
+			($last = array_pop($arrlist)) && array_push($arrlist, $last);
+			$imagelist += $arrlist;
+			$start += $limit;
+		}
+		if($filter) {
+			foreach($imagelist as $k=>$attach) {
+				if(!isset($attach['pid']) || $attach['pid'] > 0) {
+					unset($imagelist[$k]);
+				}
+			}
+		}
+		return $imagelist;
 	}
 	
-	public function clear_aid_from_tmp($uid) {
-		$this->kv->delete("upload_{$uid}_fid_aids.tmp");
-	}
-	
-	public function save_aid_to_tmp($fid, $aid, $uid) {
-		$oldfidaid = trim($this->kv->get("upload_{$uid}_fid_aids.tmp"));
-		$fidaid = "{$fid}_{$aid}";
-		$fidaid = $oldfidaid ? $oldfidaid.' '.$fidaid : $fidaid;
-		$this->kv->set("upload_{$uid}_fid_aids.tmp", trim($fidaid));
-	}
-	
-	public function remove_aid_from_tmp($fid, $aid, $uid) {
-		$s = trim($this->kv->get("upload_{$uid}_fid_aids.tmp"));
-		$fidaidarr = explode(' ', $s);
-		$fidaid = $fid."_".$aid;
-		$newarr = array_diff($fidaidarr, array($fidaid));
-		$fidaids = implode(' ', $newarr);
-		$this->kv->set("upload_{$uid}_fid_aids.tmp", $fidaids);
+	public function get_uploading_attachlist($uid, $filter = TRUE) {
+		$attachlist = array();
+		$last = array('pid'=>0);
+		$start = 0;
+		$limit = 20;
+		while(!empty($last) && $last['pid'] == 0) {
+			$arrlist = $this->index_fetch(array('uid'=>$uid, 'isimage'=>0), array('aid'=>-1), $start, $limit);
+			if(empty($arrlist)) break; //  || count($imagelist)
+			($last = array_pop($arrlist)) && array_push($arrlist, $last);
+			$attachlist += $arrlist;
+			($last = array_pop($attachlist)) && array_push($attachlist, $last);
+			$start += $limit;
+		}
+		if($filter) {
+			foreach($attachlist as $k=>$attach) {
+				if(!isset($attach['pid']) || $attach['pid'] > 0) {
+					unset($attachlist[$k]);
+				}
+			}
+		}
+		return $attachlist;
 	}
 	
 	// hook attach_model_end.php

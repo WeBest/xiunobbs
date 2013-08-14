@@ -231,7 +231,7 @@ class common_control extends base_control {
 		preg_match('#^https?://([^/]+)/#', $appurl, $m);
 		$installhost = $m[1];
 		$host = core::gpc('HTTP_HOST', 'S');
-		if(core::gpc('REQUEST_METHOD', 'S') == 'POST' || strpos($_SERVER['REQUEST_URI'], '-ajax-') !== FALSE) {
+		if(core::gpc('REQUEST_METHOD', 'S') == 'POST' || strpos($_SERVER['REQUEST_URI'], '-ajax-') !== FALSE || strpos($_SERVER['REQUEST_URI'], '-redirect-0') !== FALSE) {
 			return;
 		}
 		if($host != $m[1]) {
