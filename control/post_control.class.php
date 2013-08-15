@@ -698,7 +698,8 @@ class post_control extends common_control {
 		$s = strip_tags($s);
 		$s = preg_replace('#[\r\n]{2,999}#', "<br />", $s);
 		$s = utf8::substr($s, 0, 200);
-		$s = "<div class=\"quote\"><span class=\"grey\">引用 $post[username]：</span><p>$s</p></div><br /><br />";
+		//$s = "<div class=\"quote\"><span class=\"grey\">引用 $post[username]：</span><p>$s</p></div><br /><br />";
+		$s = "<blockquote><span class=\"grey\">引用 $post[username]：</span><p>$s</p></blockquote><br />";
 		return $s;
 	}
 	
