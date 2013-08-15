@@ -2,16 +2,15 @@ var attachnum = $attachnum;
 var pid = $pid;
 
 window.UEDITOR_HOME_URL = "$conf[plugin_url]baidu_editor/ueditor/";
-$.xload('plugin/baidu_editor/ueditor/ueditor.config.js', 'plugin/baidu_editor/ueditor/ueditor.all.js', 'view/js/editor/swfupload.js', function() {
+$.xload('plugin/baidu_editor/ueditor/ueditor.config.js', 'plugin/baidu_editor/ueditor/ueditor.all.min.js', 'view/js/editor/swfupload.js', function() {
 	var editor = new UE.ui.Editor();
 	window.editor = editor;
 	editor.render("update_message_$pid");
 	editor.ready(function(){
 		editor.setContent($('#update_message_$pid').val());
 		editor.focus(true);
-		//alert($('#file_upload_'+pid).html());
-		var attachdialog = editor.ui._dialogs.attachmentDialog;
 		
+		var attachdialog = editor.ui._dialogs.attachmentDialog;
 		//var attachdialog = editor.getDialog('attachment');
 		attachdialog.iframeUrl = '?ueditor-attach-fid-$fid-pid-$pid-redirect-0.htm';
 		
@@ -19,11 +18,6 @@ $.xload('plugin/baidu_editor/ueditor/ueditor.config.js', 'plugin/baidu_editor/ue
 			$('#'+attachdialog.id+'_iframe')[0].contentWindow.attach_form_submit(attachdialog);
 			return false;
 		};
-		
-		//attachdialog.open();
-		//attachdialog.mesureSize();
-		//attachdialog.getDom('content').innerHTML = 'xxxxxxxxxxxxxxqqq';
-		//attachdialog.close();
 		
 		window.set_attach_num = function(attachnum) {
 			if(attachnum > 0) {

@@ -26,7 +26,9 @@ class admin_control extends common_control {
 		$this->check_ip();
 		
 		// 检查来路是否合法
-		$this->check_xss();
+		if(!defined('XIUNO_SKIP_CHECK_XSS')) {
+			$this->check_xss();
+		}
 		
 		// 这里可能会有跨站脚本导致的提交，可以触发安全警报。管理员应该定期查看后台日志。
 		$this->check_mod_group();

@@ -6,6 +6,9 @@
 
 !defined('FRAMEWORK_PATH') && exit('FRAMEWORK_PATH not defined.');
 
+// 此 control 不检查 xss，给 swfupload 放行
+define('XIUNO_SKIP_CHECK_XSS', 1);
+
 include BBS_PATH.'admin/control/admin_control.class.php';
 
 class cms_control extends admin_control {
@@ -112,8 +115,10 @@ class cms_control extends admin_control {
 		$channelid = intval(core::gpc('channelid'));
 		$cateid = intval(core::gpc('cateid'));
 		if(!$this->form_submit()) {
+			$articleid = 0;
 			$this->view->assign('channelid', $channelid);
 			$this->view->assign('cateid', $cateid);
+			$this->view->assign('articleid', $articleid);
 			$this->view->display('xn_cms_admin_article_create_ajax.htm');
 		} else {
 			$subject = core::gpc('subject', 'P');
@@ -425,19 +430,27 @@ class cms_control extends admin_control {
 		return $maxrank;
 	}
 	
-	// 上传图片
+	// 编辑器依赖上传图片
 	public function on_uploadimage() {
+		echo "{'url':'upload1/20130815/13765755307382.jpg','title':'','original':'UEditor_snapScreen_tmp.jpg','state':'SUCCESS'}";
+		$s = ob_get_contents();
+		file_put_contents('d:/xxx.txt', $s);
+		exit;
+		
+		if(empty($_FILES['upfile'])) {
+			$this->uploaderror('没有上传文件。');
+		}
 		
 		$atticleid = intval(core::gpc('articleid'));
 		
 		// 对付一些变态的 iis 环境， is_file() 无法检测无权限的目录。
 		$tmpfile = FRAMEWORK_TMP_TMP_PATH.md5(rand(0, 1000000000).$_SERVER['time'].$_SERVER['ip']).'.tmp';
-		$succeed = IN_SAE ? copy($_FILES['Filedata']['tmp_name'], $tmpfile) : move_uploaded_file($_FILES['Filedata']['tmp_name'], $tmpfile);
+		$succeed = IN_SAE ? copy($_FILES['upfile']['tmp_name'], $tmpfile) : move_uploaded_file($_FILES['upfile']['tmp_name'], $tmpfile);
 		if(!$succeed) {
-			$this->message('移动临时文件错误，请检查临时目录的可写权限。', 0);
+			$this->uploaderror('移动临时文件错误，请检查临时目录的可写权限。');
 		}
 		
-		$file = $_FILES['Filedata'];
+		$file = $_FILES['upfile'];
 		$file['tmp_name'] = $tmpfile;
 		core::htmlspecialchars($file['name']);
 		$filetype = $this->attach->get_filetype($file['name']);
@@ -447,50 +460,45 @@ class cms_control extends admin_control {
 		
 		!is_dir($uploadpath) && mkdir($uploadpath, 0777);
 		
-		if($filetype == 'image') {
-			// 处理文件
-			$imginfo = getimagesize($file['tmp_name']);
-			
-			// 按照天存储
-			$day = date('Ymd', $_SERVER['time']);
-			!is_dir($uploadpath.$day) && mkdir($uploadpath.$day, 0777);
-			if($imginfo[2] == 1) {
-				$fileurl = $day.'/'.$atticleid.'_'.rand(1, 99999999).'.gif';
-				$thumbfile = $uploadpath.$fileurl;
-				copy($file['tmp_name'], $thumbfile);
-				$r['filesize'] = filesize($file['tmp_name']);
-				$r['width'] = $imginfo[0];
-				$r['height'] = $imginfo[1];
-				$r['fileurl'] = $fileurl;
-			} else {
-				$destext = image::ext($file['name']);
-				$fileurl = $day.'/'.$atticleid.'_'.rand(1, 99999999).'.'.$destext;
-				$thumbfile = $uploadpath.$fileurl;
-				image::thumb($file['tmp_name'], $thumbfile, 1600, 16000);
-				$imginfo = getimagesize($thumbfile);
-				$r['filesize'] = filesize($thumbfile);
-				$r['width'] = $imginfo[0];
-				$r['height'] = $imginfo[1];
-				$r['fileurl'] = $fileurl;
-			}
-			
-			is_file($file['tmp_name']) && unlink($file['tmp_name']);
-			
-			$this->message('<img src="'.$uploadurl.$r['fileurl'].'" width="'.$r['width'].'" height="'.$r['height'].'"/>');
-			
+		if($filetype != 'image') {
+			$this->uploaderror('请您上传图片！');
+		}
+		// 处理文件
+		$imginfo = getimagesize($file['tmp_name']);
+		
+		// 按照天存储
+		$day = date('Ymd', $_SERVER['time']);
+		!is_dir($uploadpath.$day) && mkdir($uploadpath.$day, 0777);
+		if($imginfo[2] == 1) {
+			$fileurl = $day.'/'.$atticleid.'_'.rand(1, 99999999).'.gif';
+			$thumbfile = $uploadpath.$fileurl;
+			copy($file['tmp_name'], $thumbfile);
+			$r['filesize'] = filesize($file['tmp_name']);
+			$r['width'] = $imginfo[0];
+			$r['height'] = $imginfo[1];
+			$r['fileurl'] = $fileurl;
 		} else {
-			// 按照天存储
-			$day = date('Ymd', $_SERVER['time']);
-			!is_dir($uploadpath.$day) && mkdir($uploadpath.$day, 0777);
-			$ext = image::ext($file['name']);
-			$ext = $this->attach->safe_ext('.'.$ext);
-			$desturl = $day.'/'.$atticleid.'_'.rand(1, 99999999)."$ext";
-			$destfile = $uploadpath.$desturl;
-			copy($file['tmp_name'], $destfile);
-			global $bbsconf;
-			$this->message('<a href="'.$uploadurl.$desturl.'"><img src="'.$bbsconf['static_url'].'view/image/filetype/'.$filetype.'.gif" width="16" height="16" />'.$file['name'].'</a>');
+			$destext = image::ext($file['name']);
+			$fileurl = $day.'/'.$atticleid.'_'.rand(1, 99999999).'.'.$destext;
+			$thumbfile = $uploadpath.$fileurl;
+			image::thumb($file['tmp_name'], $thumbfile, 1600, 16000);
+			$imginfo = getimagesize($thumbfile);
+			$r['filesize'] = filesize($thumbfile);
+			$r['width'] = $imginfo[0];
+			$r['height'] = $imginfo[1];
+			$r['fileurl'] = $fileurl;
 		}
 		
+		is_file($file['tmp_name']) && unlink($file['tmp_name']);
+		$title = htmlspecialchars(core::gpc('pictitle', 'P'));
+		echo "{'url':'" . $uploadurl.$r['fileurl'] . "','title':'" . $title . "','original':'" . $file['name'] . "','state':'SUCCESS'}";
+		exit;
+	}
+	
+	// 编辑器依赖
+	private function uploaderror($s) {
+		echo "{'url':'','title':'','original':'','state':'" . $s . "'}";
+		exit;
 	}
 }
 

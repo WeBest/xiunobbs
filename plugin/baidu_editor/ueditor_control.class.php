@@ -18,7 +18,7 @@ class ueditor_control extends common_control {
 		$this->_seo_description = $this->conf['seo_description'];
 	}
 	
-	public function uploaderror($s) {
+	private function uploaderror($s) {
 		echo "{'url':'','title':'','original':'','state':'" . $s . "'}";
 		exit;
 	}

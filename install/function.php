@@ -148,7 +148,7 @@ function make_tmp($conf) {
 			$s = file_get_contents($file);
 			core::process_include($conf, $s);
 			
-			$_SERVER['preg_replace_callback_arg'] = $conf;
+			$_ENV['preg_replace_callback_arg'] = $conf;
 			$s = preg_replace_callback('#\t*\/\/\s*hook\s+([^\s]+)#is', 'core::process_hook_callback', $s);
 			
 			core::process_urlrewrite($conf, $s);
@@ -182,7 +182,7 @@ function make_tmp($conf) {
 			$objfile = $tmppath."model_$filename";
 			$s = file_get_contents($file);
 			
-			$_SERVER['preg_replace_callback_arg'] = $conf;
+			$_ENV['preg_replace_callback_arg'] = $conf;
 			$s = preg_replace_callback('#\t*\/\/\s*hook\s+([^\s]+)#is', 'core::process_hook_callback', $s);
 
 			core::process_urlrewrite($conf, $s);
@@ -213,7 +213,7 @@ function make_tmp($conf) {
 			$s = file_get_contents($file);
 			core::process_include($conf, $s);
 			
-			$_SERVER['preg_replace_callback_arg'] = $conf;
+			$_ENV['preg_replace_callback_arg'] = $conf;
 			$s = preg_replace_callback('#\t*\/\/\s*hook\s+([^\s]+)#is', 'core::process_hook_callback', $s);
 
 			core::process_urlrewrite($conf, $s);
