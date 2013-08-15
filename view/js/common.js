@@ -512,9 +512,19 @@ $.toJSON = function(o) {
 	} 
 };
 
+// 去除重复
+var xn_loaded_js = [];
 $.xload_js = function(i) {
 	if(typeof $.xload_arguments[i] == 'string') {
 		var js = $.xload_arguments[i];
+		if($.inArray(js, xn_loaded_js) != -1) {
+			if(i < $.xload_arguments.length) {
+				$.xload_js(i+1);
+			}
+			return;
+		}
+		xn_loaded_js.push(js);
+		
 		var script = document.createElement("script");
 	       	script.src = js;
 
