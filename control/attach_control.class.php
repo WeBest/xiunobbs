@@ -484,15 +484,26 @@ class attach_control extends common_control {
 		$uid = $this->_user['uid'];
 		$user = $this->user->read($uid);
 		$fid = intval(core::gpc('fid'));
-		$forum = $this->forum->read($fid);
-		$this->check_forum_exists($forum);
-		$gold = core::gpc('gold', 'P');
+		$pid = intval(core::gpc('pid'));
+		$pid == 0 && $fid = 0;
+		
+		if($fid > 0) {
+			$forum = $this->forum->read($fid);
+			$this->check_forum_exists($forum);
+		}
+		$gold = (array)core::gpc('gold', 'P');
 		foreach($gold as $aid=>$golds) {
 			$aid = intval($aid);		
 			$golds = intval($golds);
 			$attach = $this->attach->read($fid, $aid);
 			if(empty($attach)) continue;
-			if($attach['uid'] != $uid && !$this->is_mod($forum, $user)) continue;
+			if($attach['uid'] != $uid) {
+				if($fid > 0 && !$this->is_mod($forum, $user)) {
+					continue;
+				} elseif($this->_user['groupid'] > 2) {
+					continue;
+				}
+			}
 			if($attach['golds'] != $golds) {
 				$attach['golds'] = $golds;
 				$this->attach->update($attach);
