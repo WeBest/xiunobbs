@@ -695,11 +695,12 @@ class post_control extends common_control {
 		$s = $post['message'];
 		$s = str_ireplace(array('<br>', '<br />', '<br  />'), "\n", $s);
 		$s = preg_replace('#<div\s*class=\"quote\">.*?</div>#ism', "", $s); // 避免引用嵌套！
+		$s = preg_replace('#<blockquote>.*?</blockquote>#ism', "", $s); // 避免引用嵌套！
 		$s = strip_tags($s);
 		$s = preg_replace('#[\r\n]{2,999}#', "<br />", $s);
 		$s = utf8::substr($s, 0, 200);
 		//$s = "<div class=\"quote\"><span class=\"grey\">引用 $post[username]：</span><p>$s</p></div><br /><br />";
-		$s = "<blockquote><span class=\"grey\">引用 $post[username]：</span><p>$s</p></blockquote><br />";
+		$s = "<blockquote><span class=\"grey\">引用 $post[username]：</span><p>$s</p></blockquote><br />"; // 2.1.0 以后改为 blockquote 标签
 		return $s;
 	}
 	
