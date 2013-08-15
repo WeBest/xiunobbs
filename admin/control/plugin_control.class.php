@@ -212,8 +212,7 @@ class plugin_control extends admin_control {
 					3. 点击<a href=\"$next\"><b>【下一步】</b></a>安装。");
 			} else {
 				// 服务端开始下载
-				var_dump($url);exit;
-				$s = misc::fetch_url($url, 20);
+				$s = misc::fetch_url($url, 30);
 				if(empty($s) || substr($s, 0, 2) != 'PK') {
 					$arr = core::json_decode($s);
 					empty($arr['message']) && $arr['message'] = '';
