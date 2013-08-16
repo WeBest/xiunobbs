@@ -432,11 +432,6 @@ class cms_control extends admin_control {
 	
 	// 编辑器依赖上传图片
 	public function on_uploadimage() {
-		echo "{'url':'upload1/20130815/13765755307382.jpg','title':'','original':'UEditor_snapScreen_tmp.jpg','state':'SUCCESS'}";
-		$s = ob_get_contents();
-		file_put_contents('d:/xxx.txt', $s);
-		exit;
-		
 		if(empty($_FILES['upfile'])) {
 			$this->uploaderror('没有上传文件。');
 		}

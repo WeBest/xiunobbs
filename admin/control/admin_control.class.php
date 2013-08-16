@@ -11,11 +11,9 @@ include BBS_PATH.'control/common_control.class.php';
 class admin_control extends common_control {
 	
 	function __construct(&$conf) {
-		
 		// hook admin_control_construct_before.php
 		parent::__construct($conf);
 		// hook admin_control_construct_after.php
-		
 		global $bbsconf;
 		$this->view->assign('bbsconf', $bbsconf);
 		
@@ -29,10 +27,11 @@ class admin_control extends common_control {
 		if(!defined('XIUNO_SKIP_CHECK_XSS')) {
 			$this->check_xss();
 		}
-		
 		// 这里可能会有跨站脚本导致的提交，可以触发安全警报。管理员应该定期查看后台日志。
 		$this->check_mod_group();
 		$admin_auth = core::gpc($this->conf['cookie_pre'].'admin_auth', 'R');
+		$this->view->assign('_admin_auth', $admin_auth);
+		
 		$login = 0;
 		if(empty($admin_auth)) {
 			// 登录页面放行
@@ -82,7 +81,6 @@ class admin_control extends common_control {
 			echo '<html><body><script>top.location="'.$url.'"</script></body></html>';
 			exit;
 		}
-		
 		// hook admin_control_check_after.php
 	}
 	

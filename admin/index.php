@@ -19,8 +19,9 @@ define('FRAMEWORK_TMP_PATH', $conf['tmp_path']);
 
 // 日志目录
 define('FRAMEWORK_LOG_PATH', $conf['log_path']);
-
+		
 include FRAMEWORK_PATH.'core.php';
+
 core::init($conf);
 core::ob_start();
 core::run($conf);

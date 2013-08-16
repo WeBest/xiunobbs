@@ -36,13 +36,7 @@ function delay_execute(dialog, recall) {
 		window.UEDITOR_CONFIG.imageUrl = "?cms-uploadimage-articleid-$articleid-ajax-1.htm";
 		window.UEDITOR_CONFIG.fileUrl = "?cms-uploadfile-articleid-$articleid-ajax-1.htm";
 		window.UEDITOR_CONFIG.catcherUrl = "?cms-getremoteimage-articleid-$articleid-ajax-1.htm";
-		//window.UEDITOR_CONFIG.snapscreenServerUrl = "http://x.net/plugin/ueditor1_2_6_1-src/php/imageUp.php";
-		//window.UEDITOR_CONFIG.snapscreenServerUrl = "http://x.net/plugin/xn_cms/1.htm";
-		//window.UEDITOR_CONFIG.snapscreenServerUrl = "http://x.net/admin/cms-uploadimage-articleid--ajax-1.html";
-		//window.UEDITOR_CONFIG.snapscreenServerUrl = "http://x.net/admin/1.html";
-		
-		window.UEDITOR_CONFIG.snapscreenServerUrl = "http://x.net/admin/cms-uploadimage-articleid-0-ajax-1.html";
-		//window.open("?cms-uploadimage-articleid-$articleid-ajax-1.htm");
+		window.UEDITOR_CONFIG.snapscreenServerUrl = "?cms-uploadimage-articleid-0-$conf[cookie_pre]sid-$_sid-$conf[cookie_pre]auth-$_auth-$conf[cookie_pre]admin_auth-$_admin_auth-ajax-1.htm";
 		var editor = new UE.ui.Editor();
 		editor.render("message");
 		editor.ready(function(){
