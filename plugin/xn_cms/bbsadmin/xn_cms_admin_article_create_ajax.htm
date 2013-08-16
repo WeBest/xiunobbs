@@ -41,10 +41,8 @@ function delay_execute(dialog, recall) {
 		editor.render("message");
 		editor.ready(function(){
 			editor.focus(true);
-			
 			var attachdialog = editor.ui._dialogs.attachmentDialog;
 			attachdialog.iframeUrl = '?ueditor-attach-fid-$fid-pid-$pid-redirect-0.htm';
-		
 		});
 	});
 	

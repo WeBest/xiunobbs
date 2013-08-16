@@ -136,6 +136,9 @@ class cms_control extends admin_control {
 			$articleid = $this->cms_article->create($article);
 			$this->process_attach($articleid);
 			$cate = $this->cms_cate->read($channelid, $cateid);
+			if(empty($cate)) {
+				$this->message('分类不存在，请选择左侧分类。');
+			}
 			$cate['articles']++;
 			$this->cms_cate->update($cate);
 			$this->message('提交成功！');
