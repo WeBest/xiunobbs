@@ -81,7 +81,9 @@ class common_control extends base_control {
 		// 通过代理发送的头获取用户真实IP
 		if(!empty($this->conf['cdn_ip'])) {
 			foreach($this->conf['cdn_ip'] as $cdnip) {
-				if($_SERVER['ip'] == $cdnip || (strrchr($cdnip, '.') == '.*' && ($pre = substr($cdnip, 0, -2)) && $pre == substr($_SERVER['ip'], 0, strlen($pre)))) {
+				$pos1 = strrpos($cdnip, '.');
+				$pos2 = strrpos($_SERVER['ip'], '.');
+				if($_SERVER['ip'] == $cdnip || ($pos1 == $pos2 && substr($cdnip, $pos1) == '.*' && substr($cdnip, 0, $pos1) == substr($_SERVER['ip'], 0, $pos2))) {
 					$realip = core::gpc('HTTP_X_FORWARDED_FOR', 'S');
 					empty($realip) && $realip = core::gpc('HTTP_CLIENT_IP', 'S');
 					if(preg_match('#^\d+(\.\d+){3}$#', $realip)) {
