@@ -115,15 +115,17 @@ class cms_control extends admin_control {
 		$channelid = intval(core::gpc('channelid'));
 		$cateid = intval(core::gpc('cateid'));
 		if(!$this->form_submit()) {
-			$articleid = 0;
+			$articleid = $this->cms_article->maxid() + 1;
 			$this->view->assign('channelid', $channelid);
 			$this->view->assign('cateid', $cateid);
 			$this->view->assign('articleid', $articleid);
 			$this->view->display('xn_cms_admin_article_create_ajax.htm');
 		} else {
+			$articleid = intval(core::gpc('articleid', 'P'));
 			$subject = core::gpc('subject', 'P');
 			$message = core::gpc('message', 'P');
 			$article = array(
+				'articleid'=>$articleid,
 				'channelid'=>$channelid,
 				'cateid'=>$cateid,
 				'subject'=>$subject,
@@ -133,12 +135,12 @@ class cms_control extends admin_control {
 				'dateline'=>$_SERVER['time'],
 				'views'=>0,
 			);
-			$articleid = $this->cms_article->create($article);
 			$this->process_attach($articleid);
 			$cate = $this->cms_cate->read($channelid, $cateid);
 			if(empty($cate)) {
-				$this->message('分类不存在，请选择左侧分类。');
+				$this->message('分类不存在，请选择左侧分类。', 0);
 			}
+			$this->cms_article->create($article);
 			$cate['articles']++;
 			$this->cms_cate->update($cate);
 			$this->message('提交成功！');
@@ -439,7 +441,17 @@ class cms_control extends admin_control {
 			$this->uploaderror('没有上传文件。');
 		}
 		
+		$uploadpath = $this->conf['upload_path'].'attach_cms/';
+		$uploadurl = $this->conf['upload_url'].'attach_cms/';
+		
 		$atticleid = intval(core::gpc('articleid'));
+		$articleid = intval(core::gpc('articleid'));
+		$article = $this->cms_article->read($articleid);
+		$dateline = empty($article) ? $_SERVER['time'] : $article['dateline'];
+		
+		$date = date('Ymd', $dateline);
+		!is_dir($uploadpath) && mkdir($uploadpath, 0777);
+		!is_dir($uploadpath.$date) && mkdir($uploadpath.$date, 0777);
 		
 		// 对付一些变态的 iis 环境， is_file() 无法检测无权限的目录。
 		$tmpfile = FRAMEWORK_TMP_TMP_PATH.md5(rand(0, 1000000000).$_SERVER['time'].$_SERVER['ip']).'.tmp';
@@ -453,9 +465,6 @@ class cms_control extends admin_control {
 		core::htmlspecialchars($file['name']);
 		$filetype = $this->attach->get_filetype($file['name']);
 		
-		$uploadpath = $this->conf['upload_path'].'attach_cms/';
-		$uploadurl = $this->conf['upload_url'].'attach_cms/';
-		
 		!is_dir($uploadpath) && mkdir($uploadpath, 0777);
 		
 		if($filetype != 'image') {
@@ -465,10 +474,8 @@ class cms_control extends admin_control {
 		$imginfo = getimagesize($file['tmp_name']);
 		
 		// 按照天存储
-		$day = date('Ymd', $_SERVER['time']);
-		!is_dir($uploadpath.$day) && mkdir($uploadpath.$day, 0777);
 		if($imginfo[2] == 1) {
-			$fileurl = $day.'/'.$atticleid.'_'.rand(1, 99999999).'.gif';
+			$fileurl = $date.'/'.$atticleid.'_'.rand(1, 99999999).'.gif';
 			$thumbfile = $uploadpath.$fileurl;
 			copy($file['tmp_name'], $thumbfile);
 			$r['filesize'] = filesize($file['tmp_name']);
@@ -477,9 +484,9 @@ class cms_control extends admin_control {
 			$r['fileurl'] = $fileurl;
 		} else {
 			$destext = image::ext($file['name']);
-			$fileurl = $day.'/'.$atticleid.'_'.rand(1, 99999999).'.'.$destext;
+			$fileurl = $date.'/'.$atticleid.'_'.rand(1, 99999999).'.'.$destext;
 			$thumbfile = $uploadpath.$fileurl;
-			image::thumb($file['tmp_name'], $thumbfile, 1600, 16000);
+			image::thumb($file['tmp_name'], $thumbfile, 1920, 16000);
 			$imginfo = getimagesize($thumbfile);
 			$r['filesize'] = filesize($thumbfile);
 			$r['width'] = $imginfo[0];
@@ -490,6 +497,74 @@ class cms_control extends admin_control {
 		is_file($file['tmp_name']) && unlink($file['tmp_name']);
 		$title = htmlspecialchars(core::gpc('pictitle', 'P'));
 		echo "{'url':'" . $uploadurl.$r['fileurl'] . "','title':'" . $title . "','original':'" . $file['name'] . "','state':'SUCCESS'}";
+		exit;
+	}
+
+	public function on_getremoteimage() {
+		$uploadpath = $this->conf['upload_path'].'attach_cms/';
+		$uploadurl = $this->conf['upload_url'].'attach_cms/';
+		
+		$articleid = intval(core::gpc('articleid'));
+		$article = $this->cms_article->read($articleid);
+		$dateline = empty($article) ? $_SERVER['time'] : $article['dateline'];
+		
+		$uid = $this->_user['uid'];
+		$this->check_forbidden_group();
+		$this->check_login();
+		
+		$url = htmlspecialchars(core::gpc( 'upfile', 'P'));
+		$url = str_replace( "&amp;" , "&" , $url);
+		$url = 'http://f.hiphotos.baidu.com/album/w%3D217/sign=e5b28884aec379317d688128dcc5b784/1e30e924b899a901d14a11b41c950a7b0208f531.jpg';
+		$urllist = explode("ue_separate_ue", $url);
+		$returnurl = array();
+		foreach($urllist as $url) {
+			if(empty($url)) {
+				//$this->uploaderror('没有URL。');
+				$returnurl[] = 'error';
+				continue;
+			}
+			
+			preg_match('#/([^/]+)\.(jpg|jpeg|png|gif|bmp)#i', $url, $m);
+			if(empty($m[2])) {
+				//$this->uploaderror('只支持 jpg, jpeg, png, gif, bmp 格式。');
+				$returnurl[] = 'error';
+				continue;
+			}
+			$ext = $m[2];
+			$filename = $m[0];
+			if(!preg_match('#^(https?://[^\'"\\\\<>:\s]+(:\d+)?)?([^\'"\\\\<>:\s]+?)*$#is', $url)) {
+				//$this->uploaderror('URL 格式不正确。');
+				$returnurl[] = 'error';
+				continue;
+			}
+			
+			$s = misc::fetch_url($url, 5);
+				
+			$tmpfile = FRAMEWORK_TMP_TMP_PATH.md5(rand(0, 1000000000).$_SERVER['time'].$_SERVER['ip']).'.'.$ext;
+			$succeed = file_put_contents($tmpfile, $s);
+			if(!$succeed) {
+				//$this->uploaderror('移动临时文件错误，请检查临时目录的可写权限。');
+				$returnurl[] = 'error';
+				continue;
+			}
+			
+			$date = date('Ymd', $dateline);
+			!is_dir($uploadpath) && mkdir($uploadpath, 0777);
+			!is_dir($uploadpath.$date) && mkdir($uploadpath.$date, 0777);
+			if($ext == 'gif') {
+				$filepath = $date.'/'.$articleid.'_'.rand(0, 1000000000).$_SERVER['time'].'.gif';
+				$destfile = $uploadpath.$filepath;
+				copy($tmpfile, $destfile);
+			} else {
+				$filepath = $date.'/'.$articleid.'_'.rand(0, 1000000000).$_SERVER['time'].'.'.$ext;
+				$destfile = $uploadpath.$filepath;
+				image::thumb($tmpfile, $destfile, 1920, 240000);	// 1210 800
+			}
+			$imginfo = getimagesize($destfile);
+			is_file($tmpfile) && unlink($tmpfile);
+			$returnurl[] = $uploadurl.$filepath;
+		}
+		echo "{'url':'" . implode('ue_separate_ue', $returnurl) . "','tip':'远程图片抓取成功！','srcUrl':'" . core::gpc( 'upfile', 'P') . "','state':'SUCCESS'}";
 		exit;
 	}
 	
