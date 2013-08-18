@@ -10,6 +10,16 @@ $.xload('plugin/baidu_editor/ueditor/ueditor.config.js', 'plugin/baidu_editor/ue
 		editor.setContent($('#update_message_$pid').val());
 		editor.focus(true);
 		
+		<!--{if $isfirst}-->
+		// TAB 切换键到 message
+		$('#update_subject_$pid').keydown(function(e) {
+			var keycode = e.keyCode ? e.keyCode : e.which;
+			if(keycode == 9) {
+				setTimeout(function() {editor.focus(true);}, 100); // fix chrome.
+			}
+		});
+		<!--{/if}-->
+		
 		var attachdialog = editor.ui._dialogs.attachmentDialog;
 		//var attachdialog = editor.getDialog('attachment');
 		attachdialog.iframeUrl = '?ueditor-attach-fid-$fid-pid-$pid-redirect-0.htm';
@@ -25,5 +35,13 @@ $.xload('plugin/baidu_editor/ueditor/ueditor.config.js', 'plugin/baidu_editor/ue
 			}
 		};
 		window.set_attach_num(attachnum);
+		
+		// 快捷键相应
+		editor.body.onkeydown = function(e) {
+			if((e.ctrlKey && (e.which == 13 || e.which == 10)) || (e.altKey && e.which == 83)) {
+				editor.sync();
+				$('#update_submit_$pid').trigger('click');
+			}
+		}
 	});
 });

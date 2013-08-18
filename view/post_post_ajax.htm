@@ -37,6 +37,14 @@ function delay_execute(dialog, recall) {
 
 	$('#post_message_$pid')[0].focus();
 	
+	// 自动伸缩，自动提交
+	$('#post_message_$pid').keyup(function(e) {
+		if((e.ctrlKey && (e.which == 13 || e.which == 10)) || (e.altKey && e.which == 83)) {
+			$('#post_submit_$pid').trigger('click');
+			return false;
+		}
+	});
+	
 	$('#post_submit_$pid').click(function() {
 		$('div.alert').remove();
 		$('#post_submit_$pid').disable();

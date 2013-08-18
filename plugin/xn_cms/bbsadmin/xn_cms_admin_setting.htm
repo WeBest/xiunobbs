@@ -346,6 +346,14 @@ $.xload('../plugin/baidu_editor/ueditor/ueditor.config.js', '../plugin/baidu_edi
 		editor.focus(true);
 		var attachdialog = editor.ui._dialogs.attachmentDialog;
 		attachdialog.iframeUrl = '?ueditor-attach-fid-$fid-pid-$pid-redirect-0.htm';
+		
+		// 快捷键相应
+		editor.body.onkeydown = function(e) {
+			if((e.ctrlKey && (e.which == 13 || e.which == 10)) || (e.altKey && e.which == 83)) {
+				editor.sync();
+				$('#create_article_submit').trigger('click');
+			}
+		}
 	});
 });
 

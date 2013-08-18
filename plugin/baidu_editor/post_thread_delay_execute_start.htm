@@ -7,7 +7,14 @@ $.xload('plugin/baidu_editor/ueditor/ueditor.config.js', 'plugin/baidu_editor/ue
 	window.editor = editor;
 	editor.render("thread_message_$pid");
 	editor.ready(function(){
-		editor.focus(true);
+			
+		// TAB 切换键到 message
+		$('#subject_$pid').keydown(function(e) {
+			var keycode = e.keyCode ? e.keyCode : e.which;
+			if(keycode == 9) {
+				setTimeout(function() {editor.focus(true);}, 100); // fix chrome.
+			}
+		});
 		
 		//var attachdialog = editor.getDialog('attachment');
 		var attachdialog = editor.ui._dialogs.attachmentDialog;
@@ -24,5 +31,13 @@ $.xload('plugin/baidu_editor/ueditor/ueditor.config.js', 'plugin/baidu_editor/ue
 			}
 		};
 		window.set_attach_num(attachnum);
+		
+		// 快捷键相应
+		editor.body.onkeydown = function(e) {
+			if((e.ctrlKey && (e.which == 13 || e.which == 10)) || (e.altKey && e.which == 83)) {
+				editor.sync();
+				$('#post_thread_submit_$pid').trigger('click');
+			}
+		}
 	});
 });

@@ -10,7 +10,7 @@ form.update_form dd {width: 93%;}
 		<!--{hook post_update_subject_before.htm}-->
 		<!--{if $isfirst}-->
 		<dt>
-			<label for="update_subject">标题：</label>
+			<label for="update_subject_$pid">标题：</label>
 		</dt>
 		<dd style="white-space: nowrap;">
 			<!--{if $typeselect1}-->$typeselect1<!--{/if}-->
@@ -44,7 +44,17 @@ form.update_form dd {width: 93%;}
 function delay_execute(dialog, recall) {
 	
 	// hook post_update_delay_execute_start.htm
-		
+	
+	$('#update_message_$pid')[0].focus();
+	
+	// 自动伸缩，自动提交
+	$('#update_message_$pid').keyup(function(e) {
+		if((e.ctrlKey && (e.which == 13 || e.which == 10)) || (e.altKey && e.which == 83)) {
+			$('#update_submit_$pid').trigger('click');
+			return false;
+		}
+	});
+	
 	$('#update_submit_$pid').click(function() {
 		$('div.alert').remove();
 		$('#update_submit_$pid').disable();

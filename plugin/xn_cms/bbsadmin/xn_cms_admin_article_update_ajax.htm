@@ -48,6 +48,15 @@ function delay_execute(dialog, recall) {
 			attachdialog.iframeUrl = '?ueditor-attach-fid-$fid-pid-$pid-redirect-0.htm';
 			
 			editor.setContent($("message_update_$articleid").val());
+			
+			// 快捷键相应
+			editor.body.onkeydown = function(e) {
+				if((e.ctrlKey && (e.which == 13 || e.which == 10)) || (e.altKey && e.which == 83)) {
+					editor.sync();
+					$('#update_article_submit_$articleid').trigger('click');
+				}
+			}
+			
 		});
 		
 		$('#subject_update_$articleid').focus().keydown(function(e) {

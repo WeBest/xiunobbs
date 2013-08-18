@@ -391,7 +391,7 @@ $.getScript('$click_server&'+Math.random(), function() {
 
 // 自动伸缩，自动提交
 $('#quick_message').keyup(function(e) {
-	if(e.ctrlKey && e.which == 13 || e.which == 10) {
+	if((e.ctrlKey && (e.which == 13 || e.which == 10)) || (e.altKey && e.which == 83)) {
 		$('#quick_post_submit').trigger('click');
 		return false;
 	}
