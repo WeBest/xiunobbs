@@ -50,9 +50,11 @@ function delay_execute(dialog, recall) {
 	// hook post_thread_delay_execute_start.htm
 	
 	$('#subject_$pid').focus();
+	
 	// 自动伸缩，自动提交
 	$('#thread_message_$pid').keyup(function(e) {
-		if(e.ctrlKey && (e.which == 13 || e.which == 10)) {
+		alert(e.altKey);
+		if((e.ctrlKey && (e.which == 13 || e.which == 10)) || (e.altKey && e.which == 18)) {
 			$('#post_thread_submit_$pid').trigger('click');
 			return false;
 		}

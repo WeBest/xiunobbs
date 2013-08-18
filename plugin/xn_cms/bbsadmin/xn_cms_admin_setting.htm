@@ -17,7 +17,7 @@
 						<li>
 							
 							<input type="text" size="6" channelid="$channel[channelid]" value="$channel[name]" /><br />
-							<a href="?cms-index-channelid-$channel[channelid].htm" title="切换后进行频道编辑" {if $channelid == $channel[channelid]} class="bold red"{/if}>切换</a>
+							<a href="?cms-index-channelid-$channel[channelid].htm" title="双击进行切换，切换后进行频道编辑" {if $channelid == $channel[channelid]} class="bold red"{/if}>切换</a>
 							&nbsp; <span class="icon icon-move" title="拖动排序"></span>
 							<a href="" class="icon icon-delete" title="删除频道"></a>
 							
@@ -25,7 +25,7 @@
 						<!--{/loop}-->
 						<li>
 							<input type="text" size="6" channelid="$newchannelid" value="" islast="1" /><br />
-							<a href="?cms-index-channelid-$newchannelid.htm" title="切换后进行频道编辑">切换</a>
+							<a href="?cms-index-channelid-$newchannelid.htm" title="双击进行切换，切换后进行频道编辑">切换</a>
 							&nbsp; <span class="icon icon-move" title="拖动排序"></span>
 							<a href="" class="icon icon-delete" title="删除频道"></a>
 						</li>
@@ -82,14 +82,14 @@
 					<!--{loop $catelist $cate}-->
 					<li>
 						<input type="text" size="10" cateid="$cate[cateid]" value="$cate[name]" /><br />
-						<a href="?cms-index-channelid-$channelid-cateid-$cate[cateid].htm" {if $cateid == $cate[cateid]} class="bold red"{/if}>切换</a>
+						<a href="?cms-index-channelid-$channelid-cateid-$cate[cateid].htm" {if $cateid == $cate[cateid]} class="bold red"{/if} title="双击切换">切换</a>
 						&nbsp; <span href="" class="icon icon-move" title="拖动排序"></span>
 						<a href="" class="icon icon-delete" title="删除"></a>
 					</li>
 					<!--{/loop}-->
 					<li>
 						<input type="text" size="10" cateid="$newcateid" value="" islast="1" /><br />
-						<a href="?cms-index-channelid-$channelid-cateid-$newcateid.htm">切换</a>
+						<a href="?cms-index-channelid-$channelid-cateid-$newcateid.htm" title="双击切换">切换</a>
 						&nbsp; <span class="icon icon-move" title="拖动排序"></span>
 						<a href="" class="icon icon-delete" title="删除"></a>
 					</li>
