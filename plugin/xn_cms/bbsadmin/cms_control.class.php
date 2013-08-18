@@ -121,9 +121,14 @@ class cms_control extends admin_control {
 			$this->view->assign('articleid', $articleid);
 			$this->view->display('xn_cms_admin_article_create_ajax.htm');
 		} else {
-			$articleid = intval(core::gpc('articleid', 'P'));
+			$articleid = intval(core::gpc('articleid'));
 			$subject = core::gpc('subject', 'P');
 			$message = core::gpc('message', 'P');
+			// 非正常ID
+			$maxid = $this->cms_article->maxid();
+			if($articleid > $maxid + 10 || $articleid <= $maxid) {
+				$this->message("articleid $articleid 范围非法！");
+			}
 			$article = array(
 				'articleid'=>$articleid,
 				'channelid'=>$channelid,
@@ -141,6 +146,7 @@ class cms_control extends admin_control {
 				$this->message('分类不存在，请选择左侧分类。', 0);
 			}
 			$this->cms_article->create($article);
+			$this->cms_article->maxid('+1');
 			$cate['articles']++;
 			$this->cms_cate->update($cate);
 			$this->message('提交成功！');
