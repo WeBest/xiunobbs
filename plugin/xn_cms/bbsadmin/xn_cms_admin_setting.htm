@@ -123,7 +123,7 @@
 						<!--{loop $articlelist $article}-->
 							<tr>
 								<td width="60"><input type="text" name="articlerank[$article[articleid]]" articleid="$article[articleid]" value="$article[rank]" size="4" /></td>
-								<td><a href="../?article-$articleid.htm" target="_blank" class="subject" articleid="$article[articleid]">$article[subject]</a></td>
+								<td><a href="../?cms-channel-channelid-$article[channelid]-articleid-$article[articleid].htm" target="_blank" class="subject" articleid="$article[articleid]">$article[subject]</a></td>
 								<td width="30">$article[views]</td>
 								<td width="60">
 									<a href="?cms-updatearticle-channelid-$article[channelid]-cateid-$article[cateid]-articleid-$article[articleid].htm" class="ajaxdialog" ajaxdialog="{fullicon: true, modal: false, cache: false}" onclick="return false;">编辑</a>
@@ -324,8 +324,6 @@ $('#rank_setting').click(function() {
 </script>
 <!--{/if}-->
 
-
-
 <!--{if $layout < 2}-->
 <script type="text/javascript">
 
@@ -381,9 +379,6 @@ $('#create_article_submit').click(function() {
 			return false;
 		}
 		var thread = json.thread;
- 		
-		// 清空编辑器内容
-		//$('#message')[0].editor.set('');
  		
  		dialog.set_body('<div class="ok">发表成功，页面将自动跳转到列表页！</div>');
  		setTimeout(function() {

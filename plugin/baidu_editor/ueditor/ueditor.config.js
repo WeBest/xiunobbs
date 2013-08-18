@@ -172,7 +172,7 @@
 
         //word转存配置区
         ,wordImageUrl:URL + "php/imageUp.php"             //word转存提交地址
-        ,wordImagePath:URL + "php/"                       //
+        ,wordImagePath:""                       //
         //,wordImageFieldName:"upfile"                     //word转存表单名若此处修改，需要在后台对应文件修改对应参数
 
         //获取视频数据的地址
@@ -410,7 +410,7 @@
 
         //autoHeightEnabled
         // 是否自动长高,默认true
-        //,autoHeightEnabled:true
+        ,autoHeightEnabled:false
 
         //scaleEnabled
         //是否可以拉伸长高,默认true(当开启时，自动长高失效)

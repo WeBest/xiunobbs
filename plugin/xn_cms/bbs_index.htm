@@ -1,7 +1,9 @@
 <!--{include header.htm}-->
 
 <!--{hook index_index_start.htm}-->
-
+<style>
+.threadlist {margin: 0px; padding: 0px; padding-left: 16px; line-height: 1.6;}
+</style>
 <div class="width">
 
 	<!--{hook index_index_nav_before.htm}-->
@@ -33,7 +35,7 @@
 					<td width="70" align="center" valign="middle"></td>
 					<td class="grey2" valign="middle">板块名称</td>
 					<td width="100" align="center" valign="middle" title="版块贴数" class="grey2">精华/主题/回帖</td>
-					<td width="200" align="center" valign="middle" class="grey2">最后回复</td>
+					<td width="300" align="center" valign="middle" class="grey2">最后回复</td>
 				</tr>
 			</table>
 			<div class="hr" style="margin-left: 4px; margin-right: 4px;"></div>
@@ -75,14 +77,15 @@
 						<a href="?forum-index-fid-$forum[fid]-digest-1.htm"><span class="green bold">$forum[digests]</span></a> / <span class="bold grey">$forum[threads]</span> <span class="grey">/ $forum[posts]</span>
 					</td>
 					
-					<td width="200" valign="middle">
-						<!--{if 0 && $forum[lastsubject]}-->
-						<a href="?thread-index-fid-$forum[fid]-tid-$forum[lasttid].htm" target="_blank">$forum[lastsubject]</a><br />
-						<span class="grey">
-							$forum[lastpost_fmt]
-							<a href="?you-profile-uid-$forum[lastuid]-ajax-1.htm" target="_blank" class="ajaxdialog" ajaxdialog="{position: 6, modal: false}" onclick="return false;" rel="nofollow">$forum[lastusername]</a>
-						</span>
-						<!--{/if}-->	
+					<td width="300" valign="middle">
+						<!--{php $fid = $forum['fid'];}-->
+						<ul class="threadlist">
+						<!--{if !empty($threadlists[$fid])}-->
+						<!--{loop $threadlists[$fid] $thread}-->
+							<li class="grey"><a href="?thread-index-fid-$thread[fid]-tid-$thread[tid].htm" target="_blank">$thread[subject_fmt]</a> <span class="tiny grey">- $thread[dateline_fmt]</span></li>
+						<!--{/loop}-->
+						</ul>
+						<!--{/if}-->
 					</td>
 				</tr>
 			</table>

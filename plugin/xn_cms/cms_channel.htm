@@ -5,7 +5,7 @@
 .cms_article_list {margin: 10px; padding: 0px;}
 .cms_article_list li {font-size: 14px; line-height: 2; list-style: none; margin: 0px; padding: 0px;}
 .cms_subject {margin: 10px; text-align: center;}
-/*.cms_article {font-size: 14px; line-height: 1.6; margin: 10px;}*/
+.cms_article {font-size: 14px; line-height: 1.6; margin: 10px;}
 </style>
 
 <!--{hook cms_channel_start.htm}-->
@@ -70,8 +70,6 @@
 							<h1 class="cms_subject">$article[subject]</h1>
 							<div style="text-align: center;" class="grey">
 								添加时间：$article[dateline_fmt] 查看：$article[views] 次 
-								<!--{if $_user[groupid] == 1}--><a href="admin/?cms-updatearticle-articleid-$articleid.htm" target="_blank">编辑</a><!--{/if}-->
-								<!--{if $_user[groupid] == 1}--><a href="admin/?cms-deletearticle-channelid-$channelid-articleid-$articleid.htm" target="_blank" onclick="return window.confirm('确定删除？')">删除</a><!--{/if}-->
 							</div>
 							
 							<div class="cms_article">$article[message]</div>

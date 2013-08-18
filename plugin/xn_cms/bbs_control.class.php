@@ -23,52 +23,29 @@ class bbs_control extends common_control {
 		// hook index_bbs_before.php
 		
 		// 按照板块调用数据
-		
-		$pagesize = 30;
-		$toplist = array(); // only top 3
-		$readtids = '';
-		$page = misc::page();
-		$start = ($page -1 ) * $pagesize;
-		$threadlist = $this->thread->get_newlist($start, $pagesize);
-		foreach($threadlist as $k=>&$thread) {
-			$this->thread->format($thread);
-			
-			// 去掉没有权限访问的版块数据
-			$fid = $thread['fid'];
-			/*if(!isset($this->conf['forumarr'][$fid])) {
-				unset($threadlist[$k]);
-				continue;
-			}*/
-			
-			// 那就多消耗点资源吧，谁让你不听话要设置权限。
-			if(!empty($this->conf['forumaccesson'][$fid])) {
-				$access = $this->forum_access->read($fid, $this->_user['groupid']); // 框架内部有变量缓存，此处不会重复查表。
-				if($access && !$access['allowread']) {
-					unset($threadlist[$k]);
-					continue;
+		$forumarr = $this->conf['forumarr'];
+		$threadlists = $this->runtime->get('threadlists');
+		if(empty($threadlists)) {
+			foreach($forumarr as $fid=>$name) {
+				if(!empty($forumarr[$fid])) {
+					$access = $this->forum_access->read($fid, $this->_user['groupid']);
+					if(!empty($access) && !$access['allowread']) {
+						unset($forumarr[$fid]);
+						continue;
+					}
 				}
+				$threadlist = $this->thread->get_threadlist_by_fid($fid, 0, 0, 2, 0);
+				foreach($threadlist as &$thread) {
+					$thread['dateline_fmt'] = misc::humandate($thread['dateline']);
+					$thread['subject_fmt'] = utf8::substr($thread['subject'], 0, 20);
+				}
+				$threadlists[$fid] = $threadlist;
 			}
-			
-			$readtids .= ','.$thread['tid'];
-			if($thread['top'] == 3) {
-				unset($threadlist[$k]);
-				$toplist[] = $thread;
-				continue;
-			}
+			$this->runtime->set('threadlists', $threadlists, 60); // todo:一分钟的缓存时间！这里可以根据负载进行调节。
 		}
+		$this->view->assign('forumarr', $forumarr);
+		$this->view->assign('threadlists', $threadlists);
 		
-		$toplist = $page == 1 ? $this->get_toplist() : array();
-		$toplist = array_filter($toplist);
-		foreach($toplist as $k=>&$thread) {
-			$this->thread->format($thread);
-                        $readtids .= ','.$thread['tid'];
-                }
-                
-		$readtids = substr($readtids, 1); 
-		$click_server = $this->conf['click_server']."?db=tid&r=$readtids";
-		
-		$pages = misc::simple_pages('?index-index.htm', count($threadlist), $page, $pagesize);
-
 		// 在线会员
 		$ismod = ($this->_user['groupid'] > 0 && $this->_user['groupid'] <= 4);
 		$fid = 0;
@@ -79,10 +56,9 @@ class bbs_control extends common_control {
 		$this->view->assign('click_server', $click_server);
 		$this->view->assign('pages', $pages);
 		
-		
 		$forumlist = $this->forum->get_list();
 		foreach ($forumlist as &$forum) {
-			$this->forum->format($forum);			
+			$this->forum->format($forum);		
 		}		
 		$this->view->assign('forumlist', $forumlist);
 		

@@ -24,7 +24,7 @@
 
 <script type="text/javascript">
 
-window.UEDITOR_HOME_URL = "http://x.net/plugin/baidu_editor/ueditor/";
+window.UEDITOR_HOME_URL = "$conf[plugin_url]baidu_editor/ueditor/";
 
 function delay_execute(dialog, recall) {
 	
@@ -48,52 +48,53 @@ function delay_execute(dialog, recall) {
 			var attachdialog = editor.ui._dialogs.attachmentDialog;
 			attachdialog.iframeUrl = '?ueditor-attach-fid-$fid-pid-$pid-redirect-0.htm';
 		});
-	});
-	
-	$('#subject').focus().keydown(function(e) {
-		var keycode = e.keyCode ? e.keyCode : e.which;
-		if(keycode == 9) {
-			//$('#message')[0].editor._focus();
-		}
-	});
-	$('#create_article_submit').click(function() {
-		$('div.alert').remove();
-		$('#create_article_submit').disable();
-		var postdata = $("#create_article_form").serialize();
-		$.post($('#create_article_form').attr('action'), postdata,  function(s){
-			$('#create_article_submit').enable();
-			var json = json_decode(s);
-			if(error = json_error(json)) {alert(error); return false;}
-			if(json.status <=0) {
-				alert(json.message);
-				return false;
+		
+		$('#subject').focus().keydown(function(e) {
+			var keycode = e.keyCode ? e.keyCode : e.which;
+			if(keycode == 9) {
+				editor.focus(true);
 			}
-			
-			json = json.message;
-			if(json.subject) {
-				$('#subject').alert(json.subject, {width: 250, delay: 3000}).focus();
-				return false;
-			}
-			if(json.message) {
-				$('#message').parent().alert(json.message, {width: 250, delay: 3000});
-				//$('#message')[0].editor._focus();
-				return false;
-			}
-			var thread = json.thread;
-	 		
-			// 清空编辑器内容
-			//$('#message')[0].editor.set('');
-	 		
-	 		dialog.set_body('<div class="ok">发表成功，页面将自动跳转到列表页！</div>');
-	 		setTimeout(function() {
-	 			window.location= '?cms-index-channelid-$channelid-cateid-$cateid.htm';
-	 			dialog.close();
-	 		}, 500);
-		  });
-		  return false;
-	});
-	$('#create_article_cancel').click(function() {
-		dialog.close();
+		});
+		$('#create_article_submit').click(function() {
+			$('div.alert').remove();
+			$('#create_article_submit').disable();
+			var postdata = $("#create_article_form").serialize();
+			$.post($('#create_article_form').attr('action'), postdata,  function(s){
+				$('#create_article_submit').enable();
+				var json = json_decode(s);
+				if(error = json_error(json)) {alert(error); return false;}
+				if(json.status <=0) {
+					alert(json.message);
+					return false;
+				}
+				
+				json = json.message;
+				if(json.subject) {
+					$('#subject').alert(json.subject, {width: 250, delay: 3000}).focus();
+					return false;
+				}
+				if(json.message) {
+					$('#message').parent().alert(json.message, {width: 250, delay: 3000});
+					editor.focus(true);
+					return false;
+				}
+				var thread = json.thread;
+		 		
+				// 清空编辑器内容
+				//$('#message')[0].editor.set('');
+		 		
+		 		dialog.set_body('<div class="ok">发表成功，页面将自动跳转到列表页！</div>');
+		 		setTimeout(function() {
+		 			window.location= '?cms-index-channelid-$channelid-cateid-$cateid.htm';
+		 			dialog.close();
+		 		}, 500);
+			  });
+			  return false;
+		});
+		$('#create_article_cancel').click(function() {
+			dialog.close();
+		});
+		
 	});
 };
 </script>

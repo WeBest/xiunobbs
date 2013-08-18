@@ -80,10 +80,10 @@ class cms_control extends common_control {
 		$this->view->display('cms_channel.htm');
 	}
 	
-	public function on_article() {
+	/*public function on_article() {
 		$articleid = intval(core::gpc('articleid'));
 		$this->view->display('cms_article.htm');
-	}
+	}*/
 	
 }
 ?>
