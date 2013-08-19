@@ -85,7 +85,7 @@ function delay_execute(dialog, recall) {
 	
 	// 快捷提交
 	jmessage.keyup(function(e) {
-		if(e.ctrlKey && e.which == 13 || e.which == 10) {
+		if((e.ctrlKey && (e.which == 13 || e.which == 10)) || (e.altKey && e.which == 83)) {
 			jsubmit.trigger('click');
 			return false;
 		}
