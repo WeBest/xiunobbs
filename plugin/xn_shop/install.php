@@ -11,7 +11,7 @@ $db->table_create('shop_cate', array(
 	array('goods', 'int(11)'), 
 	array('rank', 'int(11)'), 
 ));
-$db->index_create('shop_cate', array('cateid'=>1, 'rank'=>1));
+$db->index_create('shop_cate', array('cateid'=>1));
 
 $db->table_drop('shop_good');
 $db->table_create('shop_good', array(
@@ -21,8 +21,11 @@ $db->table_create('shop_good', array(
 	array('dateline', 'int(11)'), 
 	array('orders', 'int(11)'), 
 	array('replies', 'int(11)'), 
+	array('views', 'int(11)'), 
+	array('rank', 'int(11)'), 
 ));
-$db->index_create('shop_goods', array('goodsid'=>1));
+$db->index_create('shop_good', array('goodid'=>1));
+$db->index_create('shop_good', array('cateid'=>1, 'rank'=>1));
 
 $db->table_drop('shop_order');
 $db->table_create('shop_order', array(

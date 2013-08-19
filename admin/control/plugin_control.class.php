@@ -292,7 +292,7 @@ class plugin_control extends admin_control {
 			$url = $this->official_plugin_site."plugin-installstat-dir-$dir-siteid-$siteid-ajax-1.htm?app_url=$app_url";
 			$script = "<script src=\"$url\"></script>";
 			
-			$this->message('安装成功。'.$script, 1, $referer);
+			$this->message('安装成功。<script>top.frame_menu.location.reload();</script>'.$script, 1, $referer);
 		}
 	}
 	
@@ -338,7 +338,7 @@ class plugin_control extends admin_control {
 			misc::rmdir($this->conf['plugin_path'].$dir);
 			xn_zip::unzip($pluginzip, $this->conf['plugin_path'].$dir.'/');
 			$this->clear_tmp();
-			$this->message('升级完毕。', 1, $referer);
+			$this->message('升级完毕。<script>top.frame_menu.location.reload();</script>', 1, $referer);
 		}
 	}
 	
@@ -411,9 +411,9 @@ class plugin_control extends admin_control {
 			misc::rmdir($this->conf['plugin_path'].$dir);
 			$this->clear_tmp();
 			if($isview) {
-				$this->message("删除该风格 $dir 成功，已经还原为系统默认风格。", 1, $referer);
+				$this->message("删除该风格 $dir 成功，已经还原为系统默认风格。<script>top.frame_menu.location.reload();</script>", 1, $referer);
 			} else {
-				$this->message("删除插件 $dir 成功。", 1, $referer);
+				$this->message("删除插件 $dir 成功。<script>top.frame_menu.location.reload();</script>", 1, $referer);
 			}
 		}
 	}
@@ -468,7 +468,7 @@ class plugin_control extends admin_control {
 			$this->message("请<a href=\"$url\" target=\"\"><b>【下载压缩包】</b></a>，解压后，将文件上传到 tmp 目录，完成启用，<a href=\"$referer\">下一步</a>，。");
 		} else {
 			$this->clear_tmp();
-			$this->message('启用成功。', 1, $referer);
+			$this->message('启用成功。<script>top.top.frame_menu.location.reload();</script>', 1, $referer);
 		}
 	}
 	
@@ -504,9 +504,9 @@ class plugin_control extends admin_control {
 		} else {
 			$this->clear_tmp();
 			if($isview) {
-				$this->message('禁用该风格成功，已经还原为系统默认风格。', 1, $referer);
+				$this->message('禁用该风格成功，已经还原为系统默认风格。<script>top.frame_menu.location.reload();</script>', 1, $referer);
 			} else {
-				$this->message('禁用插件成功。', 1, $referer);
+				$this->message('禁用插件成功。<script>top.frame_menu.location.reload();</script>', 1, $referer);
 			}
 		}
 	}
