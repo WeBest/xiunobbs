@@ -16,12 +16,15 @@
 				<a href="?index-menu-type-user.htm" target="frame_menu" class="a_user">用户</a>				<span class="sep"></span>
 	<!--{if !IN_SAE}-->	<a href="?index-menu-type-log.htm" target="frame_menu" class="a_log">日志</a>				<span class="sep"></span>	<!--{/if}-->
 				<a href="?index-menu-type-other.htm" target="frame_menu" class="a_other">其他</a>			<span class="sep"></span>
-				<a href="?index-menu-type-plugin.htm" target="frame_menu" class="a_plugin">插件</a>			<span class="sep"></span>
 				<!--{/if}-->
-				
 				<!--{if $_group[groupid] > 0 && $_group[groupid] < 6}-->
 				<a href="?index-menu-type-mod.htm" target="frame_menu" class="a_mod">版主管理</a>			<span class="sep"></span>
 				<!--{/if}-->
+				<!--{if $_group[groupid] == 1}-->
+				<a href="?index-menu-type-plugin.htm" target="frame_menu" class="a_plugin">插件</a>			<span class="sep"></span>
+				<!--{/if}-->
+				
+				
 				
 				<!--{hook admin_index_top_after_plugin}-->
 			</td>

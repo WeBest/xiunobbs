@@ -156,7 +156,8 @@ class cms_control extends admin_control {
 	// 删除无关联的垃圾附件！
 	private function process_attach($articleid) {
 		$article = $this->cms_article->read($articleid);
-		$path = $this->conf['upload_path'].'attach_cms'.'/'.date('Ymd', $article['dateline']).'/';
+		$diradd = image::get_dir($articleid);
+		$path = $this->conf['upload_path'].'attach_cms'.'/'.$diradd.'/';
 		if(!is_dir($path)) return;
 		$files = misc::scandir($path);
 		foreach($files as $file) {
@@ -264,6 +265,19 @@ class cms_control extends admin_control {
 			if($cate) {
 				$cate['articles']--;
 				$this->cms_cate->update($cate);
+			}
+		}
+		
+		// 删除附件
+		// 删除商品附件
+		$diradd = image::get_dir($articleid);
+		$attachpath = $this->conf['upload_path'].'attach_cms/'.$diradd;
+		
+		// 遍历该目录下的 shopid_xxx.jpg，最多一千张
+		$files = misc::scandir($attachpath);
+		foreach($files as $file) {
+			if(preg_match("#^{$articleid}_#", $file)) {
+				is_file($attachpath.$file) && unlink($attachpath.$file);
 			}
 		}
 		
@@ -455,9 +469,9 @@ class cms_control extends admin_control {
 		$article = $this->cms_article->read($articleid);
 		$dateline = empty($article) ? $_SERVER['time'] : $article['dateline'];
 		
-		$date = date('Ymd', $dateline);
+		$diradd = image::get_dir($articleid);
 		!is_dir($uploadpath) && mkdir($uploadpath, 0777);
-		!is_dir($uploadpath.$date) && mkdir($uploadpath.$date, 0777);
+		!is_dir($uploadpath.$diradd) && mkdir($uploadpath.$diradd, 0777);
 		
 		// 对付一些变态的 iis 环境， is_file() 无法检测无权限的目录。
 		$tmpfile = FRAMEWORK_TMP_TMP_PATH.md5(rand(0, 1000000000).$_SERVER['time'].$_SERVER['ip']).'.tmp';
@@ -481,7 +495,7 @@ class cms_control extends admin_control {
 		
 		// 按照天存储
 		if($imginfo[2] == 1) {
-			$fileurl = $date.'/'.$atticleid.'_'.rand(1, 99999999).'.gif';
+			$fileurl = $diradd.'/'.$atticleid.'_'.rand(1, 99999999).'.gif';
 			$thumbfile = $uploadpath.$fileurl;
 			copy($file['tmp_name'], $thumbfile);
 			$r['filesize'] = filesize($file['tmp_name']);
@@ -490,7 +504,7 @@ class cms_control extends admin_control {
 			$r['fileurl'] = $fileurl;
 		} else {
 			$destext = image::ext($file['name']);
-			$fileurl = $date.'/'.$atticleid.'_'.rand(1, 99999999).'.'.$destext;
+			$fileurl = $diradd.'/'.$atticleid.'_'.rand(1, 99999999).'.'.$destext;
 			$thumbfile = $uploadpath.$fileurl;
 			image::thumb($file['tmp_name'], $thumbfile, 1920, 16000);
 			$imginfo = getimagesize($thumbfile);
@@ -554,15 +568,15 @@ class cms_control extends admin_control {
 				continue;
 			}
 			
-			$date = date('Ymd', $dateline);
+			$diradd = image::get_dir($articleid);
 			!is_dir($uploadpath) && mkdir($uploadpath, 0777);
-			!is_dir($uploadpath.$date) && mkdir($uploadpath.$date, 0777);
+			!is_dir($uploadpath.$diradd) && mkdir($uploadpath.$diradd, 0777);
 			if($ext == 'gif') {
-				$filepath = $date.'/'.$articleid.'_'.rand(0, 1000000000).$_SERVER['time'].'.gif';
+				$filepath = $diradd.'/'.$articleid.'_'.rand(0, 1000000000).$_SERVER['time'].'.gif';
 				$destfile = $uploadpath.$filepath;
 				copy($tmpfile, $destfile);
 			} else {
-				$filepath = $date.'/'.$articleid.'_'.rand(0, 1000000000).$_SERVER['time'].'.'.$ext;
+				$filepath = $diradd.'/'.$articleid.'_'.rand(0, 1000000000).$_SERVER['time'].'.'.$ext;
 				$destfile = $uploadpath.$filepath;
 				image::thumb($tmpfile, $destfile, 1920, 240000);	// 1210 800
 			}

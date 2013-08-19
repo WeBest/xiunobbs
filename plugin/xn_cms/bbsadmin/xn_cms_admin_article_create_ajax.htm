@@ -37,7 +37,7 @@ function delay_execute(dialog, recall) {
 		window.UEDITOR_CONFIG.fileUrl = "?cms-uploadfile-articleid-$articleid-ajax-1.htm";
 		window.UEDITOR_CONFIG.catcherUrl = "?cms-getremoteimage-articleid-$articleid-ajax-1.htm";
 		window.UEDITOR_CONFIG.catcherPath = "";
-		window.UEDITOR_CONFIG.snapscreenServerUrl = "?cms-uploadimage-articleid-0-$conf[cookie_pre]sid-$_sid-$conf[cookie_pre]auth-$_auth-$conf[cookie_pre]admin_auth-$_admin_auth-ajax-1.htm";
+		window.UEDITOR_CONFIG.snapscreenServerUrl = "?cms-uploadimage-articleid-$articleid-$conf[cookie_pre]sid-$_sid-$conf[cookie_pre]auth-$_auth-$conf[cookie_pre]admin_auth-$_admin_auth-ajax-1.htm";
 		var i = $.inArray("attachment", window.UEDITOR_CONFIG.toolbars[0]);
 		delete(window.UEDITOR_CONFIG.toolbars[0][i]);
 		
