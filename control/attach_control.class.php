@@ -254,7 +254,7 @@ class attach_control extends common_control {
 				$fileurl = image::set_dir($aid, $uploadpath).'/'.$md5name.'.gif';
 				$thumbfile = $uploadpath.$fileurl;
 				copy($file['tmp_name'], $thumbfile);
-				$r['filesize'] = filesize($file['tmp_name']);
+				$r['filesize'] = $file['size'];
 				$r['width'] = $imginfo[0];
 				$r['height'] = $imginfo[1];
 				$r['fileurl'] = $fileurl;
@@ -357,7 +357,7 @@ class attach_control extends common_control {
 			$arr['fid'] = $fid;
 			$arr['aid'] = $aid;
 			$arr['filename'] = $pathadd.'/'.$filename;
-			$arr['filesize'] = filesize($file['tmp_name']);
+			$arr['filesize'] = $file['size'];
 			$this->attach->update($arr);
 			
 			if(copy($file['tmp_name'], $destfile)) {
@@ -415,7 +415,7 @@ class attach_control extends common_control {
 				$this->message('移动临时文件错误，请检查临时目录的可写权限。', 0);
 			} else {
 				$file = $_FILES['Filedata'];
-				$attach['filesize'] = filesize($file['tmp_name']);
+				$attach['filesize'] = $file['size'];
 				$this->attach->update($attach);
 				
 				// hook attach_updatefile_after.php
