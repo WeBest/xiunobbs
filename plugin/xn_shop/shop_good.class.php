@@ -13,11 +13,14 @@ class shop_good extends base_model {
 		$this->maxcol = 'goodid';
 	}
 	
-	public function get_list_by_cateid($cateid, $page = 1) {
-		$pagesize = 20;
+	public function get_list_by_cateid($cateid, $page = 1, $pagesize = 20) {
 		$start = ($page - 1) * $pagesize;
 		$shoplist = $this->index_fetch(array('cateid'=>$cateid), array(), $start, $pagesize);
-		misc::arrlist_change_key($shoplist, 'rank');
+		misc::arrlist_multisort($shoplist, 'rank');
+		misc::arrlist_change_key($shoplist, 'shopid');
+		foreach($shoplist as &$shop) {
+			$this->format($shop);
+		}
 		return $shoplist;
 	}
 	
@@ -74,7 +77,7 @@ class shop_good extends base_model {
 	}
 	
 	public function format(&$shop) {
-		
+		$shop['dateline_fmt'] = misc::humandate($shop['dateline']);
 	}
 }
 ?>

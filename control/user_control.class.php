@@ -161,7 +161,7 @@ class user_control extends common_control {
 			$error['password2'] = $this->user->check_password2($password, $password2);
 			
 			$groupid = $this->conf['reg_email_on'] ? 6 : 11;
-			$salt = rand(100000, 999999);
+			$salt = substr(md5(rand(10000000, 99999999).$_SERVER['time']), 0, 8);
 			$user = array(
 				'username'=>$username,
 				'email'=>$email,

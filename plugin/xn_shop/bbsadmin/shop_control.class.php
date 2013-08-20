@@ -32,9 +32,21 @@ class shop_control extends admin_control {
 		$do = core::gpc('do');
 		empty($do) && $do = 'list';
 		if($do == 'list') {
+			
 			$cateid = intval(core::gpc('cateid'));
 			$catearr = $this->shop_cate->get_arr();
+			empty($cateid) && $catearr && ($first = current($catearr)) && ($cateid = $first['cateid']);
+			$cate = $this->shop_cate->read($cateid);
+			$goods = empty($cate) ? 0 : $cate['goods'];
 			$cateselect = form::get_select('cateid', $catearr, $cateid);
+			
+			$pagesize = 20;
+			$page = misc::page();
+			$pages = misc::pages("?shop-good-do-list-cateid-$cateid.htm", $goods, $page, $pagesize);
+			$goodlist = $this->shop_good->get_list_by_cateid($cateid, $page);
+			
+			$this->view->assign('cateid', $cateid);
+			$this->view->assign('goodlist', $goodlist);
 			$this->view->assign('cateselect', $cateselect);
 			$this->view->display('xn_shop_good_list.htm');
 		} elseif($do == 'create') {
@@ -42,8 +54,14 @@ class shop_control extends admin_control {
 			if(!$this->form_submit()) {
 				$goodid = $this->shop_good->maxid() + 1;
 				$this->view->assign('goodid', $goodid);
+				
+				$catearr = $this->shop_cate->get_arr();
+				$cateselect = form::get_select('cateid', $catearr, $cateid);
+				
+				$this->view->assign('cateselect', $cateselect);
 				$this->view->display('xn_shop_good_create.htm');
 			} else {
+				$cateid = intval(core::gpc('cateid', 'P'));
 				$subject = core::gpc('subject', 'P');
 				$message = core::gpc('message', 'P');
 				$arr = array(
@@ -53,8 +71,38 @@ class shop_control extends admin_control {
 					'dateline'=>$_SERVER['time'],
 				);
 				$this->shop_good->xcreate($arr);
+				$this->message('添加商品成功。');
 			}
+		} elseif($do == 'update') {
+			$goodid = intval(core::gpc('goodid', 'P'));
+			if(!$this->form_submit()) {
+				$good = $this->shop_good->read($goodid);
+				
+				$catearr = $this->shop_cate->get_arr();
+				$cateselect = form::get_select('cateid', $catearr, $good['cateid']);
+				
+				$this->view->assign('good', $good);
+				$this->view->assign('cateselect', $cateselect);
+				$this->view->assign('cateselect', $cateselect);
 			
+				$this->view->display('xn_shop_good_create.htm');
+			} else {
+				$cateid = intval(core::gpc('cateid', 'P'));
+				$subject = core::gpc('subject', 'P');
+				$message = core::gpc('message', 'P');
+				$arr = array(
+					'goodid'=>$goodid,
+					'subject'=>$subject,
+					'message'=>$message,
+					'dateline'=>$_SERVER['time'],
+				);
+				$this->shop_good->xcreate($arr);
+				$this->message('添加商品成功。');
+			}
+		} elseif($do == 'delete') {
+			$goodid = intval(core::gpc('goodid', 'P'));
+			$this->shop_good->xdelete($goodid);
+			$this->message('删除成功！');
 		}
 	}
 	
