@@ -7,7 +7,7 @@ $db = $this->user->db;	// 与 user model 同一台 db
 $db->table_drop('shop_cate');
 $db->table_create('shop_cate', array(
 	array('cateid', 'int(11)'), 
-	array('name', 'int(11)'), 
+	array('name', 'char(32)'), 
 	array('goods', 'int(11)'), 
 	array('rank', 'int(11)'), 
 ));
@@ -16,7 +16,9 @@ $db->index_create('shop_cate', array('cateid'=>1));
 $db->table_drop('shop_good');
 $db->table_create('shop_good', array(
 	array('goodid', 'int(11)'), 
-	array('name', 'int(11)'), 
+	array('cateid', 'int(11)'), 
+	array('name', 'char(64)'), 
+	array('cover', 'char(64)'), 
 	array('price', 'int(11)'), 
 	array('dateline', 'int(11)'), 
 	array('orders', 'int(11)'), 
