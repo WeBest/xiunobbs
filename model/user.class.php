@@ -230,7 +230,7 @@ class user extends base_model{
 		
 		$user['groupname'] = $this->conf['grouparr'][$user['groupid']];
 		
-		// hook usre_model_format_end.php
+		// hook user_model_format_end.php
 	}
 	
 	// followstatus: 0: 加关注, 1: 取消关注, 2: 互相关注, 3:取消相互关注

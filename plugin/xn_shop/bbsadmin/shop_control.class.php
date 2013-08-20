@@ -37,6 +37,24 @@ class shop_control extends admin_control {
 			$cateselect = form::get_select('cateid', $catearr, $cateid);
 			$this->view->assign('cateselect', $cateselect);
 			$this->view->display('xn_shop_good_list.htm');
+		} elseif($do == 'create') {
+			$goodid = intval(core::gpc('goodid', 'P'));
+			if(!$this->form_submit()) {
+				$goodid = $this->shop_good->maxid() + 1;
+				$this->view->assign('goodid', $goodid);
+				$this->view->display('xn_shop_good_create.htm');
+			} else {
+				$subject = core::gpc('subject', 'P');
+				$message = core::gpc('message', 'P');
+				$arr = array(
+					'goodid'=>$goodid,
+					'subject'=>$subject,
+					'message'=>$message,
+					'dateline'=>$_SERVER['time'],
+				);
+				$this->shop_good->xcreate($arr);
+			}
+			
 		}
 	}
 	
@@ -91,7 +109,7 @@ class shop_control extends admin_control {
 	}
 	
 	// 创建分类
-	public function on_createcate() {
+	public function on_order() {
 		
 	}
 }

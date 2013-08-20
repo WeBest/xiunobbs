@@ -23,6 +23,9 @@ class shop_good extends base_model {
 	
 	public function xcreate($arr) {
 		$goodid = $this->create($arr);
+		if(!empty($arr['goodid'])) {
+			$this->shop_good->maxid('+1');
+		}
 		$cate = $this->shop_cate->read($arr['cateid']);
 		$cate['goods']++;
 		$this->shop_cate->update($cate);
