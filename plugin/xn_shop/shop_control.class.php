@@ -23,9 +23,11 @@ class shop_control extends common_control {
 	public function on_good() {
 		$goodid = intval(core::gpc('goodid'));
 		$good = $this->shop_good->read($goodid);
+		$this->shop_good->format($good);
 		empty($good) && $this->message('商品不存在。');
 		$imglist = $this->shop_image->get_loop_list($goodid);
 		$this->view->assign('imglist', $imglist);
+		$this->view->assign('good', $good);
 		$this->view->display('shop_good_read.htm');
 	}
 }

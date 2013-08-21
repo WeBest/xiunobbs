@@ -1,6 +1,7 @@
 <!--{include header.htm}-->
 
 <style type="text/css">
+.yellow {color: #FF4400;}
 #banner {position:relative; width:500px; height:300px; border:1px solid #666; overflow:hidden; font-size:16px} 
 #banner_list img {border:0px;} 
 #banner_bg {position:absolute; bottom:0;background-color:#000;height:30px;filter: Alpha(Opacity=30);opacity:0.3;z-index:1000;cursor:pointer; width:912px; } 
@@ -50,11 +51,23 @@
 					</div>
 				</div>
 			</td>
-			<td valign="top" class="right">
-				属性
+			<td width="8"></td>
+			<td valign="top" class="right" style="line-height: 1.6">
+				<h2 style="margin: 0px; margin-bottom: 16px;">$good[name]</h2>
+				<p>价　　格：<span class="grey" style="font-size: 24px;">¥</span><span style="font-size: 24px; color: #FF4400; font-weight: 800;">$good[price].00</span></p>
+				<p>库　　存：$good[stocks]</p>
+				<p>查看次数：$good[views]</p>
+				<p>订购次数：$good[orders]</p>
+				<p>上架时间：$good[dateline_fmt]</p>
+				<br />
+				<input type="button" class="button bigblue" value="立即购买" id="buybutton" />
+				<input type="button" class="button biggrey" value="加入到购物车" id="addcart" />
 			</td>
 		</tr>
 	</table>
+	<div>
+		$good[message]
+	</div>
 </div>
 
 
@@ -101,6 +114,10 @@ document.onreadystatechange=function() { if(document.readyState == 'complete'){
 	loop_play_pic();
 }};
 
+
+$('#addcart').click(function() {
+
+});
 </script>
 
 $conf[footer_js]

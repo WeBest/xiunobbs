@@ -34,7 +34,7 @@ class shop_control extends admin_control {
 		if($do == 'list') {
 			$cateid = intval(core::gpc('cateid'));
 			$catearr = $this->shop_cate->get_arr();
-			empty($cateid) && $catearr && $cateid = key($catearr);
+			!isset($_GET['cateid']) && $catearr && $cateid = key($catearr);
 			
 			$cate = $this->shop_cate->read($cateid);
 			
