@@ -22,7 +22,7 @@ class shop_control extends admin_control {
 	public function on_index() {
 		// 管理商品，管理分类，管理订单
 		
-		//$this->view->display('xn_shop.htm');
+		//$this->view->display('shop.htm');
 		
 		$this->on_good();
 	}
@@ -34,9 +34,13 @@ class shop_control extends admin_control {
 		if($do == 'list') {
 			$cateid = intval(core::gpc('cateid'));
 			$catearr = $this->shop_cate->get_arr();
-			empty($cateid) && $catearr && ($first = current($catearr)) && ($cateid = $first['cateid']);
+			empty($cateid) && $catearr && $cateid = key($catearr);
+			
 			$cate = $this->shop_cate->read($cateid);
+			
 			$goods = empty($cate) ? 0 : $cate['goods'];
+			$catearr[0] = '全部';
+			ksort($catearr);
 			$cateselect = form::get_select('cateid', $catearr, $cateid);
 			
 			$pagesize = 20;
@@ -47,7 +51,7 @@ class shop_control extends admin_control {
 			$this->view->assign('cateid', $cateid);
 			$this->view->assign('goodlist', $goodlist);
 			$this->view->assign('cateselect', $cateselect);
-			$this->view->display('xn_shop_good_list.htm');
+			$this->view->display('shop_good_list.htm');
 		} elseif($do == 'create') {
 			$goodid = intval(core::gpc('goodid', 'P'));
 			if(!$this->form_submit()) {
@@ -55,20 +59,21 @@ class shop_control extends admin_control {
 				$goodid = $this->shop_good->maxid() + 1;
 				
 				$catearr = $this->shop_cate->get_arr();
-				empty($cateid) && $catearr && ($first = current($catearr)) && ($cateid = $first['cateid']);
+				empty($cateid) && $catearr && $cateid = key($catearr);
 				$cateselect = form::get_select('cateid', $catearr, $cateid);
 				
 				
 				$this->view->assign('goodid', $goodid);
 				$this->view->assign('cateselect', $cateselect);
-				$this->view->display('xn_shop_good_create.htm');
+				$this->view->display('shop_good_create.htm');
 			} else {
+				$goodid = intval(core::gpc('goodid'));
 				$cateid = intval(core::gpc('cateid', 'P'));
 				$name = core::gpc('name', 'P');
 				$message = core::gpc('message', 'P');
 				$stocks = intval(core::gpc('stocks', 'P'));
 				$price = intval(core::gpc('price', 'P'));
-				$cover = $this->get_cover($goodid);
+				$cover = $this->shop_image->get_cover($goodid);
 				$arr = array(
 					'goodid'=>$goodid,
 					'cateid'=>$cateid,
@@ -81,45 +86,68 @@ class shop_control extends admin_control {
 					'orders'=>0,
 					'replies'=>0,
 					'views'=>0,
-					'rank'=>0,
+					'rank'=>100,
 				);
 				$this->shop_good->xcreate($arr);
 				$this->message('添加商品成功。');
 			}
 		} elseif($do == 'update') {
-			$goodid = intval(core::gpc('goodid', 'P'));
+			$goodid = intval(core::gpc('goodid'));
 			if(!$this->form_submit()) {
 				$good = $this->shop_good->read($goodid);
+				$this->check_good_exists($good);
 				
 				$catearr = $this->shop_cate->get_arr();
 				$cateselect = form::get_select('cateid', $catearr, $good['cateid']);
 				
+				$imglist = $this->shop_image->get_list_by_goodid($goodid);
+				$good['message'] = htmlspecialchars($good['message']);
+				$good['img1'] = $this->shop_image->get_seq($imglist, 1);
+				$good['img2'] = $this->shop_image->get_seq($imglist, 2);
+				$good['img3'] = $this->shop_image->get_seq($imglist, 3);
+				$good['img4'] = $this->shop_image->get_seq($imglist, 4);
+				$good['img5'] = $this->shop_image->get_seq($imglist, 5);
+				
 				$this->view->assign('good', $good);
-				$this->view->assign('cateselect', $cateselect);
+				$this->view->assign('goodid', $goodid);
 				$this->view->assign('cateselect', $cateselect);
 			
-				$this->view->display('xn_shop_good_create.htm');
+				$this->view->display('shop_good_update.htm');
 			} else {
 				$cateid = intval(core::gpc('cateid', 'P'));
-				$subject = core::gpc('subject', 'P');
+				$name = core::gpc('name', 'P');
 				$message = core::gpc('message', 'P');
-				$arr = array(
-					'goodid'=>$goodid,
-					'subject'=>$subject,
-					'message'=>$message,
-					'dateline'=>$_SERVER['time'],
-				);
-				$this->shop_good->xcreate($arr);
-				$this->message('添加商品成功。');
+				$stocks = intval(core::gpc('stocks', 'P'));
+				$price = intval(core::gpc('price', 'P'));
+				$cover = $this->shop_image->get_cover($goodid);
+				$good = $this->shop_good->read($goodid);
+				$this->check_good_exists($good);
+				$good['cateid'] = $cateid;
+				$good['name'] = $name;
+				$good['message'] = $message;
+				$good['cover'] = $cover;
+				$good['price'] = $price;
+				$good['stocks'] = $stocks;
+				$this->shop_good->xupdate($good);
+				$this->message('更新商品成功。');
 			}
+		} elseif($do == 'updaterank') {
+			$goodid = intval(core::gpc('goodid'));
+			$rank = intval(core::gpc('rank'));
+			$good = $this->shop_good->read($goodid);
+			$this->check_good_exists($good);
+			$good['rank'] = $rank;
+			$this->shop_good->update($good);
+			$this->message('更新顺序成功。');
 		} elseif($do == 'delete') {
-			$goodid = intval(core::gpc('goodid', 'P'));
+			$goodid = intval(core::gpc('goodid'));
 			$this->shop_good->xdelete($goodid);
 			$this->message('删除成功！');
 		}
 	}
 	
-	private function get_cover($goodid) {
+	// 获取第一张
+	/*private function get_cover($goodid) {
 		$diradd = image::get_dir($goodid);
 		$attachpath = $this->conf['upload_path'].'attach_shop/'.$diradd;
 		$files = misc::scandir($attachpath);
@@ -129,7 +157,7 @@ class shop_control extends admin_control {
 			}
 		}
 		return '';
-	}
+	}*/
 	
 	public function on_cate() {
 		$this->_checked['shop_cate'] = 'class="checked"';
@@ -139,17 +167,14 @@ class shop_control extends admin_control {
 			$catelist = $this->shop_cate->get_list();
 			$catearr = $this->shop_cate->get_arr();
 			$cateid = intval(core::gpc('cateid'));
-			if(empty($cateid)) {
-				$first = current($catearr);
-				$first && $cateid = $first['cateid'];
-			}
+			empty($cateid) && $cateid = key($catearr);
 			
 			$newcateid = $this->shop_cate->maxid() + 1;
 			$cateselect = form::get_select('cateid', $catearr, $cateid);
 			$this->view->assign('newcateid', $newcateid);
 			$this->view->assign('catelist', $catelist);
 			$this->view->assign('cateselect', $cateselect);
-			$this->view->display('xn_shop_cate.htm');
+			$this->view->display('shop_cate.htm');
 		// 逐条
 		} elseif($do == 'update') {
 			$cateid = intval(core::gpc('cateid'));
@@ -199,8 +224,8 @@ class shop_control extends admin_control {
 		
 		$goodid = intval(core::gpc('goodid'));
 		$seq = intval(core::gpc('seq'));
-		$article = $this->shop_good->read($goodid);
-		$dateline = empty($article) ? $_SERVER['time'] : $article['dateline'];
+		$good = $this->shop_good->read($goodid);
+		$dateline = empty($good) ? $_SERVER['time'] : $good['dateline'];
 		
 		
 		!is_dir($uploadpath) && mkdir($uploadpath, 0777);
@@ -338,6 +363,24 @@ class shop_control extends admin_control {
 		}
 		echo '{"url":"' . implode("ue_separate_ue", $returnurl) . '","tip":"远程图片抓取成功！","srcUrl":"' . core::gpc( "upfile", "P") . '","state":"SUCCESS"}';
 		exit;
+	}
+	
+	private function check_good_exists($good) {
+		if(empty($good)) {
+			$this->message('商品不存在。', 0);
+		}
+	}
+	
+	private function check_cate_exists($cate) {
+		if(empty($cate)) {
+			$this->message('分类不存在。', 0);
+		}
+	}
+	
+	private function check_order_exists($order) {
+		if(empty($order)) {
+			$this->message('订单不存在。', 0);
+		}
 	}
 }
 
