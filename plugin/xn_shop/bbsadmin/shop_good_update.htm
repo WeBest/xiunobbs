@@ -1,0 +1,213 @@
+<!--{json width:"940",title:"编辑商品"}-->
+<style type="text/css">
+#update_good_form dt {width: 5%;}
+#update_good_form dd {width: 93%;}
+</style>
+<form action="?shop-good-do-update-goodid-$goodid-ajax-1.htm" method="post" id="update_good_form" target="_blank">
+	<input type="hidden" name="FORM_HASH" value="{FORM_HASH}" />
+	
+	<table width="100%">
+		<tr>
+			<td width="50"><label for="name">名称：</label></td><td width="400"><input type="text" name="name" id="name" value="$good[name]" size="32" /></td>
+			<td width="50"><label for="name">价格：</label></td><td width="400"><input type="text" name="price" id="price" value="$good[price]" size="8" /></td>
+		</tr>
+		<tr>
+			<td><label for="cateid">分类：</label></td><td>$cateselect</td>
+			<td><label for="stocks">库存：</label></td><td><input type="text" name="stocks" id="stocks" value="$good[stocks]" size="8" /></td>
+		</tr>
+		<tr>
+			<td valign="top">图片：</td>
+			<td colspan="3">
+				<table>
+					<tr>
+						<td><img src="$good[img1]" id="goodimage1" width="64" height="64" style="cursor: pointer" onclick="window.open(this.src)" title="第一张为封面图" /></td>
+						<td><img src="$good[img2]" id="goodimage2" width="64" height="64" style="cursor: pointer" onclick="window.open(this.src)" /></td>
+						<td><img src="$good[img3]" id="goodimage3" width="64" height="64" style="cursor: pointer" onclick="window.open(this.src)" /></td>
+						<td><img src="$good[img4]" id="goodimage4" width="64" height="64" style="cursor: pointer" onclick="window.open(this.src)" /></td>
+						<td><img src="$good[img5]" id="goodimage5" width="64" height="64" style="cursor: pointer" onclick="window.open(this.src)" /></td>
+					</tr>
+					<tr align="center">
+						<td><div id="uploadimage1"></div></td>
+						<td><div id="uploadimage2"></div></td>
+						<td><div id="uploadimage3"></div></td>
+						<td><div id="uploadimage4"></div></td>
+						<td><div id="uploadimage5"></div></td>
+					</tr>
+				</table>
+			</td>
+		</tr>
+		<tr>
+			<td valign="top">描述：</td>
+			<td colspan="3">
+				<div><textarea name="message" id="message" style="width: 855px; height: 400px;">$good[message]</textarea></div>
+			</td>
+		</tr>
+		<tr>
+			<td colspan="4" align="center">
+				<input type="submit" class="button bigblue" id="update_good_submit" value="编辑商品" />
+				<input type="button" class="button biggrey" value="取消" id="update_good_cancel" />
+			</td>
+		</tr>
+	</table>
+</form>
+
+<script type="text/javascript">
+
+window.UEDITOR_HOME_URL = "$conf[plugin_url]baidu_editor/ueditor/";
+
+function delay_execute(dialog, recall) {
+	
+	$('#update_good_form').submit(function() {return false;});
+	
+	$.xload('../plugin/baidu_editor/ueditor/ueditor.config.js', '../plugin/baidu_editor/ueditor/ueditor.all.min.js', function() {
+		window.URL = URL = window.UEDITOR_HOME_URL;
+		window.URL = URL = '';
+		window.UEDITOR_CONFIG.imageUrl = "?shop-uploadimage-goodid-$goodid-ajax-1.htm";
+		window.UEDITOR_CONFIG.fileUrl = "?shop-uploadfile-goodid-$goodid-ajax-1.htm";
+		window.UEDITOR_CONFIG.catcherUrl = "?shop-getremoteimage-goodid-$goodid-ajax-1.htm";
+		window.UEDITOR_CONFIG.catcherPath = "";
+		window.UEDITOR_CONFIG.snapscreenServerUrl = "?shop-uploadimage-goodid-$goodid-$conf[cookie_pre]sid-$_sid-$conf[cookie_pre]auth-$_auth-$conf[cookie_pre]admin_auth-$_admin_auth-ajax-1.htm";
+		var i = $.inArray("attachment", window.UEDITOR_CONFIG.toolbars[0]);
+		delete(window.UEDITOR_CONFIG.toolbars[0][i]);
+		
+		var editor = new UE.ui.Editor();
+		editor.render("message");
+		editor.ready(function(){
+			editor.focus(true);
+				
+			// 快捷键相应
+			editor.body.onkeydown = function(e) {
+				if((e.ctrlKey && (e.which == 13 || e.which == 10)) || (e.altKey && e.which == 83)) {
+					editor.sync();
+					$('#update_good_submit').trigger('click');
+				}
+			}
+			
+		});
+		
+		$('#subject').focus().keydown(function(e) {
+			var keycode = e.keyCode ? e.keyCode : e.which;
+			if(keycode == 9) {
+				editor.focus(true);
+			}
+		});
+		$('#update_good_submit').click(function() {
+			$('div.alert').remove();
+			$('#update_good_submit').disable();
+			var postdata = $("#update_good_form").serialize();
+			$.post($('#update_good_form').attr('action'), postdata,  function(s){
+				$('#update_good_submit').enable();
+				var json = json_decode(s);
+				if(error = json_error(json)) {alert(error); return false;}
+				if(json.status <=0) {
+					alert(json.message);
+					return false;
+				}
+				
+				json = json.message;
+				if(json.name) {
+					$('#name').alert(json.subject, {width: 250, delay: 3000}).focus();
+					return false;
+				}
+				if(json.message) {
+					$('#message').parent().alert(json.message, {width: 250, delay: 3000});
+					editor.focus(true);
+					return false;
+				}
+				var thread = json.thread;
+		 		
+				// 清空编辑器内容
+				//$('#message')[0].editor.set('');
+		 		
+		 		dialog.set_body('<div class="ok">编辑成功！</div>');
+		 		setTimeout(function() {
+		 			window.location.reload();
+		 			dialog.close();
+		 		}, 500);
+			  });
+			  return false;
+		});
+		$('#update_good_cancel').click(function() {
+			dialog.close();
+		});
+		
+	});
+	
+	// flash 上传图片
+	$.xload('$bbsconf[static_url]/view/js/clipimg/swfupload.js', function() {
+		for(i=1; i<6; i++) {
+			// 来一个闭包
+			function a(i) {
+				var swf_settings = {
+					flash_url : '../view/js/clipimg/swfupload.swf',
+					upload_url: "?shop-uploadimage-goodid-$goodid-seq-"+i+"-$conf[cookie_pre]sid-$_sid-$conf[cookie_pre]auth-$_auth-$conf[cookie_pre]admin_auth-$_admin_auth-ajax-1.htm",
+					prevent_swf_caching : false,
+					preserve_relative_urls : false,
+					post_params: "",
+					//file_size_limit : '4M',
+					file_types : "*.jpg;*.gif;*.png;*.bmp",
+					file_types_description : "图片文件",
+					file_upload_limit : 100,
+					file_queue_limit : 0,
+					custom_settings : {
+						thumbnail_height: 120000,
+						thumbnail_width: 1600,
+						thumbnail_quality: 90
+					},
+					debug: false,
+					//button_image_url: '../view/js/clipimg/uploadimage.png',
+					button_width: "74",
+					button_height: "22",
+					button_placeholder_id: "uploadimage"+i,
+					button_text: '<span class="theFont">上传图片</span>',
+					button_text_style: ".theFont {font-size: 12px;}",
+					button_window_mode: SWFUpload.WINDOW_MODE.TRANSPARENT,	// chrome may be does not work!
+					
+					file_dialog_complete_handler : function(numFilesSelected, numFilesQueued) {
+						this.startUpload();
+					},
+					upload_start_handler : function(file) {
+						//$('<span class="loading"><img src="'+baseurl+'loading.gif" width="16" height="16" /></span>').insertAfter($('#SWFUpload_0'));
+						return true;
+					},
+					upload_progress_handler : function(file, bytesLoaded, bytesTotal) {
+						var w = Math.ceil((bytesLoaded / bytesTotal) * 26);
+						//$('span.imageprocess_body', _this.toolbar).width(w);
+					},
+					upload_error_handler : function(file, errorCode, message) {
+						alert('upload_error: file:'+file+', errorcode:'+errorcode+', message:'+message);
+					},
+					upload_success_handler : function(file, serverData) {
+						//$('#SWFUpload_0').next('span.loading').hide();
+						var json = json_decode(serverData);
+						if(json.url) {
+							$('#goodimage'+i).attr('src', json.url);
+						} else {
+							alert('服务端返回数据错误：'+serverData);
+						}
+						return true;
+					},
+					file_queue_error_handler : function(file, errorCode, message) {
+						if(errorCode == SWFUpload.QUEUE_ERROR.FILE_EXCEEDS_SIZE_LIMIT) {
+							alert('您选择的文件：'+file+' 尺寸太大！错误信息：'+message);
+							$('.toolbar a.imageloading', _this).hide();
+							return true;
+						} else {
+							alert('upload_queue_error: file:'+file+', errorCode:'+errorCode+', message:'+message);
+						}
+						return false;
+					},
+					queue_complete_handler : function(numFilesUploaded) {
+						//$('a.image', _this.toolbar).width(49);
+						//$('a.imageloading', _this.toolbar).hide();
+					}
+				};
+				var swfu = new SWFUpload(swf_settings);
+			};
+			a(i);
+		}
+		
+	});
+		
+};
+</script>

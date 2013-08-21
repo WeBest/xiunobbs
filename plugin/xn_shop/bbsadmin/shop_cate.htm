@@ -1,0 +1,107 @@
+<!--{include header.htm}-->
+
+<div class="width">
+
+	<div class="page tab" style="margin-bottom: 4px;">
+		<a href="?shop-good.htm" $_checked[shop_good]>商品管理</a>
+		<a href="?shop-cate.htm" $_checked[shop_cate]>分类管理</a>
+		<a href="?shop-order.htm" $_checked[shop_order]>订单管理</a>
+		<a href="?shop-setting.htm" $_checked[shop_setting]>设置</a>
+	</div>
+	<div class="list" style="width: 400px;">
+		<table class="table" id="shopcatetable">
+			<tr class="header">
+				<td colspan="4">商品分类管理</td>
+			</tr>
+			<tr>
+				<td>删除</td>
+				<td>顺序</td>
+				<td>名称</td>
+			</tr>
+			<!--{loop $catelist $cateid $cate}-->
+			<tr cateid="$cateid">
+				<td width="16" align="center"><input type="checkbox" name="delete" value="$cateid" /></td>
+				<td width="80"><input type="text" size="4" name="rank" value="$cate[rank]" /></td>
+				<td width="100"><input type="text" size="16" name="name" value="$cate[name]" /></td>
+			</tr>
+			<!--{/loop}-->
+			<tr cateid="$newcateid">
+				<td width="16" align="center"><input type="checkbox" name="delete" value="$newcateid" /></td>
+				<td width="80"><input type="text" size="4" name="rank" value="0" /></td>
+				<td width="100"><input type="text" size="16" name="name" value="" /></td>
+			</tr>
+		</table>
+	</div>
+	<div>
+		<input type="button" class="button bigblue" value="确定" id="confirm" />
+	</div>
+</div>
+
+<!--{include footer.htm}-->
+
+<script>
+// 添加脚本
+var maxcateid = $newcateid - 1;
+var newcateid = $newcateid;
+var jlast = $('#shopcatetable tr:last');
+jlast.find('input[name="name"]').live('keyup', function() {
+	if($(this).val().length > 0) {
+		newcateid++;
+		var jclone = jlast.clone();
+		jclone.attr('cateid', newcateid);
+		jclone.find('input').val('');
+		jclone.find('input[name=rank]').val('0');
+		jclone.appendTo('#shopcatetable');
+	}
+});
+
+// 确定按钮
+$('#confirm').click(function() {
+	// 判断是否已经勾选了删除，给予提示。
+	var confirmed = true;
+	if($('#shopcatetable tr').find('input[name=delete]:checked').length > 0) {
+		confirmed = window.confirm('您确定删除分类？');
+	}
+	if(confirmed) {
+		$('#shopcatetable tr').each(function() {
+			var jtr = $(this);
+			var cateid = intval(jtr.attr('cateid'));
+			if(cateid < 1) return;
+			var jdelete = $(this).find('input[name=delete]');
+			if(jdelete.attr('checked')) {
+				$.get('?shop-cate-do-delete-cateid-'+cateid+'-ajax-1.htm', function(s) {
+					var json = json_decode(s);
+					if(error = json_error(json)) {alert(error); return false;}
+					jtr.remove();
+				});
+			} else {
+				// 添加
+				if(cateid > maxcateid) {
+					var name = urlencode(jtr.find('input[name=name]').val());
+					var rank = urlencode(jtr.find('input[name=rank]').val());
+					if(name == "") return;
+					$.get('?shop-cate-do-create-cateid-'+cateid+'-name-'+name+'-rank-'+rank+'-ajax-1.htm', function(s) {
+						var json = json_decode(s);
+						if(error = json_error(json)) {alert(error); return false;}
+						//jtr.addClass('red');
+					});
+				// 更新
+				} else {
+					var name = urlencode(jtr.find('input[name=name]').val());
+					var rank = urlencode(jtr.find('input[name=rank]').val());
+					$.get('?shop-cate-do-update-cateid-'+cateid+'-name-'+name+'-rank-'+rank+'-ajax-1.htm', function(s) {
+						var json = json_decode(s);
+						if(error = json_error(json)) {alert(error); return false;}
+						//jtr.addClass('red');
+					});
+				}
+			}
+		});
+		alert('保存完毕！');
+	}
+});
+
+</script>
+
+</body>
+</html>

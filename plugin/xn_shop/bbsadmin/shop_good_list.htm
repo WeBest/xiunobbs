@@ -1,0 +1,105 @@
+<!--{include header.htm}-->
+
+<div class="width">
+
+	<div class="page tab" style="margin-bottom: 4px;">
+		<a href="?shop-good.htm" $_checked[shop_good]>商品管理</a>
+		<a href="?shop-cate.htm" $_checked[shop_cate]>分类管理</a>
+		<a href="?shop-order.htm" $_checked[shop_order]>订单管理</a>
+		<a href="?shop-setting.htm" $_checked[shop_setting]>设置</a>
+	</div>
+	<div>
+		<table width="100%">
+			<tr>
+				<td align="left">
+					$cateselect
+				</td>
+				<td align="right">
+					<input type="button" class="button smallblue" value="添加商品" id="addgood" />
+				</td>
+			</tr>
+		</table>
+	</div>
+	<div class="list">
+		<table class="table" id="goodtable">
+			<tr class="header">
+				<td colspan="7">商品管理</td>
+			</tr>
+			<tr>
+				<td width="20">删除</td>
+				<td width="40">顺序</td>
+				<td width="64">名称</td>
+				<td width="32">价格</td>
+				<td width="32">订单数</td>
+				<td width="32">查看数</td>
+				<td width="32">编辑</td>
+			</tr>
+			<!--{loop $goodlist $goodid $good}-->
+			<tr goodid="$goodid">
+				<td align="center"><input type="checkbox" name="delete" value="$goodid" /></td>
+				<td><input type="text" size="4" name="rank" value="$good[rank]" /></td>
+				<td><a href="../?shop-good-goodid-$good[goodid].htm" target="_blank">$good[name]</a></td>
+				<td align="center">$good[price]</td>
+				<td align="center">$good[orders]</td>
+				<td align="center">$good[views]</td>
+				<td align="center"><a href="?shop-good-do-update-goodid-$good[goodid].htm" class="ajaxdialog">编辑</a></td>
+			</tr>
+			<!--{/loop}-->
+		</table>
+	</div>
+	<div class="page">$pages</div>
+	<div>
+		<input type="button" class="button bigblue" value="确定" id="confirm" />
+	</div>
+</div>
+
+<!--{include footer.htm}-->
+
+<script>
+
+// 确定按钮
+$('#confirm').click(function() {
+	// 判断是否已经勾选了删除，给予提示。
+	var confirmed = true;
+	var n = $('#goodtable tr').find('input[name=delete]:checked').length;
+	if(n > 0) {
+		confirmed = window.confirm('您确定删除选定商品（'+n+'件）？');
+	}
+	if(confirmed) {
+		$('#goodtable tr').each(function() {
+			var jtr = $(this);
+			var goodid = intval(jtr.attr('goodid'));
+			if(goodid < 1) return;
+			var jdelete = $(this).find('input[name=delete]');
+			if(jdelete.attr('checked')) {
+				$.get('?shop-good-do-delete-goodid-'+goodid+'-ajax-1.htm', function(s) {
+					var json = json_decode(s);
+					if(error = json_error(json)) {alert(error); return false;}
+					jtr.remove();
+				});
+			} else {
+				var rank = urlencode(jtr.find('input[name=rank]').val());
+				$.get('?shop-good-do-updaterank-goodid-'+goodid+'-rank-'+rank+'-ajax-1.htm', function(s) {
+					var json = json_decode(s);
+					if(error = json_error(json)) {alert(error); return false;}
+					//jtr.addClass('red');
+				});
+			}
+		});
+		alert('保存完毕！');
+	}
+});
+
+$('#addgood').click(function()  {
+	 ajaxdialog_request("?shop-good-do-create-cateid-$cateid-ajax-1.htm");
+	 return false;
+});
+
+$('#cateid').change(function() {
+	var cateid = $(this).val();
+	window.location = "?shop-good-do-list-cateid-"+cateid+".htm";
+});
+</script>
+
+</body>
+</html>
