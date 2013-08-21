@@ -17,7 +17,7 @@ class shop_good extends base_model {
 		$start = ($page - 1) * $pagesize;
 		$shoplist = $this->index_fetch(array('cateid'=>$cateid), array(), $start, $pagesize);
 		misc::arrlist_multisort($shoplist, 'rank');
-		misc::arrlist_change_key($shoplist, 'shopid');
+		misc::arrlist_change_key($shoplist, 'goodid');
 		foreach($shoplist as &$shop) {
 			$this->format($shop);
 		}
@@ -36,9 +36,10 @@ class shop_good extends base_model {
 	}
 	
 	public function xdelete($goodid) {
+		$good = $this->read($goodid);
 		$n = $this->delete($goodid);
 		if($n > 0) {
-			$cate = $this->shop_cate->read($arr['cateid']);
+			$cate = $this->shop_cate->read($good['cateid']);
 			$cate['goods']--;
 			$this->shop_cate->update($cate);
 		}

@@ -20,30 +20,9 @@ class index_control extends common_control {
 	
 	// 给插件预留个位置
 	public function on_index() {
-			
+		
 		// hook index_index_before.php
-		/*
-		$attach = array (
-  'fid' => 1,
-  'aid' => '147',
-  'tid' => 68,
-  'pid' => 109,
-  'uid' => '1',
-  'filesize' => '205',
-  'width' => '0',
-  'height' => '0',
-  'filename' => '000/000/0be74ad863bf2f706294d9d410702806._htm',
-  'orgfilename' => 'you_info_td_3.htm',
-  'filetype' => 'unknown',
-  'dateline' => '1376471788',
-  'comment' => '',
-  'downloads' => '0',
-  'isimage' => '0',
-  'golds' => '0',
-);
-	$this->attach->db_cache_update("attach-fid-0-aid-$attach[aid]", $attach);
-	$a = $this->attach->read($attach['fid'], $attach['pid']);
-	print_r($a);exit;*/
+		
 		$this->on_bbs();
 	}
 	

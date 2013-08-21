@@ -18,9 +18,11 @@ $db->table_create('shop_good', array(
 	array('goodid', 'int(11)'), 
 	array('cateid', 'int(11)'), 
 	array('name', 'char(64)'), 
+	array('message', 'text'), 
 	array('cover', 'char(64)'), 
 	array('price', 'int(11)'), 
 	array('dateline', 'int(11)'), 
+	array('stocks', 'int(11)'), // 库存数量
 	array('orders', 'int(11)'), 
 	array('replies', 'int(11)'), 
 	array('views', 'int(11)'), 
@@ -29,12 +31,25 @@ $db->table_create('shop_good', array(
 $db->index_create('shop_good', array('goodid'=>1));
 $db->index_create('shop_good', array('cateid'=>1, 'rank'=>1));
 
+$db->table_drop('shop_image');
+$db->table_create('shop_image', array(
+	array('imageid', 'int(11)'), 
+	array('goodid', 'int(11)'), 
+	array('filename', 'char(64)'), // 000/001/123_24ekjlkfs.jpg
+	array('width', 'int(11)'), 
+	array('height', 'int(11)'), 
+));
+$db->index_create('shop_image', array('imageid'=>1));
+$db->index_create('shop_image', array('goodid'=>1));
+
 $db->table_drop('shop_order');
 $db->table_create('shop_order', array(
 	array('orderid', 'int(11)'), 
 	array('goodid', 'int(11)'), 
 	array('uid', 'int(11)'), 
 	array('dateline', 'int(11)'), 
+	array('amount', 'int(11)'),  // 购买数量
+	array('price', 'int(11)'),  // 应支付的金额
 	array('year', 'int(11)'), 
 	array('month', 'int(11)'), 
 	array('day', 'int(11)'), 

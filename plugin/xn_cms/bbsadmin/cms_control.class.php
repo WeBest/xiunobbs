@@ -73,7 +73,7 @@ class cms_control extends admin_control {
 					$article = $this->cms_article->read($articleid);
 				} elseif($channel['layout'] == 2) {
 					$article = array();
-					$atticleid = $this->cms_article->maxid() + 1;
+					$articleid = $this->cms_article->maxid() + 1;
 				}
 				
 				$pagesize = 20;
@@ -464,14 +464,13 @@ class cms_control extends admin_control {
 		$uploadpath = $this->conf['upload_path'].'attach_cms/';
 		$uploadurl = $this->conf['upload_url'].'attach_cms/';
 		
-		$atticleid = intval(core::gpc('articleid'));
+		$articleid = intval(core::gpc('articleid'));
 		$articleid = intval(core::gpc('articleid'));
 		$article = $this->cms_article->read($articleid);
 		$dateline = empty($article) ? $_SERVER['time'] : $article['dateline'];
 		
-		$diradd = image::get_dir($articleid);
 		!is_dir($uploadpath) && mkdir($uploadpath, 0777);
-		!is_dir($uploadpath.$diradd) && mkdir($uploadpath.$diradd, 0777);
+		$diradd = image::set_dir($articleid, $uploadpath);
 		
 		// 对付一些变态的 iis 环境， is_file() 无法检测无权限的目录。
 		$tmpfile = FRAMEWORK_TMP_TMP_PATH.md5(rand(0, 1000000000).$_SERVER['time'].$_SERVER['ip']).'.tmp';
@@ -485,17 +484,15 @@ class cms_control extends admin_control {
 		core::htmlspecialchars($file['name']);
 		$filetype = $this->attach->get_filetype($file['name']);
 		
-		!is_dir($uploadpath) && mkdir($uploadpath, 0777);
-		
 		if($filetype != 'image') {
 			$this->uploaderror('请您上传图片！');
 		}
 		// 处理文件
 		$imginfo = getimagesize($file['tmp_name']);
 		
-		// 按照天存储
+		// 按id存储
 		if($imginfo[2] == 1) {
-			$fileurl = $diradd.'/'.$atticleid.'_'.rand(1, 99999999).'.gif';
+			$fileurl = $diradd.'/'.$articleid.'_'.rand(1, 99999999).'.gif';
 			$thumbfile = $uploadpath.$fileurl;
 			copy($file['tmp_name'], $thumbfile);
 			$r['filesize'] = filesize($file['tmp_name']);
@@ -504,7 +501,7 @@ class cms_control extends admin_control {
 			$r['fileurl'] = $fileurl;
 		} else {
 			$destext = image::ext($file['name']);
-			$fileurl = $diradd.'/'.$atticleid.'_'.rand(1, 99999999).'.'.$destext;
+			$fileurl = $diradd.'/'.$articleid.'_'.rand(1, 99999999).'.'.$destext;
 			$thumbfile = $uploadpath.$fileurl;
 			image::thumb($file['tmp_name'], $thumbfile, 1920, 16000);
 			$imginfo = getimagesize($thumbfile);
@@ -534,7 +531,7 @@ class cms_control extends admin_control {
 		
 		$url = htmlspecialchars(core::gpc( 'upfile', 'P'));
 		$url = str_replace( "&amp;" , "&" , $url);
-		$url = 'http://f.hiphotos.baidu.com/album/w%3D217/sign=e5b28884aec379317d688128dcc5b784/1e30e924b899a901d14a11b41c950a7b0208f531.jpg';
+		//$url = 'http://f.hiphotos.baidu.com/album/w%3D217/sign=e5b28884aec379317d688128dcc5b784/1e30e924b899a901d14a11b41c950a7b0208f531.jpg';
 		$urllist = explode("ue_separate_ue", $url);
 		$returnurl = array();
 		foreach($urllist as $url) {
@@ -568,9 +565,8 @@ class cms_control extends admin_control {
 				continue;
 			}
 			
-			$diradd = image::get_dir($articleid);
 			!is_dir($uploadpath) && mkdir($uploadpath, 0777);
-			!is_dir($uploadpath.$diradd) && mkdir($uploadpath.$diradd, 0777);
+			$diradd = image::set_dir($articleid, $uploadpath);
 			if($ext == 'gif') {
 				$filepath = $diradd.'/'.$articleid.'_'.rand(0, 1000000000).$_SERVER['time'].'.gif';
 				$destfile = $uploadpath.$filepath;
