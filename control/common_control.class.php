@@ -427,7 +427,7 @@ class common_control extends base_control {
 	protected function check_user_access($user, $action = 'post', &$message) {
 		$uid = $user['uid'];
 		$actiontext = array('read'=>'阅读帖子', 'thread'=>'发表帖子', 'post'=>'回帖', 'attach'=>'上传附件', 'down'=>'下载附件');
-		
+
 		// hook common_control_check_user_access_actiontext_after.php
 		
 		// 跳过检测
@@ -437,9 +437,9 @@ class common_control extends base_control {
 		if(!isset($user['accesson'])) {
 			$user = $this->user->read($user['uid']);
 		}
-		
 		if($user['accesson']) {
 			$access = $this->user_access->read($uid);
+			
 			// 如果用户被删除
 			if(empty($access)) {
 				$user = $this->user->read($uid);

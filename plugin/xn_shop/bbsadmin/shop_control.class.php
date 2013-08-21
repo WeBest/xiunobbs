@@ -32,7 +32,6 @@ class shop_control extends admin_control {
 		$do = core::gpc('do');
 		empty($do) && $do = 'list';
 		if($do == 'list') {
-			
 			$cateid = intval(core::gpc('cateid'));
 			$catearr = $this->shop_cate->get_arr();
 			empty($cateid) && $catearr && ($first = current($catearr)) && ($cateid = $first['cateid']);
@@ -54,12 +53,13 @@ class shop_control extends admin_control {
 			if(!$this->form_submit()) {
 				$cateid = intval(core::gpc('cateid'));
 				$goodid = $this->shop_good->maxid() + 1;
-				$this->view->assign('goodid', $goodid);
 				
 				$catearr = $this->shop_cate->get_arr();
 				empty($cateid) && $catearr && ($first = current($catearr)) && ($cateid = $first['cateid']);
 				$cateselect = form::get_select('cateid', $catearr, $cateid);
 				
+				
+				$this->view->assign('goodid', $goodid);
 				$this->view->assign('cateselect', $cateselect);
 				$this->view->display('xn_shop_good_create.htm');
 			} else {
@@ -189,15 +189,16 @@ class shop_control extends admin_control {
 	
 	// 编辑器依赖上传图片
 	public function on_uploadimage() {
-		if(empty($_FILES['upfile'])) {
-			$this->uploaderror('没有上传文件。');
-		}
+		$file = array();
+		!empty($_FILES['upfile']) && $file = $_FILES['upfile'];
+		!empty($_FILES['Filedata']) && $file = $_FILES['Filedata'];
+		empty($file) && $this->uploaderror('没有上传文件。');
 		
 		$uploadpath = $this->conf['upload_path'].'attach_shop/';
 		$uploadurl = $this->conf['upload_url'].'attach_shop/';
 		
 		$goodid = intval(core::gpc('goodid'));
-		$goodid = intval(core::gpc('goodid'));
+		$seq = intval(core::gpc('seq'));
 		$article = $this->shop_good->read($goodid);
 		$dateline = empty($article) ? $_SERVER['time'] : $article['dateline'];
 		
@@ -207,12 +208,11 @@ class shop_control extends admin_control {
 		
 		// 对付一些变态的 iis 环境， is_file() 无法检测无权限的目录。
 		$tmpfile = FRAMEWORK_TMP_TMP_PATH.md5(rand(0, 1000000000).$_SERVER['time'].$_SERVER['ip']).'.tmp';
-		$succeed = IN_SAE ? copy($_FILES['upfile']['tmp_name'], $tmpfile) : move_uploaded_file($_FILES['upfile']['tmp_name'], $tmpfile);
+		$succeed = IN_SAE ? copy($file['tmp_name'], $tmpfile) : move_uploaded_file($file['tmp_name'], $tmpfile);
 		if(!$succeed) {
 			$this->uploaderror('移动临时文件错误，请检查临时目录的可写权限。');
 		}
 		
-		$file = $_FILES['upfile'];
 		$file['tmp_name'] = $tmpfile;
 		core::htmlspecialchars($file['name']);
 		$filetype = $this->attach->get_filetype($file['name']);
@@ -225,8 +225,9 @@ class shop_control extends admin_control {
 		// 处理文件
 		$imginfo = getimagesize($file['tmp_name']);
 		
+		$suffix = $seq ? $seq : rand(1, 99999999);
 		if($imginfo[2] == 1) {
-			$fileurl = $diradd.'/'.$goodid.'_'.rand(1, 99999999).'.gif';
+			$fileurl = $diradd.'/'.$goodid.'_'.$suffix.'.gif';
 			$thumbfile = $uploadpath.$fileurl;
 			copy($file['tmp_name'], $thumbfile);
 			$r['filesize'] = filesize($file['tmp_name']);
@@ -235,7 +236,7 @@ class shop_control extends admin_control {
 			$r['fileurl'] = $fileurl;
 		} else {
 			$destext = image::ext($file['name']);
-			$fileurl = $diradd.'/'.$goodid.'_'.rand(1, 99999999).'.'.$destext;
+			$fileurl = $diradd.'/'.$goodid.'_'.$suffix.'.'.$destext;
 			$thumbfile = $uploadpath.$fileurl;
 			image::thumb($file['tmp_name'], $thumbfile, 1920, 16000);
 			$imginfo = getimagesize($thumbfile);
@@ -245,9 +246,19 @@ class shop_control extends admin_control {
 			$r['fileurl'] = $fileurl;
 		}
 		
+		// db 里记录一下 image
+		$arr = array(
+			'goodid'=>$goodid,
+			'seq'=>$seq,
+			'fileurl'=>$fileurl,
+			'width'=>$r['width'],
+			'height'=>$r['height'],
+		);
+		$this->shop_image->create($arr);
+		
 		is_file($file['tmp_name']) && unlink($file['tmp_name']);
 		$title = htmlspecialchars(core::gpc('pictitle', 'P'));
-		echo "{'url':'" . $uploadurl.$r['fileurl'] . "','title':'" . $title . "','original':'" . $file['name'] . "','state':'SUCCESS'}";
+		echo '{"url":"' . $uploadurl.$r['fileurl'] . '","title":"' . $title . '","original":"' . $file['name'] . '","state":"SUCCESS"}';
 		exit;
 	}
 	
@@ -313,8 +324,19 @@ class shop_control extends admin_control {
 			$imginfo = getimagesize($destfile);
 			is_file($tmpfile) && unlink($tmpfile);
 			$returnurl[] = $uploadurl.$filepath;
+			
+			
+			// db 里记录一下 image
+			$arr = array(
+				'goodid'=>$goodid,
+				'seq'=>0,
+				'fileurl'=>$filepath,
+				'width'=>$imginfo[0],
+				'height'=>$imginfo[1]
+			);
+			$this->shop_image->create($arr);
 		}
-		echo "{'url':'" . implode('ue_separate_ue', $returnurl) . "','tip':'远程图片抓取成功！','srcUrl':'" . core::gpc( 'upfile', 'P') . "','state':'SUCCESS'}";
+		echo '{"url":"' . implode("ue_separate_ue", $returnurl) . '","tip":"远程图片抓取成功！","srcUrl":"' . core::gpc( "upfile", "P") . '","state":"SUCCESS"}';
 		exit;
 	}
 }

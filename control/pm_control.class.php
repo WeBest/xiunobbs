@@ -31,7 +31,7 @@ class pm_control extends common_control {
 		}
 		
 		// 用户名被修改，需要重新登录。
-		if($user['username'] != $this->_user['username']) {
+		if($user['username'] != $this->_user['username'] || $user['accesson'] != $this->_user['accesson']) {
 			$this->user->set_login_cookie($user);
 		}
 		

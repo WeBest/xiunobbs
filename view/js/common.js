@@ -512,67 +512,63 @@ $.toJSON = function(o) {
 	} 
 };
 
-// 去除重复
-var xn_loaded_js = [];
-$.xload_js = function(i) {
-	if(typeof $.xload_arguments[i] == 'string') {
-		var js = $.xload_arguments[i];
-		if($.inArray(js, xn_loaded_js) != -1) {
-			if(i < $.xload_arguments.length) {
-				$.xload_js(i+1);
-			}
-			return;
-		}
-		xn_loaded_js.push(js);
-		
-		var script = document.createElement("script");
-	       	script.src = js;
-
-		// recall next
-		if(i < $.xload_arguments.length) {
-			var recall = function() {$.xload_js(i+1);};
-			if(is_ie) {
-	       			script.onreadystatechange = function() {
-	       				if(script.readyState == 'loaded' || script.readyState == 'complete') {
-	       					recall();
-	       					script.onreadystatechange = null;
-	       				}
-	       			};
-	       			script.onerror = function() {
-	       				alert('script load error:'+js);
-	       			}
-	       		} else {
-	       			script.onload = recall;
-	       		}
-		}
-		document.getElementsByTagName('head')[0].appendChild(script);
-		
-	} else if(typeof $.xload_arguments[i] == 'function'){
-		var f = $.xload_arguments[i];
-		f();
-		if(i < $.xload_arguments.length) {
-			$.xload_js(i+1);
-		}
-	}
-};
-
 $.xload = function() {
-	// 此处未去除重复
-	// 如果第一个参数为数组的情况。
+	var args = null;
 	if(typeof arguments[0] == 'object') {
-		$.xload_arguments = arguments[0];
-		if(arguments[1]) $.xload_arguments.push(arguments[1]);
+		args = arguments[0];
+		if(arguments[1]) args.push(arguments[1]);
 	} else {
-		$.xload_arguments = arguments;
+		args = arguments;
 	}
-	$.xload_js(0);
+		
+	// 去除重复
+	var loaded = []; // 已经加载的JS
+	//args; // 参数列表
+	this.load = function(args, loaded, i) {
+		if(typeof args[i] == 'string') {
+			var js = args[i];
+			if($.inArray(js, loaded) != -1) {
+				if(i < args.length) {
+					this.load(i+1);
+				}
+				return;
+			}
+			loaded.push(js);
+			
+			var script = document.createElement("script");
+		       	script.src = js;
+	
+			// recall next
+			if(i < args.length) {
+				var _this = this;
+				if(is_ie) {
+		       			script.onreadystatechange = function() {
+		       				if(script.readyState == 'loaded' || script.readyState == 'complete') {
+		       					_this.load(args, loaded, i+1);
+		       					script.onreadystatechange = null;
+		       				}
+		       			};
+		       			script.onerror = function() {
+		       				alert('script load error:'+js);
+		       			}
+		       		} else {
+		       			script.onload = function() {
+		       				_this.load(args, loaded, i+1);
+		       			};
+		       		}
+			}
+			document.getElementsByTagName('head')[0].appendChild(script);
+			
+		} else if(typeof args[i] == 'function'){
+			var f = args[i];
+			f();
+			if(i < args.length) {
+				this.load(args, loaded, i+1);
+			}
+		}
+	};
+	this.load(args, loaded, 0);
 }
-
-/*
-$.xload('1.js', '2.js', function() {
-	alert(311);
-}, function() {alert(123)});
-*/
 
 function xiuno_load_css(filename) {
 	// 判断重复加载

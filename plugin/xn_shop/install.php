@@ -31,16 +31,19 @@ $db->table_create('shop_good', array(
 $db->index_create('shop_good', array('goodid'=>1));
 $db->index_create('shop_good', array('cateid'=>1, 'rank'=>1));
 
+
 $db->table_drop('shop_image');
 $db->table_create('shop_image', array(
 	array('imageid', 'int(11)'), 
 	array('goodid', 'int(11)'), 
-	array('filename', 'char(64)'), // 000/001/123_24ekjlkfs.jpg
+	array('seq', 'int(11)'), 	// 图片的序列，第几张图片，默认为5张，seq 为0的。
+	array('fileurl', 'char(64)'), // 000/001/123_24ekjlkfs.jpg
 	array('width', 'int(11)'), 
 	array('height', 'int(11)'), 
 ));
 $db->index_create('shop_image', array('imageid'=>1));
 $db->index_create('shop_image', array('goodid'=>1));
+
 
 $db->table_drop('shop_order');
 $db->table_create('shop_order', array(
