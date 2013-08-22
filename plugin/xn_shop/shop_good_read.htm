@@ -1,8 +1,7 @@
 <!--{include header.htm}-->
 
 <style type="text/css">
-.yellow {color: #FF4400;}
-#banner {position:relative; width:500px; height:300px; border:1px solid #666; overflow:hidden; font-size:16px} 
+#banner {position:relative; width:560px; height:280px; border:1px solid #666; overflow:hidden; font-size:16px} 
 #banner_list img {border:0px;} 
 #banner_bg {position:absolute; bottom:0;background-color:#000;height:30px;filter: Alpha(Opacity=30);opacity:0.3;z-index:1000;cursor:pointer; width:912px; } 
 #banner_info{position:absolute; bottom:4px; left:5px;height:22px;color:#fff;z-index:1001;cursor:pointer} 
@@ -23,50 +22,67 @@
 			<td class="center">
 				<a class="icon icon-home" href="./"></a>
 				<span class="sep"></span>
+				<span><a href="?shop.htm">购买</a></span>
+				<span class="sep"></span>
+				<span><a href="?shop-list-cateid-$cate[cateid].htm">$cate[name]</a></span>
+				<span class="sep"></span>
 				<span>$good[name]</span>
 			</td>
 			<td class="center2">
 				<!--{include header_user.inc.htm}-->
+				<a href="?shop-cart-ajax-1.htm" target="_blank" onclick="return false;" id="create_thread" rel="nofollow"><span class="icon icon-cart"></span> 购物车</a>
 			</td>
 			<td class="right"></td>
 		</tr>
 	</table>
 
-	<table width="100%" width="100%">
-		<tr>
-			<td width="50%" valign="top" class="left">
-				<div id="banner"> 
-					<div id="banner_bg"></div> 
-					<div id="banner_info"></div> 
-					<ul> 
-						<li>1</li> 
-						<li>2</li> 
-						<li>3</li> 
-						<li>4</li> 
-					</ul> 
-					<div id="banner_list">
-						<!--{loop $imglist $imgurl}-->
-							<a href="#" target="_blank"><img title="刀锋黑草" alt="刀锋黑草" src="$imgurl"></a> 
-						<!--{/loop}-->
-					</div>
-				</div>
-			</td>
-			<td width="8"></td>
-			<td valign="top" class="right" style="line-height: 1.6">
-				<h2 style="margin: 0px; margin-bottom: 16px;">$good[name]</h2>
-				<p>价　　格：<span class="grey" style="font-size: 24px;">¥</span><span style="font-size: 24px; color: #FF4400; font-weight: 800;">$good[price].00</span></p>
-				<p>库　　存：$good[stocks]</p>
-				<p>查看次数：$good[views]</p>
-				<p>订购次数：$good[orders]</p>
-				<p>上架时间：$good[dateline_fmt]</p>
-				<br />
-				<input type="button" class="button bigblue" value="立即购买" id="buybutton" />
-				<input type="button" class="button biggrey" value="加入到购物车" id="addcart" />
-			</td>
-		</tr>
-	</table>
-	<div>
-		$good[message]
+	<div class="div">
+		<div class="header">商品详情</div>
+		<div class="body">
+			<table width="100%" width="100%">
+				<tr>
+					<td width="50%" valign="top" class="left">
+						<div id="banner"> 
+							<div id="banner_bg"></div> 
+							<div id="banner_info"></div> 
+							<ul> 
+								<li>1</li> 
+								<li>2</li> 
+								<li>3</li> 
+								<li>4</li> 
+								<li>5</li> 
+							</ul> 
+							<div id="banner_list">
+								<!--{loop $imglist $imgurl}-->
+									<a href="#" target="_blank"><img src="$imgurl"></a> 
+								<!--{/loop}-->
+							</div>
+						</div>
+					</td>
+					<td width="8"></td>
+					<td valign="top" class="right">
+						<h2 style="margin-top: 12px; margin-bottom: 16px;">$good[name]</h2>
+						<p style="line-height: 2.0">价　　格：<span class="grey" style="font-size: 24px;">¥</span> <span style="font-size: 24px; color: #FF4400; font-weight: 800;">$good[price].00</span></p>
+						<p style="line-height: 2.0">库　　存：$good[stocks]</p>
+						<p style="line-height: 2.0">查看次数：$good[views]</p>
+						<p style="line-height: 2.0">订购次数：$good[orders]</p>
+						<p style="line-height: 2.0">上架时间：$good[dateline_fmt]</p>
+						<br />
+						<br />
+						<p>
+							<input type="button" class="button bigblue" value="立即购买"  onclick="window.location='?shop-buy-goodid-$good[goodid].htm'"  />
+							<input type="button" class="button biggrey" value="加入到购物车" id="addcart" />
+						</p>
+					</td>
+				</tr>
+			</table>
+		</div>
+	</div>
+	<div class="div">
+		<div class="header">商品描述</div>
+		<div class="body" style="font-size: 14px; line-height: 1.8">
+			$good[message]
+		</div>
 	</div>
 </div>
 

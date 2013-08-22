@@ -205,6 +205,8 @@ class common_control extends base_control {
 			}
 		}
 		
+		$this->conf['_user'] = $this->_user;
+		
 		// hook common_control_init_user_after.php
 	}
 

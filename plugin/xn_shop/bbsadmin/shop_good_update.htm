@@ -20,11 +20,11 @@
 			<td colspan="3">
 				<table>
 					<tr>
-						<td><img src="$good[img1]" id="goodimage1" width="64" height="64" style="cursor: pointer" onclick="window.open(this.src)" title="第一张为封面图" /></td>
-						<td><img src="$good[img2]" id="goodimage2" width="64" height="64" style="cursor: pointer" onclick="window.open(this.src)" /></td>
-						<td><img src="$good[img3]" id="goodimage3" width="64" height="64" style="cursor: pointer" onclick="window.open(this.src)" /></td>
-						<td><img src="$good[img4]" id="goodimage4" width="64" height="64" style="cursor: pointer" onclick="window.open(this.src)" /></td>
-						<td><img src="$good[img5]" id="goodimage5" width="64" height="64" style="cursor: pointer" onclick="window.open(this.src)" /></td>
+						<td><img src="$good[img1]?$_SERVER[time]" id="goodimage1" width="128" height="64" style="cursor: pointer" onclick="window.open(this.src)" title="第一张为封面图" /></td>
+						<td><img src="$good[img2]?$_SERVER[time]" id="goodimage2" width="128" height="64" style="cursor: pointer" onclick="window.open(this.src)" /></td>
+						<td><img src="$good[img3]?$_SERVER[time]" id="goodimage3" width="128" height="64" style="cursor: pointer" onclick="window.open(this.src)" /></td>
+						<td><img src="$good[img4]?$_SERVER[time]" id="goodimage4" width="128" height="64" style="cursor: pointer" onclick="window.open(this.src)" /></td>
+						<td><img src="$good[img5]?$_SERVER[time]" id="goodimage5" width="128" height="64" style="cursor: pointer" onclick="window.open(this.src)" /></td>
 					</tr>
 					<tr align="center">
 						<td><div id="uploadimage1"></div></td>
@@ -181,7 +181,7 @@ function delay_execute(dialog, recall) {
 						//$('#SWFUpload_0').next('span.loading').hide();
 						var json = json_decode(serverData);
 						if(json.url) {
-							$('#goodimage'+i).attr('src', json.url);
+							$('#goodimage'+i).attr('src', json.url+'?'+Math.random());
 						} else {
 							alert('服务端返回数据错误：'+serverData);
 						}

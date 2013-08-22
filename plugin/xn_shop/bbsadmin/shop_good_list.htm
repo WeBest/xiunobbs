@@ -23,11 +23,12 @@
 	<div class="list">
 		<table class="table" id="goodtable">
 			<tr class="header">
-				<td colspan="7">商品管理</td>
+				<td colspan="8">商品管理</td>
 			</tr>
 			<tr>
 				<td width="20">删除</td>
 				<td width="40">顺序</td>
+				<td width="64">图片</td>
 				<td width="64">名称</td>
 				<td width="32">价格</td>
 				<td width="32">订单数</td>
@@ -38,6 +39,7 @@
 			<tr goodid="$goodid">
 				<td align="center"><input type="checkbox" name="delete" value="$goodid" /></td>
 				<td><input type="text" size="4" name="rank" value="$good[rank]" /></td>
+				<td><img src="$good[cover]" width="200" height="100" /></td>
 				<td><a href="../?shop-good-goodid-$good[goodid].htm" target="_blank">$good[name]</a></td>
 				<td align="center">$good[price]</td>
 				<td align="center">$good[orders]</td>

@@ -39,8 +39,17 @@ class shop_order extends base_model {
 		return $n;
 	}
 	
-	public function format(&$shop) {
-		
+	// 格式化订单。
+	public function format(&$order) {
+		$order['goodarr'] = array();
+		$order['goodlist'] = array();
+		$order['goodarr'] = core::json_decode($good['json_good']);
+		foreach($order['goodarr'] as $goodid=>$amount) {
+			$arr = $this->shop_good->read($goodid);
+			$this->shop_good->format($arr);
+			$arr['amount'] = $amount;
+			$order['goodlist'][] = $arr;
+		}
 	}
 }
 ?>

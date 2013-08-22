@@ -42,21 +42,24 @@ $db->table_create('shop_image', array(
 	array('height', 'int(11)'), 
 ));
 $db->index_create('shop_image', array('imageid'=>1));
-$db->index_create('shop_image', array('goodid'=>1));
-
+$db->index_create('shop_image', array('goodid'=>1, 'seq'=>1));
 
 $db->table_drop('shop_order');
 $db->table_create('shop_order', array(
 	array('orderid', 'int(11)'), 
-	array('goodid', 'int(11)'), 
 	array('uid', 'int(11)'), 
 	array('dateline', 'int(11)'), 
-	array('amount', 'int(11)'),  // 购买数量
-	array('price', 'int(11)'),  // 应支付的金额
+	array('price', 'int(11)'),  // 应支付的金额，json_good 计算的总金额，管理员应该可以修改此值。
 	array('year', 'int(11)'), 
 	array('month', 'int(11)'), 
 	array('day', 'int(11)'), 
 	array('status', 'int(11)'),  // "0":"等待支付", "1":"已支付，等待发货", "2":"已发货，等待收货", "3":"已收货，交易完毕", "4":"无效订单"
+	
+	array('json_good', 'char(255'), // json 格式存储的数据，格式如： {123:1, 124:2},大约一个订单能存储 10-20 个商品，保险起见，限制为10个商品。10 个提示购物车以满。
+	
+	array('recv_address', 'int(11)'),  // 收货地址
+	array('recv_mobile', 'int(11)'),  // 收货人手机
+	array('recv_name', 'int(11)'),  // 收货人姓名
 	
 	array('alipay_email', 'char(60)'), 
 	array('alipay_orderid', 'char(60)'), 

@@ -254,7 +254,17 @@ class shop_control extends admin_control {
 		if($imginfo[2] == 1) {
 			$fileurl = $diradd.'/'.$goodid.'_'.$suffix.'.gif';
 			$thumbfile = $uploadpath.$fileurl;
-			copy($file['tmp_name'], $thumbfile);
+			
+			if($seq > 0) {
+				image::clip_thumb($file['tmp_name'], $thumbfile, 1600, 800);
+				$thumbfile2 = image::thumb_name($thumbfile);
+				image::clip_thumb($file['tmp_name'], $thumbfile2, 560, 280);
+				$thumbfile3 = image::thumb_name($thumbfile2);
+				image::clip_thumb($file['tmp_name'], $thumbfile3, 300, 150);
+			} else {
+				copy($file['tmp_name'], $thumbfile);
+			}
+			
 			$r['filesize'] = filesize($file['tmp_name']);
 			$r['width'] = $imginfo[0];
 			$r['height'] = $imginfo[1];
@@ -263,9 +273,17 @@ class shop_control extends admin_control {
 			$destext = image::ext($file['name']);
 			$fileurl = $diradd.'/'.$goodid.'_'.$suffix.'.'.$destext;
 			$thumbfile = $uploadpath.$fileurl;
-			image::thumb($file['tmp_name'], $thumbfile, 1920, 16000);
-			$thumbfile2 = image::thumb_name($thumbfile);
-			image::clip_thumb($file['tmp_name'], $thumbfile, 200, 200);
+			
+			if($seq > 0) {
+				image::clip_thumb($file['tmp_name'], $thumbfile, 1600, 800);
+				$thumbfile2 = image::thumb_name($thumbfile);
+				image::clip_thumb($file['tmp_name'], $thumbfile2, 560, 280);
+				$thumbfile3 = image::thumb_name($thumbfile2);
+				image::clip_thumb($file['tmp_name'], $thumbfile3, 300, 150);
+			} else {
+				image::thumb($file['tmp_name'], $thumbfile, 1920, 200000);
+			}
+			
 			$imginfo = getimagesize($thumbfile);
 			$r['filesize'] = filesize($thumbfile);
 			$r['width'] = $imginfo[0];
@@ -281,10 +299,11 @@ class shop_control extends admin_control {
 			'width'=>$r['width'],
 			'height'=>$r['height'],
 		);
-		$this->shop_image->create($arr);
+		$this->shop_image->xcreate($arr);
 		
 		is_file($file['tmp_name']) && unlink($file['tmp_name']);
 		$title = htmlspecialchars(core::gpc('pictitle', 'P'));
+		if($seq > 0) $r['fileurl'] = image::thumb_name($r['fileurl']);
 		echo '{"url":"' . $uploadurl.$r['fileurl'] . '","title":"' . $title . '","original":"' . $file['name'] . '","state":"SUCCESS"}';
 		exit;
 	}

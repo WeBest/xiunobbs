@@ -85,6 +85,7 @@ class shop_good extends base_model {
 	
 	public function format(&$shop) {
 		$shop['dateline_fmt'] = misc::humandate($shop['dateline']);
+		$shop['brief'] = utf8::cutstr_cn(htmlspecialchars(strip_tags($shop['message'])), 208);
 	}
 }
 ?>
