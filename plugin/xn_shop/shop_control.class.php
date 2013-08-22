@@ -17,7 +17,13 @@ class shop_control extends common_control {
 	
 	public function on_index() {
 		//$this->view->display('xn_shop.htm');
-		$this->on_good();
+		$this->on_list();
+	}
+	
+	// 商品列表
+	public function on_list() {
+		$catearr = $this->shop_cate->get_arr();
+		
 	}
 	
 	public function on_good() {

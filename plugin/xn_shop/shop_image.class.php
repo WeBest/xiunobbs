@@ -45,7 +45,9 @@ class shop_image extends base_model {
 	
 	public function get_cover($goodid) {
 		$imglist = $this->get_list_by_goodid($goodid);
-		return $this->get_seq($imglist, 1);
+		$file = $this->get_seq($imglist, 1);
+		$file = image::thumb_name($file);
+		return $file;
 	}
 	
 	public function delete_by_goodid($goodid) {
@@ -59,7 +61,9 @@ class shop_image extends base_model {
 	public function xdelete($imageid) {
 		$image = $this->read($imageid);
 		$file = $this->conf['upload_path'].'attach_shop/'.$image['filepath'];
+		$thumb = image::thumb_name($file);
 		is_file($file) && unlink($file);
+		is_file($thumb) && unlink($thumb);
 		return $this->delete($imageid);
 	}
 }

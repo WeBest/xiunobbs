@@ -264,6 +264,8 @@ class shop_control extends admin_control {
 			$fileurl = $diradd.'/'.$goodid.'_'.$suffix.'.'.$destext;
 			$thumbfile = $uploadpath.$fileurl;
 			image::thumb($file['tmp_name'], $thumbfile, 1920, 16000);
+			$thumbfile2 = image::thumb_name($thumbfile);
+			image::clip_thumb($file['tmp_name'], $thumbfile, 200, 200);
 			$imginfo = getimagesize($thumbfile);
 			$r['filesize'] = filesize($thumbfile);
 			$r['width'] = $imginfo[0];
