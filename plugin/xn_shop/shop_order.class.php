@@ -20,6 +20,11 @@ class shop_order extends base_model {
 		return $orderlist;
 	}
 	
+	// 获取收货人地址列表
+	public function get_recv_address_list() {
+	
+	}
+	
 	public function xcreate($arr) {
 		$orderid = $this->create($arr);
 		$good = $this->shop_good->read($arr['goodid']);

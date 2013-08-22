@@ -72,19 +72,38 @@ class shop_control extends common_control {
 		empty($good) && $this->message('商品不存在。');
 		
 		if($goodid) {
+			$good['amount'] = 1;
 			$goodlist = array($goodid=>$good);	
 		} else {
-			// 购物车
+			$goodlist = $this->shop_cart->get_list();
 		}
 		
 		$cate = $this->shop_cate->read($good['cateid']);
 		
 		$imglist = $this->shop_image->get_loop_list($goodid);
 		$this->shop_good->format($good);
+		
+		// 如果有提交数据，处理提交
+		if($this->form_submit()) {
+			print_r($_POST);exit;
+		}
+		
 		$this->view->assign('cate', $cate);
 		$this->view->assign('imglist', $imglist);
 		$this->view->assign('good', $good);
+		$this->view->assign('goodlist', $goodlist);
 		$this->view->display('shop_buy.htm');
+	}
+	
+	public function on_addcart() {
+		$goodid = intval(core::gpc('goodid'));
+		$amount = intval(core::gpc('amount'));
+		$good = $this->shop_good->read($goodid);
+		empty($good) && $this->message('商品不存在。');
+		
+		$this->shop_cart->xcreate($goodid, $amount);
+		
+		$this->message('保存成功。');
 	}
 }
 
