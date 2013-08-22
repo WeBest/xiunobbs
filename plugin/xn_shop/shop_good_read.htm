@@ -30,7 +30,7 @@
 			</td>
 			<td class="center2">
 				<!--{include header_user.inc.htm}-->
-				<a href="?shop-cart-ajax-1.htm" target="_blank" onclick="return false;" id="create_thread" rel="nofollow"><span class="icon icon-cart"></span> 购物车</a>
+				<a href="?shop-cart-ajax-1.htm" target="_blank" onclick="return false;" id="cart_icon" rel="nofollow"><span class="icon icon-cart-disable"></span> 购物车</a>
 			</td>
 			<td class="right"></td>
 		</tr>
@@ -61,16 +61,20 @@
 					</td>
 					<td width="8"></td>
 					<td valign="top" class="right">
-						<h2 style="margin-top: 12px; margin-bottom: 16px;">$good[name]</h2>
+						<h2 style="margin-top: 0px; margin-bottom: 16px;">$good[name]</h2>
 						<p style="line-height: 2.0">价　　格：<span class="grey" style="font-size: 24px;">¥</span> <span style="font-size: 24px; color: #FF4400; font-weight: 800;">$good[price].00</span></p>
 						<p style="line-height: 2.0">库　　存：$good[stocks]</p>
 						<p style="line-height: 2.0">查看次数：$good[views]</p>
 						<p style="line-height: 2.0">订购次数：$good[orders]</p>
 						<p style="line-height: 2.0">上架时间：$good[dateline_fmt]</p>
-						<br />
+						<p style="line-height: 2.0">数量：
+							<span class="icon icon-min" style="cursor: pointer"></span>
+							<input type="text" value="1" name="amout" style="width: 40px; height: 16px; font-size: 8px; text-align: center;" class="border" />
+							<span class="icon icon-plus" style="cursor: pointer"></span>
+						</p>
 						<br />
 						<p>
-							<input type="button" class="button bigblue" value="立即购买"  onclick="window.location='?shop-buy-goodid-$good[goodid].htm'"  />
+							<input type="button" class="button bigblue" value="立即购买" id="buybutton"  />
 							<input type="button" class="button biggrey" value="加入到购物车" id="addcart" />
 						</p>
 					</td>
@@ -91,6 +95,12 @@
 
 <!--{include footer.htm}-->
 
+
+<!--{if $cart_shop_number > 0}-->
+<script>
+$('span.icon-cart-disable').removeClass('icon-cart-disable').addClass('icon-cart');.alert('$cart_shop_num');
+</script>
+<!--{/if}-->
 
 	
 <script>
@@ -130,11 +140,36 @@ document.onreadystatechange=function() { if(document.readyState == 'complete'){
 	loop_play_pic();
 }};
 
-
+// 加入到购物车，提示加入成功。
 $('#addcart').click(function() {
+	var i = $cart_shop_num + 1;
+	$.alert('加入成功，请继续购物。');
+	$('span.icon-cart-disable').removeClass('icon-cart-disable').addClass('icon-cart').alert(i, {alerticon: null, width: 16});
+	$.get('?shop-addcart-goodid-'+goodid+'-amount-'+amount+'.htm', function() {
+	
+	});
+});
 
+$('#buybutton').click(function() {
+	var amount = $('input[name=amout]').val();
+	window.location='?shop-buy-goodid-$good[goodid]-amount-'+amount+'.htm';
+});
+
+$('span.icon-min').click(function() {
+	var jtr = $(this).closest('tr');
+	var jprev = $(this).next('input');
+	if(jprev.val() > 0) {
+		jprev.val((intval(jprev.val()) - 1));
+	}
+});
+
+$('span.icon-plus').click(function() {
+	var jtr = $(this).closest('tr');
+	var jprev = $(this).prev('input');
+	jprev.val((intval(jprev.val()) + 1));
 });
 </script>
+
 
 $conf[footer_js]
 

@@ -13,6 +13,8 @@ class shop_control extends common_control {
 	function __construct(&$conf) {
 		parent::__construct($conf);
 		$this->_checked['shop'] = ' class="checked"';
+		
+		$this->init_cart();
 	}
 	
 	public function on_index() {
@@ -68,11 +70,12 @@ class shop_control extends common_control {
 	public function on_buy() {
 		$goodlist = array(); // 购物车内的商品列表
 		$goodid = intval(core::gpc('goodid'));
+		$amount = intval(core::gpc('amount'));
 		$good = $this->shop_good->read($goodid);
 		empty($good) && $this->message('商品不存在。');
 		
 		if($goodid) {
-			$good['amount'] = 1;
+			$good['amount'] = $amount;
 			$goodlist = array($goodid=>$good);	
 		} else {
 			$goodlist = $this->shop_cart->get_list();
@@ -88,6 +91,7 @@ class shop_control extends common_control {
 			print_r($_POST);exit;
 		}
 		
+		$this->view->assign('goodid', $goodid);
 		$this->view->assign('cate', $cate);
 		$this->view->assign('imglist', $imglist);
 		$this->view->assign('good', $good);
@@ -104,6 +108,14 @@ class shop_control extends common_control {
 		$this->shop_cart->xcreate($goodid, $amount);
 		
 		$this->message('保存成功。');
+	}
+	
+	// cart 的状态
+	public function init_cart() {
+		$shoplist = $this->shop_cart->get_list();
+		$n = count($shoplist);
+		$this->view->assign('cart_shop_number', $n);
+		$this->view->assign('cart_shop_list', $shoplist);
 	}
 }
 
