@@ -76,27 +76,72 @@ class shop_control extends common_control {
 		
 		if($goodid) {
 			$good['amount'] = $amount;
+			$good['amountprice'] = $amount * $good['price'];
 			$goodlist = array($goodid=>$good);	
 		} else {
 			$goodlist = $this->shop_cart->get_list();
 		}
+		
+		$totalprice = 0;
+		foreach ($goodlist as $good) $totalprice += $good['amountprice'];
 		
 		$cate = $this->shop_cate->read($good['cateid']);
 		
 		$imglist = $this->shop_image->get_loop_list($goodid);
 		$this->shop_good->format($good);
 		
-		// 如果有提交数据，处理提交
-		if($this->form_submit()) {
-			print_r($_POST);exit;
-		}
-		
 		$this->view->assign('goodid', $goodid);
 		$this->view->assign('cate', $cate);
 		$this->view->assign('imglist', $imglist);
 		$this->view->assign('good', $good);
+		$this->view->assign('totalprice', $totalprice);
 		$this->view->assign('goodlist', $goodlist);
 		$this->view->display('shop_buy.htm');
+	}
+	
+	// ajax 提交订单
+	public function on_buysubmit() {
+		// 如果有提交数据，处理提交
+		if($this->form_submit()) {
+			$recv_address = core::gpc('recv_address', 'P');
+			$recv_name = core::gpc('recv_name', 'P');
+			$recv_mobile = core::gpc('recv_mobile', 'P');
+			$recv_comment = core::gpc('recv_comment', 'P');
+			$amountarr = core::gpc('amount', 'P');
+			$totalprice = 0;
+			foreach($amountarr as $goodid=>$amount) {
+				$good = $this->shop_good->read($goodid);
+				$totalprice += $good['price'] * $amount;
+			}
+			list($year, $month, $day) = explode('-', date('y-n-j', $_SERVER['time']));
+			
+			$json_amount = core::json_encode($amountarr);
+			if(utf8::strlen($json_amount) > 255) $this->message('商品个数太多。', 0);
+			
+			// 保存到订单
+			$arr = array(
+				'uid'=>$this->_user['uid'],
+				'dateline'=>$_SERVER['time'],
+				'price'=>$totalprice,
+				'year'=>$year,
+				'month'=>$month,
+				'day'=>$day,
+				'status'=>0,
+				'json_amount'=>$json_amount,
+				'recv_address'=>$recv_address,
+				'recv_mobile'=>$recv_mobile,
+				'recv_name'=>$recv_name,
+				
+				'alipay_email'=>'',
+				'alipay_orderid'=>'',
+				'alipay_fee'=>'',
+				'alipay_receive_name'=>'',
+				'alipay_receive_phone'=>'',
+				'alipay_receive_mobile'=>'',
+			);
+			$this->shop_order->xcreate($arr);
+			$this->message('提交订单成功。');
+		}
 	}
 	
 	public function on_addcart() {
