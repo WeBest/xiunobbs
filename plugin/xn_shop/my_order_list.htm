@@ -17,7 +17,6 @@
 					<td colspan="8">订单管理</td>
 				</tr>
 				<tr>
-					<td width="28">删除</td>
 					<td width="250">商品信息</td>
 					<td>收货人信息</td>
 					<td width="64">订购时间</td>
@@ -27,7 +26,6 @@
 				</tr>
 				<!--{loop $orderlist $orderid $order}-->
 				<tr orderid="$orderid">
-					<td align="center"><input type="checkbox" name="delete" value="$orderid" /></td>
 					<td valign="top">
 						<!--{loop $order[goodlist] $good}-->
 							<a href="../?shop-good-goodid-$good[goodid].htm" target="_blank">$good[name] <span class="grey">($good[amount]件)</span></a>
@@ -51,7 +49,7 @@
 		</div>
 		<div class="page">$pages</div>
 		
-		<p style="text-align: center; padding: 8px;"><input type="button" class="button bigblue" value="删除" id="confirm" /> <input type="button" value=" 返回 " class="button biggrey" onclick="window.location='?my-upload.htm'" /></p>
+		<p style="text-align: center; padding: 8px;"><input type="button" value=" 返回 " class="button biggrey" onclick="window.location='?my-upload.htm'" /></p>
 	</div>
 </div>	
 
