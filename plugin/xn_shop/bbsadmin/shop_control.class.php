@@ -239,9 +239,32 @@ class shop_control extends admin_control {
 			empty($order) && $this->message('订单不存在。');
 			
 			$this->shop_order->format($order);
+			
 			$this->view->assign('orderid', $orderid);
 			$this->view->assign('order', $order);
 			$this->view->display('shop_order_read.htm');
+		// 更新订单
+		} elseif($do == 'update') {
+			$orderid = intval(core::gpc('orderid'));
+			$order = $this->shop_order->read($orderid);
+			empty($order) && $this->message('订单不存在。');
+			
+			$recv_address = core::gpc('recv_address', 'P');
+			$recv_name = core::gpc('recv_name', 'P');
+			$recv_mobile = core::gpc('recv_mobile', 'P');
+			$recv_comment = core::gpc('recv_comment', 'P');
+			$admin_comment = core::gpc('admin_comment', 'P');
+			$status = core::gpc('status', 'P');
+			
+			$order['recv_address'] = $recv_address;
+			$order['recv_name'] = $recv_name;
+			$order['recv_mobile'] = $recv_mobile;
+			$order['recv_comment'] = $recv_comment;
+			$order['admin_comment'] = $admin_comment;
+			$order['status'] = $status;
+			$this->shop_order->update($order);
+			
+			$this->message('更新成功');
 		}
 	}
 	

@@ -19,6 +19,7 @@ class shop_order extends base_model {
 		foreach($orderlist as &$order) {
 			$this->format($order);
 		}
+		misc::arrlist_change_key($orderlist, 'orderid');
 		return $orderlist;
 	}
 	
@@ -28,6 +29,7 @@ class shop_order extends base_model {
 		foreach($orderlist as &$order) {
 			$this->format($order);
 		}
+		misc::arrlist_change_key($orderlist, 'orderid');
 		return $orderlist;
 	}
 	
@@ -50,7 +52,7 @@ class shop_order extends base_model {
 	
 	// 删除订单
 	public function xdelete($orderid) {
-		$order = $this->read($order);
+		$order = $this->read($orderid);
 		if(empty($order)) return 0;
 		$json_amount = core::json_decode($order['json_amount']);
 		foreach($json_amount as $goodid=>$amount) {
@@ -58,7 +60,7 @@ class shop_order extends base_model {
 			$good['orders']--;
 			$this->shop_good->update($good);
 		}
-		$n = $this->delete($goodid);
+		$n = $this->delete($orderid);
 		return $n;
 	}
 	
@@ -79,8 +81,9 @@ class shop_order extends base_model {
 		$order['user'] = $this->user->read($order['uid']);
 		$order['dateline_fmt'] = misc::humandate($order['dateline']);
 		
-		$status = array(0=>'待支付', 1=>'已支付，等待发货', 2=>'已发货，等待收货', 3=>'已收货，交易完毕', 4=>'无效订单');
+		$status = array(0=>'待支付', 1=>'等待发货', 2=>'等待收货', 3=>'交易完毕', 4=>'无效订单');
 		$order['status_fmt'] = $status[$order['status']];
+		$order['status_select'] = form::get_select('status', $status, $order['status'], FALSE);
 		$order['totalprice'] = $totalprice;
 	}
 }
