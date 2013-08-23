@@ -72,9 +72,15 @@ class shop_order extends base_model {
 			$arr = $this->shop_good->read($goodid);
 			$this->shop_good->format($arr);
 			$arr['amount'] = $amount;
+			$arr['amountprice'] = $amount * $arr['price'];
 			$order['goodlist'][] = $arr;
-			$totalprice += $amount * $arr['price'];
+			$totalprice += $arr['amountprice'];
 		}
+		$order['user'] = $this->user->read($order['uid']);
+		$order['dateline_fmt'] = misc::humandate($order['dateline']);
+		
+		$status = array(0=>'待支付', 1=>'已支付，等待发货', 2=>'已发货，等待收货', 3=>'已收货，交易完毕', 4=>'无效订单');
+		$order['status_fmt'] = $status[$order['status']];
 		$order['totalprice'] = $totalprice;
 	}
 }
