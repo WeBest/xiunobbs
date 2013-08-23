@@ -499,7 +499,7 @@ $('a.ajaxconfirm').die('click').live('click', ajaxdialog_confirm);
 
 // post_td 下的图片调整大小
 $(function() {
-	var td_width = $('td.post_td').width() - 16;
+	var td_width = $('td.post_td').width() - 28;
 	td_width = Math.min($('#body').width() - 170, td_width);
 	$('td.post_td img').each(function() {
 		if($(this).width() > td_width) {

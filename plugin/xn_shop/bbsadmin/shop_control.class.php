@@ -364,6 +364,32 @@ class shop_control extends admin_control {
 		exit;
 	}
 	
+	public function on_setting() {
+		$setting = $this->kv->get('shop_setting');
+		if($this->form_submit()) {
+			$enable = core::gpc('enable', 'R');
+			$meta = core::gpc('meta', 'R');
+			$appid = core::gpc('appid', 'R');
+			$appkey = core::gpc('appkey', 'R');
+			
+			if($meta) {
+				if(!preg_match('#<meta[^<>]+/>#is', $meta)) {
+					$this->message('meta标签格式不正确！');
+				}
+				$file = BBS_PATH.'plugin/xn_qq_login/header_css_before.htm';
+				if(!file_put_contents($file, $meta)) {
+					$this->message('写入文件 plugin/xn_qq_login/header_css_before.htm 失败，请检查文件是否可写<br />或者手工编辑此文件内容为：'.htmlspecialchars($meta));
+				}
+				// 删除 tmp 下的缓存文件
+				misc::rmdir($this->conf['tmp_path'], 1);
+			}
+			
+			$this->kv->set('qqlogin', array('enable'=>$enable, 'meta'=>$meta, 'appid'=>$appid, 'appkey'=>$appkey));
+			$this->kv->xset('qqlogin_enable', $enable);
+			$this->runtime->xset('qqlogin_enable', $enable);
+		}
+	}
+	
 	public function on_getremoteimage() {
 		$uploadpath = $this->conf['upload_path'].'attach_shop/';
 		$uploadurl = $this->conf['upload_url'].'attach_shop/';
