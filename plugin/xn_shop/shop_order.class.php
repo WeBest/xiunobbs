@@ -13,10 +13,21 @@ class shop_order extends base_model {
 		$this->maxcol = 'orderid';
 	}
 	
-	public function get_list($page = 1) {
-		$pagesize = 20;
+	public function get_list($page = 1, $pagesize = 20) {
 		$start = ($page - 1) * $pagesize;
 		$orderlist = $this->index_fetch(array(), array('orderid'=>-1), $start, $pagesize);
+		foreach($orderlist as &$order) {
+			$this->format($order);
+		}
+		return $orderlist;
+	}
+	
+	public function get_list_by_uid($uid, $page = 1, $pagesize = 20) {
+		$start = ($page - 1) * $pagesize;
+		$orderlist = $this->index_fetch(array('uid'=>$uid), array('orderid'=>-1), $start, $pagesize);
+		foreach($orderlist as &$order) {
+			$this->format($order);
+		}
 		return $orderlist;
 	}
 	
@@ -37,14 +48,17 @@ class shop_order extends base_model {
 		return $orderid;
 	}
 	
+	// 删除订单
 	public function xdelete($orderid) {
-		$n = $this->delete($goodid);
-		if($n > 0) {
-			$good = $this->shop_good->read($arr['goodid']);
+		$order = $this->read($order);
+		if(empty($order)) return 0;
+		$json_amount = core::json_decode($order['json_amount']);
+		foreach($json_amount as $goodid=>$amount) {
+			$good = $this->shop_good->read($goodid);
 			$good['orders']--;
 			$this->shop_good->update($good);
 		}
-		// 删除评论
+		$n = $this->delete($goodid);
 		return $n;
 	}
 	
@@ -52,13 +66,16 @@ class shop_order extends base_model {
 	public function format(&$order) {
 		$order['goodarr'] = array();
 		$order['goodlist'] = array();
-		$order['goodarr'] = core::json_decode($good['json_good']);
-		foreach($order['goodarr'] as $goodid=>$amount) {
+		$order['json_amount'] = core::json_decode($order['json_amount']);
+		$totalprice = 0;
+		foreach($order['json_amount'] as $goodid=>$amount) {
 			$arr = $this->shop_good->read($goodid);
 			$this->shop_good->format($arr);
 			$arr['amount'] = $amount;
 			$order['goodlist'][] = $arr;
+			$totalprice += $amount * $arr['price'];
 		}
+		$order['totalprice'] = $totalprice;
 	}
 }
 ?>

@@ -76,6 +76,10 @@ $('#leftmenu a').click(function() {
 	$('#leftmenu a').removeClass('checked');
 	$(this).addClass('checked');
 });
+
+// 第一个菜单为选中状态
+$('#leftmenu li:first a').addClass('checked');
+parent.main.location = $('#leftmenu li:first a').attr('href');
 </script>
 
 </body>

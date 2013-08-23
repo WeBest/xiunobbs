@@ -71,6 +71,7 @@ $db->table_create('shop_order', array(
 	array('alipay_receive_mobile', 'char(10)'), 
 ));
 $db->index_create('shop_order', array('orderid'=>1));
+$db->index_create('shop_order', array('uid'=>1, 'orderid'=>1));
 $db->index_create('shop_order', array('year'=>1, 'month'=>1, 'day'=>1));
 
 $db->table_drop('shop_reply');

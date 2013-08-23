@@ -206,11 +206,44 @@ class shop_control extends admin_control {
 		}
 	}
 	
-	// 创建分类
+	// 订单管理
 	public function on_order() {
 		
+		$this->_checked['shop_order'] = 'class="checked"';
+		$do = core::gpc('do');
+		empty($do) && $do = 'list';
+		if($do == 'list') {
+				
+			$pagesize = 20;
+			$page = misc::page();
+			$n = $this->shop_order->count();
+			$pages = misc::pages("?shop-order-do-list.htm", $n, $page, $pagesize);
+			$orderlist = $this->shop_order->get_list($page, $pagesize);
+			
+			
+			$this->view->assign('page', $page);
+			$this->view->assign('pages', $pages);
+			$this->view->assign('orderlist', $orderlist);
+			$this->view->assign('orderlist', $orderlist);
+			$this->view->display('shop_order_list.htm');
+		} elseif($do == 'delete') {
+			$orderid = intval(core::gpc('orderid'));
+			$order = $this->shop_order->read($orderid);
+			empty($order) && $this->message('订单不存在。');
+			
+			$this->shop_order->xdelete($orderid);
+			$this->message('删除成功。');
+		} elseif($do == 'read') {
+			$orderid = intval(core::gpc('orderid'));
+			$order = $this->shop_order->read($orderid);
+			empty($order) && $this->message('订单不存在。');
+			
+			$this->shop_order->format($order);
+			$this->view->assign('orderid', $orderid);
+			$this->view->assign('order', $order);
+			$this->view->display('shop_order_read.htm');
+		}
 	}
-	
 	
 	// 编辑器依赖上传图片
 	public function on_uploadimage() {
