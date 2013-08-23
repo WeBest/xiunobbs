@@ -1,0 +1,103 @@
+<!--{include header.htm}-->
+
+<div class="width">
+
+	<div class="page tab" style="margin-bottom: 4px;">
+		<a href="?shop-good.htm" $_checked[shop_good]>商品管理</a>
+		<a href="?shop-cate.htm" $_checked[shop_cate]>分类管理</a>
+		<a href="?shop-order.htm" $_checked[shop_order]>订单管理</a>
+		<a href="?shop-setting.htm" $_checked[shop_setting]>设置</a>
+	</div>
+	<!--
+	<div>
+		<table width="100%">
+			<tr>
+				<td align="left">
+					时间筛选：
+				</td>
+				<td align="right">
+					查找：
+				</td>
+			</tr>
+		</table>
+	</div>
+	-->
+	<div class="list">
+		<table class="table" id="ordertable">
+			<tr class="header">
+				<td colspan="8">订单管理</td>
+			</tr>
+			<tr>
+				<td width="28">删除</td>
+				<td width="250">商品信息</td>
+				<td>收货人信息</td>
+				<td width="64">订购时间</td>
+				<td width="64">总价</td>
+				<td width="64">订单状态</td>
+				<td width="32">详情</td>
+			</tr>
+			<!--{loop $orderlist $orderid $order}-->
+			<tr orderid="$orderid">
+				<td align="center"><input type="checkbox" name="delete" value="$orderid" /></td>
+				<td valign="top">
+					<!--{loop $order[goodlist] $good}-->
+						<a href="../?shop-good-goodid-$good[goodid].htm" target="_blank">$good[name] <span class="grey">($good[amount]件)</span></a>
+						&nbsp; <span class="grey" style="font-size: 14px;">¥</span> <span style="font-size: 14px; color: #FF4400; "><span class="price2">$good[amountprice]</span>.00</span>
+						<br />
+					<!--{/loop}-->
+				</td>
+				<td valign="top">
+					<a href="../?you-index-uid-$order[user][uid].htm" target="_blank">$order[user][username]</a> <br />
+					$order[recv_name] ($order[recv_mobile])<br />
+				</td>
+				<td align="center">$order[dateline_fmt]</td>
+				<td align="center">
+					<span class="grey" style="font-size: 14px;">¥</span> <span style="font-size: 18px; color: #FF4400; "><span class="price2">$order[totalprice]</span>.00</span>
+				</td>
+				<td align="center">$order[status_fmt]</td>
+				<td align="center"><a href="?shop-order-do-read-orderid-$order[orderid].htm">详情</a></td>
+			</tr>
+			<!--{/loop}-->
+		</table>
+	</div>
+	<div class="page">$pages</div>
+	<div>
+		<input type="button" class="button bigblue" value="删除" id="confirm" />
+	</div>
+</div>
+
+<!--{include footer.htm}-->
+
+<script>
+
+// 确定按钮
+$('#confirm').click(function() {
+	// 判断是否已经勾选了删除，给予提示。
+	var confirmed = true;
+	var n = $('#ordertable tr').find('input[name=delete]:checked').length;
+	if(n > 0) {
+		confirmed = window.confirm('您确定删除选定订单（'+n+'个）？');
+	}
+	if(confirmed) {
+		$('#ordertable tr').each(function() {
+			var jtr = $(this);
+			var orderid = intval(jtr.attr('orderid'));
+			if(orderid < 1) return;
+			var jdelete = $(this).find('input[name=delete]');
+			if(jdelete.attr('checked')) {
+				alert('?shop-order-do-delete-orderid-'+orderid+'-ajax-1.htm');
+				$.get('?shop-order-do-delete-orderid-'+orderid+'-ajax-1.htm', function(s) {
+					var json = json_decode(s);
+					if(error = json_error(json)) {alert(error); return false;}
+					jtr.remove();
+				});
+			}
+		});
+		alert('操作完毕！');
+	}
+});
+
+</script>
+
+</body>
+</html>

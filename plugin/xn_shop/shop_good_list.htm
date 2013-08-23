@@ -1,0 +1,89 @@
+<!--{include header.htm}-->
+
+<style>
+.catelist {line-height: 1.6; font-size: 14px;}
+</style>
+<div class="width">
+
+	<!--{hook shop_good_list_before.htm}-->
+	<table id="nav" cellpadding="0" cellspacing="0" style="margin-bottom: 4px;">
+		<tr>
+			<td class="left"></td>
+			<td class="center" style="white-space:nowrap; overflow: hidden;">
+				<a class="icon icon-home" href="./"></a>
+				<span class="sep"></span>
+				<span><a href="?shop.htm">购买</a></span>
+				<span class="sep"></span>
+				<span><a href="?shop-list-cateid-$cateid-page-1.htm">$cate[name]</a></span>
+			</td>
+			<td class="center2">
+				<!--{include header_user.inc.htm}-->
+				<a href="?shop-cart-ajax-1.htm" class="ajaxdialog" target="_blank" onclick="return false;" id="cart_icon" rel="nofollow"><span class="icon icon-cart-disable"></span> 购物车</a>
+			</td>
+			<td class="right"></td>
+		</tr>
+	</table>
+	
+	<table width="100%" cellpadding="0" cellspacing="0">
+		<tr>
+			<td width="200" valign="top">
+				<div class="div">
+					<div class="header">分类</div>
+					<div class="body">
+						<ul class="catelist">
+						<!--{loop $catearr $_cateid $_catename}-->
+						<li><a href="?shop-list-cateid-$_cateid.htm" $_checked[cateid_$_cateid]>$_catename</a></li>
+						<!--{/loop}-->
+						</ul>
+					</div>
+				</div>
+			</td>
+			<td width="6"></td>
+			<td valign="top">
+				<div class="div">
+					<div class="header">产品</div>
+					<div class="body">
+						<!--{loop $goodlist $goodid $good}-->
+						<table width="100%">
+							<tr goodid="$goodid">
+								<td width="200"><a href="?shop-good-goodid-$good[goodid].htm"><img src="$good[cover]" width="300" height="150" /></a></td>
+								<td width="8"></td>
+								<td valign="top">
+									<h3 style="margin: 0px;"><a href="?shop-good-goodid-$good[goodid].htm">$good[name]</a></h3>
+									<p><span class="grey" style="font-size: 14px;">¥</span> <span style="font-size: 14px; color: #FF4400; font-weight: 800;">$good[price].00</span></p>
+									<p class="grey" style="line-height: 1.8;">$good[brief]</p>
+									<p style="text-align: right;">
+										<input type="button" class="button smallblue" value="购买" onclick="window.location='?shop-good-goodid-$good[goodid].htm'" />
+									</p>
+								</td>
+							</tr>
+						</table>
+						<br />
+						<hr />
+						<br />
+						<!--{/loop}-->
+					</div>
+					<div class="footer"></div>
+				</div>
+				<div class="page">$pages</div>
+				<div>
+					<input type="button" class="button bigblue" value="确定" id="confirm" />
+				</div>
+			</td>
+		</tr>
+	</table>
+</div>
+
+<!--{include footer.htm}-->
+
+
+
+<!--{if $cart_shop_number > 0}-->
+<script>
+$('span.icon-cart-disable').removeClass('icon-cart-disable').addClass('icon-cart').alert('$cart_shop_number', {alerticon: null, width: 16});
+</script>
+<!--{/if}-->
+
+
+</body>
+</html>

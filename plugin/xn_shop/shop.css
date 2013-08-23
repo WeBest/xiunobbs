@@ -1,0 +1,8 @@
+.icon-min-disabled {background: url(shop.gif) 0px -0px;}
+.icon-min {background: url(shop.gif) 0px -16px;}
+.icon-plus-disabled {background: url(shop.gif) -16px 0px;}
+.icon-plus {background: url(shop.gif) -16px -16px;}
+.icon-cart {background: url(shop.gif) -32px 0px;}
+.icon-cart-disable {background: url(shop.gif) -32px -16px;}
+
+#cart_icon {margin-left: 16px;}

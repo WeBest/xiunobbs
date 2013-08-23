@@ -1,0 +1,149 @@
+<!--{include header.htm}-->
+
+<link href="view/my.css" type="text/css" rel="stylesheet" />
+
+<div class="width">
+
+	<!--{include my_nav.inc.htm}-->
+
+	<div class="left border shadow bg2">
+		<!--{include my_menu.inc.htm}-->
+	</div>
+	
+	<div class="right">
+		<form action="?my-order-do-update-orderid-$orderid-ajax-1.htm" method="post" id="order_form" target="_blank">
+			<input type="hidden" name="FORM_HASH" value="{FORM_HASH}" />
+				
+			<div class="div">
+				<div class="header">用户信息</div>
+				<div class="body">
+					<table width="100%">
+						<tr>
+							<td>用户名：</td>
+							<td><a href="../?you-index-uid-$order[user][uid].htm" target="_blank">$order[user][username]</a></td>
+						</tr>
+						<tr>
+							<td width="100">收货地址：</td>
+							<td><input type="text" name="recv_address" value="$order[recv_address]" size="64" tabindex="1" {if $order[status] > 0}disabled="disabled"{/if} /> * </td>
+						</tr>
+						<tr>
+							<td>收货人姓名：</td>
+							<td><input type="text" name="recv_name" value="$order[recv_name]" size="16" tabindex="2" {if $order[status] > 0}disabled="disabled"{/if} /> * </td>
+						</tr>
+						<tr>
+							<td>收货人手机：</td>
+							<td><input type="text" name="recv_mobile" value="$order[recv_mobile]" size="16" {if $order[status] > 0}disabled="disabled"{/if} tabindex="3" /> * </td>
+						</tr>
+						<tr>
+							<td>补充说明：</td>
+							<td><input type="text" name="recv_comment" value="$order[recv_comment]" size="32" {if $order[status] > 0}disabled="disabled"{/if} tabindex="4" /></td>
+						</tr>
+					</table>
+				</div>
+			</div>
+			
+			<div class="div">
+				<div class="header">订单信息</div>
+				<div class="body">
+					<div>
+						<table width="100%">
+							<tr>
+								<td width="100">图片：</td>
+								<td>名称：</td>
+								<td width="100">单价</td>
+								<td width="100">数量</td>
+								<td width="100">小计</td>
+							</tr>
+							<tr>
+								<td colspan="5"><hr /></td>
+							</tr>
+							<!--{loop $order[goodlist] $good}-->
+							<tr>
+								<td><img src="$good[cover]" width="64" height="32" /></td>
+								<td><a href="?shop-good-goodid-$good[goodid].htm" target="_blank">$good[name]</a></td>
+								<td>¥ <span class="price">$good[price]</span>.00</td>
+								<td>
+									<input type="text" disabled="disabled" value="$good[amount]" name="amount[{$good[goodid]}]" style="width: 40px; height: 16px; font-size: 12px; text-align: center;" class="border" />
+								</td>
+								<td><span class="grey" style="font-size: 14px;">¥</span> <span style="font-size: 14px; color: #FF4400; "><span class="price2">$good[amountprice]</span>.00</span></td>
+							</tr>
+							<tr>
+								<td colspan="5"><hr /></td>
+							</tr>
+							<!--{/loop}-->
+						</table>
+						<p style="text-align: right;">实际应付款：<span class="grey" style="font-size: 24px;">¥</span> <span style="font-size: 24px; color: #FF4400; font-weight: 800;"><span class="totalprice">$order[price]</span>.00</span></p>
+					</div>
+				</div>
+			</div>
+			
+			<div class="div">
+				<div class="header">支付信息</div>
+				<div class="body">
+					<table width="100%">
+						<tr>
+							<td width="100">订单状态：</td>
+							<td>$order[status_fmt] </td>
+						</tr>
+						<tr>
+							<td>支付宝账号：</td>
+							<td>$order[alipay_email]</td>
+						</tr>
+						<tr>
+							<td>支付宝金额：</td>
+							<td><span class="grey" style="font-size: 24px;">¥</span> <span style="font-size: 24px; color: #FF4400; font-weight: 800;">$order[alipay_fee].00</span></td>
+						</tr>
+						<tr>
+							<td>支付宝订单号：</td>
+							<td>$order[alipay_orderid]</td>
+						</tr>
+					</table>
+				</div>
+			</div>
+			
+			<p style="text-align: center; margin-top: 10px; margin-bottom: 10px;">
+				<!--{if $order[status] == 0}-->
+				<input type="button" class="button bigblue" value="更新订单" id="order_confirm" />
+				<input type="button" class="button bigblue" value="删除" id="order_delete" />
+				<!--{/if}-->
+				<input type="button" value=" 返回 " class="button biggrey" onclick="window.location='?my-order.htm'" />
+			</p>
+		</form>
+	</div>
+</div>	
+
+
+<!--{include footer.htm}-->
+
+<!--{if $order[status] == 0}-->
+<script>
+$('#order_confirm').click(function() {
+	var jform = $('#order_form');
+	var postdata = jform.serialize();
+	$('#order_confirm').disable();
+	
+	$.post(jform.attr('action'), postdata, function(s) {
+		$('#order_confirm').enable();
+		var json = json_decode(s);
+		if(error = json_error(json)) {alert(error); return false;}
+		if(json.status <= 0) {alert(json.message); return false;}
+		$.alert('提交更新成功。');
+	});
+});
+$('#order_delete').click(function() {
+	if(window.confirm('您确定删除当前订单吗？')) {
+		$.get('?my-order-do-delete-orderid-$orderid-ajax-1.htm', function(s) {
+			var json = json_decode(s);
+			if(error = json_error(json)) {alert(error); return false;}
+			if(json.status <= 0) {alert(json.message); return false;}
+			$.alert('删除成功。');
+			setTimeout(function() {window.location='?my-order-do-list.htm'}, 2000);
+		});
+	}
+});
+</script>
+<!--{/if}-->
+
+$conf[footer_js]
+</body>
+</html>

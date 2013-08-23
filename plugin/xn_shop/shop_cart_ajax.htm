@@ -1,0 +1,61 @@
+<!--{json width:"640",title:"购物车内的商品($cart_shop_number 件)"}-->
+<div class="list">
+	<table class="table" id="goodtable">
+		<tr>
+			<td width="64">图片</td>
+			<td width="64">名称</td>
+			<td width="32">价格</td>
+			<td width="32">数量</td>
+			<td width="32">删除</td>
+		</tr>
+		<!--{if $cart_shop_list}-->
+		<!--{loop $cart_shop_list $goodid $good}-->
+		<tr goodid="$goodid">
+			<td><img src="$good[cover]" width="100" height="50" /></td>
+			<td><a href="../?shop-good-goodid-$good[goodid].htm" target="_blank">$good[name]</a></td>
+			<td align="center"><span class="grey" style="font-size: 14px;">¥</span> <span style="font-size: 14px; color: #FF4400; "><span class="price2">$good[amountprice]</span>.00</span></td>
+			<td>$good[amount]</td>
+			<td align="center"><a href="?shop-deletecart-goodid-$good[goodid].htm" onclick="return false;" deletecart="$goodid">删除</a></td>
+		</tr>
+		<!--{/loop}-->
+		<!--{else}-->
+		<tr>
+			<td colspan="5">您还没有添加商品到购物车。</td>	
+		</tr>
+		<!--{/if}-->
+	</table>
+</div>
+<hr />
+<p style="text-align: center;">
+	<!--{if $cart_shop_number}-->
+	<input type="button" class="button bigblue" value="立即结算" id="cart_confirm" />
+	<!--{/if}-->
+	<input type="button" class="button biggrey" value="关闭" id="cart_cancel" />
+</p>
+<script type="text/javascript">
+
+function delay_execute(dialog, recall) {
+	$('#cart_confirm').click(function() {
+		window.location = '?shop-buy.htm';
+	});
+	$('#cart_cancel').click(function() {
+		dialog.close();
+	});
+	$('a[deletecart]').each(function() {
+		$(this).click(function() {
+			var goodid = $(this).attr('deletecart');
+			if(window.confirm('确定删除吗？')) {
+				$.get('?shop-deletecart-goodid-'+goodid+'-ajax-1.htm', function(s) {
+					var json = json_decode(s);
+					if(error = json_error(json)) {alert(error); return false;}
+					if(json.status <= 0) {alert(json.message);return false;}
+					var n = json.message;
+					if(n == 0)  $('#cart_confirm').remove();
+					$('tr[goodid='+goodid+']').remove();
+					$('span.icon-cart-disable, span.icon-cart').removeClass('icon-cart-disable').addClass('icon-cart').alert(n, {alerticon: null, width: 16});
+				});
+			}
+		});
+	});
+};
+</script>

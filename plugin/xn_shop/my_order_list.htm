@@ -1,0 +1,66 @@
+<!--{include header.htm}-->
+
+<link href="view/my.css" type="text/css" rel="stylesheet" />
+
+<div class="width">
+
+	<!--{include my_nav.inc.htm}-->
+
+	<div class="left border shadow bg2">
+		<!--{include my_menu.inc.htm}-->
+	</div>
+	
+	<div class="right">
+		<div class="list">
+			<table class="table" id="ordertable">
+				<tr class="header">
+					<td colspan="8">订单管理</td>
+				</tr>
+				<tr>
+					<td width="28">删除</td>
+					<td width="250">商品信息</td>
+					<td>收货人信息</td>
+					<td width="64">订购时间</td>
+					<td width="80">总价</td>
+					<td width="64">订单状态</td>
+					<td width="32">详情</td>
+				</tr>
+				<!--{loop $orderlist $orderid $order}-->
+				<tr orderid="$orderid">
+					<td align="center"><input type="checkbox" name="delete" value="$orderid" /></td>
+					<td valign="top">
+						<!--{loop $order[goodlist] $good}-->
+							<a href="../?shop-good-goodid-$good[goodid].htm" target="_blank">$good[name] <span class="grey">($good[amount]件)</span></a>
+							&nbsp; <span class="grey" style="font-size: 14px;">¥</span> <span style="font-size: 14px; color: #FF4400; "><span class="price2">$good[amountprice]</span>.00</span>
+							<br />
+						<!--{/loop}-->
+					</td>
+					<td valign="top">
+						<a href="../?you-index-uid-$order[user][uid].htm" target="_blank">$order[user][username]</a> <br />
+						$order[recv_name] ($order[recv_mobile])<br />
+					</td>
+					<td align="center">$order[dateline_fmt]</td>
+					<td align="center">
+						<span class="grey" style="font-size: 14px;">¥</span> <span style="font-size: 18px; color: #FF4400; "><span class="price2">$order[totalprice]</span>.00</span>
+					</td>
+					<td align="center">$order[status_fmt]</td>
+					<td align="center"><a href="?my-order-do-read-orderid-$order[orderid].htm">详情</a></td>
+				</tr>
+				<!--{/loop}-->
+			</table>
+		</div>
+		<div class="page">$pages</div>
+		
+		<p style="text-align: center; padding: 8px;"><input type="button" class="button bigblue" value="删除" id="confirm" /> <input type="button" value=" 返回 " class="button biggrey" onclick="window.location='?my-upload.htm'" /></p>
+	</div>
+</div>	
+
+
+<!--{include footer.htm}-->
+
+<script>
+
+</script>
+
+</body>
+</html>

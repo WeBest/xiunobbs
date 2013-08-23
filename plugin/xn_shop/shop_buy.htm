@@ -1,0 +1,166 @@
+<!--{include header.htm}-->
+
+<div class="width">
+	<table id="nav" cellpadding="0" cellspacing="0" style="margin-bottom: 4px;">
+		<tr>
+			<td class="left"></td>
+			<td class="center">
+				<a class="icon icon-home" href="./"></a>
+				<span class="sep"></span>
+				<span><a href="?shop.htm">购买</a></span>
+				<!--{if $goodid}-->
+				<span class="sep"></span>
+				<span><a href="?shop-list-cateid-$cate[cateid].htm">$cate[name]</a></span>
+				<span class="sep"></span>
+				<span><a href="?shop-good-goodid-$good[goodid].htm">$good[name]</a></span>
+				<!--{/if}-->
+				<span class="sep"></span>
+				<span>下订单</span>
+			</td>
+			<td class="center2">
+				<!--{include header_user.inc.htm}-->
+				<a href="?shop-cart-ajax-1.htm" class="ajaxdialog" target="_blank" onclick="return false;" id="cart_icon" rel="nofollow"><span class="icon icon-cart-disable"></span> 购物车</a>
+			</td>
+			<td class="right"></td>
+		</tr>
+	</table>
+
+	<form action="?shop-buysubmit-ajax-1.htm" method="post" id="buy_form" target="_blank">
+		<input type="hidden" name="FORM_HASH" value="{FORM_HASH}" />
+		<div class="div">
+			<div class="header">收货人信息</div>
+			<div class="body">
+				<table width="100%">
+					<tr>
+						<td width="100">收货地址：</td>
+						<td><input type="text" name="recv_address" value="" size="64" tabindex="1" /> * </td>
+					</tr>
+					<tr>
+						<td>收货人姓名：</td>
+						<td><input type="text" name="recv_name" value="" size="16" tabindex="2" /> * </td>
+					</tr>
+					<tr>
+						<td>收货人手机：</td>
+						<td><input type="text" name="recv_mobile" value="" size="16" tabindex="3" /> * </td>
+					</tr>
+					<tr>
+						<td>补充说明：</td>
+						<td><input type="text" name="recv_comment" value="" size="32" tabindex="4" /></td>
+					</tr>
+				</table>
+			</div>
+		</div>
+		
+		<div class="div">
+			<div class="header">确认订单信息</div>
+			<div class="body">
+				<div>
+					<table width="100%">
+						<tr>
+							<td width="100">图片：</td>
+							<td>名称：</td>
+							<td width="100">单价</td>
+							<td width="100">数量</td>
+							<td width="100">小计</td>
+						</tr>
+						<tr>
+							<td colspan="5"><hr /></td>
+						</tr>
+						<!--{loop $goodlist $good}-->
+						<tr>
+							<td><img src="$good[cover]" width="64" height="32" /></td>
+							<td><a href="?shop-good-goodid-$good[goodid].htm" target="_blank">$good[name]</a></td>
+							<td>¥ <span class="price">$good[price]</span>.00</td>
+							<td>
+								<span class="icon icon-min" style="cursor: pointer"></span>
+								<input type="text" value="$good[amount]" name="amount[{$good[goodid]}]" style="width: 40px; height: 16px; font-size: 12px; text-align: center;" class="border" />
+								<span class="icon icon-plus" style="cursor: pointer"></span>
+							</td>
+							<td><span class="grey" style="font-size: 14px;">¥</span> <span style="font-size: 14px; color: #FF4400; "><span class="price2">$good[amountprice]</span>.00</span></td>
+						</tr>
+						<tr>
+							<td colspan="5"><hr /></td>
+						</tr>
+						<!--{/loop}-->
+					</table>
+					<p style="text-align: right;">实际付款：<span class="grey" style="font-size: 24px;">¥</span> <span style="font-size: 24px; color: #FF4400; font-weight: 800;"><span class="totalprice">$totalprice</span>.00</span></p>
+					<p style="text-align: right; margin-top: 10px; margin-bottom: 10px;">
+						<input type="button" class="button bigblue" value="提交订单" id="buy_submit" />
+					</p>
+				</div>
+			</div>
+		</div>
+	</form>
+</div>
+
+<!--{include footer.htm}-->
+
+<!--{if $cart_shop_number > 0}-->
+<script>
+$('span.icon-cart-disable').removeClass('icon-cart-disable').addClass('icon-cart').alert('$cart_shop_number ', {alerticon: null, width: 16});
+</script>
+<!--{/if}-->
+
+
+
+<script>
+$('input[name=recv_address]').focus();
+$('#buy_submit').click(function() {
+	if($('input[name=recv_address]').val() == '') {
+		$('input[name=recv_address]').focus().alert('请填写收货人地址！');
+		return false;
+	}
+	if($('input[name=recv_name]').val() == '') {
+		$('input[name=recv_name]').focus().alert('请填写收货人姓名！');
+		return false;
+	}
+	if($('input[name=recv_mobile]').val() == '') {
+		$('input[name=recv_mobile]').focus().alert('请填写收货人手机！');
+		return false;
+	}
+	
+	var jform = $('#buy_form');
+	var postdata = jform.serialize();
+	$('#buy_submit').disable();
+	$.post(jform.attr('action'), postdata, function(s) {
+		$('#buy_submit').enable();
+		var json = json_decode(s);
+		if(error = json_error(json)) {alert(error); return false;}
+		if(json.status <= 0) {alert(json.message); return false;}
+		var orderid = intval(json.message);
+		if(orderid > 0) {
+			$.alert('提交订单成功，接下来进入支付流程。');
+			setTimeout(function() {window.location = '?shop-pay-orderid-'+orderid+'.htm';}, 3000);
+		}
+	});
+});
+
+$('span.icon-min').click(function() {
+	var jtr = $(this).closest('tr');
+	var jprev = $(this).next('input');
+	if(jprev.val() > 0) {
+		jprev.val((intval(jprev.val()) - 1));
+		var jprice = jtr.find('span.price');
+		var jprice2 = jtr.find('span.price2');
+		var jtotal = $('span.totalprice');
+		jprice2.html(intval(jprice2.html()) - intval(jprice.html()));
+		jtotal.html(intval(jtotal.html()) - intval(jprice.html()));
+	}
+});
+
+$('span.icon-plus').click(function() {
+	var jtr = $(this).closest('tr');
+	var jprev = $(this).prev('input');
+	jprev.val((intval(jprev.val()) + 1));
+	var jprice = jtr.find('span.price');
+	var jprice2 = jtr.find('span.price2');
+	var jtotal = $('span.totalprice');
+	jprice2.html(intval(jprice2.html()) + intval(jprice.html()));
+	jtotal.html(intval(jtotal.html()) + intval(jprice.html()));
+});
+</script>
+
+$conf[footer_js]
+
+</body>
+</html>
