@@ -90,6 +90,7 @@ class shop_control extends common_control {
 			$this->shop_good->format($good);
 		} else {
 			$goodlist = $this->shop_cart->get_list();
+			empty($goodlist) && $this->message('请选择商品。');
 		}
 		
 		$totalprice = 0;
@@ -112,12 +113,18 @@ class shop_control extends common_control {
 			$recv_name = core::gpc('recv_name', 'P');
 			$recv_mobile = core::gpc('recv_mobile', 'P');
 			$recv_comment = core::gpc('recv_comment', 'P');
-			$amountarr = core::gpc('amount', 'P');
+			$amountarr = (array)core::gpc('amount', 'P');
 			$totalprice = 0;
+			
+			$shopnum = 0;
 			foreach($amountarr as $goodid=>$amount) {
 				$good = $this->shop_good->read($goodid);
+				if(empty($good)) continue;
 				$totalprice += $good['price'] * $amount;
+				$shopnum++;
 			}
+			empty($shopnum) && $this->message('请选择有效商品ID。', 0);
+			
 			list($year, $month, $day) = explode('-', date('y-n-j', $_SERVER['time']));
 			
 			$json_amount = core::json_encode($amountarr);
@@ -149,6 +156,9 @@ class shop_control extends common_control {
 				'alipay_receive_mobile'=>'',
 			);
 			$orderid = $this->shop_order->xcreate($arr);
+			
+			$this->shop_cart->xtruncate(); // 清理购物车
+			
 			$this->message($orderid);
 		} else {
 			$this->message('提交订单失败。', 0);
