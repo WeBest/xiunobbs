@@ -151,7 +151,8 @@ $('#addcart').click(function() {
 		if(error = json_error(json)) {alert(error); return false;}
 		if(json.status <= 0) {alert(json.message); return false;}
 		n = json.message;
-		$('span.icon-cart-disable').removeClass('icon-cart-disable').addClass('icon-cart').alert(n, {alerticon: null, width: 16});
+		$('span.icon-cart-disable, span.icon-cart').removeClass('icon-cart-disable').addClass('icon-cart');
+		$('span.icon-cart').alert(n, {alerticon: null, width: 16});
 	});
 });
 
