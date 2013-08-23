@@ -60,6 +60,8 @@ $db->table_create('shop_order', array(
 	array('recv_address', 'int(11)'),  // 收货地址
 	array('recv_mobile', 'int(11)'),  // 收货人手机
 	array('recv_name', 'int(11)'),  // 收货人姓名
+	array('recv_comment', 'int(11)'),  // 收货人备注
+	array('admin_comment', 'int(11)'),  // 管理员备注
 	
 	array('alipay_email', 'char(60)'), 
 	array('alipay_orderid', 'char(60)'), 

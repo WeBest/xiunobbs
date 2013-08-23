@@ -10,6 +10,8 @@ include BBS_PATH.'control/common_control.class.php';
 
 class shop_control extends common_control {
 	
+	public $cart_shop_list = array(); // 购物车内的商品
+	
 	function __construct(&$conf) {
 		parent::__construct($conf);
 		$this->_checked['shop'] = ' class="checked"';
@@ -19,7 +21,7 @@ class shop_control extends common_control {
 	
 	public function on_index() {
 		//$this->view->display('xn_shop.htm');
-		$this->on_list();
+		$this->cart_shop_list = $this->on_list();
 	}
 	
 	// 商品列表
@@ -61,6 +63,7 @@ class shop_control extends common_control {
 		$imglist = $this->shop_image->get_loop_list($goodid);
 		$this->shop_good->format($good);
 		$this->view->assign('cate', $cate);
+		$this->view->assign('goodid', $goodid);
 		$this->view->assign('imglist', $imglist);
 		$this->view->assign('good', $good);
 		$this->view->display('shop_good_read.htm');
@@ -70,30 +73,32 @@ class shop_control extends common_control {
 	public function on_buy() {
 		$goodlist = array(); // 购物车内的商品列表
 		$goodid = intval(core::gpc('goodid'));
-		$amount = intval(core::gpc('amount'));
-		$good = $this->shop_good->read($goodid);
-		empty($good) && $this->message('商品不存在。');
 		
 		if($goodid) {
+			$good = $this->shop_good->read($goodid);
+			empty($good) && $this->message('商品不存在。');
+			
+			$amount = intval(core::gpc('amount'));
+			
 			$good['amount'] = $amount;
 			$good['amountprice'] = $amount * $good['price'];
 			$goodlist = array($goodid=>$good);	
+			
+			$cate = $this->shop_cate->read($good['cateid']);
+			$this->view->assign('good', $good);
+			$this->view->assign('cate', $cate);
+			$this->shop_good->format($good);
 		} else {
 			$goodlist = $this->shop_cart->get_list();
 		}
 		
 		$totalprice = 0;
-		foreach ($goodlist as $good) $totalprice += $good['amountprice'];
-		
-		$cate = $this->shop_cate->read($good['cateid']);
+		foreach ($goodlist as $_good) $totalprice += $_good['amountprice'];
 		
 		$imglist = $this->shop_image->get_loop_list($goodid);
-		$this->shop_good->format($good);
 		
 		$this->view->assign('goodid', $goodid);
-		$this->view->assign('cate', $cate);
 		$this->view->assign('imglist', $imglist);
-		$this->view->assign('good', $good);
 		$this->view->assign('totalprice', $totalprice);
 		$this->view->assign('goodlist', $goodlist);
 		$this->view->display('shop_buy.htm');
@@ -127,10 +132,14 @@ class shop_control extends common_control {
 				'month'=>$month,
 				'day'=>$day,
 				'status'=>0,
+				
 				'json_amount'=>$json_amount,
+				
 				'recv_address'=>$recv_address,
 				'recv_mobile'=>$recv_mobile,
 				'recv_name'=>$recv_name,
+				'recv_comment'=>$recv_comment,
+				'admin_comment'=>'',
 				
 				'alipay_email'=>'',
 				'alipay_orderid'=>'',
@@ -139,9 +148,24 @@ class shop_control extends common_control {
 				'alipay_receive_phone'=>'',
 				'alipay_receive_mobile'=>'',
 			);
-			$this->shop_order->xcreate($arr);
-			$this->message('提交订单成功。');
+			$orderid = $this->shop_order->xcreate($arr);
+			$this->message($orderid);
+		} else {
+			$this->message('提交订单失败。', 0);
 		}
+	}
+	
+	// 显示购物车
+	public function on_cart() {
+		$n = count($this->cart_shop_list);
+		$this->view->display('shop_cart_ajax.htm');
+	}
+	
+	// 从购物车中删除物品
+	public function on_deletecart() {
+		$goodid = intval(core::gpc('goodid'));
+		$n = $this->shop_cart->xdelete($goodid);
+		$this->message($n);
 	}
 	
 	public function on_addcart() {
@@ -150,9 +174,10 @@ class shop_control extends common_control {
 		$good = $this->shop_good->read($goodid);
 		empty($good) && $this->message('商品不存在。');
 		
-		$this->shop_cart->xcreate($goodid, $amount);
+		// 商品的总数
+		$n = $this->shop_cart->xcreate($goodid, $amount);
 		
-		$this->message('保存成功。');
+		$this->message($n);
 	}
 	
 	// cart 的状态

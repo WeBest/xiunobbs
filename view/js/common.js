@@ -951,7 +951,7 @@ function json_error(json) {
 		return json;
 	}
 	
-	if(json.servererror) {return json.servererror;}
+	if(json.servererror) {return json.servererror.replace(/\\n/, "\n");}
 	return '';
 }
 

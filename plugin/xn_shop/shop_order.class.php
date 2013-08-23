@@ -27,9 +27,13 @@ class shop_order extends base_model {
 	
 	public function xcreate($arr) {
 		$orderid = $this->create($arr);
-		$good = $this->shop_good->read($arr['goodid']);
-		$good['orders']++;
-		$this->shop_good->update($good);
+		$json_amount = core::json_decode($arr['json_amount']);
+		foreach($json_amount as $shopid=>$amount) {
+			$good = $this->shop_good->read($shopid);
+			if(empty($good)) continue;
+			$good['orders']++;
+			$this->shop_good->update($good);
+		}
 		return $orderid;
 	}
 	

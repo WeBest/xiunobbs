@@ -30,7 +30,7 @@
 			</td>
 			<td class="center2">
 				<!--{include header_user.inc.htm}-->
-				<a href="?shop-cart-ajax-1.htm" target="_blank" onclick="return false;" id="cart_icon" rel="nofollow"><span class="icon icon-cart-disable"></span> 购物车</a>
+				<a href="?shop-cart-ajax-1.htm" class="ajaxdialog" target="_blank" onclick="return false;" id="cart_icon" rel="nofollow"><span class="icon icon-cart-disable"></span> 购物车</a>
 			</td>
 			<td class="right"></td>
 		</tr>
@@ -98,7 +98,7 @@
 
 <!--{if $cart_shop_number > 0}-->
 <script>
-$('span.icon-cart-disable').removeClass('icon-cart-disable').addClass('icon-cart');.alert('$cart_shop_num');
+$('span.icon-cart-disable').removeClass('icon-cart-disable').addClass('icon-cart').alert('$cart_shop_number ', {alerticon: null, width: 16});
 </script>
 <!--{/if}-->
 
@@ -142,11 +142,16 @@ document.onreadystatechange=function() { if(document.readyState == 'complete'){
 
 // 加入到购物车，提示加入成功。
 $('#addcart').click(function() {
-	var i = $cart_shop_num + 1;
-	$.alert('加入成功，请继续购物。');
-	$('span.icon-cart-disable').removeClass('icon-cart-disable').addClass('icon-cart').alert(i, {alerticon: null, width: 16});
-	$.get('?shop-addcart-goodid-'+goodid+'-amount-'+amount+'.htm', function() {
-	
+	var amount = $('input[name=amout]').val();
+	$('#addcart').disable();
+	$.get('?shop-addcart-goodid-$goodid-amount-'+amount+'-ajax-1.htm', function(s) {
+		$.alert('加入成功，请继续购物。');
+		$('#addcart').enable();
+		var json = json_decode(s);
+		if(error = json_error(json)) {alert(error); return false;}
+		if(json.status <= 0) {alert(json.message); return false;}
+		n = json.message;
+		$('span.icon-cart-disable').removeClass('icon-cart-disable').addClass('icon-cart').alert(n, {alerticon: null, width: 16});
 	});
 });
 
