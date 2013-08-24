@@ -328,6 +328,7 @@ EOT;
 				$order['pay_amount'] = $total_fee;
 				$order['status'] = 1;
 				$this->shop_order->update($order); // 支付时间是否要记一个？
+				$this->message('支付成功，现在跳转到订单详情', 1, "?my-order-do-read-orderid-$orderid.htm");
 			}
 			echo "success";		// 请不要修改或删除
 		} else {
@@ -381,14 +382,13 @@ EOT;
 		if($v_md5str == $md5string){
 			if($v_pstatus == "20"){
 				$orderid = $v_oid;
-				
 				$order = $this->shop_order->read($orderid);
 				$order['pay_type'] = 2;
 				$order['pay_amount'] = $v_amount;
 				$order['status'] = 1;
 				$this->shop_order->update($order); // 支付时间是否要记一个？
-				
-				echo "ok";
+				$this->message('支付成功，现在跳转到订单详情', 1, "?my-order-do-read-orderid-$orderid.htm");
+				//echo "ok";
 			}else{
 				echo 'error';
 			}		
@@ -396,6 +396,18 @@ EOT;
 			echo 'error';
 		}
 		exit;
+	}
+	
+	// 返回订单状态, ajax 检测订单支付状态的时候用
+	public function on_orderinfo() {
+		$orderid = intval(core::gpc('orderid'));
+		$order = $this->shop_order->read($orderid);
+		empty($order) && $this->message('订单不存在。');
+		$order['uid'] != $this->_user['uid'] && $this->message('该订单不是您的。');
+		$setting = $this->kv->get('shop_setting');
+		empty($setting['enable']) && $this->message('在线支付关闭。');
+		
+		$this->message($order);
 	}
 	
 	// 显示购物车

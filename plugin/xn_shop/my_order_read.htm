@@ -103,8 +103,9 @@
 			
 			<p style="text-align: center; margin-top: 10px; margin-bottom: 10px;">
 				<!--{if $order[status] == 0}-->
+				<input type="button" class="button bigblue" value="开始支付" onclick="window.location='?shop-pay-orderid-$orderid.htm'" />
 				<input type="button" class="button bigblue" value="更新订单" id="order_confirm" />
-				<input type="button" class="button bigblue" value="删除" id="order_delete" />
+				<input type="button" class="button biggrey" value="删除" id="order_delete" />
 				<!--{/if}-->
 				<input type="button" value=" 返回 " class="button biggrey" onclick="window.location='?my-order.htm'" />
 			</p>
