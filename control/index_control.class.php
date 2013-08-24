@@ -21,6 +21,46 @@ class index_control extends common_control {
 	// 给插件预留个位置
 	public function on_index() {
 
+		$setting = $this->kv->get('shop_setting');
+		// http://www.yegenyou.com/shop-alipayreturn.htm?body=%E5%95%86%E5%93%81%E8%B4%AD%E4%B9%B0&buyer_email=axiuno%40gmail.com&buyer_id=2088002093746313&exterface=create_direct_pay_by_user&is_success=T&notify_id=RqPnCoPT3K9%252Fvwbh3I72LheDYDTEvTJcgVeS0cnIBTCRibmzWmVLsBpG7kQpYJFH2Adv&notify_time=2013-08-24+19%3A27%3A13&notify_type=trade_status_sync&out_trade_no=10001&payment_type=1&seller_email=248802407%40qq.com&seller_id=2088701071709204&subject=%E5%95%86%E5%93%81%E8%B4%AD%E4%B9%B0&total_fee=1.00&trade_no=2013082457477731&trade_status=TRADE_SUCCESS&sign=38e4804656dbcc48791b693390905d54&sign_type=MD5
+		$_GET = array (
+  'body' => '商品购买',
+  'buyer_email' => 'axiuno@gmail.com',
+  'buyer_id' => '2088002093746313',
+  'exterface' => 'create_direct_pay_by_user',
+  'is_success' => 'T',
+  'notify_id' => 'RqPnCoPT3K9%2Fvwbh3I72LheDZ0xnYaFE92XSfEy%2FC5DqjmTOWcGwsS5R1uKzq3vHec92',
+  'notify_time' => '2013-08-24 19:37:18',
+  'notify_type' => 'trade_status_sync',
+  'out_trade_no' => '10003',
+  'payment_type' => '1',
+  'seller_email' => '248802407@qq.com',
+  'seller_id' => '2088701071709204',
+  'subject' => '商品购买',
+  'total_fee' => '1.00',
+  'trade_no' => '2013082457502031',
+  'trade_status' => 'TRADE_SUCCESS',
+  'sign' => 'edc41f083797743dd44bc2184ef85c8f',
+  'sign_type' => 'MD5',
+);
+	
+		//$_GET['notify_id'] = urlencode($_GET['notify_id']);
+		foreach($_GET as &$v) $v = urlencode($v);
+		//foreach($_GET as &$v) $v = urldecode($v);
+		//foreach($_GET as &$v) $v = iconv('utf-8', 'gbk', $v);
+		//foreach($_GET as &$v) $v = iconv('gbk', 'utf-8', $v);
+		//foreach($_GET as &$v) $v = iconv('utf-8', 'gbk', urldecode($v));
+		
+		include BBS_PATH."plugin/xn_shop/alipay/alipay_notify.class.php";	
+		$setting = $this->kv->get('shop_setting');
+		
+		//计算得出通知验证结果
+		$alipayNotify = new AlipayNotify($setting['alipay']);
+		$verify_result = $alipayNotify->verifyReturn();
+		print_r($_GET);
+		var_dump($verify_result);
+		exit;
+		
 		// hook index_index_before.php
 		
 		$this->on_bbs();

@@ -13,8 +13,8 @@
  * 调试通知返回时，可查看或改写log日志的写入TXT里的数据，来检查通知返回是否正常
  */
 
-require_once("alipay_core.function.php");
-require_once("alipay_md5.function.php");
+require_once(BBS_PATH."plugin/xn_shop/alipay/alipay_core.function.php");
+require_once(BBS_PATH."plugin/xn_shop/alipay/alipay_md5.function.php");
 
 class AlipayNotify {
     /**
@@ -30,9 +30,7 @@ class AlipayNotify {
 	function __construct($alipay_config){
 		$this->alipay_config = $alipay_config;
 	}
-    function AlipayNotify($alipay_config) {
-    	$this->__construct($alipay_config);
-    }
+	
     /**
      * 针对notify_url验证消息是否是支付宝发出的合法消息
      * @return 验证结果
@@ -56,7 +54,6 @@ class AlipayNotify {
 			}
 			$log_text = "responseTxt=".$responseTxt."\n notify_url_log:isSign=".$isSignStr.",";
 			$log_text = $log_text.createLinkString($_POST);
-			logResult($log_text);
 			
 			//验证
 			//$responsetTxt的结果不是true，与服务器设置问题、合作身份者ID、notify_id一分钟失效有关
@@ -92,7 +89,7 @@ class AlipayNotify {
 			}
 			$log_text = "responseTxt=".$responseTxt."\n return_url_log:isSign=".$isSignStr.",";
 			$log_text = $log_text.createLinkString($_GET);
-			logResult($log_text);
+			// logResult($log_text);
 			
 			//验证
 			//$responsetTxt的结果不是true，与服务器设置问题、合作身份者ID、notify_id一分钟失效有关
@@ -154,7 +151,6 @@ class AlipayNotify {
 		}
 		$veryfy_url = $veryfy_url."partner=" . $partner . "&notify_id=" . $notify_id;
 		$responseTxt = getHttpResponseGET($veryfy_url, $this->alipay_config['cacert']);
-		
 		return $responseTxt;
 	}
 }

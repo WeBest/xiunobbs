@@ -216,14 +216,16 @@ class shop_control extends common_control {
 		        	} elseif($setting['alipay']['type'] == 2) {
 		        		$parameterarr = array(
 			        		"service" 		=> "create_direct_pay_by_user",
-			        		"total_fee"		=> $order['price'],
+			        		//"total_fee"		=> $order['price'],
+			        		"price"			=> $order['price'],
+						"quantity"		=> 1,
 			        		"anti_phishing_key"	=> '',
 						"exter_invoke_ip"	=> $_SERVER['ip'],
 					);
 					$parameter = array_merge($parameter, $parameterarr);
 				}
 				$alipaySubmit = new AlipaySubmit($setting['alipay']);
-				$html_text = $alipaySubmit->buildRequestForm($parameter, "get", "确认");
+				$html_text = $alipaySubmit->buildRequestForm($parameter, "get", "开始支付");
 				echo $html_text;
 				exit;		        
 		        } elseif($pay_type == 2) {
@@ -305,11 +307,14 @@ EOT;
 	}
 	
 	public function on_alipayreturn() {
+		array_shift($_GET);array_pop($_GET);array_pop($_GET);
+		//foreach($_GET as &$v) $v = core::urldecode($v);
+		
 		include BBS_PATH."plugin/xn_shop/alipay/alipay_notify.class.php";	
 		$setting = $this->kv->get('shop_setting');
 		
-		$alipayNotify = new AlipayNotify($setting['alipay']);
-		$verify_result = $alipayNotify->verifyNotify();
+		$alipayNotify = new Alipay($setting['alipay']);
+		$verify_result = $alipayNotify->verifyReturn();
 		if($verify_result) {
 			$orderid = $out_trade_no = core::gpc('out_trade_no', 'R');	//商户订单号
 			$trade_no = core::gpc('trade_no', 'R');				//支付宝交易号
@@ -331,6 +336,9 @@ EOT;
 	}
 	
 	public function on_alipaynotify() {
+		array_shift($_GET);array_pop($_GET);array_pop($_GET);
+		//foreach($_GET as &$v) $v = core::urldecode($v);
+		
 		include BBS_PATH."plugin/xn_shop/alipay/alipay_notify.class.php";	
 		$setting = $this->kv->get('shop_setting');
 		

@@ -380,7 +380,7 @@ class shop_control extends admin_control {
 					'input_charset'=>'', 
 					'cacert'=>'', 
 					'transport'=>'',
-					'type'=>1, // 交易类型
+					'type'=>1, // 交易类型，1：担保，2：即时到帐
 				),
 				'tenpay'=>array(
 					'enable'=>0,

@@ -17,14 +17,13 @@
 function createLinkstring($para) {
 	$arg  = "";
 	while (list ($key, $val) = each ($para)) {
-		$arg.=$key."=".$val."&";
+		$arg .= ($key."=".$val."&");
 	}
 	//去掉最后一个&字符
-	$arg = substr($arg,0,count($arg)-2);
+	$arg = substr($arg, 0, -1);
 	
 	//如果存在转义字符，那么去掉转义
 	if(get_magic_quotes_gpc()){$arg = stripslashes($arg);}
-	
 	return $arg;
 }
 /**
@@ -39,7 +38,6 @@ function createLinkstringUrlencode($para) {
 	}
 	//去掉最后一个&字符
 	$arg = substr($arg,0,count($arg)-2);
-	
 	//如果存在转义字符，那么去掉转义
 	if(get_magic_quotes_gpc()){$arg = stripslashes($arg);}
 	
@@ -74,11 +72,13 @@ function argSort($para) {
  * @param $word 要写入日志里的文本内容 默认值：空值
  */
 function logResult($word='') {
+	/*
 	$fp = fopen("log.txt","a");
 	flock($fp, LOCK_EX) ;
 	fwrite($fp,"执行日期：".strftime("%Y%m%d%H%M%S",time())."\n".$word."\n");
 	flock($fp, LOCK_UN);
 	fclose($fp);
+	*/
 }
 
 /**
