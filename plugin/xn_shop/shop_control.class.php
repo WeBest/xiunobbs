@@ -329,6 +329,17 @@ EOT;
 				$order['pay_email'] = $buyer_email;
 				$order['status'] = 1;
 				$this->shop_order->update($order); // 支付时间是否要记一个？
+				
+				// 库存要减
+				$json_amount = core::json_decode($order['json_amount']);
+				foreach($json_amount as $goodid=>$amount) {
+					$good = $this->shop_good->read($goodid);
+					if(empty($good)) continue;
+					$good['stocks'] -= $amount;
+					$good['stocks'] < 0 && $good['stocks'] = 0;
+					$this->shop_good->update($good);
+				}
+				
 				$this->message('支付成功，现在跳转到订单详情', 1, "?my-order-do-read-orderid-$orderid.htm");
 			}
 			echo "success";		// 请不要修改或删除
@@ -361,6 +372,18 @@ EOT;
 				$order['pay_email'] = $buyer_email;
 				$order['status'] = 1;
 				$this->shop_order->update($order); // 支付时间是否要记一个？
+				
+				
+				// 库存要减
+				$json_amount = core::json_decode($order['json_amount']);
+				foreach($json_amount as $goodid=>$amount) {
+					$good = $this->shop_good->read($goodid);
+					if(empty($good)) continue;
+					$good['stocks'] -= $amount;
+					$good['stocks'] < 0 && $good['stocks'] = 0;
+					$this->shop_good->update($good);
+				}
+				
 			}
 			echo "success";		// 请不要修改或删除
 		} else {
@@ -392,7 +415,18 @@ EOT;
 				$order['pay_type'] = 2;
 				$order['pay_amount'] = $v_amount;
 				$order['status'] = 1;
-				$this->shop_order->update($order); // 支付时间是否要记一个？
+				$this->shop_order->update($order);
+				
+				// 库存要减
+				$json_amount = core::json_decode($order['json_amount']);
+				foreach($json_amount as $goodid=>$amount) {
+					$good = $this->shop_good->read($goodid);
+					if(empty($good)) continue;
+					$good['stocks'] -= $amount;
+					$good['stocks'] < 0 && $good['stocks'] = 0;
+					$this->shop_good->update($good);
+				}
+				
 				$this->message('支付成功，现在跳转到订单详情', 1, "?my-order-do-read-orderid-$orderid.htm");
 				//echo "ok";
 			}else{

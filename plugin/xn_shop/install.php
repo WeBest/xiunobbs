@@ -27,6 +27,7 @@ $db->table_create('shop_good', array(
 	array('replies', 'int(11)'), 
 	array('views', 'int(11)'), 
 	array('rank', 'int(11)'), 
+	array('unit_name', 'char(16)'), // 单位名称：件，年，斤
 ));
 $db->index_create('shop_good', array('goodid'=>1));
 $db->index_create('shop_good', array('cateid'=>1, 'rank'=>1));
