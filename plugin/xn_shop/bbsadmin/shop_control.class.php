@@ -427,7 +427,6 @@ class shop_control extends admin_control {
 		} else {
 			$enable = core::gpc('enable', 'P');
 			$alipay_enable = core::gpc('alipay_enable', 'P');
-			$alipay_enable = core::gpc('alipay_enable', 'P');
 			$alipay_seller_email = core::gpc('alipay_seller_email', 'P');
 			$alipay_partner = core::gpc('alipay_partner', 'P');
 			$alipay_key = core::gpc('alipay_key', 'P');
@@ -437,6 +436,10 @@ class shop_control extends admin_control {
 			$alipay_input_charset= strtolower('utf-8');
 			$alipay_cacert    = $this->conf['plugin_path'].'xn_shop/alipay/cacert.pem';
 			$alipay_transport    = 'http';	
+			
+			if($alipay_enable && !function_exists('curl_init')) {
+				$this->message('启用支付宝需要 curl_init() 函数支持，请确定您的 php.ini 启用 curl 模块。', 0);
+			}
 			
 			// 财付通
 			$tenpay_enable = core::gpc('tenpay_enable', 'P');
