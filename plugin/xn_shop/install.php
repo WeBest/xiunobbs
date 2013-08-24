@@ -62,6 +62,12 @@ $db->table_create('shop_order', array(
 	array('recv_comment', 'char(100)'),  // 收货人备注
 	array('admin_comment', 'char(100)'),  // 管理员备注
 	
+	array('pay_type', 'int(11)'),     // 支付的方式：1: alipay, 2: ebank, 3: tenpay
+	array('pay_orderid', 'char(32)'), // 外部订单号
+	array('pay_amount', 'int(11)'),   // 支付金额
+	array('pay_email', 'char(60)'),   // 支付的EMAIL（支付宝仅有）
+	
+	/*
 	array('alipay_email', 'char(60)'), 
 	array('alipay_orderid', 'char(60)'), 
 	array('alipay_fee', 'int(11)'), 		// 支付宝支付的金额
@@ -69,8 +75,14 @@ $db->table_create('shop_order', array(
 	array('alipay_receive_phone', 'char(20)'), 
 	array('alipay_receive_mobile', 'char(10)'), 
 	
-	array('ebank_orderid', 'char(10)'), 
+	array('ebank_orderid', 'char(32)'), 
+	array('ebank_amount', 'int(11)'), 
+	
+	array('tenpay_transaction_id', 'char(32)'), 
+	array('tenpay_total_fee', 'int(11)'), 
+	*/
 ));
+
 $db->index_create('shop_order', array('orderid'=>1));
 $db->index_create('shop_order', array('uid'=>1, 'orderid'=>1));
 $db->index_create('shop_order', array('year'=>1, 'month'=>1, 'day'=>1));

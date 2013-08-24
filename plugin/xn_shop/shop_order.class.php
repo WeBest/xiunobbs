@@ -85,6 +85,16 @@ class shop_order extends base_model {
 		$order['status_fmt'] = $status[$order['status']];
 		$order['status_select'] = form::get_select('status', $status, $order['status'], FALSE);
 		$order['totalprice'] = $totalprice;
+		$pay_type_text = array(0=>'', 1=>'支付宝', 2=>'网银', 3=>'财付通', 4=>'线下');
+		$pay_type_image = array(
+			0=>"无",
+			1=>"<img src=\"".$this->conf['plugin_url'].'xn_shop/logo_alipay.gif'." width=\"59\" height=\"20\"/>",
+			2=>"<img src=\"".$this->conf['plugin_url'].'xn_shop/logo_ebank.gif'." width=\"65\" height=\"20\"/>",
+			3=>"<img src=\"".$this->conf['plugin_url'].'xn_shop/logo_tenpay.gif'." width=\"60\" height=\"20\"/>",
+			4=>"<img src=\"".$this->conf['plugin_url'].'xn_shop/logo_offline.gif'." width=\"60\" height=\"20\"/>",
+		);
+		$order['pay_type_text'] = $pay_type_text[$order['pay_type']];
+		$order['pay_type_image'] = $pay_type_image[$order['pay_type']];
 	}
 }
 ?>

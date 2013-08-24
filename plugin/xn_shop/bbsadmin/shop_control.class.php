@@ -382,6 +382,11 @@ class shop_control extends admin_control {
 					'transport'=>'',
 					'type'=>1, // 交易类型
 				),
+				'tenpay'=>array(
+					'enable'=>0,
+					'appid'=>0,
+					'key'=>0,
+				),
 				'ebank'=>array(
 					'enable'=>0, 
 					'mid'=>'', 
@@ -389,10 +394,11 @@ class shop_control extends admin_control {
 				),
 				'offline'=>array(
 					'enable'=>0, 
-					'banklist'=>'', // 支持 markdown 语法
+					'banklist'=>'',
 				)
 			);
 		}
+		
 		// 处理 POST 提交
 		if(!$this->form_submit()) {
 			$input['enable'] = form::get_radio_yes_no('enable', $setting['enable']);
@@ -400,7 +406,12 @@ class shop_control extends admin_control {
 			$input['alipay_seller_email'] = form::get_text('alipay_seller_email', $setting['alipay']['seller_email'], 300);
 			$input['alipay_partner'] = form::get_text('alipay_partner', $setting['alipay']['partner'], 300);
 			$input['alipay_key'] = form::get_text('alipay_key', $setting['alipay']['key'], 300);
-			$input['alipay_type'] = form::get_radio('alipay_type', array(1=>'担保交易', 2=>'即时到帐', 3=>'担保交易+即时到帐'), $setting['alipay']['type']);
+			$input['alipay_type'] = form::get_radio('alipay_type', array(1=>'担保交易', 2=>'即时到帐'), $setting['alipay']['type']);
+			
+			// 财付通
+			$input['tenpay_enable'] = form::get_radio_yes_no('tenpay_enable', $setting['tenpay']['enable']);
+			$input['tenpay_appid'] = form::get_text('tenpay_appid', $setting['tenpay']['appid'], 300);
+			$input['tenpay_key'] = form::get_text('tenpay_key', $setting['tenpay']['key'], 300);
 			
 			//网银支付
 			$input['ebank_enable'] = form::get_radio_yes_no('ebank_enable', $setting['ebank']['enable']);
@@ -427,6 +438,11 @@ class shop_control extends admin_control {
 			$alipay_cacert    = $this->conf['plugin_path'].'xn_shop/alipay/cacert.pem';
 			$alipay_transport    = 'http';	
 			
+			// 财付通
+			$tenpay_enable = core::gpc('tenpay_enable', 'P');
+			$tenpay_appid = core::gpc('tenpay_appid', 'P');
+			$tenpay_key = core::gpc('tenpay_key', 'P');
+			
 			// 网银在线
 			$ebank_enable = core::gpc('ebank_enable', 'P');
 			$ebank_mid = core::gpc('ebank_mid', 'P');
@@ -449,6 +465,11 @@ class shop_control extends admin_control {
 					'transport'=>$alipay_transport,
 					'type'=>$alipay_type,
 				),
+				'tenpay'=>array(
+					'enable'=>$tenpay_enable, 
+					'appid'=>$tenpay_appid, 
+					'key'=>$tenpay_key,
+				),
 				'ebank'=>array(
 					'enable'=>$ebank_enable, 
 					'mid'=>$ebank_mid, 
@@ -456,7 +477,7 @@ class shop_control extends admin_control {
 				),
 				'offline'=>array(
 					'enable'=>$offline_enable, 
-					'banklist'=>'', // 支持 markdown 语法
+					'banklist'=>$offline_banklist, // 支持 markdown 语法
 				)
 			);
 			$this->kv->set('shop_setting', $setting);		

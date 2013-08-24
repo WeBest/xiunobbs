@@ -86,16 +86,16 @@
 							<td>$order[status_fmt] </td>
 						</tr>
 						<tr>
-							<td>支付宝账号：</td>
-							<td>$order[alipay_email]</td>
+							<td>支付类型：</td>
+							<td>$order[pay_type_image] $order[pay_type_text]</td>
 						</tr>
 						<tr>
 							<td>支付宝金额：</td>
-							<td><span class="grey" style="font-size: 24px;">¥</span> <span style="font-size: 24px; color: #FF4400; font-weight: 800;">$order[alipay_fee].00</span></td>
+							<td><span class="grey" style="font-size: 24px;">¥</span> <span style="font-size: 24px; color: #FF4400; font-weight: 800;">$order[alipay_amount].00</span></td>
 						</tr>
 						<tr>
-							<td>支付宝订单号：</td>
-							<td>$order[alipay_orderid]</td>
+							<td>支付 Email：</td>
+							<td>$order[pay_email]</td>
 						</tr>
 					</table>
 				</div>
@@ -144,6 +144,5 @@ $('#order_delete').click(function() {
 </script>
 <!--{/if}-->
 
-$conf[footer_js]
 </body>
 </html>

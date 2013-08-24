@@ -21,6 +21,8 @@ $db->table_drop('shop_reply');
 $db->index_drop('shop_reply', array('replyid'=>1));
 $db->index_drop('shop_reply', array('goodid'=>1));
 
+$db->delete("kv-k-shop_setting");
+
 misc::rmdir($conf['upload_path'].'attach_shop/');
 
 ?>
