@@ -313,7 +313,7 @@ EOT;
 		include BBS_PATH."plugin/xn_shop/alipay/alipay_notify.class.php";	
 		$setting = $this->kv->get('shop_setting');
 		
-		$alipayNotify = new Alipay($setting['alipay']);
+		$alipayNotify = new AlipayNotify($setting['alipay']);
 		$verify_result = $alipayNotify->verifyReturn();
 		if($verify_result) {
 			$orderid = $out_trade_no = core::gpc('out_trade_no', 'R');	//商户订单号
