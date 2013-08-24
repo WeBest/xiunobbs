@@ -106,10 +106,10 @@ class shop_control extends common_control {
 			$this->view->assign('goodlist', $goodlist);
 			$this->view->display('shop_buy.htm');
 		} else {
-			$recv_address = core::gpc('recv_address', 'P');
-			$recv_name = core::gpc('recv_name', 'P');
-			$recv_mobile = core::gpc('recv_mobile', 'P');
-			$recv_comment = core::gpc('recv_comment', 'P');
+			$recv_address = htmlspecialchars(core::gpc('recv_address', 'P'));
+			$recv_name = htmlspecialchars(core::gpc('recv_name', 'P'));
+			$recv_mobile = htmlspecialchars(core::gpc('recv_mobile', 'P'));
+			$recv_comment = htmlspecialchars(core::gpc('recv_comment', 'P'));
 			$amountarr = (array)core::gpc('amount', 'P');
 			$totalprice = 0;
 			
