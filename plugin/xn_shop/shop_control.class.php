@@ -182,6 +182,7 @@ class shop_control extends common_control {
 				empty($setting['alipay']['enable']) && $this->message('站点没有启用支付宝支付。');
 				
 		        	include BBS_PATH."plugin/xn_shop/alipay/alipay_submit.class.php";
+		        	
 		        	$parameter = array (
 					"partner" => trim($setting['alipay']['partner']),
 					"payment_type"	=> 1,				//支付类型
@@ -221,24 +222,19 @@ class shop_control extends common_control {
 					);
 					$parameter = array_merge($parameter, $parameterarr);
 				}
-				$alipaySubmit = new AlipaySubmit($recharge['alipay']);
+				$alipaySubmit = new AlipaySubmit($setting['alipay']);
 				$html_text = $alipaySubmit->buildRequestForm($parameter, "get", "确认");
 				echo $html_text;
 				exit;		        
 		        } elseif($pay_type == 2) {
 		        	empty($setting['ebank']['enable']) && $this->message('站点没有启用网银支付。');
 		        	
-		        	$app_url = $this->conf['app_url'];
-		        	//卖家网银在线帐号	
-			        $v_mid = $recharge['ebank']['mid'];		// 商户号，这里为测试商户号1001，替换为自己的商户号(老版商户号为4位或5位,新版为8位)即可   
+			        $v_mid = $setting['ebank']['mid'];		// 商户号，这里为测试商户号1001，替换为自己的商户号(老版商户号为4位或5位,新版为8位)即可   
 				$v_url = "?shop-ebankreturn.htm";	// 请填写返回url,地址应为绝对路径,带有http协议
-				$key = $recharge['ebank']['key']; 				
-		        	//订单号
+				$key = $setting['ebank']['key']; 				
 		       		$v_oid = $orderid;	        	                
-		        	//付款金额
-				$v_amount = intval(core::gpc('pay', 'P'));
-			        //备注
-			        $remark1 = core::gpc('remarks', 'P');
+				$v_amount = $order['price'];
+			        $remark1 = '';
 			                        
 				$v_moneytype = "CNY";                                            //币种		
 				$text = $v_amount.$v_moneytype.$v_oid.$v_mid.$v_url.$key;        //md5加密拼凑串,注意顺序不能变
@@ -287,11 +283,9 @@ class shop_control extends common_control {
 						<input type="hidden" name="v_orderaddr"    value="$v_orderaddr">
 						<input type="hidden" name="v_ordermobile"  value="$v_ordermobile">
 						<input type="hidden" name="v_orderemail"   value="$v_orderemail">
-						</form><script>
-		                                function a() {
-		                                        $('#ebankform').submit();
-		                                }
-		                                setTimeout("a()", 500);
+						</form>
+						<script>
+		                                setTimeout(function() {  document.getElementById('ebankform').submit();}, 500);
 		                                </script>
 		                                <h1>正在连接网银 ... </h1>
 		                        </body>

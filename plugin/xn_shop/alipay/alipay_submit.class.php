@@ -9,8 +9,8 @@
  * 以下代码只是为了方便商户测试而提供的样例代码，商户可以根据自己网站的需要，按照技术文档编写,并非一定要使用该代码。
  * 该代码仅供学习和研究支付宝接口使用，只是提供一个参考。
  */
-require_once("alipay_core.function.php");
-require_once("alipay_md5.function.php");
+require_once(BBS_PATH."plugin/xn_shop/alipay/alipay_core.function.php");
+require_once(BBS_PATH."plugin/xn_shop/alipay/alipay_md5.function.php");
 
 class AlipaySubmit {
 
@@ -23,9 +23,6 @@ class AlipaySubmit {
 	function __construct($alipay_config){
 		$this->alipay_config = $alipay_config;
 	}
-    function AlipaySubmit($alipay_config) {
-    	$this->__construct($alipay_config);
-    }
 	
 	/**
 	 * 生成签名结果
