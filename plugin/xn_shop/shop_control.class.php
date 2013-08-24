@@ -318,14 +318,16 @@ EOT;
 		if($verify_result) {
 			$orderid = $out_trade_no = core::gpc('out_trade_no', 'R');	//商户订单号
 			$trade_no = core::gpc('trade_no', 'R');				//支付宝交易号
-			$trade_status = core::gpc('trade_status', 'R');			//交易状态
-			$total_fee = core::gpc('total_fee', 'R');			//交易状态
-			
+			$trade_status = core::gpc('trade_status', 'R');			//
+			$total_fee = core::gpc('total_fee', 'R');			//
+			$buyer_email = core::gpc('buyer_email', 'R');			//
+
 			if($trade_status == 'TRADE_FINISHED' || $trade_status == 'TRADE_SUCCESS') {
 				$order = $this->shop_order->read($orderid);
 				$order['pay_type'] = 1;
 				$order['pay_amount'] = $total_fee;
 				$order['status'] = 1;
+				$order['pay_email'] = $buyer_email;
 				$this->shop_order->update($order); // 支付时间是否要记一个？
 				$this->message('支付成功，现在跳转到订单详情', 1, "?my-order-do-read-orderid-$orderid.htm");
 			}
@@ -350,12 +352,14 @@ EOT;
 			$trade_no = core::gpc('trade_no', 'R');				//支付宝交易号
 			$trade_status = core::gpc('trade_status', 'R');			//交易状态
 			$total_fee = core::gpc('total_fee', 'R');			//交易状态
+			$buyer_email = core::gpc('buyer_email', 'R');			//
 			
 			if($trade_status == 'TRADE_FINISHED' || $trade_status == 'TRADE_SUCCESS') {
 				$order = $this->shop_order->read($orderid);
 				$order['pay_type'] = 1;
 				$order['pay_amount'] = $total_fee;
 				$order['status'] = 1;
+				$order['pay_email'] = $buyer_email;
 				$this->shop_order->update($order); // 支付时间是否要记一个？
 			}
 			echo "success";		// 请不要修改或删除
