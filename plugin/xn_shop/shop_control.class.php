@@ -326,8 +326,8 @@ EOT;
 				$order = $this->shop_order->read($orderid);
 				$order['pay_type'] = 1;
 				$order['pay_amount'] = $total_fee;
-				$order['status'] = 1;
 				$order['pay_email'] = $buyer_email;
+				$order['status'] = 1;
 				$this->shop_order->update($order); // 支付时间是否要记一个？
 				$this->message('支付成功，现在跳转到订单详情', 1, "?my-order-do-read-orderid-$orderid.htm");
 			}
@@ -358,8 +358,8 @@ EOT;
 				$order = $this->shop_order->read($orderid);
 				$order['pay_type'] = 1;
 				$order['pay_amount'] = $total_fee;
-				$order['status'] = 1;
 				$order['pay_email'] = $buyer_email;
+				$order['status'] = 1;
 				$this->shop_order->update($order); // 支付时间是否要记一个？
 			}
 			echo "success";		// 请不要修改或删除
