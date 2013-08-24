@@ -1,0 +1,113 @@
+<!--{include header.htm}-->
+
+<div class="width">
+
+	<div class="page tab" style="margin-bottom: 4px;">
+		<a href="?shop-good.htm" $_checked[shop_good]>商品管理</a>
+		<a href="?shop-cate.htm" $_checked[shop_cate]>分类管理</a>
+		<a href="?shop-order.htm" $_checked[shop_order]>订单管理</a>
+		<a href="?shop-setting.htm" $_checked[shop_setting]>设置</a>
+	</div>
+	
+	<form action="?shop-setting-ajax-1.htm" method="post" id="form">
+		<input type="hidden" name="FORM_HASH" value="{FORM_HASH}" />
+		
+
+		<div class="div">
+			<div class="header"><span>商城设置</span></div>
+			<div class="body">
+				<dl>
+					<dt><label for="enable">是否开启支付：</label></dt>
+					<dd>$input[enable]</dd>
+				</dl>						
+			</div>
+		</div>
+			
+		<div class="div">
+			<div class="header"><span>支付宝设置</span></div>
+			<div class="body">
+				<dl>
+					<dt><label for="alipay_enable">是否开启支付宝：</label></dt>
+					<dd>$input[alipay_enable]</dd>
+					
+					<dt><label for="alipay_enable">交易类型：</label></dt>
+					<dd>$input[alipay_type]</dd>
+				
+					<dt><label for="alipay_seller_email">卖家支宝帐户：</label></dt>
+					<dd>$input[alipay_seller_email]</dd>
+					
+					<dt><label for="alipay_partner">合作身份者id：</label></dt>
+					<dd>$input[alipay_partner] 以2088开头的16位纯数字</dd>
+				
+					<dt><label for="alipay_key">安全检验码：</label></dt>
+					<dd>$input[alipay_key] 以数字和字母组成的32位字符</dd>
+					
+					<dt></dt>
+					<dd>
+						<p>支付宝接口地址：<a href="https://b.alipay.com/order/productSet.htm" target="_blank">https://b.alipay.com/order/productSet.htm</a></p>
+					</dd>
+					
+				</dl>						
+			</div>
+		</div>
+		<div class="div" style="margin-top: 8px;">
+			<div class="header">网银在线设置</div>
+			<div class="body">
+				<dl>
+					<dt><label for="ebank_enable">是否开启网银在线接口：</label></dt>
+					<dd>$input[ebank_enable]</dd>
+				
+					<dt><label for="ebank_mid">商户号码：</label></dt>
+					<dd>$input[ebank_mid]</dd>
+					
+					<dt><label for="ebank_key">MD5密钥：</label></dt>
+					<dd>$input[ebank_key]</dd>
+					
+					<dt></dt>
+					
+					<dd>
+						<p>网银支付接口网址：<a href="http://www.chinabank.com.cn/" target="_blank">http://www.chinabank.com.cn/</a></p>
+					</dd>
+				</dl>
+			</div>
+		</div>
+		<div class="div" style="margin-top: 8px;">
+			<div class="header">线下汇款设置</div>
+			<div class="body">
+				<dl>
+					<dt><label for="offline_enable">是否开启线下汇款提示：</label></dt>
+					<dd>$input[offline_enable]</dd>
+				
+					<dt><label for="offline_banklist">银行账户信息：</label></dt>
+					<dd>$input[offline_banklist]</dd>
+				</dl>
+			</div>
+		</div>
+		<p style="text-align: center;">
+			<input type="submit" class="button bigblue" id="submit" value="确定" />
+			<input type="button" class="button biggrey" value="返回" onclick="history.back();" />
+		</p>
+	</form>
+</div>
+
+<!--{include footer.htm}-->
+
+<script type="text/javascript">
+var jsubmit = $('#submit');
+var jform = $('#form');
+jsubmit.click(function() {
+	$('div.alert').remove(); 
+	jsubmit.disable();
+	var postdata = jform.serialize();
+	$.post(jform.attr('action'), postdata,  function(s){
+		jsubmit.enable();
+		var json = json_decode(s);
+		if(error = json_error(json)) {alert(error); return false;}
+		if(json.status <= 0) {alert(json.message);return false;}
+		$.alert('保存成功。', 'ok', 3000);
+	});
+});
+
+</script>
+</body>
+</html>

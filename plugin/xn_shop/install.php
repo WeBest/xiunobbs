@@ -68,6 +68,8 @@ $db->table_create('shop_order', array(
 	array('alipay_receive_name', 'char(10)'), 
 	array('alipay_receive_phone', 'char(20)'), 
 	array('alipay_receive_mobile', 'char(10)'), 
+	
+	array('ebank_orderid', 'char(10)'), 
 ));
 $db->index_create('shop_order', array('orderid'=>1));
 $db->index_create('shop_order', array('uid'=>1, 'orderid'=>1));

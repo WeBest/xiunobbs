@@ -365,28 +365,102 @@ class shop_control extends admin_control {
 	}
 	
 	public function on_setting() {
+		$this->_checked['shop_setting'] = 'class="checked"';
+		
 		$setting = $this->kv->get('shop_setting');
-		if($this->form_submit()) {
-			$enable = core::gpc('enable', 'R');
-			$meta = core::gpc('meta', 'R');
-			$appid = core::gpc('appid', 'R');
-			$appkey = core::gpc('appkey', 'R');
+		if(empty($setting)) {
+			$setting = array(
+				'enable'=>0,
+				'alipay'=>array(
+					'enable'=>0, 
+					'seller_email'=>'', 
+					'partner'=>'', 
+					'key'=>'', 
+					'sign_type'=>'', 
+					'input_charset'=>'', 
+					'cacert'=>'', 
+					'transport'=>'',
+					'type'=>1, // 交易类型
+				),
+				'ebank'=>array(
+					'enable'=>0, 
+					'mid'=>'', 
+					'key'=>'',
+				),
+				'offline'=>array(
+					'enable'=>0, 
+					'banklist'=>'', // 支持 markdown 语法
+				)
+			);
+		}
+		// 处理 POST 提交
+		if(!$this->form_submit()) {
+			$input['enable'] = form::get_radio_yes_no('enable', $setting['enable']);
+			$input['alipay_enable'] = form::get_radio_yes_no('alipay_enable', $setting['alipay']['enable']);
+			$input['alipay_seller_email'] = form::get_text('alipay_seller_email', $setting['alipay']['seller_email'], 300);
+			$input['alipay_partner'] = form::get_text('alipay_partner', $setting['alipay']['partner'], 300);
+			$input['alipay_key'] = form::get_text('alipay_key', $setting['alipay']['key'], 300);
+			$input['alipay_type'] = form::get_radio('alipay_type', array(1=>'担保交易', 2=>'即时到帐', 3=>'担保交易+即时到帐'), $setting['alipay']['type']);
 			
-			if($meta) {
-				if(!preg_match('#<meta[^<>]+/>#is', $meta)) {
-					$this->message('meta标签格式不正确！');
-				}
-				$file = BBS_PATH.'plugin/xn_qq_login/header_css_before.htm';
-				if(!file_put_contents($file, $meta)) {
-					$this->message('写入文件 plugin/xn_qq_login/header_css_before.htm 失败，请检查文件是否可写<br />或者手工编辑此文件内容为：'.htmlspecialchars($meta));
-				}
-				// 删除 tmp 下的缓存文件
-				misc::rmdir($this->conf['tmp_path'], 1);
-			}
+			//网银支付
+			$input['ebank_enable'] = form::get_radio_yes_no('ebank_enable', $setting['ebank']['enable']);
+			$input['ebank_mid'] = form::get_text('ebank_mid', $setting['ebank']['mid'], 300);
+			$input['ebank_key'] = form::get_text('ebank_key', $setting['ebank']['key'], 300);
 			
-			$this->kv->set('qqlogin', array('enable'=>$enable, 'meta'=>$meta, 'appid'=>$appid, 'appkey'=>$appkey));
-			$this->kv->xset('qqlogin_enable', $enable);
-			$this->runtime->xset('qqlogin_enable', $enable);
+			// 线下支付，银行列表
+			$input['offline_enable'] = form::get_radio_yes_no('offline_enable', $setting['offline']['enable']);
+			$input['offline_banklist'] = form::get_textarea('offline_banklist', $setting['offline']['banklist'], 400, 100);
+			
+			$this->view->assign('input', $input);
+			$this->view->display('shop_setting.htm');
+		} else {
+			$enable = core::gpc('enable', 'P');
+			$alipay_enable = core::gpc('alipay_enable', 'P');
+			$alipay_enable = core::gpc('alipay_enable', 'P');
+			$alipay_seller_email = core::gpc('alipay_seller_email', 'P');
+			$alipay_partner = core::gpc('alipay_partner', 'P');
+			$alipay_key = core::gpc('alipay_key', 'P');
+			$alipay_type = core::gpc('alipay_type', 'P');
+			
+			$alipay_sign_type = strtoupper('MD5');
+			$alipay_input_charset= strtolower('utf-8');
+			$alipay_cacert    = $this->conf['plugin_path'].'xn_shop/alipay/cacert.pem';
+			$alipay_transport    = 'http';	
+			
+			// 网银在线
+			$ebank_enable = core::gpc('ebank_enable', 'P');
+			$ebank_mid = core::gpc('ebank_mid', 'P');
+			$ebank_key = core::gpc('ebank_key', 'P');
+			
+			// 线下支付
+			$offline_enable = core::gpc('ebank_enable', 'P');
+			$offline_banklist = core::gpc('offline_banklist', 'P');
+			
+			$setting = array(
+				'enable'=>$enable,
+				'alipay'=>array(
+					'enable'=>$alipay_enable, 
+					'seller_email'=>$alipay_seller_email, 
+					'partner'=>$alipay_partner, 
+					'key'=>$alipay_key, 
+					'sign_type'=>$alipay_sign_type, 
+					'input_charset'=>$alipay_input_charset, 
+					'cacert'=>$alipay_cacert, 
+					'transport'=>$alipay_transport,
+					'type'=>$alipay_type,
+				),
+				'ebank'=>array(
+					'enable'=>$ebank_enable, 
+					'mid'=>$ebank_mid, 
+					'key'=>$ebank_key,
+				),
+				'offline'=>array(
+					'enable'=>$offline_enable, 
+					'banklist'=>'', // 支持 markdown 语法
+				)
+			);
+			$this->kv->set('shop_setting', $setting);		
+			$this->message('设置成功！');
 		}
 	}
 	
