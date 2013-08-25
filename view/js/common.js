@@ -512,6 +512,7 @@ $.toJSON = function(o) {
 	} 
 };
 
+$.loaded = []; // 已经加载的JS
 $.xload = function() {
 	var args = null;
 	if(typeof arguments[0] == 'object') {
@@ -522,29 +523,27 @@ $.xload = function() {
 	}
 		
 	// 去除重复
-	var loaded = []; // 已经加载的JS
 	//args; // 参数列表
-	this.load = function(args, loaded, i) {
+	this.load = function(args, i) {
 		if(typeof args[i] == 'string') {
 			var js = args[i];
-			if($.inArray(js, loaded) != -1) {
+			if($.inArray(js, $.loaded) != -1) {
 				if(i < args.length) {
-					this.load(i+1);
+					this.load(args, i+1);
 				}
 				return;
 			}
-			loaded.push(js);
+			$.loaded.push(js);
 			
 			var script = document.createElement("script");
 		       	script.src = js;
-	
 			// recall next
 			if(i < args.length) {
 				var _this = this;
 				if(is_ie) {
 		       			script.onreadystatechange = function() {
 		       				if(script.readyState == 'loaded' || script.readyState == 'complete') {
-		       					_this.load(args, loaded, i+1);
+		       					_this.load(args, i+1);
 		       					script.onreadystatechange = null;
 		       				}
 		       			};
@@ -553,7 +552,7 @@ $.xload = function() {
 		       			}
 		       		} else {
 		       			script.onload = function() {
-		       				_this.load(args, loaded, i+1);
+		       				_this.load(args, i+1);
 		       			};
 		       		}
 			}
@@ -563,11 +562,12 @@ $.xload = function() {
 			var f = args[i];
 			f();
 			if(i < args.length) {
-				this.load(args, loaded, i+1);
+				this.load(args, i+1);
 			}
+		} else {
 		}
 	};
-	this.load(args, loaded, 0);
+	this.load(args, 0);
 }
 
 function xiuno_load_css(filename) {
