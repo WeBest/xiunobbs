@@ -34,8 +34,6 @@ class shop_control extends common_control {
 		$this->_checked['cateid_'.$cateid] = ' class="checked"';
 		
 		$goods = empty($cate) ? 0 : $cate['goods'];
-		$catearr[0] = '全部';
-		ksort($catearr);
 		$cateselect = form::get_select('cateid', $catearr, $cateid);
 		
 		$pagesize = 20;

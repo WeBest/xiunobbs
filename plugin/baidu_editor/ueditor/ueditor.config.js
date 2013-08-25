@@ -180,8 +180,8 @@
 
         //工具栏上的所有的功能按钮和下拉框，可以在new编辑器的实例时选择自己需要的从新定义
         
-       // , toolbars: [["undo","redo","bold","italic","underline","forecolor","fontsize","fontfamily","justifyleft","justifycenter","justifyright","justifyjustify","insertunorderedlist","insertorderedlist","removeformat","unlink","link","insertimage","attachment","insertvideo","music","gmap","snapscreen","fullscreen","emotion","blockquote","inserttable",,"source"],[]]
-        , toolbars: [["undo","redo","bold","italic","underline","forecolor","fontsize","fontfamily","justifyleft","justifycenter","justifyright","insertunorderedlist","insertorderedlist","removeformat","unlink","link","insertimage","snapscreen","attachment","gmap","fullscreen","emotion","blockquote","insertcode","inserttable","source"],[]]
+        , toolbars: [["undo","redo","bold","italic","underline","forecolor","fontsize","fontfamily","justifyleft","justifycenter","justifyright","justifyjustify","insertunorderedlist","insertorderedlist","removeformat","unlink","link","insertimage","attachment","insertvideo","music","gmap","snapscreen","fullscreen","emotion","blockquote","inserttable",,"source"],[]]
+       // , toolbars: [["undo","redo","bold","italic","underline","forecolor","fontsize","fontfamily","justifyleft","justifycenter","justifyright","insertunorderedlist","insertorderedlist","removeformat","unlink","link","insertimage","snapscreen","attachment","gmap","fullscreen","emotion","blockquote","insertcode","inserttable","source"],[]]
         //当鼠标放在工具栏上时显示的tooltip提示,留空支持自动多语言配置，否则以配置值为准
 //        ,labelMap:{
 //            'anchor':'', 'undo':''
