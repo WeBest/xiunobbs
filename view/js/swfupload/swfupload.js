@@ -1283,12 +1283,12 @@ FileProgress.prototype.disappear = function () {
 		this.setTimer(null);
 	}
 };
-
+/*
 function swf_upload_file(setting, recall) {
 	var base_url = setting.base_url;
 	var buttonid = setting.buttonid;
 	var swf_settings = {
-		flash_url : base_url + 'swfupload.swf',
+		flash_url : 'view/js/swfupload/swfupload.swf',
 		upload_url: setting.upload_url,
 		prevent_swf_caching : false,
 		preserve_relative_urls : false,
@@ -1346,5 +1346,5 @@ function swf_upload_file(setting, recall) {
 	swf_settings = $.extend(swf_settings, setting);
 	var swfu = new SWFUpload(swf_settings);
 }
-
+*/
 }// end defined

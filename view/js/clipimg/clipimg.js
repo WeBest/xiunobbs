@@ -180,7 +180,7 @@ $.clipimg = function(img, settings) {
 	
 	this.init = function() {
 		var swf_settings = {
-			flash_url : baseurl + 'swfupload.swf',
+			flash_url : baseurl+'../swfupload/swfupload.swf',
 			upload_url: uploadurl,
 			prevent_swf_caching : false,
 			preserve_relative_urls : false,
@@ -196,7 +196,7 @@ $.clipimg = function(img, settings) {
 				thumbnail_quality: 90
 			},
 			debug: false,
-			button_image_url: baseurl+"uploadfile.png",
+			button_image_url: baseurl+"../swfupload/uploadfile.png",
 			button_width: "74",
 			button_height: "22",
 			button_placeholder_id: settings.buttonid,

@@ -118,7 +118,7 @@ $('#file_upload_form_'+pid+' span.delete').die('click').live('click', function()
 var upload_file_id   = 'file_upload_button_'+pid;
 var file_size_limit = intval('$upload_max_filesize') + ' MB';
 var swf_settings = {
-	flash_url : 'view/js/editor/swfupload.swf',
+	flash_url : 'view/js/swfupload/swfupload.swf',
 	upload_url: '?attach-uploadfile-fid-$fid-pid-$pid-$conf[cookie_pre]sid-$_sid-$conf[cookie_pre]auth-$_auth-ajax-1.htm',
 	prevent_swf_caching : false,
 	preserve_relative_urls : false,
@@ -134,7 +134,7 @@ var swf_settings = {
 		thumbnail_quality: 80
 	},
 	debug: false,
-	button_image_url: "view/js/editor/uploadfile.png",
+	button_image_url: "view/js/swfupload/uploadfile.png",
 	button_width: "74",
 	button_height: "22",
 	button_placeholder_id: upload_file_id,

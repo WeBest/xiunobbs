@@ -135,7 +135,7 @@ function delay_execute(dialog, recall) {
 			// 来一个闭包
 			function a(i) {
 				var swf_settings = {
-					flash_url : '../view/js/clipimg/swfupload.swf',
+					flash_url : '../view/js/swfupload/swfupload.swf',
 					upload_url: "?shop-uploadimage-goodid-$goodid-seq-"+i+"-$conf[cookie_pre]sid-$_sid-$conf[cookie_pre]auth-$_auth-$conf[cookie_pre]admin_auth-$_admin_auth-ajax-1.htm",
 					prevent_swf_caching : false,
 					preserve_relative_urls : false,
@@ -151,11 +151,11 @@ function delay_execute(dialog, recall) {
 						thumbnail_quality: 90
 					},
 					debug: false,
-					//button_image_url: '../view/js/clipimg/uploadimage.png',
-					button_width: "74",
+					button_image_url: '../view/js/swfupload/uploadimage.png',
+					button_width: "49",
 					button_height: "22",
 					button_placeholder_id: "uploadimage"+i,
-					button_text: '<span class="theFont">上传图片</span>',
+					button_text: '<span class="theFont"></span>',
 					button_text_style: ".theFont {font-size: 12px;}",
 					button_window_mode: SWFUpload.WINDOW_MODE.TRANSPARENT,	// chrome may be does not work!
 					
