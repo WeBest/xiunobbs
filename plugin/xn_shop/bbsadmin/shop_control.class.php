@@ -111,6 +111,7 @@ class shop_control extends admin_control {
 				$good['img4'] = $this->shop_image->get_seq($imglist, 4);
 				$good['img5'] = $this->shop_image->get_seq($imglist, 5);
 				
+				$this->shop_good->format($good);
 				$this->view->assign('good', $good);
 				$this->view->assign('goodid', $goodid);
 				$this->view->assign('cateselect', $cateselect);

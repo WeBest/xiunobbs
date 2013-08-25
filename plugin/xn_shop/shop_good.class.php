@@ -94,10 +94,10 @@ class shop_good extends base_model {
 		return $this->update($arr);
 	}
 	
-	public function format(&$shop) {
-		$shop['dateline_fmt'] = misc::humandate($shop['dateline']);
-		$shop['brief'] = utf8::cutstr_cn(htmlspecialchars(strip_tags($shop['message'])), 208);
-		// hook shop_model_xupdate_end.php
+	public function format(&$good) {
+		$good['dateline_fmt'] = misc::humandate($good['dateline']);
+		$good['brief'] = utf8::cutstr_cn(htmlspecialchars(strip_tags($good['message'])), 208);
+		// hook shop_model_format_end.php
 	}
 }
 ?>

@@ -20,7 +20,8 @@ class attach extends base_model {
 		'text' => array('c', 'cpp', 'cc'),
 		'zip' => array('tar', 'zip', 'gz', 'tar.gz', 'rar', '7z', 'bz'),
 		'book' => array('chm'),
-		'torrent' => array('bt', 'torrent')
+		'torrent' => array('bt', 'torrent'),
+		'font' => array('ttf', 'font', 'fon')
 	);
 	
 	//public $safe_exts = array ();

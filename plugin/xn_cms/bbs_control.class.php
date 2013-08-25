@@ -37,7 +37,7 @@ class bbs_control extends common_control {
 				$threadlist = $this->thread->get_threadlist_by_fid($fid, 0, 0, 2, 0);
 				foreach($threadlist as &$thread) {
 					$thread['dateline_fmt'] = misc::humandate($thread['dateline']);
-					$thread['subject_fmt'] = utf8::substr($thread['subject'], 0, 20);
+					$thread['subject_fmt'] = utf8::substr($thread['subject'], 0, 18);
 				}
 				$threadlists[$fid] = $threadlist;
 			}
