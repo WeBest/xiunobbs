@@ -2,7 +2,7 @@ var attachnum = $attachnum;
 var pid = $pid;
 
 window.UEDITOR_HOME_URL = "$conf[plugin_url]baidu_editor/ueditor/";
-$.xload('plugin/baidu_editor/ueditor/ueditor.config.js', 'plugin/baidu_editor/ueditor/ueditor.all.min.js', 'view/js/editor/swfupload.js', function() {
+$.xload('plugin/baidu_editor/ueditor/ueditor.config.js', 'plugin/baidu_editor/ueditor/ueditor.all.min.js', 'view/js/swfupload/swfupload.js', function() {
 	var editor = new UE.ui.Editor();
 	window.editor = editor;
 	editor.render("thread_message_$pid");
