@@ -51,6 +51,7 @@ class shop_control extends admin_control {
 			$this->view->assign('cateid', $cateid);
 			$this->view->assign('goodlist', $goodlist);
 			$this->view->assign('cateselect', $cateselect);
+			// hook admin_shop_good_list_end.php
 			$this->view->display('shop_good_list.htm');
 		} elseif($do == 'create') {
 			$goodid = intval(core::gpc('goodid', 'P'));
@@ -65,6 +66,7 @@ class shop_control extends admin_control {
 				
 				$this->view->assign('goodid', $goodid);
 				$this->view->assign('cateselect', $cateselect);
+				// hook admin_shop_good_create_submit_before.php
 				$this->view->display('shop_good_create.htm');
 			} else {
 				$goodid = intval(core::gpc('goodid'));
@@ -88,6 +90,7 @@ class shop_control extends admin_control {
 					'views'=>0,
 					'rank'=>100,
 				);
+				// hook admin_shop_good_create_submit_after.php
 				$this->shop_good->xcreate($arr);
 				$this->message('添加商品成功。');
 			}
@@ -111,7 +114,7 @@ class shop_control extends admin_control {
 				$this->view->assign('good', $good);
 				$this->view->assign('goodid', $goodid);
 				$this->view->assign('cateselect', $cateselect);
-			
+				// hook admin_shop_good_update_submit_before.php
 				$this->view->display('shop_good_update.htm');
 			} else {
 				$cateid = intval(core::gpc('cateid', 'P'));
@@ -128,6 +131,7 @@ class shop_control extends admin_control {
 				$good['cover'] = $cover;
 				$good['price'] = $price;
 				$good['stocks'] = $stocks;
+				// hook admin_shop_good_update_submit_after.php
 				$this->shop_good->xupdate($good);
 				$this->message('更新商品成功。');
 			}
@@ -141,6 +145,7 @@ class shop_control extends admin_control {
 			$this->message('更新顺序成功。');
 		} elseif($do == 'delete') {
 			$goodid = intval(core::gpc('goodid'));
+			// hook admin_shop_good_delete_before.php
 			$this->shop_good->xdelete($goodid);
 			$this->message('删除成功！');
 		}
@@ -219,7 +224,6 @@ class shop_control extends admin_control {
 			$n = $this->shop_order->count();
 			$pages = misc::pages("?shop-order-do-list.htm", $n, $page, $pagesize);
 			$orderlist = $this->shop_order->get_list($page, $pagesize);
-			
 			
 			$this->view->assign('page', $page);
 			$this->view->assign('pages', $pages);
@@ -360,6 +364,9 @@ class shop_control extends admin_control {
 		is_file($file['tmp_name']) && unlink($file['tmp_name']);
 		$title = htmlspecialchars(core::gpc('pictitle', 'P'));
 		if($seq > 0) $r['fileurl'] = image::thumb_name($r['fileurl']);
+		
+		// hook admin_shop_uploadimage_end.php
+		
 		echo '{"url":"' . $uploadurl.$r['fileurl'] . '","title":"' . $title . '","original":"' . $file['name'] . '","state":"SUCCESS"}';
 		exit;
 	}
@@ -562,6 +569,9 @@ class shop_control extends admin_control {
 			);
 			$this->shop_image->create($arr);
 		}
+		
+		// hook admin_shop_remoteimage_end.php
+		
 		echo '{"url":"' . implode("ue_separate_ue", $returnurl) . '","tip":"远程图片抓取成功！","srcUrl":"' . core::gpc( "upfile", "P") . '","state":"SUCCESS"}';
 		exit;
 	}
@@ -583,6 +593,8 @@ class shop_control extends admin_control {
 			$this->message('订单不存在。', 0);
 		}
 	}
+	
+	// hook admin_shop_control_after.php
 }
 
 ?>

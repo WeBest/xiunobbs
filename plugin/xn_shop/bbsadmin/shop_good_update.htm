@@ -42,6 +42,7 @@
 				<div><textarea name="message" id="message" style="width: 855px; height: 400px;">$good[message]</textarea></div>
 			</td>
 		</tr>
+		<!--{hook shop_good_update_submit_before.htm}-->
 		<tr>
 			<td colspan="4" align="center">
 				<input type="submit" class="button bigblue" id="update_good_submit" value="编辑商品" />
@@ -131,6 +132,8 @@ function delay_execute(dialog, recall) {
 			dialog.close();
 		});
 		
+		// hook shop_good_update_load_editor_end_js.htm
+		
 	});
 	
 	// flash 上传图片
@@ -206,7 +209,6 @@ function delay_execute(dialog, recall) {
 			};
 			a(i);
 		}
-		
 	});
 		
 };

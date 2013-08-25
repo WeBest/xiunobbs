@@ -49,11 +49,14 @@
 								<td width="200"><a href="?shop-good-goodid-$good[goodid].htm"><img src="$good[cover]" width="300" height="150" /></a></td>
 								<td width="8"></td>
 								<td valign="top">
-									<h3 style="margin: 0px;"><a href="?shop-good-goodid-$good[goodid].htm">$good[name]</a></h3>
+									<h3 style="margin: 0px;"><a href="?shop-good-goodid-$good[goodid].htm">$good[name]</a><!--{hook shop_good_list_name_after.htm}--></h3>
 									<p><span class="grey" style="font-size: 14px;">¥</span> <span style="font-size: 14px; color: #FF4400; font-weight: 800;">$good[price].00</span></p>
+									<!--{hook shop_good_list_brief_before.htm}-->
 									<p class="grey" style="line-height: 1.8;">$good[brief]</p>
 									<p style="text-align: right;">
+										<!--{hook shop_good_list_buy_before.htm}-->
 										<input type="button" class="button smallblue" value="购买" onclick="window.location='?shop-good-goodid-$good[goodid].htm'" />
+										<!--{hook shop_good_list_buy_after.htm}-->
 									</p>
 								</td>
 							</tr>
@@ -72,7 +75,6 @@
 </div>
 
 <!--{include footer.htm}-->
-
 
 
 <!--{if $cart_shop_number > 0}-->

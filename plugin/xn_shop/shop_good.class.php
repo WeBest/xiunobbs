@@ -22,6 +22,9 @@ class shop_good extends base_model {
 		foreach($shoplist as &$shop) {
 			$this->format($shop);
 		}
+		
+		// hook shop_model_get_list_by_cateid_end.php
+		
 		return $shoplist;
 	}
 	
@@ -35,6 +38,9 @@ class shop_good extends base_model {
 			$cate['goods']++;
 			$this->shop_cate->update($cate);
 		}
+		
+		// hook shop_model_xcreate_end.php
+		
 		return $goodid;
 	}
 	
@@ -64,6 +70,8 @@ class shop_good extends base_model {
 				is_file($attachpath.$file) && unlink($attachpath.$file);
 			}
 		}*/
+		
+		// hook shop_model_xdelete_end.php
 		return $n;
 	}
 	
@@ -80,12 +88,16 @@ class shop_good extends base_model {
 			$cate['goods']++;
 			$this->shop_cate->update($cate);
 		}
+		
+		// hook shop_model_xupdate_end.php
+		
 		return $this->update($arr);
 	}
 	
 	public function format(&$shop) {
 		$shop['dateline_fmt'] = misc::humandate($shop['dateline']);
 		$shop['brief'] = utf8::cutstr_cn(htmlspecialchars(strip_tags($shop['message'])), 208);
+		// hook shop_model_xupdate_end.php
 	}
 }
 ?>

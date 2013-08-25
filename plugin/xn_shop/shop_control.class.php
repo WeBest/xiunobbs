@@ -46,6 +46,7 @@ class shop_control extends common_control {
 		$this->view->assign('cateid', $cateid);
 		$this->view->assign('goodlist', $goodlist);
 		$this->view->assign('cateselect', $cateselect);
+		// hook shop_list_end.php
 		$this->view->display('shop_good_list.htm');
 	}
 	
@@ -64,6 +65,7 @@ class shop_control extends common_control {
 		$this->view->assign('goodid', $goodid);
 		$this->view->assign('imglist', $imglist);
 		$this->view->assign('good', $good);
+		// hook shop_list_end.php
 		$this->view->display('shop_good_read.htm');
 	}
 	
@@ -338,6 +340,8 @@ EOT;
 					$this->shop_good->update($good);
 				}
 				
+				// hook shop_alipay_succeed.php
+				
 				$this->message('支付成功，现在跳转到订单详情', 1, "?my-order-do-read-orderid-$orderid.htm");
 			}
 			echo "success";		// 请不要修改或删除
@@ -371,7 +375,6 @@ EOT;
 				$order['status'] = 1;
 				$this->shop_order->update($order); // 支付时间是否要记一个？
 				
-				
 				// 库存要减
 				$json_amount = core::json_decode($order['json_amount']);
 				foreach($json_amount as $goodid=>$amount) {
@@ -381,6 +384,8 @@ EOT;
 					$good['stocks'] < 0 && $good['stocks'] = 0;
 					$this->shop_good->update($good);
 				}
+				
+				// hook shop_alipay_succeed.php
 				
 			}
 			echo "success";		// 请不要修改或删除
@@ -424,6 +429,8 @@ EOT;
 					$good['stocks'] < 0 && $good['stocks'] = 0;
 					$this->shop_good->update($good);
 				}
+				
+				// hook shop_ebank_succeed.php
 				
 				$this->message('支付成功，现在跳转到订单详情', 1, "?my-order-do-read-orderid-$orderid.htm");
 				//echo "ok";
@@ -476,6 +483,8 @@ EOT;
 		$this->view->assign('cart_shop_number', $n);
 		$this->view->assign('cart_shop_list', $shoplist);
 	}
+	
+	// hook shop_control_after.php
 }
 
 ?>

@@ -38,6 +38,7 @@
 				<div><textarea name="message" id="message" style="width: 855px; height: 400px;"></textarea></div>
 			</td>
 		</tr>
+		<!--{hook shop_good_create_submit_before.htm}-->
 		<tr>
 			<td colspan="4" align="center">
 				<input type="submit" class="button bigblue" id="create_good_submit" value="添加商品" />
@@ -127,6 +128,7 @@ function delay_execute(dialog, recall) {
 			dialog.close();
 		});
 		
+		// hook shop_good_create_load_editor_end_js.htm
 	});
 	
 	// flash 上传图片
