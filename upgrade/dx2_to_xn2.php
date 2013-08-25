@@ -4,11 +4,11 @@
  * Copyright (C) xiuno.com
  */
 
-// 本程序用来升级 DiscuzX 2.0 到 Xiuno BBS 2.0.0 Release，支持重复升级，断点升级，可以反复升级，不会导致数据错乱。
+// 本程序用来升级 DiscuzX 2.0 到 Xiuno BBS 2.1.0，支持重复升级，断点升级，可以反复升级，不会导致数据错乱。
 /*
 	流程：
 		1. 备份原站点：新建目录: dx2, 将所有文件移动到 dx2 中
-		2. 上传 XiunoBBS 2.0.0 upload_me 文件夹下的源代码到根目录，通过 url 访问，安装，安装成功以后进入第3步。
+		2. 上传 XiunoBBS 2.1.0 upload_me 文件夹下的源代码到根目录，通过 url 访问，安装，安装成功以后进入第3步。
 		3. 访问 http://www.domain.com/dx2_to_xn2.php 开始升级
 		4. 升级完毕后，删除升级程序：dx2_to_xn2.php
 */
@@ -1498,13 +1498,13 @@ function show_header() {
 	<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 	<html xmlns="http://www.w3.org/1999/xhtml">
 	<head>
-		<title>Discuz!X 2.0 转 Xiuno BBS 2.0.0 Release 程序 </title>
+		<title>Discuz!X 2.0 转 Xiuno BBS 2.1.0 程序 </title>
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 		<link rel="stylesheet" type="text/css" href="view/common.css" />
 	</head>
 	<body>
 	<div id="header" style="overflow: hidden;">
-		<h3 style="color: #FFFFFF; line-height: 26px;margin-left: 16px;">Discuz! 2.0 转 Xiuno BBS 2.0.0 Release 程序</h3>
+		<h3 style="color: #FFFFFF; line-height: 26px;margin-left: 16px;">Discuz! 2.0 转 Xiuno BBS 2.1.0 程序</h3>
 		<p style="color: #BBBBBB; margin-left: 16px;">本程序会记录上次升级的进度，如果需要重头转换，请删除进度记录文件'.$conf['upload_path'].'upgrade_process.txt'.'</p>
 	</div>
 	<div id="body" style="padding: 16px;">';
