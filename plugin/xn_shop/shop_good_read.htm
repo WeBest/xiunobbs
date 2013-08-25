@@ -42,26 +42,15 @@
 			<table width="100%" width="100%">
 				<tr>
 					<td width="50%" valign="top" class="left">
-						<div id="banner"> 
-							<div id="banner_bg"></div> 
-							<div id="banner_info"></div> 
-							<ul> 
-								<li>1</li> 
-								<li>2</li> 
-								<li>3</li> 
-								<li>4</li> 
-								<li>5</li> 
-							</ul> 
-							<div id="banner_list">
-								<!--{loop $imglist $imgurl}-->
-									<a href="#" target="_blank"><img src="$imgurl"></a> 
-								<!--{/loop}-->
-							</div>
+						<div class="looppic" style="width: 560px; height: 280px; overflow: hidden;"> 
+						<!--{loop $imglist $imgurl}-->
+							<a href="$imgurl[image]" target="_blank" title=""><img src="$imgurl[thumb]"></a>
+						<!--{/loop}-->
 						</div>
 					</td>
 					<td width="8"></td>
 					<td valign="top" class="right">
-						<h2 style="margin-top: 0px; margin-bottom: 16px;">$good[name]</h2>
+						<h2 style="margin-top: 24px; margin-bottom: 16px;">$good[name]</h2>
 						<p style="line-height: 2.0">价　　格：<span class="grey" style="font-size: 24px;">¥</span> <span style="font-size: 24px; color: #FF4400; font-weight: 800;">$good[price].00</span></p>
 						<p style="line-height: 2.0">库　　存：$good[stocks]</p>
 						<p style="line-height: 2.0">查看次数：$good[views]</p>
@@ -72,6 +61,7 @@
 							<input type="text" value="1" name="amout" style="width: 40px; height: 16px; font-size: 12px; text-align: center;" class="border" />
 							<span class="icon icon-plus" style="cursor: pointer"></span>
 						</p>
+						<br />
 						<br />
 						<p>
 							<input type="button" class="button bigblue" value="立即购买" id="buybutton"  />
@@ -104,41 +94,57 @@ $('span.icon-cart-disable').removeClass('icon-cart-disable').addClass('icon-cart
 
 	
 <script>
-function loop_play_pic() {
-	var t =0;
-	var n = 0
-	var count = 0;
-	var _this = this;
-	this.showAuto = function () {
-		n = n >=(count - 1) ? 0 : ++n; 
-		$("#banner li").eq(n).trigger('click'); 
+// 轮播
+$.fn.looppic = function() {
+	var w = $(this).width();
+	var h = $(this).height();
+	// 追加一行在下面，显示小图片
+	// 遍历里面的 a img 元素
+	// 1. 隐藏第一张以后的元素
+	var links = $(this).find('a');
+	var imgs = $(this).find('a img');
+	//links.not(':eq(0)').hide();
+	
+	var total = links.length;
+	var last = 0; // 最后播放的序号
+	
+	var t; // 定时器句柄
+	
+	// 2. 生成小图片，放在图片下方
+	var jdiv = $('<div></div>').insertAfter(this);
+	imgs.each(function(n) {$(this).clone().width(100).height(50).appendTo(jdiv).css({'cursor':'pointer', 'margin':'2px'})});
+	var jthumb = jdiv.find('img');
+	jthumb.each(function(n) {
+		$(this).click(function() {
+			// 上一张隐藏，切换其他张
+			if(last == n) return;
+			loop(n);
+		});
+	});
+	$.merge(jthumb,links).hover(function() {
+		clearInterval(t);
+	}, function() {
+		t = setInterval(function() {loop();}, 3000);
+	});
+	
+	// 3 启动定时器
+	function loop(i) {
+		var n = typeof i != 'undefined' ? i : last + 1;
+		if(n >= total) {
+			n = 0;
+		}
+		links.eq(last).fadeOut(500);
+		links.eq(n).fadeIn(500);
+		jthumb.eq(last).removeClass('border');
+		jthumb.eq(n).addClass('border');
+		
+		last = n;
 	}
 	
-	count = $("#banner_list a").length; 
-	$("#banner_list a:not(:first-child)").hide(); 
-	$("#banner_info").html($("#banner_list a:first-child").find("img").attr('alt')); 
-	$("#banner_info").click(function(){window.open($("#banner_list a:first-child").attr('href'), "_blank")}); 
-	$("#banner li").click(function() { 
-		var i = $(this).text() - 1;//获取Li元素内的值，即1，2，3，4 
-		n = i; 
-		if (i >= count) return; 
-		$("#banner_info").html($("#banner_list a").eq(i).find("img").attr('alt')); 
-		$("#banner_info").unbind().click(function(){window.open($("#banner_list a").eq(i).attr('href'), "_blank")}) 
-		$("#banner_list a").filter(":visible").fadeOut(500).parent().children().eq(i).fadeIn(1000); 
-		$(this).css({"background":"#c30000",'color':'#FFFFFF'}).siblings().css({"background":"#710000",'color':'#fff'});
-	}); 
-	t = setInterval(function() {_this.showAuto()}, 5000);
-	$("#banner li:first-child").trigger('click'); 
-	$("#banner").hover(
-		function(){clearInterval(t)}, 
-		function(){
-				t = setInterval(function() {showAuto();}, 5000);
-		}
-	); 
-}
-document.onreadystatechange=function() { if(document.readyState == 'complete'){
-	loop_play_pic();
-}};
+	t = setInterval(function() {loop();}, 3000);
+};
+
+$('div.looppic').looppic();
 
 // 加入到购物车，提示加入成功。
 $('#addcart').click(function() {

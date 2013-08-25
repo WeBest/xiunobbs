@@ -40,7 +40,7 @@ class shop_image extends base_model {
 		$uploadurl = $this->conf['upload_url'].'attach_shop/';
 		foreach($imagelist as $k=>$v) {
 			if($v['seq'] > 0 && $v['fileurl']) {
-				$retlist[] = $uploadurl.$v['fileurl'];
+				$retlist[] = array('image'=>$uploadurl.$v['fileurl'], 'thumb'=>image::thumb_name($uploadurl.$v['fileurl']));
 			}
 		}
 		return $retlist;
