@@ -1,0 +1,66 @@
+var swf_settings = {
+	flash_url : '../view/js/swfupload/swfupload.swf',
+	upload_url: "?shop-uploadfile-goodid-$goodid-$conf[cookie_pre]sid-$_sid-$conf[cookie_pre]auth-$_auth-$conf[cookie_pre]admin_auth-$_admin_auth-ajax-1.htm",
+	prevent_swf_caching : false,
+	preserve_relative_urls : false,
+	post_params: "",
+	//file_size_limit : '4M',
+	file_types : "*.jpg;*.gif;*.png;*.bmp;*.ttf;*.font;*.fon;*.zip;*.7z;*.rar;*.tar.gz",
+	file_types_description : "文件",
+	file_upload_limit : 100,
+	file_queue_limit : 0,
+	custom_settings : {
+		thumbnail_height: 120000,
+		thumbnail_width: 1600,
+		thumbnail_quality: 90
+	},
+	debug: false,
+	button_image_url: '../view/js/swfupload/uploadfile.png',
+	button_width: "74",
+	button_height: "22",
+	button_placeholder_id: "uploadfile",
+	button_text: '<span class="theFont"></span>',
+	button_text_style: ".theFont {font-size: 12px;}",
+	button_window_mode: SWFUpload.WINDOW_MODE.TRANSPARENT,	// chrome may be does not work!
+	
+	file_dialog_complete_handler : function(numFilesSelected, numFilesQueued) {
+		this.startUpload();
+	},
+	upload_start_handler : function(file) {
+		//$('<span class="loading"><img src="../view/js/loading.gif" width="16" height="16" /></span>').insertAfter($('#SWFUpload_0'));
+		return true;
+	},
+	upload_progress_handler : function(file, bytesLoaded, bytesTotal) {
+		var w = Math.ceil((bytesLoaded / bytesTotal) * 26);
+		//$('span.imageprocess_body', _this.toolbar).width(w);
+	},
+	upload_error_handler : function(file, errorCode, message) {
+		alert('upload_error: file:'+file+', errorcode:'+errorcode+', message:'+message);
+	},
+	upload_success_handler : function(file, serverData) {
+		//$('#SWFUpload_0').next('span.loading').hide();
+		var json = json_decode(serverData);
+		if(json.message) {
+			$('#uploadfileinfo').html(json.message);
+			//$('#goodimage'+i).attr('src', json.url);
+		} else {
+			alert('服务端返回数据错误：'+serverData);
+		}
+		return true;
+	},
+	file_queue_error_handler : function(file, errorCode, message) {
+		if(errorCode == SWFUpload.QUEUE_ERROR.FILE_EXCEEDS_SIZE_LIMIT) {
+			alert('您选择的文件：'+file+' 尺寸太大！错误信息：'+message);
+			//$('.toolbar a.imageloading', _this).hide();
+			return true;
+		} else {
+			alert('upload_queue_error: file:'+file+', errorCode:'+errorCode+', message:'+message);
+		}
+		return false;
+	},
+	queue_complete_handler : function(numFilesUploaded) {
+		//$('a.image', _this.toolbar).width(49);
+		//$('a.imageloading', _this.toolbar).hide();
+	}
+};
+var swfu = new SWFUpload(swf_settings);
