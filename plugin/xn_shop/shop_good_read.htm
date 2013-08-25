@@ -50,26 +50,26 @@
 					</td>
 					<td width="8"></td>
 					<td valign="top" class="right">
-						<h2 style="margin-top: 24px; margin-bottom: 16px;">$good[name]</h2>
+						<h2 style="margin-top: 24px; margin-bottom: 16px;">$good[name] <!--{hook shop_good_read_name_after.htm}--></h2>
 						<p style="line-height: 2.0">价　　格：<span class="grey" style="font-size: 24px;">¥</span> <span style="font-size: 24px; color: #FF4400; font-weight: 800;">$good[price].00</span></p>
-						<!--{hook shop_good_list_price_after.htm}-->
+						<!--{hook shop_good_read_price_after.htm}-->
 						<p style="line-height: 2.0">库　　存：$good[stocks]</p>
 						<p style="line-height: 2.0">查看次数：$good[views]</p>
 						<p style="line-height: 2.0">订购次数：$good[orders]</p>
 						<p style="line-height: 2.0">上架时间：$good[dateline_fmt]</p>
-						<!--{hook shop_good_list_amount_before.htm}-->
+						<!--{hook shop_good_read_amount_before.htm}-->
 						<p style="line-height: 2.0">数量：
 							<span class="icon icon-min" style="cursor: pointer"></span>
 							<input type="text" value="1" name="amout" style="width: 40px; height: 16px; font-size: 12px; text-align: center;" class="border" />
 							<span class="icon icon-plus" style="cursor: pointer"></span>
-							<!--{hook shop_good_list_amount_end.htm}-->
+							<!--{hook shop_good_read_amount_end.htm}-->
 						</p>
-						<!--{hook shop_good_list_amount_after.htm}-->
+						<!--{hook shop_good_read_amount_after.htm}-->
 						<br />
 						<br />
 						<p>
 							<input type="button" class="button bigblue" value="立即购买" id="buybutton"  />
-							<input type="button" class="button biggrey" value="加入到购物车" id="addcart" />
+							<input type="button" class="button biggrey" value="加入购物车" id="addcart" />
 						</p>
 					</td>
 				</tr>
@@ -79,7 +79,7 @@
 	<div class="div">
 		<div class="header">商品描述</div>
 		<div class="body" style="font-size: 14px; line-height: 1.8">
-			$good[message]
+			<div style="margin: 10px;">$good[message]</div>
 		</div>
 	</div>
 </div>

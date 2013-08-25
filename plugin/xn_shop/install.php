@@ -19,7 +19,7 @@ $db->table_create('shop_good', array(
 	array('cateid', 'int(11)'), 
 	array('name', 'char(64)'), 
 	array('message', 'text'), 
-	array('cover', 'char(64)'), 
+	array('cover', 'char(128)'), 
 	array('price', 'int(11)'), 
 	array('dateline', 'int(11)'), 
 	array('stocks', 'int(11)'), // 库存数量

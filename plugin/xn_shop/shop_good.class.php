@@ -16,16 +16,16 @@ class shop_good extends base_model {
 	public function get_list_by_cateid($cateid, $page = 1, $pagesize = 20) {
 		$start = ($page - 1) * $pagesize;
 		$cond = $cateid ? array('cateid'=>$cateid) : array();
-		$shoplist = $this->index_fetch($cond, array(), $start, $pagesize);
-		misc::arrlist_multisort($shoplist, 'rank');
-		misc::arrlist_change_key($shoplist, 'goodid');
-		foreach($shoplist as &$shop) {
-			$this->format($shop);
+		$goodlist = $this->index_fetch($cond, array(), $start, $pagesize);
+		misc::arrlist_multisort($goodlist, 'rank');
+		misc::arrlist_change_key($goodlist, 'goodid');
+		foreach($goodlist as &$good) {
+			$this->format($good);
 		}
 		
-		// hook shop_model_get_list_by_cateid_end.php
+		// hook shop_good_model_get_list_by_cateid_end.php
 		
-		return $shoplist;
+		return $goodlist;
 	}
 	
 	public function xcreate($arr) {
@@ -39,7 +39,7 @@ class shop_good extends base_model {
 			$this->shop_cate->update($cate);
 		}
 		
-		// hook shop_model_xcreate_end.php
+		// hook shop_good_model_xcreate_end.php
 		
 		return $goodid;
 	}
@@ -71,7 +71,7 @@ class shop_good extends base_model {
 			}
 		}*/
 		
-		// hook shop_model_xdelete_end.php
+		// hook shop_good_model_xdelete_end.php
 		return $n;
 	}
 	
@@ -89,7 +89,7 @@ class shop_good extends base_model {
 			$this->shop_cate->update($cate);
 		}
 		
-		// hook shop_model_xupdate_end.php
+		// hook shop_good_model_xupdate_end.php
 		
 		return $this->update($arr);
 	}
@@ -97,7 +97,7 @@ class shop_good extends base_model {
 	public function format(&$good) {
 		$good['dateline_fmt'] = misc::humandate($good['dateline']);
 		$good['brief'] = utf8::cutstr_cn(htmlspecialchars(strip_tags($good['message'])), 208);
-		// hook shop_model_format_end.php
+		// hook shop_good_model_format_end.php
 	}
 }
 ?>
