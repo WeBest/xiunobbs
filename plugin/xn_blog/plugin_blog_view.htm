@@ -24,129 +24,129 @@
 		</tr>
 	</table>
 	
-	<table width="100%">
+	<table width="100%" style="table-layout: fixed;">
 		<tr>
 			<td width="70%" valign="top">
-			<!--{hook thread_index_nav_after.htm}-->
-			<!--{loop $postlist $post}-->
-			<!--{php $u = isset($userlist[$post['uid']]) ? $userlist[$post['uid']] : array('uid'=>0, 'username'=>'', 'groupname'=>'', 'avatar_middle'=>'');}-->
-			<!--{if $thread[firstpid] == $post[pid]}-->
-			<table width="100%" class="post_content">
-				<tr>
-					<td width="100%" valign="top">
-						<div class="div">
-							<div class="body" style="padding:8px 20px 20px 20px;">
-								<div style="text-align:center;">
-									<h1>$thread[subject]</h1>
-									<br /><hr />
-									<p class="grey">作者：$thread[username]&nbsp;&nbsp;发布时间：$thread[dateline_fmt]&nbsp;&nbsp;分类：
-									<!--{if $thread[typeid1]}-->
-									<a href="?forum-index-fid-$fid-typeid1-$thread[typeid1].htm" target="_blank" style="color:blue;" rel="nofollow">{$thread[typename1]}</a>&nbsp;&nbsp;
-									<!--{else}-->
-									无&nbsp;&nbsp;
+				<!--{hook thread_index_nav_after.htm}-->
+				<!--{loop $postlist $post}-->
+				<!--{php $u = isset($userlist[$post['uid']]) ? $userlist[$post['uid']] : array('uid'=>0, 'username'=>'', 'groupname'=>'', 'avatar_middle'=>'');}-->
+				<!--{if $thread[firstpid] == $post[pid]}-->
+				<table width="100%" class="post_content">
+					<tr>
+						<td width="100%" valign="top">
+							<div class="div">
+								<div class="body" style="padding:8px 20px 20px 20px;">
+									<div style="text-align:center;">
+										<h1>$thread[subject]</h1>
+										<br /><hr />
+										<p class="grey">作者：$thread[username]&nbsp;&nbsp;发布时间：$thread[dateline_fmt]&nbsp;&nbsp;分类：
+										<!--{if $thread[typeid1]}-->
+										<a href="?forum-index-fid-$fid-typeid1-$thread[typeid1].htm" target="_blank" style="color:blue;" rel="nofollow">{$thread[typename1]}</a>&nbsp;&nbsp;
+										<!--{else}-->
+										无&nbsp;&nbsp;
+										<!--{/if}-->
+										阅读：<span id="thread_views" class="bold"></span>&nbsp;次&nbsp;&nbsp;
+										评论：<span class="bold">$thread[posts_fmt]</span>&nbsp;&nbsp;
+										<!--{if $ismod}-->	
+										<a href="?post-update-fid-$thread[fid]-pid-$post[pid]-ajax-1.htm" class="ajaxdialog" ajaxdialog="{fullicon: true, modal: false, cache: false}" onclick="return false;">编辑</a>&nbsp;&nbsp;
+										<a href="?post-delete-fid-$fid-pid-$post[pid].htm" class="ajaxconfirm" ajaxconfirm="{message: '确定删除吗？'}" onclick="return false;">删除</a>
+										<!--{/if}-->
+										</p>
+										<br />
+									</div>
+									<div class="post">
+										<div class="message">$post[message]</div>
+									</div>
+								</div>
+							</div>
+							<div style="width:100%;  height:20px; margin:12px 0;">
+								<div style="width:50%; margin:auto auto 5px; float:left;"><span style="margin-left:10px;">上一篇：<!--{if !empty($up)}--><a href="?thread-index-fid-$up[fid]-tid-$up[tid].htm">$up[subject_substr]</a><!--{else}-->没有了<!--{/if}--></span></div>
+								<div style="width:50%;  margin:auto auto 5px; float:right;">
+									<span style="float:right; margin-right:10px;">下一篇：<!--{if !empty($next)}--><a href="?thread-index-fid-$next[fid]-tid-$next[tid].htm">$next[subject_substr]</a><!--{else}-->没有了<!--{/if}--></span></div>
+							</div>
+					</tr>
+				</table>
+				<!--{else}-->
+				<table border="0" cellpadding="0" cellspacing="0" width="100%" align="center" class="post_table">
+					<tr>
+						<td width="6%" valign="top">
+							<div>
+								<a href_real="?you-index-uid-$u[uid].htm" target="_blank" href="?you-profile-uid-$u[uid]-ajax-1.htm" class="ajaxdialog_hover" ajaxdialog="{position: 5, modal: false, timeout: 1000, showtitle: false}" onclick="return false;" style="display: block" rel="nofollow">
+									<span class="avatar_middle border bg1" {if $u[avatar_middle]}style="background-image: url($u[avatar_middle])"{/if}></span>
+								</a>
+							</div>
+							<div style="word-break:break-all; text-align:center;" aria-label="$u[username] $post[floor]楼">$u[username]</div>
+						</td>
+						<td width="2%"></td>
+						<td width="61%" class="post_td" valign="top">
+							<span class="icon icon-left-arrow" style="position: absolute; z-index: 9; float: left; margin-left: -9px; margin-top: 10px;"></span>
+							<div class="bg1 border post" style="padding: 8px;">
+								<div id="message_$post[pid]" class="message">$post[message]</div>
+								<div class="grey mod" pid="$post[pid]" style="zoom: 1;">
+									<span style="width: 150px; float: left; text-align: left;" class="small">$post[dateline_fmt]</span>
+									
+									<!--{if $_user[uid]}-->
+									<a href="?post-post-fid-$fid-tid-$post[tid]-pid-$post[pid].htm" class="ajaxdialog" ajaxdialog="{fullicon: true, cache: true}" onclick="return false;">引用</a>
 									<!--{/if}-->
-									阅读：<span id="thread_views" class="bold"></span>&nbsp;次&nbsp;&nbsp;
-									评论：<span class="bold">$thread[posts_fmt]</span>&nbsp;&nbsp;
+									
 									<!--{if $ismod}-->	
-									<a href="?post-update-fid-$thread[fid]-pid-$post[pid]-ajax-1.htm" class="ajaxdialog" ajaxdialog="{fullicon: true, modal: false, cache: false}" onclick="return false;">编辑</a>&nbsp;&nbsp;
-									<a href="?post-delete-fid-$fid-pid-$post[pid].htm" class="ajaxconfirm" ajaxconfirm="{message: '确定删除吗？'}" onclick="return false;">删除</a>
+									<a href="?post-update-fid-$thread[fid]-pid-$post[pid]-ajax-1.htm" class="ajaxdialog" ajaxdialog="{fullicon: true, modal: false, cache: false}" onclick="return false;">编辑</a>
+									<a href="?post-delete-fid-$fid-pid-$post[pid].htm" onclick="return window.confirm('您确定删除吗？');">删除</a>
 									<!--{/if}-->
-									</p>
-									<br />
-								</div>
-								<div class="post">
-									<div class="message">$post[message]</div>
+									#<!--{php echo $post[floor]-1}-->楼
 								</div>
 							</div>
-						</div>
-						<div style="width:100%;  height:20px; margin:12px 0;">
-							<div style="width:50%; margin:auto auto 5px; float:left;"><span style="margin-left:10px;">上一篇：<!--{if !empty($up)}--><a href="?thread-index-fid-$up[fid]-tid-$up[tid].htm">$up[subject_substr]</a><!--{else}-->没有了<!--{/if}--></span></div>
-							<div style="width:50%;  margin:auto auto 5px; float:right;">
-								<span style="float:right; margin-right:10px;">下一篇：<!--{if !empty($next)}--><a href="?thread-index-fid-$next[fid]-tid-$next[tid].htm">$next[subject_substr]</a><!--{else}-->没有了<!--{/if}--></span></div>
-						</div>
-				</tr>
-			</table>
-			<!--{else}-->
-			<table border="0" cellpadding="0" cellspacing="0" width="100%" align="center" class="post_table">
-				<tr>
-					<td width="6%" valign="top">
-						<div>
-							<a href_real="?you-index-uid-$u[uid].htm" target="_blank" href="?you-profile-uid-$u[uid]-ajax-1.htm" class="ajaxdialog_hover" ajaxdialog="{position: 5, modal: false, timeout: 1000, showtitle: false}" onclick="return false;" style="display: block" rel="nofollow">
-								<span class="avatar_middle border bg1" {if $u[avatar_middle]}style="background-image: url($u[avatar_middle])"{/if}></span>
-							</a>
-						</div>
-						<div style="word-break:break-all; text-align:center;" aria-label="$u[username] $post[floor]楼">$u[username]</div>
-					</td>
-					<td width="2%"></td>
-					<td width="61%" class="post_td" valign="top">
-						<span class="icon icon-left-arrow" style="position: absolute; z-index: 9; float: left; margin-left: -9px; margin-top: 10px;"></span>
-						<div class="bg1 border post" style="padding: 8px;">
-							<div id="message_$post[pid]" class="message">$post[message]</div>
-							<div class="grey mod" pid="$post[pid]" style="zoom: 1;">
-								<span style="width: 150px; float: left; text-align: left;" class="small">$post[dateline_fmt]</span>
-								
-								<!--{if $_user[uid]}-->
-								<a href="?post-post-fid-$fid-tid-$post[tid]-pid-$post[pid].htm" class="ajaxdialog" ajaxdialog="{fullicon: true, cache: true}" onclick="return false;">引用</a>
-								<!--{/if}-->
-								
-								<!--{if $ismod}-->	
-								<a href="?post-update-fid-$thread[fid]-pid-$post[pid]-ajax-1.htm" class="ajaxdialog" ajaxdialog="{fullicon: true, modal: false, cache: false}" onclick="return false;">编辑</a>
-								<a href="?post-delete-fid-$fid-pid-$post[pid].htm" onclick="return window.confirm('您确定删除吗？');">删除</a>
-								<!--{/if}-->
-								#<!--{php echo $post[floor]-1}-->楼
+						</td>
+					</tr>
+				</table>
+				<!--{/if}-->
+				<!--{/loop}-->
+				<!--{if $pages}-->
+				<table width="100%">
+					<tr>
+						<td width="70%" valign="top">
+							<div class="box">
+								<div class="page" style="text-align: center;">$pages</div>
 							</div>
-						</div>
-					</td>
-				</tr>
-			</table>
-			<!--{/if}-->
-			<!--{/loop}-->
-			<!--{if $pages}-->
-			<table width="100%">
-				<tr>
-					<td width="70%" valign="top">
-						<div class="box">
-							<div class="page" style="text-align: center;">$pages</div>
-						</div>
-					</td>
-					<td width="30%"></td>
-				</tr>
-			</table>
-			<!--{/if}-->
-			
-			<!--{hook thread_index_quick_post_start.htm}-->
-			<table border="0" cellpadding="0" cellspacing="0" width="100%" align="center" style="margin-top: 4px;" class="post_table">
-				<tr>
-					<td  width="6%" valign="top">
-						<div>
-							<a href_real="?you-index-uid-$_user[uid].htm" target="_blank" href="?you-profile-uid-$_user[uid]-ajax-1.htm" class="ajaxdialog_hover" ajaxdialog="{position: 5, modal: false, timeout: 1000, showtitle: false}" onclick="return false;" style="display: block" rel="nofollow">
-								<span class="avatar_middle border bg1" {if !empty($_user[avatar_middle])}style="background-image: url($_user[avatar_middle])"{/if}></span>
-							</a>
-						</div>
-						<div style="word-break:break-all; text-align:center;">$_user[username]</div>
-					</td>
-					<td width="2%"></td>
-					<td width="61%" class="post_td" valign="top">
-						<span class="icon icon-left-arrow" style="position: absolute; z-index: 9; float: left; margin-left: -9px; margin-top: 10px;"></span>
-						<div class="bg1 border shadow" style="padding: 8px;">
-							<form action="?post-post-fid-$thread[fid]-tid-$thread[tid]-ajax-1-quickpost-1.htm" method="post" id="quick_post_form" target="_blank">
-								<input type="hidden" name="FORM_HASH" value="{FORM_HASH}" />
-								<textarea name="message" id="quick_message" style="width: 100%; height: 60px; font-size: 14px; overflow: hidden;"></textarea>
-								<div style="margin-top: 4px;">
-									<div style="width: 50%; float: left;">
-										<input type="submit" class="button smallblue" id="quick_post_submit" value="快速回复" />
-										<!--{hook thread_index_quick_post_after.htm}-->
+						</td>
+						<td width="30%"></td>
+					</tr>
+				</table>
+				<!--{/if}-->
+				
+				<!--{hook thread_index_quick_post_start.htm}-->
+				<table border="0" cellpadding="0" cellspacing="0" width="100%" align="center" style="margin-top: 4px;" class="post_table">
+					<tr>
+						<td  width="6%" valign="top">
+							<div>
+								<a href_real="?you-index-uid-$_user[uid].htm" target="_blank" href="?you-profile-uid-$_user[uid]-ajax-1.htm" class="ajaxdialog_hover" ajaxdialog="{position: 5, modal: false, timeout: 1000, showtitle: false}" onclick="return false;" style="display: block" rel="nofollow">
+									<span class="avatar_middle border bg1" {if !empty($_user[avatar_middle])}style="background-image: url($_user[avatar_middle])"{/if}></span>
+								</a>
+							</div>
+							<div style="word-break:break-all; text-align:center;">$_user[username]</div>
+						</td>
+						<td width="2%"></td>
+						<td width="61%" class="post_td" valign="top">
+							<span class="icon icon-left-arrow" style="position: absolute; z-index: 9; float: left; margin-left: -9px; margin-top: 10px;"></span>
+							<div class="bg1 border shadow" style="padding: 8px;">
+								<form action="?post-post-fid-$thread[fid]-tid-$thread[tid]-ajax-1-quickpost-1.htm" method="post" id="quick_post_form" target="_blank">
+									<input type="hidden" name="FORM_HASH" value="{FORM_HASH}" />
+									<textarea name="message" id="quick_message" style="width: 100%; height: 60px; font-size: 14px; overflow: hidden;"></textarea>
+									<div style="margin-top: 4px;">
+										<div style="width: 50%; float: left;">
+											<input type="submit" class="button smallblue" id="quick_post_submit" value="快速回复" />
+											<!--{hook thread_index_quick_post_after.htm}-->
+										</div>
+										<div style="width: 50%; float: left; text-align: right;">
+											<!--{hook thread_index_advanced_post_after.htm}-->
+										</div>
 									</div>
-									<div style="width: 50%; float: left; text-align: right;">
-										<!--{hook thread_index_advanced_post_after.htm}-->
-									</div>
-								</div>
-							</form>
-						</div>
-					</td>
-				</tr>
-			</table>
-			<!--{hook thread_index_quick_post_end.htm}-->
+								</form>
+							</div>
+						</td>
+					</tr>
+				</table>
+				<!--{hook thread_index_quick_post_end.htm}-->
 			</td>
 			<td width="30%" valign="top">
 				<table width="100%">
@@ -255,10 +255,11 @@ $('a.ajaxconfirm').die('click').live('click', ajaxdialog_confirm);
 
 // post_td 下的图片调整大小
 $(function() {
-	var td_width = $('td.post_td').width() - 16;
+	var td_width = $('td.post_td').width();
 	td_width = Math.min($('#body').width() - 170, td_width);
-	$('td.post_td img').each(function() {
+	$('div.message img').each(function() {
 		if($(this).width() > td_width) {
+			
 			this.height = Math.ceil((this.height /this.width) * td_width);
 			this.width = Math.ceil(td_width);
 			
