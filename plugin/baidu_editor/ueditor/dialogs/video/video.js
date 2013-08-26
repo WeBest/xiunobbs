@@ -132,14 +132,17 @@ var video = {};
         }
         return property;
     }
+    
+    // "http://player.youku.com/player.php/sid/$1"
     function convert_url(s){
         return s.replace(/http:\/\/www\.tudou\.com\/programs\/view\/([\w\-]+)\/?/i,"http://www.tudou.com/v/$1")
             .replace(/http:\/\/www\.youtube\.com\/watch\?v=([\w\-]+)/i,"http://www.youtube.com/v/$1")
-            .replace(/http:\/\/v\.youku\.com\/v_show\/id_([\w\-=]+)\.html/i,"http://player.youku.com/player.php/sid/$1")
+            .replace(/http:\/\/v\.youku\.com\/v_show\/id_([\w\-=]+)\.html.*/i,"http://player.youku.com/player.php/sid/$1.swf")
             .replace(/http:\/\/www\.56\.com\/u\d+\/v_([\w\-]+)\.html/i, "http://player.56.com/v_$1.swf")
             .replace(/http:\/\/www.56.com\/w\d+\/play_album\-aid\-\d+_vid\-([^.]+)\.html/i, "http://player.56.com/v_$1.swf")
             .replace(/http:\/\/v\.ku6\.com\/.+\/([^.]+)\.html/i, "http://player.ku6.com/refer/$1/v.swf");
     }
+    
 
     /**
       * 检测传入的所有input框中输入的长宽是否是正数
@@ -263,7 +266,6 @@ var video = {};
      * @param url
      */
     function createPreviewVideo(url){
-
         if ( !url )return;
 		var matches = url.match(/youtu.be\/(\w+)$/) || url.match(/youtube\.com\/watch\?v=(\w+)/) || url.match(/youtube.com\/v\/(\w+)/),
             youku = url.match(/youku\.com\/v_show\/id_(\w+)/),
