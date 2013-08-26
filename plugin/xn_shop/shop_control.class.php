@@ -322,7 +322,7 @@ EOT;
 			$total_fee = core::gpc('total_fee', 'R');			//
 			$buyer_email = core::gpc('buyer_email', 'R');			//
 
-			if($trade_status == 'TRADE_FINISHED' || $trade_status == 'TRADE_SUCCESS') {
+			if($trade_status == 'TRADE_FINISHED' || $trade_status == 'TRADE_SUCCESS' || $trade_status == 'WAIT_SELLER_SEND_GOODS') {
 				$order = $this->shop_order->read($orderid);
 				$order['pay_type'] = 1;
 				$order['pay_amount'] = $total_fee;
@@ -343,8 +343,10 @@ EOT;
 				// hook shop_alipay_succeed.php
 				
 				$this->message('支付成功，现在跳转到订单详情', 1, "?my-order-do-read-orderid-$orderid.htm");
+			} else {
+				//echo "failed";
+				echo 'failed, trade_no:'.$trade_no.', trade_status:'.$trade_status;
 			}
-			echo "success";		// 请不要修改或删除
 		} else {
 			echo "failed";		// 请不要修改或删除
 		}	
@@ -367,7 +369,7 @@ EOT;
 			$total_fee = core::gpc('total_fee', 'R');			//交易状态
 			$buyer_email = core::gpc('buyer_email', 'R');			//
 			
-			if($trade_status == 'TRADE_FINISHED' || $trade_status == 'TRADE_SUCCESS') {
+			if($trade_status == 'TRADE_FINISHED' || $trade_status == 'TRADE_SUCCESS' || $trade_status == 'WAIT_SELLER_SEND_GOODS') {
 				$order = $this->shop_order->read($orderid);
 				$order['pay_type'] = 1;
 				$order['pay_amount'] = $total_fee;
@@ -387,8 +389,12 @@ EOT;
 				
 				// hook shop_alipay_succeed.php
 				
+				echo "success";		// 请不要修改或删除
+			} else {
+				
+				echo "failed";		// 请不要修改或删除
+				//echo 'failed, trade_no:'.$trade_no.', trade_status:'.$trade_status;
 			}
-			echo "success";		// 请不要修改或删除
 		} else {
 			echo "failed";		// 请不要修改或删除
 		}
