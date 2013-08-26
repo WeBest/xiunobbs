@@ -43,6 +43,7 @@ class shop_control extends common_control {
 		
 		$this->view->assign('cate', $cate);
 		$this->view->assign('catearr', $catearr);
+		$this->view->assign('pages', $pages);
 		$this->view->assign('cateid', $cateid);
 		$this->view->assign('goodlist', $goodlist);
 		$this->view->assign('cateselect', $cateselect);

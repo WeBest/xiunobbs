@@ -20,6 +20,7 @@ class cms_control extends admin_control {
 		$this->cms_channel = core::model($this->conf, 'cms_channel', array('channelid'), 'channelid');
 		$this->cms_cate = core::model($this->conf, 'cms_cate', array('channelid', 'cateid'));
 		$this->cms_article = core::model($this->conf, 'cms_article', array('articleid'), 'articleid');
+		
 	}
 	
 	// 考虑默认过期时间
@@ -28,6 +29,7 @@ class cms_control extends admin_control {
 		$channelid = intval(core::gpc('channelid'));
 		$cateid = intval(core::gpc('cateid'));
 		$layout = intval(core::gpc('layout'));
+		$issource = intval(core::gpc('issource'));
 		$channellist = $this->cms_channel->index_fetch(array(), array(), 0, 20);
 		misc::arrlist_multisort($channellist, 'rank', TRUE);
 		if(empty($channelid) && $channellist) {
@@ -49,6 +51,7 @@ class cms_control extends admin_control {
 		$newcateids = core::json_encode($this->get_newcateids($channelid));
 		$this->view->assign('newchannelids', $newchannelids);
 		$this->view->assign('newcateids', $newcateids);
+		$this->view->assign('issource', $issource);
 		
 		if($channel) {
 			// 一篇文章

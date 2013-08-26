@@ -4,7 +4,7 @@
 	<form action="?plugin-setting-dir-$dir.htm" method="post" id="conf_form">
 		<input type="hidden" name="FORM_HASH" value="{FORM_HASH}" />
 		<div class="div" style="width: 700px;">
-			<div class="header">清理垃圾</div>
+			<div class="header">批量删除帖子（会彻底删除帖子，请谨慎使用！）</div>
 			<div class="body">
 				<dl>
 					<dt><label for="fids">选择版块：</label></dt>
@@ -49,7 +49,9 @@ $('#conf_submit').click(function() {
 		return false;
 	}
 	if(window.confirm('清理操作期间，站点会自动切换到只读状态，您确定继续吗？')) {
-		$('#conf_form').submit();
+		if(window.confirm('本次操作会删除符合条件的所有帖子和附件，您确定吗？')) {
+			$('#conf_form').submit();
+		}
 	}
 	return false;
 });

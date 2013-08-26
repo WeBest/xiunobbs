@@ -46,7 +46,8 @@
 		<tr>
 			<td width="50"><b>内 容：</b></td>
 			<td>
-				
+				<input type="checkbox" value="$issource" name="issource" id="issource" onclick="window.location='?cms-index-issource-'+(this.checked ? 1 : 0)+'.htm'" {if $issource}checked="checked"{/if} />
+				源代码模式
 			</td>
 		</tr>
 	</table>
@@ -324,7 +325,7 @@ $('#rank_setting').click(function() {
 </script>
 <!--{/if}-->
 
-<!--{if $layout < 2}-->
+<!--{if $layout < 2 && !$issource}-->
 <script type="text/javascript">
 
 window.UEDITOR_HOME_URL = "http://x.net/plugin/baidu_editor/ueditor/";
@@ -336,6 +337,7 @@ $.xload('../plugin/baidu_editor/ueditor/ueditor.config.js', '../plugin/baidu_edi
 	window.UEDITOR_CONFIG.fileUrl = "?cms-uploadfile-articleid-$articleid-ajax-1.htm";
 	window.UEDITOR_CONFIG.catcherUrl = "?cms-getremoteimage-articleid-$articleid-ajax-1.htm";
 	window.UEDITOR_CONFIG.catcherPath = "";
+	// window.UEDITOR_CONFIG.sourceEditorFirst = true; 貌似没用，无法进入源码编辑模式
 	window.UEDITOR_CONFIG.snapscreenServerUrl = "?cms-uploadimage-articleid-$articleid-$conf[cookie_pre]sid-$_sid-$conf[cookie_pre]auth-$_auth-$conf[cookie_pre]admin_auth-$_admin_auth-ajax-1.htm";
 	var i = $.inArray("attachment", window.UEDITOR_CONFIG.toolbars[0]);
 	delete(window.UEDITOR_CONFIG.toolbars[0][i]);
