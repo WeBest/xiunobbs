@@ -17,7 +17,7 @@ return array(
 	// ------------------> 以下为框架依赖:
 	// 数据库配置， type 为默认的数据库类型，可以支持多种数据库: mysql|pdo_mysql|pdo_oracle|mongodb	
 	'db' => array(				
-		'type' => 'mysql',			
+		'type' => 'pdo_sqlite',			
 		'mysql' => array(			
 			'master' => array(	
 				'host' => 'localhost',								
@@ -44,7 +44,7 @@ return array(
 		),
 		'pdo_sqlite' => array(
 			'master' => array(
-				'host' => 'E:/www/xiuno.2.0.0/upload/sqlite_04b8ca86db.db',
+				'host' => 'E:/www/xiuno.2.0.0/upload/sqlite_c842562b8b.db',
 				'user' => '',
 				'tablepre' => 'bbs_',
 				'password' => '',
@@ -128,7 +128,7 @@ return array(
 	'plugin_disable' => 0,			// 禁止掉所有插件
 	'plugin_on' => 1,			// 是否开启后台插件安装，0: 关闭后台安装插件模式，1:为开启线上插件模式，2:为开启本地插件模式
 	
-	'urlrewrite' => 1,			// 手工开启 URL-Rewrite 后，需要清空下 tmp 目录！
+	'urlrewrite' => 0,			// 手工开启 URL-Rewrite 后，需要清空下 tmp 目录！
 	
 	'timeoffset' => '+8',			// 服务器所在的时区
 	
@@ -138,10 +138,10 @@ return array(
 	'click_server' => 'http://x.net/service/clickd/',	// 记录主题点击数，论坛点击数
 	
 	// 加密KEY，
-	'auth_key' => '5728d27f94595be20a85e273ad488c97',
+	'auth_key' => '7af17cd27f73d4122c0a101fed835566',
 	
 	// 站点的ID，用来和官方通信，下载，安装插件。
-	'siteid' => 'a8545da4e6f4f88fa60552c64b3a140b',
+	'siteid' => 'f6d46a14a40d83cb54addaa6866f97e7',
 	
 	'cookie_pre' => 'bbs_',
 	'cookie_domain' => '',

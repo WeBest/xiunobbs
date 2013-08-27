@@ -157,7 +157,7 @@ class ueditor_control extends common_control {
 		$this->view->assign('filetyps', $filetyps);
 	}
 	
-	// 获取远程图片
+	// 获取远程图片，只针对斑竹以上用户组开放。
 	public function on_getremoteimage() {
 		$pid = intval(core::gpc('pid'));
 		$tid = intval(core::gpc('tid'));
