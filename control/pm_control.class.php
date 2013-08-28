@@ -247,6 +247,12 @@ class pm_control extends common_control {
 		
 	}
 	
+	public function on_truncate() {
+		$touid = intval(core::gpc('touid'));
+		$this->pm->truncate_history($this->_user['uid'], $touid);
+		$this->message('清除成功');
+	}
+	
 	//hook pm_control_after.php
 	
 }

@@ -9,6 +9,7 @@
 		<input type="hidden" name="FORM_HASH" value="{FORM_HASH}" />
 		<div><textarea name="message" class="message" style="width: 664px; height: 52px;"></textarea></div>
 		<div style="margin-top: 4px;">
+			<div style="width: 180px; float: right; text-align: right;"><a href="?pm-truncate-touid-$touser[uid]-ajax-1.htm" id="truncatepm" onclick="return false;">清空对话记录</a></div>
 			<div style="width: 180px; float: left;">
 				<input type="submit" class="button smallblue submit" value="发送" />
 				<input type="button" class="button smallgrey cancel" value="关闭" />
@@ -223,6 +224,19 @@ function delay_execute(dialog, recall) {
 		$('#pm a.newpm').hide();
 	}
 	
+	$('#truncatepm').click(function() {
+		if(window.confirm('您确定清空对话记录吗？')) {
+			var jlink = $(this);
+			var href = jlink.attr('href');
+			$.get(href, function(s) {
+				var json = json_decode(s);
+				if(error = json_error(json)) {alert(error); return false;}
+				$('#pmlist_$touser[uid]').html('对话记录已经清空！');
+				$('#pmlist_page_$touser[uid]').html('');
+			});
+		}
+		return false;
+	});
 }
 
 </script>

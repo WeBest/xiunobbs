@@ -146,6 +146,17 @@ class pm extends base_model {
 		// 总数--
 		$this->delete($pmid);
 	}
+	
+	// 清空对话记录
+	public function truncate_history($uid1, $uid2) {
+		if($uid1 > $uid2) {
+			$t = $uid1; $uid1 = $uid2; $uid2 = $t;
+		}
+		$this->index_delete(array('uid1'=>$uid1, 'uid2'=>$uid2));
+		$pmcount = $this->pmcount->read($uid1, $uid2);
+		$pmcount['count'] = 0;
+		$this->pmcount->update($pmcount);
+	}
 
 }
 ?>
