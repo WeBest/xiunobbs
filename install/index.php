@@ -338,7 +338,7 @@ if(empty($step) || $step == 'checklicense') {
 			$s = preg_replace('#\'timeoffset\'\s*=\>\s*\'?.*?\'?,#is', "'timeoffset' => '$timeoffset',", $s);
 			$s = preg_replace('#\'urlrewrite\'\s*=\>\s*\'?.*?\'?,#is', "'urlrewrite' => ".(IN_SAE ? 1 : 0).",", $s);
 			$s = preg_replace('#\'installed\'\s*=\>\s*\'?.*?\'?,#is', "'installed' => 1,", $s);
-			file_put_contents($configfile, $s);
+			//file_put_contents($configfile, $s); // sqlite 安装需要？跟SAE冲突
 			
 			//sleep(1); // 此处很重要！file_put_contents() 貌似是一个异步，include 可能会缓存。
 			//clearstatcache();
