@@ -274,6 +274,23 @@ class attach_control extends common_control {
 			
 			is_file($file['tmp_name']) && unlink($file['tmp_name']);
 			
+			if($fid > 0 && $pid > 0) {
+				$post = $this->post->read($fid, $pid);
+				$this->check_post_exists($post);
+				$ismod = $this->is_mod($forum, $this->_user);
+				$post['uid'] != $uid && !$ismod && $this->message('您无权编辑此帖附件。');
+				$post['imagenum']++;
+				$this->post->update($post);
+				
+				$thread = $this->thread->read($fid, $post['tid']);
+				$this->check_thread_exists($thread);
+				if($thread['firstpid'] == $pid) {
+					$thread['uid'] != $uid && !$ismod && $this->message('您无权编辑此帖附件。');
+					$thread['imagenum']++;
+					$this->thread->update($thread);
+				}
+			}
+			
 			// hook attach_uploadimage_after.php
 			$this->message('<img src="'.$uploadurl.$r['fileurl'].'" width="'.$arr['width'].'" height="'.$arr['height'].'"/>');
 			
@@ -359,6 +376,23 @@ class attach_control extends common_control {
 			$arr['filename'] = $pathadd.'/'.$filename;
 			$arr['filesize'] = $file['size'];
 			$this->attach->update($arr);
+			
+			if($fid > 0 && $pid > 0) {
+				$post = $this->post->read($fid, $pid);
+				$this->check_post_exists($post);
+				$ismod = $this->is_mod($forum, $this->_user);
+				$post['uid'] != $uid && !$ismod && $this->message('您无权编辑此帖附件。');
+				$post['attachnum']++;
+				$this->post->update($post);
+				
+				$thread = $this->thread->read($fid, $post['tid']);
+				$this->check_thread_exists($thread);
+				if($thread['firstpid'] == $pid) {
+					$thread['uid'] != $uid && !$ismod && $this->message('您无权编辑此帖附件。');
+					$thread['attachnum']++;
+					$this->thread->update($thread);
+				}
+			}
 			
 			if(copy($file['tmp_name'], $destfile)) {
 				
@@ -459,7 +493,7 @@ class attach_control extends common_control {
 			$post = $this->post->read($attach['fid'], $attach['pid']);
 			$thread = $this->thread->read($attach['fid'], $attach['tid']);
 			$this->check_post_exists($post);
-			$this->check_thread_exists($post);
+			$this->check_thread_exists($thread);
 			$post['attachnum']--;
 			$this->post->update($post);
 			if($thread['firstpid'] == $post['pid']) {
