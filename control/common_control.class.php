@@ -85,7 +85,7 @@ class common_control extends base_control {
 				$pos2 = strrpos($_SERVER['ip'], '.');
 				if($_SERVER['ip'] == $cdnip || ($pos1 == $pos2 && substr($cdnip, $pos1) == '.*' && substr($cdnip, 0, $pos1) == substr($_SERVER['ip'], 0, $pos2))) {
 					$realip = core::gpc('HTTP_X_FORWARDED_FOR', 'S');
-					empty($realip) && $realip = core::gpc('HTTP_CLIENT_IP', 'S');
+					empty($realip) && $realip = core::gpc('HTTP_X_REAL_IP', 'S');
 					if(preg_match('#^\d+(\.\d+){3}$#', $realip)) {
 						$_SERVER['ip'] = long2ip(ip2long($realip));
 					}
