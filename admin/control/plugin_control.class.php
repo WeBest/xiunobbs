@@ -186,7 +186,7 @@ class plugin_control extends admin_control {
 		
 		// 检查版本
 		if($official && version_compare($this->conf['version'], $official['bbs_version']) == -1) {
-			$this->message("此插件依赖的 Xiuno BBS 最低版本为 $local[bbs_version] ，您当前的版本：".$this->conf['version']);
+			$this->message("此插件依赖的 Xiuno BBS 最低版本为 $official[bbs_version] ，您当前的版本：".$this->conf['version']);
 		}
 		
 		// 如果本地目录不存在，则下载。
