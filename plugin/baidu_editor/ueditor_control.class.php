@@ -26,9 +26,15 @@ class ueditor_control extends common_control {
 	// 给插件预留个位置
 	public function on_uploadimage() {
 		$pid = intval(core::gpc('pid'));
-		$tid = intval(core::gpc('tid'));
+		//$tid = intval(core::gpc('tid'));
 		$fid = intval(core::gpc('fid'));
 		$pid == 0 && $fid = 0;
+		$tid = 0;
+		if($pid > 0 && $fid > 0) {
+			$post = $this->post->read($fid, $pid);
+			$this->check_post_exists($post);
+			$tid = $post['tid'];
+		}
 		
 		$uid = $this->_user['uid'];
 		$this->check_forbidden_group();
@@ -160,9 +166,15 @@ class ueditor_control extends common_control {
 	// 获取远程图片，只针对斑竹以上用户组开放。
 	public function on_getremoteimage() {
 		$pid = intval(core::gpc('pid'));
-		$tid = intval(core::gpc('tid'));
+		//$tid = intval(core::gpc('tid'));
 		$fid = intval(core::gpc('fid'));
 		$pid == 0 && $fid = 0;
+		$tid = 0;
+		if($pid > 0 && $fid > 0) {
+			$post = $this->post->read($fid, $pid);
+			$this->check_post_exists($post);
+			$tid = $post['tid'];
+		}
 		
 		$uid = $this->_user['uid'];
 		$this->check_forbidden_group();
