@@ -477,12 +477,12 @@ class attach_control extends common_control {
 			//$ismod = $this->is_mod($forum, $this->_user);
 		}
 		$attach = $this->attach->read($fid, $aid);
-		if(empty($attach)) $this->message('附件不存在。');
+		if(empty($attach)) $this->message('附件不存在。aid='.$aid, 0);
 		if($attach['uid'] != $this->_user['uid']) {
 			if($fid > 0) {
 				$this->check_access($forum, 'delete');
 			} elseif($this->_user['groupid'] > 2) {
-				$this->message('您没有权限删除此附件。');
+				$this->message('您没有权限删除此附件。', 0);
 			}
 		}
 		

@@ -194,6 +194,9 @@ var swf_settings = {
 		}
 		var s = json.message;
 		var aid = s.aid;
+		jtr.attr('aid', s.aid);
+		jtr.attr('fid', s.fid);
+		jtr.attr('fid', s.pid);
 		jtds.eq(0).find('a').attr('href', s.desturl);			// filetype
 		jtds.eq(0).find('span.filename').html(s.orgfilename);		// filename
 		jtds.eq(1).html(humansize(s.filesize));					// filesize
@@ -202,7 +205,6 @@ var swf_settings = {
 		jtds.eq(2).find('span.stop').hide();
 		jtds.eq(3).find('input').attr('disabled', '').attr('name', 'gold['+aid+']');	// gold
 		jtds.eq(4).find('span.delete').show();		// delete
-		
 		attachnum++;
 		parent.set_attach_num(attachnum);
 		return true;
