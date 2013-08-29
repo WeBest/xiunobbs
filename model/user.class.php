@@ -24,7 +24,7 @@ class user extends base_model{
 		
 		empty($arr['uid']) && $arr['uid'] = $this->maxid('+1');
 		$arr['regdate'] = $_SERVER['time'];
-		$arr['regip'] = ip2long($_SERVER['REMOTE_ADDR']);
+		$arr['regip'] = ip2long($_SERVER['ip']);
 		$arr['threads'] = 0;
 		$arr['posts'] = 0;
 		$arr['myposts'] = 0;
