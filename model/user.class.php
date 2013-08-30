@@ -253,7 +253,7 @@ class user extends base_model{
 		$password = substr($password, 0, 8);
 		
 		$time = $_SERVER['time'];
-		$ip = $_SERVER['REMOTE_ADDR'];
+		$ip = $_SERVER['ip'];
 		
 		// 所有项目中，不允许有\t，否则可能会被伪造
 		$xn_auth = encrypt("$uid	$username	$groupid	$password	$ip	$time	$accesson", $this->conf['auth_key']);
@@ -276,7 +276,7 @@ class user extends base_model{
 			'username'=>$arr[1],
 			'groupid'=>intval($arr[2]),
 			'password'=>$arr[3],
-			'ip_right'=>$_SERVER['REMOTE_ADDR'] == $arr[4],
+			'ip_right'=>$_SERVER['ip'] == $arr[4],
 			'cookietime'=>$arr[5],
 			'accesson'=>$arr[6],
 		);

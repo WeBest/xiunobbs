@@ -142,7 +142,7 @@ class common_control extends base_control {
 		$key = $this->conf['cookie_pre'].'sid';
 		$sid = core::gpc($key, 'R');
 		if(!$sid) {
-			$sid = substr(md5($_SERVER['REMOTE_ADDR'].rand(1, 2147483647)), 0, 16); // 兼容32,64位
+			$sid = substr(md5($_SERVER['ip'].rand(1, 2147483647)), 0, 16); // 兼容32,64位
 			misc::setcookie($key, $sid, $_SERVER['time'] + 86400 * 30, $this->conf['cookie_path'], $this->conf['cookie_domain']);
 		}
 		$this->_sid = $sid;
@@ -354,7 +354,7 @@ class common_control extends base_control {
 				'uid'=>$this->_user['uid'],
 				'username'=>$this->_user['username'],
 				'groupid'=>$this->_user['groupid'],
-				'ip'=>ip2long($_SERVER['REMOTE_ADDR']),
+				'ip'=>ip2long($_SERVER['ip']),
 				'url'=>$_SERVER['REQUEST_URI'],
 				'lastvisit'=>$_SERVER['time'],
 			);

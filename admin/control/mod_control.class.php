@@ -202,7 +202,7 @@ class mod_control extends admin_control {
 			$input = $error = array();
 			
 			// 初始化其他选项的参数
-			$ip = $_SERVER['REMOTE_ADDR'];
+			$ip = $_SERVER['ip'];
 			$post = $this->mypost->get_last_post($uid);
 			$input['expiry_banip'] = form::get_text('expiry_banip', date('Y-n-j', $_SERVER['time'] + 86400 * 3), 150);
 			$regip_view = long2ip($user['regip']);

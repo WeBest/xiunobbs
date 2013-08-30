@@ -120,7 +120,7 @@ function uc_user_register($username, $password, $email) {
 	$username = urlencode(uc_charset($username));
 	$password = urlencode($password);
 	$email = urlencode($email);
-	$regip = $_SERVER['REMOTE_ADDR'];
+	$regip = $_SERVER['ip'];
 	return uc_http_request('user', 'register', "username=$username&password=$password&email=$email&regip=$regip");
 }
 
