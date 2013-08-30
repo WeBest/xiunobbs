@@ -270,7 +270,6 @@ class attach_control extends common_control {
 			$arr['width'] = $r['width'];
 			$arr['height'] = $r['height'];
 			$arr['filename'] = $r['fileurl'];
-			$this->attach->update($arr);
 			
 			is_file($file['tmp_name']) && unlink($file['tmp_name']);
 			
@@ -289,7 +288,11 @@ class attach_control extends common_control {
 					$thread['imagenum']++;
 					$this->thread->update($thread);
 				}
+				
+				$arr['tid'] = $thread['tid'];
 			}
+			
+			$this->attach->update($arr);
 			
 			// hook attach_uploadimage_after.php
 			$this->message('<img src="'.$uploadurl.$r['fileurl'].'" width="'.$arr['width'].'" height="'.$arr['height'].'"/>');
