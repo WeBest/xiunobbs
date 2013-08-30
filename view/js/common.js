@@ -259,6 +259,7 @@ $.fn.disable = function(s) {
 
 $.fn.enable = function() {
 	var tag = $(this).get(0);
+	if(!tag) return this;
 	var tagname = tag.tagName.toLowerCase();
 	if(tagname == 'input') {
 		$(tag).val($(tag).attr('oldval'));

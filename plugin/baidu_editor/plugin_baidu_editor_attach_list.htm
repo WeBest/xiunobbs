@@ -196,7 +196,7 @@ var swf_settings = {
 		var aid = s.aid;
 		jtr.attr('aid', s.aid);
 		jtr.attr('fid', s.fid);
-		jtr.attr('fid', s.pid);
+		jtr.attr('pid', s.pid);
 		jtds.eq(0).find('a').attr('href', s.desturl);			// filetype
 		jtds.eq(0).find('span.filename').html(s.orgfilename);		// filename
 		jtds.eq(1).html(humansize(s.filesize));					// filesize

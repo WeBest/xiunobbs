@@ -375,7 +375,6 @@ class attach_control extends common_control {
 			$arr['aid'] = $aid;
 			$arr['filename'] = $pathadd.'/'.$filename;
 			$arr['filesize'] = $file['size'];
-			$this->attach->update($arr);
 			
 			if($fid > 0 && $pid > 0) {
 				$post = $this->post->read($fid, $pid);
@@ -392,7 +391,10 @@ class attach_control extends common_control {
 					$thread['attachnum']++;
 					$this->thread->update($thread);
 				}
+				
+				$arr['tid'] = $thread['tid'];
 			}
+			$this->attach->update($arr);
 			
 			if(copy($file['tmp_name'], $destfile)) {
 				

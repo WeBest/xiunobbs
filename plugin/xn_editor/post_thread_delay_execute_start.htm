@@ -1,9 +1,11 @@
+xiuno_load_css('plugin/xn_editor/editor/editor.css');
+
 var attachnum = $attachnum;
 var pid = $pid;
 $('#post_thread_form_$pid').submit(function() {return false;});
-xiuno_load_css('plugin/xn_editor/editor/editor.css');
+
 $.xload('view/js/swfupload/swfupload.js', "plugin/xn_editor/editor/editor.js", function() {
-	
+
 	// hook post_thread_js_start.htm
 	
 	$('#thread_message_$pid').editor({
@@ -110,7 +112,7 @@ $.xload('view/js/swfupload/swfupload.js', "plugin/xn_editor/editor/editor.js", f
 				if(window.confirm('确认删除附件吗？')) {
 					var jtr = $(this).closest('tr');
 					var aid = jtr.attr('aid');
-					$.get('?attach-deletefile-fid-$fid-aid-'+aid+'-ajax-1.htm', function(s) {
+					$.get('?attach-deletefile-fid-$fid-aid-'+aid+'-pid-'+pid+'-ajax-1.htm', function(s) {
 						var json = json_decode(s);
 						if(error = json_error(json)) {alert(error); return false;}
 						if(json.status <= 0) {alert(json.message); return false;}
@@ -169,8 +171,8 @@ $.xload('view/js/swfupload/swfupload.js', "plugin/xn_editor/editor/editor.js", f
 					jtr.appendTo(jtrs.parent()).attr('file', $.escape(file.name + file.index)).show();
 					var jtds = $('td', jtr);
 					
-					var newsrc = jtds.eq(0).find('img').attr('src').replace(/\/\w+\.gif$/i, '/'+attach_file_type(file.type)+'.gif');
-					jtds.eq(0).find('img').attr('src', newsrc);			// filetype
+					//var newsrc = jtds.eq(0).find('img').attr('src').replace(/\/\w+\.gif$/i, '/'+attach_file_type(file.type)+'.gif');
+					//jtds.eq(0).find('img').attr('src', newsrc);			// filetype
 					jtds.eq(0).find('span.filename').html(file.name);		// filename
 					jtds.eq(1).html(humansize(file.size));				// filesize
 					jtds.eq(2).find('span.stop, span.start, span.complete').hide();
@@ -210,6 +212,9 @@ $.xload('view/js/swfupload/swfupload.js', "plugin/xn_editor/editor/editor.js", f
 					}
 					var s = json.message;
 					var aid = s.aid;
+					jtr.attr('aid', s.aid);
+					jtr.attr('fid', s.fid);
+					jtr.attr('pid', s.pid);
 					jtds.eq(0).find('a').attr('href', s.desturl);			// filetype
 					jtds.eq(0).find('span.filename').html(s.orgfilename);		// filename
 					jtds.eq(1).html(humansize(s.filesize));					// filesize
@@ -275,7 +280,6 @@ $.xload('view/js/swfupload/swfupload.js', "plugin/xn_editor/editor/editor.js", f
 		// hook common_editor_arg_end.htm
 		
 	});
-	
 	// hook post_thread_ajax_editor_end.htm
 	
 	$('#subject_$pid').focus().keydown(function(e) {
@@ -313,10 +317,10 @@ $.xload('view/js/swfupload/swfupload.js', "plugin/xn_editor/editor/editor.js", f
 			// hook post_thread_submit_after_js.htm
 			
 			// 清空编辑器内容
-			$('#thread_message_$pid')[0].editor.set('');
+			try {$('#thread_message_$pid')[0].editor.set('');} catch(e) {}
 	 		
-	 		dialog.set_body('<div class="ok">发表成功，页面将自动跳转到列表页！</div>');
 	 		setTimeout(function() {
+	 			dialog.set_body('<div class="ok">发表成功，页面将自动跳转到列表页！</div>');
 	 			if(thread && thread.typeid1 || thread.typeid2 || thread.typeid3 || thread.typeid4) {
 	 				var typeidurl = '-typeid1-'+thread.typeid1+'-typeid2-'+thread.typeid2+'-typeid3-'+thread.typeid3+'-typeid4-'+thread.typeid4; 
 	 			} else {
@@ -324,7 +328,7 @@ $.xload('view/js/swfupload/swfupload.js', "plugin/xn_editor/editor/editor.js", f
 	 			}
 	 			window.location= '?thread-index-fid-'+thread.fid+'-tid-'+thread.tid+typeidurl+'.htm';
 	 			dialog.close();
-	 		}, 500);
+	 		}, 1000);
 		  });
 		  return false;
 	});
