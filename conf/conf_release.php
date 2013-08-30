@@ -119,6 +119,8 @@ return array(
 	// 模板的URL，用作CDN时请填写绝对路径，需要时，填写绝对路径： 如: http://www.domain.com/bbs/upload/, SAE: http://xxx-upload.stor.sinaapp.com/1.txt  (建立 upload 域，安装的时候需要设置)
 	'upload_url' => 'http://xiuno.net/upload/',
 	
+	'logo_url' => 'http://xiuno.net/',
+	
 	// 日志目录，需要可写
 	'log_path' => BBS_PATH.'log/',
 	

@@ -74,6 +74,8 @@ class common_control extends base_control {
 		!isset($this->conf['view_convert_button']) && $this->conf['view_convert_button'] = 1; // 兼容 2.0.3
 		isset($runtime['view_convert_button']) && $this->conf['view_convert_button'] = $runtime['view_convert_button'];
 		
+		!isset($this->conf['logo_url']) && $this->conf['logo_url'] = $this->conf['app_url']; // 兼容 2.0.3
+		
 		// hook common_control_init_runtime_after.php
 	}
 	

@@ -323,6 +323,7 @@ if(empty($step) || $step == 'checklicense') {
 			}
 			$siteid = md5($auth_key.$appurl);
 			$s = preg_replace('#\'app_url\'\s*=\>\s*\'?.*?\'?,#is', "'app_url' => '$appurl',", $s);
+			$s = preg_replace('#\'logo_url\'\s*=\>\s*\'?.*?\'?,#is', "'logo_url' => '$appurl',", $s);
 			$s = preg_replace('#\'static_url\'\s*=\>\s*\'?.*?\'?,#is', "'static_url' => '$appurl',", $s);
 			$s = preg_replace('#\'upload_url\'\s*=\>\s*\'?.*?\'?,#is', "'upload_url' => '$upload_url',", $s);
 			$s = preg_replace('#\'upload_path\'\s*=\>\s*\'?.*?\'?,#is', "'upload_path' => ".$upload_path, $s);
