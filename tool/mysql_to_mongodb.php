@@ -13,7 +13,7 @@
 		3. 命令行下访问：/usr/local/php/bin/php /data/wwwroot/domain.com/mysql_to_mongodb.php
 */
 
-@set_time_limit(0);
+function_exists('set_time_limit') && set_time_limit(0);
 
 define('DEBUG', 0);
 
