@@ -319,8 +319,9 @@ $.xload('view/js/swfupload/swfupload.js', "plugin/xn_editor/editor/editor.js", f
 			// 清空编辑器内容
 			try {$('#thread_message_$pid')[0].editor.set('');} catch(e) {}
 	 		
+			dialog.set_body('<div class="ok">发表成功，页面将自动跳转到列表页！</div>');
+			
 	 		setTimeout(function() {
-	 			dialog.set_body('<div class="ok">发表成功，页面将自动跳转到列表页！</div>');
 	 			if(thread && thread.typeid1 || thread.typeid2 || thread.typeid3 || thread.typeid4) {
 	 				var typeidurl = '-typeid1-'+thread.typeid1+'-typeid2-'+thread.typeid2+'-typeid3-'+thread.typeid3+'-typeid4-'+thread.typeid4; 
 	 			} else {
@@ -329,6 +330,7 @@ $.xload('view/js/swfupload/swfupload.js', "plugin/xn_editor/editor/editor.js", f
 	 			window.location= '?thread-index-fid-'+thread.fid+'-tid-'+thread.tid+typeidurl+'.htm';
 	 			dialog.close();
 	 		}, 1000);
+	 		
 		  });
 		  return false;
 	});
@@ -357,3 +359,5 @@ $.xload('view/js/swfupload/swfupload.js', "plugin/xn_editor/editor/editor.js", f
 	// hook post_thread_js_end.htm
 	
 });
+
+<!--{if 0}-->
