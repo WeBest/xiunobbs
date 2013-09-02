@@ -105,6 +105,9 @@ class cron extends base_model {
 			$this->conf['todayusers'] = 0;
 			// $this->runtime->xsave();
 			
+			// 清理未关联的垃圾
+			$this->attach->gc();
+			
 			// hook cron_model_run_2_end.php
 		}
 		
