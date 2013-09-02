@@ -184,7 +184,7 @@ class attach_control extends common_control {
 	public function on_uploadimage() {
 		$fid = intval(core::gpc('fid'));
 		$pid = intval(core::gpc('pid'));
-		$pid -= 0 && $fid =0;
+		$pid == 0 && $fid = 0;
 		
 		$uid = $this->_user['uid'];
 		$this->check_forbidden_group();
