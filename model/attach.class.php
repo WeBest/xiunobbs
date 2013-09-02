@@ -235,7 +235,7 @@ class attach extends base_model {
 	
 	// 清理未关联的垃圾
 	public function gc() {
-		$attachlist = $this->index_fetch(array('fid'=>0), array(), 0, 1000);
+		$attachlist = $this->index_fetch(array('fid'=>0), array(), 0, 2000);
 		foreach($attachlist as $v) {
 			$this->unlink($v);
 		}

@@ -61,7 +61,15 @@ class banip extends base_model {
 	public function add_banip($ip, $uid, $expiry) {
 		$arr = explode('.', $ip);
 		$banip = $this->get_banip($ip);
-		if($banip) return TRUE;
+		if($banip) {
+			$banip['ip0'] = $arr[0];
+			$banip['ip1'] = $arr[1];
+			$banip['ip2'] = $arr[2];
+			$banip['ip3'] = $arr[3];
+			$banip['uid'] = $uid;
+			$banip['expiry'] = $expiry;
+			return $this->update($banip);
+		}
 		foreach($arr as &$v) {
 			$v == '*' && $v = -1;
 			$v = intval($v);
